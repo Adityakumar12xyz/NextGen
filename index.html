@@ -1,0 +1,2090 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NextGen Library</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: white;
+      transition: 0.4s;
+    }
+
+    /* HEADER */
+    header {
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #000000cc;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 480px) {
+      header {
+        padding: 10px;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      header h2 {
+        margin: 0;
+        font-size: 18px;
+      }
+    }
+
+    /* SEARCH */
+    input {
+      padding: 8px;
+      border: none;
+      border-radius: 5px;
+    }
+
+    /* LOGIN SCREEN */
+    #loginScreen {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: radial-gradient(circle at center, #001f3f, #000);
+      position: absolute;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 999;
+    }
+
+    .light #loginScreen {
+      background: #f0f4f8;
+    }
+
+    .login-box {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 255, 255, 0.3);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .light .login-box {
+      background: #ffffff;
+      border: 1px solid #d1d5db;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-box h2 {
+      margin-bottom: 25px;
+      color: cyan;
+      font-size: 28px;
+      text-shadow: 0 0 10px cyan;
+    }
+
+    .light .login-box h2 {
+      color: #0056b3;
+      text-shadow: none;
+    }
+
+    .login-input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid cyan;
+      color: white;
+      font-size: 16px;
+      outline: none;
+      box-sizing: border-box;
+      transition: 0.3s;
+    }
+
+    .light .login-input {
+      background: #f9fafb;
+      color: #333;
+      border: 1px solid #ccc;
+    }
+
+    .login-input:focus {
+      box-shadow: 0 0 10px cyan;
+    }
+
+    .light .login-input:focus {
+      box-shadow: 0 0 10px #0056b3;
+      border-color: #0056b3;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      font-size: 18px;
+      background: cyan;
+      color: black;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+    }
+
+    .light .login-btn {
+      background: #0056b3;
+      color: white;
+      box-shadow: none;
+    }
+
+    .login-btn:hover {
+      background: #00ffff;
+      box-shadow: 0 0 25px cyan;
+      transform: translateY(-2px);
+    }
+
+    .light .login-btn:hover {
+      background: #004494;
+      box-shadow: 0 4px 10px rgba(0, 86, 179, 0.3);
+    }
+
+    .auth-toggle {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #ddd;
+    }
+
+    .light .auth-toggle {
+      color: #666;
+    }
+
+    .auth-toggle span {
+      color: cyan;
+      cursor: pointer;
+      text-decoration: underline;
+      font-weight: bold;
+    }
+
+    .light .auth-toggle span {
+      color: #0056b3;
+    }
+
+    .admin-link {
+      margin-top: 15px;
+      font-size: 13px;
+      color: #888;
+      text-align: right;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .admin-link:hover {
+      color: cyan;
+    }
+
+    /* ADMIN DASHBOARD */
+    #adminDashboard {
+      display: none;
+      padding: 30px;
+      max-width: 1200px;
+      margin: 40px auto;
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid cyan;
+      border-radius: 15px;
+      color: white;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+    }
+
+    .light #adminDashboard {
+      background: #fff;
+      border-color: #ddd;
+      color: black;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .admin-table th,
+    .admin-table td {
+      border: 1px solid #444;
+      padding: 12px;
+      text-align: left;
+    }
+
+    .light .admin-table th,
+    .light .admin-table td {
+      border: 1px solid #ccc;
+    }
+
+    .admin-table th {
+      background: #002233;
+      color: cyan;
+      font-size: 16px;
+    }
+
+    .light .admin-table th {
+      background: #f0f4f8;
+      color: #0056b3;
+    }
+
+    /* SELECT DROPDOWN FOR SIGN UP */
+    select.login-input {
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url('data:image/svg+xml;utf8,<svg fill="cyan" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+      background-repeat: no-repeat;
+      background-position-x: 95%;
+      background-position-y: 50%;
+    }
+
+    .light select.login-input {
+      background-image: url('data:image/svg+xml;utf8,<svg fill="%230056b3" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+    }
+
+    select.login-input option {
+      background: #001f3f;
+      color: white;
+    }
+
+    .light select.login-input option {
+      background: white;
+      color: black;
+    }
+
+    /* WELCOME */
+    #welcomeScreen {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    #typingText {
+      font-size: 42px;
+      font-weight: bold;
+      color: cyan;
+      text-shadow: 0 0 20px cyan;
+    }
+
+    @media (max-width: 768px) {
+      #typingText {
+        font-size: 32px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #typingText {
+        font-size: 24px;
+      }
+    }
+
+    /* SUBJECTS */
+    .subjects {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .subjects {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        padding: 15px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .subjects {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 10px;
+      }
+    }
+
+    .box {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px 30px;
+      border-radius: 15px;
+      cursor: pointer;
+      box-shadow: 0 0 15px cyan;
+      transition: 0.3s;
+      text-align: center;
+      font-size: 18px;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .box h1 {
+      margin: 0;
+      font-size: 40px;
+      filter: drop-shadow(0 0 10px cyan) contrast(1.2) brightness(1.2);
+    }
+
+    @media (max-width: 768px) {
+      .box {
+        padding: 20px;
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .box {
+        padding: 15px;
+        font-size: 14px;
+      }
+    }
+
+    .box:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px cyan;
+    }
+
+    /* CHAPTERS */
+    .chapters,
+    .content {
+      display: none;
+      padding: 20px;
+    }
+
+    li {
+      padding: 10px;
+      margin: 8px 0;
+      background: #ffffff22;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    /* CONTENT */
+    .section {
+      background: #ffffff22;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 15px 0;
+    }
+
+    /* TASK STYLES */
+    .task-item {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+      padding: 15px;
+      margin: 12px 0;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 2px solid rgba(102, 126, 234, 0.3);
+      transition: 0.3s;
+    }
+
+    .task-item:hover {
+      border-color: cyan;
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+      transform: translateX(5px);
+    }
+
+    .task-item.completed {
+      opacity: 0.6;
+      text-decoration: line-through;
+      background: linear-gradient(135deg, rgba(100, 200, 100, 0.2) 0%, rgba(80, 160, 80, 0.2) 100%);
+    }
+
+    .task-item input[type="checkbox"] {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      margin-right: 15px;
+      accent-color: cyan;
+    }
+
+    .task-text {
+      flex: 1;
+      font-size: 16px;
+      color: #fff;
+    }
+
+    .task-delete {
+      background: #ff6b6b;
+      padding: 8px 15px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      color: white;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .task-delete:hover {
+      background: #ff0000;
+      transform: scale(1.1);
+    }
+
+    /* BUTTON */
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background: cyan;
+      color: black;
+      font-weight: bold;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #00ffff;
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 480px) {
+      button {
+        padding: 10px 15px;
+        font-size: 14px;
+      }
+    }
+
+    /* SEMESTER VIEW WITH MOTIVATION */
+    #semesters {
+      display: grid !important;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      padding: 20px;
+      align-items: start;
+    }
+
+    #semesterContainer {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    padding:15px;
+    background:#000000cc;
+    text-align:center;
+    }
+
+    /* DARK AND LIGHT MODE */
+    .light {
+      background: #f0f4f8;
+      /* Soft light background */
+      color: #333;
+    }
+
+    .light header {
+      background: #ffffff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .light header h2 {
+      text-shadow: none;
+      color: #0056b3;
+    }
+
+    .light .box,
+    .light .info-box,
+    .light .motivation-box,
+    .light .tasks-box {
+      background: #ffffff;
+      border-color: #d1d5db;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      color: #333;
+    }
+
+    .light .box h1 {
+      filter: invert(0.8) hue-rotate(180deg) drop-shadow(0 0 5px rgba(0, 0, 0, 0.2));
+    }
+
+    .light .box:hover,
+    .light .info-box:hover {
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+      border-color: #0056b3;
+    }
+
+    .light .motivation-box h3,
+    .light .tasks-box h3,
+    .light .info-box h3 {
+      color: #0056b3;
+      border-bottom-color: #0056b3;
+    }
+
+    .light .motivation-box p {
+      color: #444;
+      text-shadow: none;
+    }
+
+    .light .info-box p,
+    .light .info-box li {
+      color: #555;
+    }
+
+    .light .task-list li {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      color: #333;
+    }
+
+    .light .task-list li:hover {
+      background: #f3f4f6;
+    }
+
+    .light h2,
+    .light #subjectTitle,
+    .light #chapterTitle {
+      color: #222;
+    }
+
+    .light .section {
+      background: #ffffff;
+      color: #333;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    /* ABOUT & TERMS SECTION */
+    .info-section {
+      display: block;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .info-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    .info-box {
+      background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(102, 126, 234, 0.1) 100%);
+      border: 2px solid cyan;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+      transition: 0.3s;
+    }
+
+    .info-box:hover {
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+      transform: translateY(-5px);
+    }
+
+    .info-box h3 {
+      color: cyan;
+      font-size: 24px;
+      margin-top: 0;
+      margin-bottom: 15px;
+      border-bottom: 2px solid cyan;
+      padding-bottom: 10px;
+    }
+
+    .info-box p {
+      font-size: 14px;
+      line-height: 1.8;
+      color: #ddd;
+    }
+
+    .info-box ul {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0;
+    }
+
+    .info-box li {
+      padding: 8px 0;
+      padding-left: 20px;
+      position: relative;
+      font-size: 13px;
+      color: #ccc;
+    }
+
+    .info-box li:before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: cyan;
+      font-weight: bold;
+    }
+
+    @media (max-width: 768px) {
+      .info-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .info-box {
+        padding: 20px;
+      }
+
+      .info-box h3 {
+        font-size: 20px;
+      }
+    }
+
+    /* SEMESTER MOTIVATION & TASKS */
+    .semester-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 20px auto;
+    }
+
+    .motivation-box,
+    .tasks-box {
+      background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(102, 126, 234, 0.1) 100%);
+      border: 2px solid cyan;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+    }
+
+    .motivation-box h3,
+    .tasks-box h3 {
+      color: cyan;
+      font-size: 20px;
+      margin-top: 0;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .motivation-box p {
+      font-size: 18px;
+      line-height: 1.6;
+      color: #fff;
+      font-style: italic;
+      text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    .task-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .task-list li {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      margin: 8px 0;
+      background: #ffffff11;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .task-list li:hover {
+      background: #ffffff22;
+      transform: translateX(5px);
+    }
+
+    .task-list input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-right: 12px;
+      cursor: pointer;
+      accent-color: cyan;
+    }
+
+    .task-list li.completed {
+      opacity: 0.6;
+      text-decoration: line-through;
+    }
+
+    .task-list li.completed input[type="checkbox"] {
+      accent-color: #00ff00;
+    }
+
+    @media (max-width: 768px) {
+      .semester-section {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header style="display:none;">
+    <h2 style="font-size: 28px; letter-spacing: 1px; flex-grow: 1; text-align: left; text-shadow: 0 0 10px cyan;">📚
+      NextGen Library</h2>
+    <div style="display: flex; gap: 10px; align-items: center;">
+      <button id="themeToggleBtn" onclick="toggleMode()"
+        style="font-size: 20px; padding: 8px 15px; background: transparent; border: none; box-shadow: none; cursor: pointer;"></button>
+    </div>
+  </header>
+
+  <!-- AUTHENTICATION SCREEN -->
+  <div id="loginScreen">
+    <div class="login-box">
+
+      <!-- SIGN UP FORM -->
+      <div id="signUpForm">
+        <h2>📝 NextGen Library Registration</h2>
+        <input type="text" id="regName" class="login-input" placeholder="Name">
+        <input type="text" id="regRoll" class="login-input" placeholder="DDU Roll Number">
+
+        <div style="display: flex; gap: 10px;">
+          <select id="regBranch" class="login-input" style="flex: 1;">
+            <option value="" disabled selected>Branch</option>
+            <option value="BCA">BCA</option>
+            <option value="BTECH">BTECH</option>
+            <option value="BBA">BBA</option>
+          </select>
+          <select id="regSection" class="login-input" style="flex: 1;">
+            <option value="" disabled selected>Section</option>
+            <option value="A1">Section A1</option>
+            <option value="A2">Section A2</option>
+            <option value="A3">Section A3</option>
+            <option value="A4">Section A4</option>
+            <option value="A5">Section A5</option>
+            <option value="A6">Section A6</option>
+            <option value="A7">Section A7</option>
+            <option value="A8">Section A8</option>
+          </select>
+        </div>
+
+        <input type="tel" id="regMobile" class="login-input" placeholder="Mobile Number">
+
+        <button class="login-btn" onclick="handleSignUp()">Sign Up & Enter</button>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+          <p class="auth-toggle" style="margin: 0;">Already have an account? <span
+              onclick="toggleAuthMode('login')">Login</span></p>
+          <div class="admin-link" onclick="toggleAuthMode('admin')">Admin Login</div>
+        </div>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <div id="loginForm" style="display: none;">
+        <h2>🔑 NextGen Login</h2>
+        <input type="text" id="loginName" class="login-input" placeholder="Name">
+        <select id="loginSection" class="login-input">
+          <option value="" disabled selected>Section</option>
+          <option value="A1">Section A1</option>
+          <option value="A2">Section A2</option>
+          <option value="A3">Section A3</option>
+          <option value="A4">Section A4</option>
+          <option value="A5">Section A5</option>
+          <option value="A6">Section A6</option>
+          <option value="A7">Section A7</option>
+          <option value="A8">Section A8</option>
+        </select>
+        <input type="tel" id="loginMobile" class="login-input" placeholder="Mobile Number">
+        <button class="login-btn" onclick="handleLogin()">Log In</button>
+        <p class="auth-toggle" style="text-align: right; margin-top: 5px;">Forgot Details? <span
+            onclick="recoverDetails()">Click Here</span></p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+          <p class="auth-toggle" style="margin: 0;">New user? <span onclick="toggleAuthMode('signup')">Sign Up</span>
+          </p>
+          <div class="admin-link" onclick="toggleAuthMode('admin')">Admin Login</div>
+        </div>
+      </div>
+
+      <!-- ADMIN LOGIN FORM -->
+      <div id="adminLoginForm" style="display: none;">
+        <h2>🛡️ Admin Access</h2>
+        <input type="text" id="adminUser" class="login-input" placeholder="Admin Username">
+        <input type="password" id="adminPass" class="login-input" placeholder="Admin Password">
+        <button class="login-btn" onclick="handleAdminLogin()"
+          style="background: #ff4757; color: white; box-shadow: 0 0 15px rgba(255, 71, 87, 0.5);">Authenticate</button>
+        <p class="auth-toggle" style="margin-top: 20px;">Return to <span onclick="toggleAuthMode('login')">Student
+            Login</span></p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- EDIT PROFILE SCREEN -->
+  <div id="editProfileScreen"
+    style="display: none; height: 100vh; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: radial-gradient(circle at center, #001f3f, #000); position: fixed; width: 100%; top: 0; left: 0; z-index: 1000;">
+    <div class="login-box">
+      <h2>✏️ Edit Profile</h2>
+      <input type="text" id="editName" class="login-input" placeholder="Name">
+      <input type="text" id="editRoll" class="login-input" placeholder="DDU Roll Number">
+
+      <div style="display: flex; gap: 10px;">
+        <select id="editBranch" class="login-input" style="flex: 1;">
+          <option value="BCA">BCA</option>
+          <option value="BTECH">BTECH</option>
+          <option value="BBA">BBA</option>
+        </select>
+        <select id="editSection" class="login-input" style="flex: 1;">
+          <option value="A1">Section A1</option>
+          <option value="A2">Section A2</option>
+          <option value="A3">Section A3</option>
+          <option value="A4">Section A4</option>
+          <option value="A5">Section A5</option>
+          <option value="A6">Section A6</option>
+          <option value="A7">Section A7</option>
+          <option value="A8">Section A8</option>
+        </select>
+      </div>
+
+      <input type="tel" id="editMobile" class="login-input" placeholder="Mobile Number">
+
+      <button class="login-btn" onclick="saveProfileChanges()" style="margin-bottom: 15px;">💾 Save Changes</button>
+      <button class="login-btn" onclick="closeEditProfile()"
+        style="background: transparent; border: 1px solid cyan; color: cyan; box-shadow: none;">❌ Cancel</button>
+    </div>
+  </div>
+
+  <!-- ADMIN DASHBOARD -->
+  <div id="adminDashboard">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <h2 style="color: cyan; text-shadow: 0 0 10px cyan;">🛡️ Secure Admin Dashboard</h2>
+      <button onclick="adminLogout()" style="background: #ff4757; color: white;">Logout Admin</button>
+    </div>
+    <p>View all registered student data below. This info is protected.</p>
+    <div style="overflow-x: auto;">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Roll Number</th>
+            <th>Branch</th>
+            <th>Section</th>
+            <th>Mobile Number</th>
+          </tr>
+        </thead>
+        <tbody id="adminTableBody">
+          <!-- Rows injected via JS -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ADMIN CONTENT MANAGEMENT SYSTEM -->
+    <div id="adminCMS" style="margin-top: 40px; border-top: 1px solid rgba(0,255,255,0.3); padding-top: 20px;">
+      <h3 style="color: cyan; text-align: left;">✏️ Manage Course Content</h3>
+      <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+        <select id="cmsCourse" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
+          onchange="onAdminCourseChange()">
+          <option value="" disabled selected>Course</option>
+        </select>
+        <select id="cmsBranch" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
+          onchange="onAdminBranchChange()">
+          <option value="" disabled selected>Branch</option>
+        </select>
+        <select id="cmsSemester" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
+          onchange="onAdminSemesterChange()">
+          <option value="" disabled selected>Semester</option>
+        </select>
+        <select id="cmsSubject" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
+          onchange="onAdminSubjectChange()">
+          <option value="" disabled selected>Subject</option>
+        </select>
+        <select id="cmsChapter" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
+          onchange="onAdminChapterChange()">
+          <option value="" disabled selected>Chapter</option>
+        </select>
+      </div>
+
+      <div id="cmsEditor" style="display: none; text-align: left;">
+        <label style="color: cyan; font-size: 14px;">📹 Video URL (YouTube Embed):</label>
+        <input type="text" id="cmsVideo" class="login-input" style="margin-top: 5px;">
+
+        <label style="color: cyan; font-size: 14px;">📝 Study Notes:</label>
+        <textarea id="cmsNotes" class="login-input" style="margin-top: 5px; height: 80px; resize: vertical;"></textarea>
+
+        <label style="color: cyan; font-size: 14px;">📄 PDF URL (Google Drive/Link):</label>
+        <input type="text" id="cmsPdf" class="login-input" style="margin-top: 5px;">
+
+        <label style="color: cyan; font-size: 14px;">📄 Assignment:</label>
+        <textarea id="cmsAssignment" class="login-input"
+          style="margin-top: 5px; height: 60px; resize: vertical;"></textarea>
+
+        <label style="color: cyan; font-size: 14px;">🏠 Homework:</label>
+        <textarea id="cmsHomework" class="login-input"
+          style="margin-top: 5px; height: 60px; resize: vertical;"></textarea>
+
+        <button class="login-btn" onclick="saveAdminContent()"
+          style="background: #00e676; color: black; box-shadow: 0 0 15px rgba(0, 230, 118, 0.4);">💾 Save
+          Content</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WELCOME -->
+  <div id="welcomeScreen" style="display:none;">
+    <div style="position: absolute; top: 20px; right: 20px;">
+      <button onclick="openEditProfile()"
+        style="font-size: 14px; padding: 8px 15px; background: rgba(0, 255, 255, 0.2); border: 1px solid cyan; border-radius: 5px; color: cyan; cursor: pointer;">✏️
+        Edit Profile</button>
+    </div>
+    <img src="img1.png" alt="NextGen Library"
+      style="width:250px; height:250px; margin-bottom:20px; filter:drop-shadow(0 0 20px cyan);">
+    <h1 id="typingText"></h1>
+    <p>Your Digital Learning Hub</p>
+    <button onclick="enterSite()">Enter Library</button>
+  </div>
+
+  <!-- PROGRAMS VIEW WITH INFO -->
+  <div id="programsWrapper" style="display:none;">
+    <div class="subjects" id="programs">
+      <div class="box" onclick="openStudentLevel('course', 'BCA')">🎓 BCA</div>
+      <div class="box" onclick="openStudentLevel('course', 'BTECH')">🏢 BTECH</div>
+      <div class="box" onclick="openStudentLevel('course', 'BBA')">💼 BBA</div>
+    </div>
+
+    <!-- ABOUT & TERMS SECTION -->
+    <div class="info-section">
+      <div class="info-container">
+        <div class="info-box">
+          <h3>📚 About NextGen Library</h3>
+          <p>Welcome to NextGen Library, your premier digital learning platform designed for modern students. We
+            believe
+            that quality education should be structured, accessible, and interactive.</p>
+          <p>Our platform integrates:</p>
+          <ul>
+            <li>High-quality Video Lectures</li>
+            <li>Meticulously curated Study Notes</li>
+            <li>Rigorous Assignments & Practice</li>
+            <li>Comprehensive Homework Guidance</li>
+            <li>Instant Doubt Resolution Support</li>
+          </ul>
+          <p>Whether you're tackling daily challenges or seeking clarity, we provide the tools necessary for academic
+            excellence and personal growth.</p>
+        </div>
+
+        <div class="info-box">
+          <h3>⚖️ Terms & Conditions</h3>
+          <ul>
+            <li><strong>Usage Rights:</strong> All content is for educational purposes only</li>
+            <li><strong>Intellectual Property:</strong> Content owned by NextGen Library and respective creators</li>
+            <li><strong>User Responsibility:</strong> Students must use resources ethically and legally</li>
+            <li><strong>Account Security:</strong> Users are responsible for account confidentiality</li>
+            <li><strong>Content Accuracy:</strong> We strive for accuracy but don't guarantee completeness</li>
+            <li><strong>Limitation:</strong> Not liable for indirect damages or service interruptions</li>
+            <li><strong>Updates:</strong> Terms may be updated. Continued use implies acceptance</li>
+            <li><strong>Support:</strong> Contact us for queries or concerns regarding any content</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DYNAMIC NAVIGATION SECTION -->
+  <div id="dynamicNavSection" style="display:none; text-align:center;">
+    <button id="dynamicNavBackBtn" onclick="goBackDynamicNav()"
+      style="margin-bottom:20px; padding: 12px 20px; font-size:16px;">⬅ Back</button>
+    <div id="dynamicNavContainer" class="subjects"></div>
+  </div>
+
+  <!-- MOTIVATION SECTION -->
+  <div id="semesterMotivationSection" style="display:none;">
+    <div class="semester-section">
+      <div class="motivation-box">
+        <h3>✨ Daily Motivation</h3>
+        <p id="motivationText">"Success is not final, failure is not fatal: It is the courage to continue that counts.
+          Keep pushing your
+          limits and remember, every expert was once a beginner. Your hard work today shapes your tomorrow. Focus on
+          the
+          process, and the results will follow!"</p>
+      </div>
+
+      <div class="tasks-box">
+        <h3>📋 Today's Tasks</h3>
+        <ul class="task-list">
+          <li><input type="checkbox" onchange="toggleTask(this)"> <span>Review today's lecture notes</span></li>
+          <li><input type="checkbox" onchange="toggleTask(this)"> <span>Complete assigned problems</span></li>
+          <li><input type="checkbox" onchange="toggleTask(this)"> <span>Read textbook chapter</span></li>
+          <li><input type="checkbox" onchange="toggleTask(this)"> <span>Prepare for tomorrow's class</span></li>
+          <li><input type="checkbox" onchange="toggleTask(this)"> <span>Practice previous year questions</span></li>
+          <li><input type="checkbox" onchange="toggleTask(this)"> <span>Join study group discussion</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTERS -->
+  <div class="chapters" id="chapters" style="display:none;">
+    <button onclick="goBackToSubjects()" style="margin-bottom:15px; font-size:16px;">⬅ Back to Subjects</button>
+    <h2 id="subjectTitle"></h2>
+    <ul id="chapterList"></ul>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content" id="content">
+    <button onclick="goBackChapter()" style="margin-bottom:15px; font-size:16px;">⬅ Back</button>
+    <h2 id="chapterTitle"></h2>
+
+    <div class="section" id="videoSection">
+      📹 Video:<br>
+      <iframe id="videoFrame" width="560" height="315" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="max-width:100%;"></iframe>
+    </div>
+
+    <div class="section" id="notesSection">
+      📝 Notes:
+      <p id="notesText"></p>
+    </div>
+
+    <div class="section" id="pdfContainer" style="display:none;">
+      📄 PDF Notes:<br>
+      <iframe id="pdfFrame" width="100%" height="500" frameborder="0" style="border-radius:8px;"></iframe>
+    </div>
+
+    <div class="section" id="assignmentSection">
+      📄 Assignment:
+      <p id="assignmentText"></p>
+    </div>
+
+    <div class="section" id="homeworkSection">
+      🏠 Homework:
+      <p id="homeworkText"></p>
+    </div>
+
+    <!-- AI TUTOR CHATBOT -->
+    <div id="aiTutorWidget" style="position: fixed; bottom: 30px; right: 30px; z-index: 1000;">
+      <button id="aiTutorBtn" onclick="toggleChat()"
+        style="background: cyan; color: black; border: none; border-radius: 50%; width: 60px; height: 60px; font-size: 30px; box-shadow: 0 0 15px cyan; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.3s;"
+        onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">🤖</button>
+
+      <div id="aiChatBox"
+        style="display: none; position: absolute; bottom: 75px; right: 0; width: 350px; background: rgba(0, 15, 30, 0.95); border: 1px solid cyan; border-radius: 10px; box-shadow: 0 0 20px cyan; overflow: hidden; flex-direction: column; z-index: 1001;">
+        <div
+          style="background: cyan; color: black; padding: 12px; font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 16px;">🤖 Gemini AI Tutor</span>
+          <button onclick="toggleChat()"
+            style="background: transparent; border: none; font-size: 18px; cursor: pointer; color: black; font-weight: bold;">✖</button>
+        </div>
+
+        <div id="aiChatHistory"
+          style="height: 320px; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; font-size: 14px;">
+          <div
+            style="align-self: flex-start; background: rgba(0, 255, 255, 0.1); padding: 10px 14px; border-radius: 12px; border-bottom-left-radius: 0; max-width: 85%; border: 1px solid rgba(0, 255, 255, 0.3); color: white; line-height: 1.4;">
+            Hello! I'm your AI Tutor powered by Gemini. Ask me any doubt related to your studies, assignments, or
+            homework!
+          </div>
+        </div>
+
+        <div
+          style="display: flex; gap: 8px; padding: 12px; border-top: 1px solid rgba(0, 255, 255, 0.3); background: rgba(0, 5, 15, 0.9);">
+          <input type="text" id="aiChatInput" placeholder="Ask a doubt..."
+            style="flex: 1; padding: 10px; border-radius: 5px; border: 1px solid cyan; background: rgba(0, 255, 255, 0.05); color: white; outline: none;"
+            onkeypress="if(event.key === 'Enter') sendChatMessage()">
+          <button onclick="sendChatMessage()"
+            style="background: cyan; color: black; border: none; border-radius: 5px; padding: 0 15px; font-weight: bold; cursor: pointer; transition: background 0.3s;"
+            onmouseover="this.style.background='#00cccc'" onmouseout="this.style.background='cyan'">Send</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  </div>
+
+  <footer>
+    Copyright © 2026 NextGen Library Made by @mr_insaan_kumar</p>
+  </footer>
+  <style>
+    footer {
+      text-align: center;
+    }
+  </style>
+
+  <script>
+    /* AUTO TYPING */
+    let text = "WELCOME TO NEXTGEN LIBRARY";
+    let i = 0;
+    function typing() {
+      if (i < text.length) {
+        document.getElementById("typingText").innerHTML += text.charAt(i);
+        i++;
+        setTimeout(typing, 100);
+      }
+    }
+    typing();
+
+    /* DATA */
+    let oldData = {
+      Math: {
+        "UNIT 1: Set theory. Relations and Functions": {
+          video: "https://www.youtube.com/embed/LK4TtZ_vkeM?si=rF8rcCWCYnUP52z1",
+          notes: "Introduction to sets, subsets, operations.",
+          pdf: "https://drive.google.com/file/d/15BlIRvpsrBmS-2566uqgrcNJKWINMWOp/view?usp=drive_link",
+          assignment: "Solve 10 problems from Set Theory.",
+          homework: "Revise union & intersection."
+        },
+        "UNIT 2: Permutation, Combination and Algebraic System:": {
+          video:
+            "https://www.youtube.com/embed/yurSCPPloMs?si=lLz2WObc1MDPpbD2",
+          notes: "Graphs, trees, properties.",
+          pdf: "https://drive.google.com/file/d/1Hf9igdkNSUthYv4Ow6aKiQl3hHusU3dW/view?usp=drive_link",
+          assignment: "Draw 5 graphs.",
+          homework: "Study tree traversal."
+        },
+        "UNTI 3: Algebra of Logic:": {
+          video: "https://www.youtube.com/embed/l5Vt5bzkLK0?si=G3PrWBLUvQx_3aIT",
+          notes: "Boolean algebra, logical operators, truth tables.",
+          pdf: "",
+          assignment: "Solve 8 problems on propositional calculus.",
+          homework: "Study De Morgan's laws."
+        },
+        "UNIT 4: Recursion and recurrence:": {
+          video: "https://www.youtube.com/embed/2ii8mCFXj88?si=idXwvor_pEm4jySM",
+          notes: "Lattice structures, Boolean operations, applications.",
+          pdf: "",
+          assignment: "Design a Boolean circuit.",
+          homework: "Revise lattice properties."
+        },
+        "UNIT 5: Graph and Trees:": {
+          video: "https://www.youtube.com/embed/la7b2jWFuhQ?si=7AeONZ9vcfbJu8D7",
+          notes: "Graph traversal, connectivity, shortest paths.",
+          pdf: "",
+          assignment: "Solve graph problems.",
+          homework: "Study BFS and DFS algorithms."
+        }
+      },
+
+      Accounting: {
+        "UNIT 1: Introduction to Accounting": {
+          video: "https://www.youtube.com/embed/B0jZsLg8pks?si=PCIH4MLVJ09W8cBf",
+          notes: "Meaning, Characteristics, Purposes and Limitations; Concepts, Convention and Generally Accepted Accounting Principles.",
+          pdf: "https://drive.google.com/file/d/1urySIm4IyaEfc5KWraOTnL1bsAf9koOt/view?usp=drive_link",
+          assignment: "Prepare journal entries.",
+          homework: "Revise rules."
+        },
+        "UNIT 2:  Financial Accounting: ": {
+          video: "https://www.youtube.com/embed/5pmh4cl9GKY?si=Wm9xem8uGXS_a86H",
+          notes: " Double Entry Framework, Basic Concept of Journal, Ledgers-Purchase Book, Sales Book, Cash Book; Trading and Profit & Loss Account, Balance Sheet",
+          pdf: "https://drive.google.com/file/d/1Z-BAht5KXnw5V4wlT1QIVqsYUcnoZJwi/view?usp=drive_link",
+          assignment: "Prepare journal and ledger entries.",
+          homework: "Study golden rules of accounting."
+        },
+        "UNIT 3: Management Accounting:": {
+          video: "https://www.youtube.com/embed/gnRmh4OI3pw?si=ilYJCzzw4ZaOG8jG",
+          notes: "Nature, Scope, Advantage and Limitations; Differences between Management Accounting and Financial Accounting.",
+          pdf: "",
+          assignment: "Prepare complete financial statements.",
+          homework: "Verify trial balance."
+        },
+        "UNIT 4: Raising Funds:": {
+          video: "https://www.youtube.com/embed/82u1qyHBMQ4?si=oygKhomi2yJ7BYjq",
+          notes: "Sources of Raising Funds, Simple Treatment to Issue of Shares, Forfeiture of Shares and Reissue of Forfeited Shares.",
+          pdf: "",
+          assignment: "Calculate depreciation and adjustments.",
+          homework: "Study adjustment process."
+        },
+        "UNIT 5:  Computer Application:": {
+          video: "https://www.youtube.com/embed/8Haz0xLfcbA?si=rzLQu9kw1WA2DMHx",
+          notes: " Role of Computers in Accounting, Software Packages for Accounting",
+          pdf: "",
+          assignment: "Analyze financial statements.",
+          homework: "Study key financial ratios."
+        }
+      },
+
+      Dcld: {
+        "DCLD - UNIT 1: Number Systems": {
+          video: "https://www.youtube.com/embed/MxjJqq3B6JU?si=6rhZmrISZh_PnFVu",
+          notes: "Decimal, Binary, Octal, Hexadecimal number system, inter conversion between different number systems, different codes, gray code, ASCII code, Floating point numbers.",
+          pdf: "",
+          assignment: "Convert numbers between different bases.",
+          homework: "Study number system conversions."
+        },
+        "DCLD - UNIT 2: Logic Gates and Boolean Algebra": {
+          video: "https://www.youtube.com/embed/EW_2MhFu7tE?si=ti8E8NYs7Dtw4pHH",
+          notes: "Elements and functions of digital Logic gates, Gate propagation delay time, logic gates applications. Boolean algebra: Boolean operations, SOP and POS forms and simplification using Karnaugh maps, Realization of expressions using universal logic gates.",
+          pdf: "",
+          assignment: "Simplify Boolean expressions using K-maps.",
+          homework: "Study Boolean theorems."
+        },
+        "DCLD - UNIT 3: Combinational logical circuits": {
+          video: "https://www.youtube.com/embed/pHNbm-4reIc?si=BcNoKtnKTlYu7e90",
+          notes: "Design of Binary Adder- half and full, Serial, Parallel, Carry look ahead adder. Full subtracter, code converters, MUX and DEMUX, encoders and decoders, seven segment decoder.",
+          pdf: "",
+          assignment: "Design combinational logic circuits.",
+          homework: "Study gate implementations."
+        },
+        "DCLD - UNIT 4: Sequential logic circuits: ": {
+          video: "https://www.youtube.com/embed/v0pxOfTg18Y?si=4nq0hPKMPrurDPIj",
+          notes: "Latches, key debouncer, Flip flop: SR, J-K, D, T, Master slave J-K, flipflops with preset and clear . Counters; Binary counter, synchronous counter, mod-10 counter, Generation of control signals; Controlled counter; Up-down counter, Shift register, Parity generator or checker, Synchronization of an asynchronous pulse.",
+          pdf: "",
+          assignment: "Design sequential circuits.",
+          homework: "Study flip-flop types."
+        },
+        "DCLD - UNIT 5:  Microprocessor:": {
+          video: "https://www.youtube.com/embed/SBh6dJMM6AI?si=5HwK09d1CBVzUZ6z",
+          notes: "Architecture of a basic microcomputer, some general microprocessor system concepts: I/O ports and buses, internal architecture of a microprocessor, Microprocessor fetches, decode, execute cycle memory mapped and I/O mapped ports, I/O controls.",
+          pdf: "",
+          assignment: "Implement digital devices.",
+          homework: "Study device applications."
+        },
+      },
+
+      Oops: {
+        "OOPS - UNIT 1: Principles of Object Oriented Programming (OOP)": {
+          video: "https://www.youtube.com/embed/mlIUKyZIUUU?si=SBp5sE2BdgTR8UaY",
+          notes: "Basic Concepts of OOP, Comparison of procedural programming and OOP, Advantages of OOP, OOP Languages, Definitions: .Class, Objects, Concepts of inheritance and encapsulation, Operator overloading, Dynamic binding. Over view of OOP using C++, Basic Program construction: main and functions, Program statements, class declaration, comments++ compilation.",
+          pdf: "",
+          assignment: "Write simple C++ program with classes.",
+          homework: "Revise OOP concepts."
+        },
+        "OOPS - UNIT 2: Elements of C++ Language": {
+          video: "https://www.youtube.com/embed/TOG6xCEJU3M?si=2lA-jZb7wHUhh1j7",
+          notes: "Tokens and identifiers: Character set and symbols, Keywords. C++, identifiers. Variables and constants. Data Types: Basic data types, Arrays and strings, User defined data types; Operators, type conversions and type cast operators, Console I/O : cin, cout functions, Control statements: The if statement, if else; else.... if: switch statements, Loops: for and while do statements, Break, continue, go to, Functions Simple functions: Declaration of functions. Calling functions, Function definition, Passing arguments and returning values: Passing constants and variables, Pass by value. Return statement, types of functions, Passing and returning structure variables, Inline functions, Default arguments, returning by reference, pointers.",
+          pdf: "",
+          assignment: "Create classes with constructors and destructors.",
+          homework: "Study access specifiers."
+        },
+        "OOPS - UNIT 3:  Classes and Objects": {
+          video: "https://www.youtube.com/embed/YNuFnhRMoVs?si=zBd253Sg6HEmRzq-",
+          notes: "Declaration of classes and objects in C++, Class definition. Declaration of members, objects as date time, Objects as function arguments. Array of objects, Returning objects from function, Structures and classes. Basic constructors, Parameterized constructors. Constructors with default arguments. Dynamic initialization of objects, use of copy constructor, shallow copying and deep copying, Dynamic constructors. Destructors, constraints on constructors and destructors.",
+          pdf: "",
+          assignment: "Create derived classes with inheritance.",
+          homework: "Study inheritance types."
+        },
+        "OOPS - UNIT 4:  Operator Overloading": {
+          video: "https://www.youtube.com/embed/0QjDxmSVryU?si=KeuZ3RawSubAmCWG",
+          notes: "Overloading unary operators: Operator keyword, Arguments and return values, Laminations of increment operators, overloading binary operators. Arithmetic operators Examples: Addition of polar coordinates and concatenation of strings Multiple overloading, Comparison operators, Arithmetic assignment operators. Data and type conversions: Conversion between basic types, Conversion between objects and basic types, conversion between objects of different classes, Constraints on type conversion",
+          pdf: "",
+          assignment: "Implement polymorphism examples.",
+          homework: "Study virtual functions."
+        },
+        "OOPS - UNIT 5: Derived Classes and Inheritance": {
+          video: "https://www.youtube.com/embed/7ZfEp71tIec?si=ch_z8CDdZsAacdFW",
+          notes: "Derived, classes and base class: Defining a derived class, accessing the bases class members, the protected access specifier, specifer. Derived class constructors. Overriding the member functions, Class hierarchies: Abstract base class. Inheritance: Public and private inheritance. Types of Inheritance single level, multi level, multiple, hybrid etc., virtual function, stream classes.",
+          pdf: "",
+          assignment: "Handle exceptions in C++ programs.",
+          homework: "Study STL containers."
+        }
+      },
+
+      Labwork: {
+        "L1": { notes: "Lab 1", pdf: "https://drive.google.com/file/d/1i0CEGHhiHYnZZ7ChWoMI_QQIlDh_wElA/view?usp=drive_link" },
+        "L2": { notes: "Lab 2", pdf: "https://drive.google.com/file/d/1zolBnOeqZ8nFpRAaWCresFFMEF_RO9H3/view?usp=drive_link" },
+        "L3": { notes: "Lab 3", pdf: "https://drive.google.com/file/d/1XDM_QariM46DrngARJyAyJE3wMC1trUT/view?usp=drive_link" },
+        "L4": { notes: "Lab 4", pdf: "https://drive.google.com/file/d/1s0haqXOUyHbgKLv9482R6e5iQ30X8T3g/view?usp=drive_link" },
+        "L5": { notes: "Lab 5", pdf: "https://drive.google.com/file/d/17VEQ8xkqd8GE-4L2CqCWoYD7fl-mSN8M/view?usp=drive_link" },
+        "L6": { notes: "Lab 6", pdf: "https://drive.google.com/file/d/1v6Xe1dcACGTX5uT9jBYpEFvUWh3Sak3p/view?usp=drive_link" },
+        "L7": { notes: "Lab 7", pdf: "https://drive.google.com/file/d/1jekV2UHtKTpcBkuZRGZjKceM5XXy1NAk/view?usp=drive_link" },
+        "L8": { notes: "Lab 8", pdf: "https://drive.google.com/file/d/1IDVA0Yb-PzDqhMyGMo881HJjx4VVaRce/view?usp=drive_link" },
+        "L9": { notes: "Lab 9", pdf: "https://drive.google.com/file/d/1VmSM4IQVXO8Wq_Gfmc_MA31MFTFEwfeZ/view?usp=drive_link" },
+        "L10": { notes: "Lab 10", pdf: "https://drive.google.com/file/d/1x_DqpHKEe7VFFCSbbPDziQU4CmqV5h_9/view?usp=drive_link" },
+        "L11": { notes: "Lab 11", pdf: "https://drive.google.com/file/d/11qvX83gzQ9-vtTc66T3-_h51b8PcHCur/view?usp=drive_link" },
+        "L12": { notes: "Lab 12", pdf: "https://drive.google.com/file/d/1I-RJ3UBs9xRtrCPfUFzAixZ9440mWXKI/view?usp=drive_link" },
+        "L13": { notes: "Lab 13", pdf: "https://drive.google.com/file/d/1tWpaL9j9XSIaYzeHNHJJuhDdAP-WX-L3/view?usp=drive_link" },
+        "L14": { notes: "Lab 14", pdf: "https://drive.google.com/file/d/1K7_9X1Rnl1qNEaPW4jOFzwkm4455cWCO/view?usp=drive_link" },
+        "L15": { notes: "Lab 15", pdf: "https://drive.google.com/file/d/1s5GkA6oqan2EZRZ8xru1Civ_Ce25rP2R/view?usp=drive_link" },
+        "L16": { notes: "Lab 16", pdf: "https://drive.google.com/file/d/1WsjzxsOjacvIw-dNhSgySGavNgZfhlf4/view?usp=drive_link" },
+        "L17": { notes: "Lab 17", pdf: "https://drive.google.com/file/d/1l7xrvtM0HBJAlNSBcBSC4UjZ8ffTFsNV/view?usp=drive_link" },
+        "L18": { notes: "Lab 18", pdf: "https://drive.google.com/file/d/19I44HsJlFwcteidEEm57qO-ezsJcK3Cp/view?usp=drive_link" },
+        "L19": { notes: "Lab 19", pdf: "" },
+        "L20": { notes: "Lab 20", pdf: "https://drive.google.com/file/d/1ZAp9brogxL2H7P6tM0y6w7tdyn0BWdq2/view?usp=drive_link" },
+        "L21": { notes: "Lab 21", pdf: "https://drive.google.com/file/d/1my2W98iS59W8BbG5QU1k8J_kQx14LhsT/view?usp=drive_link" },
+        "L22": { notes: "Lab 22", pdf: "https://drive.google.com/file/d/1LATPKKK-0-6o8qWeoykRrfVQsGc5K_G6/view?usp=drive_link" },
+        "L23": { notes: "Lab 23", pdf: "https://drive.google.com/file/d/1L-tmZcnLtvm0a3C09tovTigK0dSF0VnT/view?usp=drive_link" },
+        "L24": { notes: "Lab 24", pdf: "https://drive.google.com/file/d/1mV_LEIH7YjlzhYtJOsWQrjuGAhfeqprT/view?usp=drive_link" },
+        "L25": { notes: "Lab 25", pdf: "https://drive.google.com/file/d/1JQhIymezV4WfcdepiczEx929_nnkEp1M/view?usp=drive_link" },
+        "L26": { notes: "Lab 26", pdf: "" },
+        "L27": { notes: "Lab 27", pdf: "" },
+        "L28": { notes: "Lab 28", pdf: "" },
+        "L29": { notes: "Lab 29", pdf: "" },
+        "L30": { notes: "Lab 30", pdf: "" },
+        "L31": { notes: "Lab 31", pdf: "" },
+        "L32": { notes: "Lab 32", pdf: "" },
+        "L33": { notes: "Lab 33", pdf: "" },
+        "L34": { notes: "Lab 34", pdf: "" },
+        "L35": { notes: "Lab 35", pdf: "" },
+        "L36": { notes: "Lab 36", pdf: "" },
+        "L37": { notes: "Lab 37", pdf: "" },
+        "L38": { notes: "Lab 38", pdf: "" },
+        "L39": { notes: "Lab 39", pdf: "" },
+        "L40": { notes: "Lab 40", pdf: "" }
+      },
+
+      ComputerSkill: {
+        "UNIT 1: Introduction to Computers": {
+          video: "https://www.youtube.com/embed/agaLaSafbwc?si=2OQLr54YVYxY93cr",
+          notes: "Computer basics, hardware components, operating systems.",
+          pdf: "",
+        },
+      },
+
+      CommunicationSkill: {
+        "UNIT 1: Introduction to Communication": {
+          video: "https://www.youtube.com/embed/99W9-1I66Jw?si=oYHcAqt1irSsG2sq",
+          notes: "Communication process, types of communication, importance.",
+          pdf: "",
+
+        },
+        "UNIT 2: Written Communication": {
+          video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+          notes: "Business writing, emails, reports, documentation skills.",
+          pdf: "",
+
+        },
+        "UNIT 3: Verbal Communication": {
+          video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+          notes: "Listening skills, speaking techniques, presentation skills.",
+          pdf: "",
+          assignment: "",
+          homework: ""
+        },
+        "UNIT 4: Non-Verbal Communication": {
+          video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+          notes: "Body language, gestures, facial expressions, tone of voice.",
+          pdf: "",
+
+        },
+        "UNIT 5: Interpersonal and Professional Communication": {
+          video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+          notes: "Teamwork, conflict resolution, professional etiquette.",
+          pdf: "",
+
+        }
+      }
+    };
+
+    let allSubjects = {
+      "Discrete Maths": oldData.Math,
+      "Accounting": oldData.Accounting,
+      "Digital Logic": oldData.Dcld,
+      "C++ Programming": oldData.Oops,
+      "Lab Work": oldData.Labwork,
+      "Computer Skills": oldData.ComputerSkill,
+      "Communication": oldData.CommunicationSkill,
+      "Important Qs": oldData.QuestionPractice
+    };
+
+    let defaultData = {
+      "BTECH": { "CSE": {}, "ECE": {}, "ME": {}, "CE": {} },
+      "BCA": { "DDU": {}, "AKTU": {} },
+      "BBA": { "DDU": {}, "AKTU": {} }
+    };
+
+    for (let course in defaultData) {
+      for (let branch in defaultData[course]) {
+        let maxSem = (course === "BTECH") ? 8 : 6;
+        for (let i = 1; i <= maxSem; i++) {
+          defaultData[course][branch][i] = JSON.parse(JSON.stringify(allSubjects));
+        }
+      }
+    }
+
+    let data = JSON.parse(localStorage.getItem("courseData")) || defaultData;
+
+
+    /* AUTHENTICATION FUNCTIONS */
+    let currentUserMobile = "";
+
+    function toggleAuthMode(mode) {
+      document.getElementById('signUpForm').style.display = 'none';
+      document.getElementById('loginForm').style.display = 'none';
+      document.getElementById('adminLoginForm').style.display = 'none';
+
+      if (mode === 'login') {
+        document.getElementById('loginForm').style.display = 'block';
+      } else if (mode === 'signup') {
+        document.getElementById('signUpForm').style.display = 'block';
+      } else if (mode === 'admin') {
+        document.getElementById('adminLoginForm').style.display = 'block';
+      }
+    }
+
+    // ADMIN FUNCTIONS
+    function handleAdminLogin() {
+      let user = document.getElementById("adminUser").value.trim();
+      let pass = document.getElementById("adminPass").value.trim();
+
+      // Default basic credentials for this demo
+      if (user === "admin" && pass === "admin123") {
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("adminDashboard").style.display = "block";
+        loadAdminData();
+      } else {
+        alert("Invalid Admin Credentials!");
+      }
+    }
+
+    function adminLogout() {
+      document.getElementById("adminDashboard").style.display = "none";
+      document.getElementById("loginScreen").style.display = "flex";
+      toggleAuthMode('admin');
+      document.getElementById("adminUser").value = "";
+      document.getElementById("adminPass").value = "";
+    }
+
+    function loadAdminData() {
+      let tbody = document.getElementById("adminTableBody");
+      tbody.innerHTML = ""; // clear old
+
+      let hasData = false;
+      for (let i = 0; i < localStorage.length; i++) {
+        let key = localStorage.key(i);
+        try {
+          let data = JSON.parse(localStorage.getItem(key));
+          if (data && data.name && data.mobile) {
+            hasData = true;
+            let tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${data.name}</td>
+              <td>${data.roll}</td>
+              <td>${data.branch}</td>
+              <td>${data.section}</td>
+              <td>${data.mobile}</td>
+            `;
+            tbody.appendChild(tr);
+          }
+        } catch (e) {
+          // ignore non-json localstorage keys
+        }
+      }
+
+      if (!hasData) {
+        tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>No registered students yet.</td></tr>";
+      }
+
+      initAdminCMS(); // Initialize the Content Management dropdowns
+    }
+
+    // CMS FUNCTIONS
+    function initAdminCMS() {
+      let cSelect = document.getElementById("cmsCourse");
+      cSelect.innerHTML = '<option value="" disabled selected>Course</option>';
+      for (let c in data) {
+        let opt = document.createElement("option"); opt.value = c; opt.innerText = c; cSelect.appendChild(opt);
+      }
+      document.getElementById("cmsEditor").style.display = "none";
+    }
+
+    function onAdminCourseChange() {
+      let c = document.getElementById("cmsCourse").value;
+      let bSelect = document.getElementById("cmsBranch");
+      bSelect.innerHTML = '<option value="" disabled selected>Branch</option>';
+      if (data[c]) {
+        for (let b in data[c]) {
+          let opt = document.createElement("option"); opt.value = b; opt.innerText = b; bSelect.appendChild(opt);
+        }
+      }
+      document.getElementById("cmsSemester").innerHTML = '<option value="" disabled selected>Semester</option>';
+      document.getElementById("cmsSubject").innerHTML = '<option value="" disabled selected>Subject</option>';
+      document.getElementById("cmsChapter").innerHTML = '<option value="" disabled selected>Chapter</option>';
+      document.getElementById("cmsEditor").style.display = "none";
+    }
+
+    function onAdminBranchChange() {
+      let c = document.getElementById("cmsCourse").value;
+      let b = document.getElementById("cmsBranch").value;
+      let sSelect = document.getElementById("cmsSemester");
+      sSelect.innerHTML = '<option value="" disabled selected>Semester</option>';
+      if (data[c] && data[c][b]) {
+        for (let s in data[c][b]) {
+          let opt = document.createElement("option"); opt.value = s; opt.innerText = "Semester " + s; sSelect.appendChild(opt);
+        }
+      }
+      document.getElementById("cmsSubject").innerHTML = '<option value="" disabled selected>Subject</option>';
+      document.getElementById("cmsChapter").innerHTML = '<option value="" disabled selected>Chapter</option>';
+      document.getElementById("cmsEditor").style.display = "none";
+    }
+
+    function onAdminSemesterChange() {
+      let c = document.getElementById("cmsCourse").value;
+      let b = document.getElementById("cmsBranch").value;
+      let sem = document.getElementById("cmsSemester").value;
+      let subjSelect = document.getElementById("cmsSubject");
+      subjSelect.innerHTML = '<option value="" disabled selected>Subject</option>';
+      if (data[c] && data[c][b] && data[c][b][sem]) {
+        for (let sub in data[c][b][sem]) {
+          let opt = document.createElement("option"); opt.value = sub; opt.innerText = sub; subjSelect.appendChild(opt);
+        }
+      }
+      document.getElementById("cmsChapter").innerHTML = '<option value="" disabled selected>Chapter</option>';
+      document.getElementById("cmsEditor").style.display = "none";
+    }
+
+    function onAdminSubjectChange() {
+      let c = document.getElementById("cmsCourse").value;
+      let b = document.getElementById("cmsBranch").value;
+      let sem = document.getElementById("cmsSemester").value;
+      let sub = document.getElementById("cmsSubject").value;
+      let chapSelect = document.getElementById("cmsChapter");
+      chapSelect.innerHTML = '<option value="" disabled selected>Chapter</option>';
+      if (data[c] && data[c][b] && data[c][b][sem] && data[c][b][sem][sub]) {
+        for (let chap in data[c][b][sem][sub]) {
+          let opt = document.createElement("option"); opt.value = chap; opt.innerText = chap; chapSelect.appendChild(opt);
+        }
+      }
+      document.getElementById("cmsEditor").style.display = "none";
+    }
+
+    function onAdminChapterChange() {
+      let c = document.getElementById("cmsCourse").value;
+      let b = document.getElementById("cmsBranch").value;
+      let sem = document.getElementById("cmsSemester").value;
+      let sub = document.getElementById("cmsSubject").value;
+      let chap = document.getElementById("cmsChapter").value;
+
+      if (c && b && sem && sub && chap && data[c] && data[c][b] && data[c][b][sem] && data[c][b][sem][sub] && data[c][b][sem][sub][chap]) {
+        let content = data[c][b][sem][sub][chap];
+        document.getElementById("cmsVideo").value = content.video || "";
+        document.getElementById("cmsNotes").value = content.notes || "";
+        document.getElementById("cmsPdf").value = content.pdf || "";
+        document.getElementById("cmsAssignment").value = content.assignment || "";
+        document.getElementById("cmsHomework").value = content.homework || "";
+
+        document.getElementById("cmsEditor").style.display = "block";
+      }
+    }
+
+    function saveAdminContent() {
+      let c = document.getElementById("cmsCourse").value;
+      let b = document.getElementById("cmsBranch").value;
+      let sem = document.getElementById("cmsSemester").value;
+      let sub = document.getElementById("cmsSubject").value;
+      let chap = document.getElementById("cmsChapter").value;
+
+      if (!c || !b || !sem || !sub || !chap) return;
+
+      data[c][b][sem][sub][chap] = {
+        video: document.getElementById("cmsVideo").value.trim(),
+        notes: document.getElementById("cmsNotes").value.trim(),
+        pdf: document.getElementById("cmsPdf").value.trim(),
+        assignment: document.getElementById("cmsAssignment").value.trim(),
+        homework: document.getElementById("cmsHomework").value.trim()
+      };
+
+      localStorage.setItem("courseData", JSON.stringify(data));
+      alert("✅ Content for '" + chap + "' has been updated successfully!");
+    }
+
+    // FORGOT DETAILS RECOVERY & EDIT PROFILE VARS
+    let isRecoveringMode = false;
+
+    function recoverDetails() {
+      let rollSearch = prompt("Enter your registered DDU Roll Number to recover/edit your details:");
+      if (!rollSearch || rollSearch.trim() === "") return;
+
+      let foundUser = null;
+      for (let i = 0; i < localStorage.length; i++) {
+        let key = localStorage.key(i);
+        try {
+          let data = JSON.parse(localStorage.getItem(key));
+          if (data && data.roll && data.roll.toLowerCase() === rollSearch.trim().toLowerCase()) {
+            foundUser = data;
+            break;
+          }
+        } catch (e) { }
+      }
+
+      if (foundUser) {
+        // Open Edit Profile screen in recovery mode
+        isRecoveringMode = true;
+        tempRecoverMobile = foundUser.mobile;
+
+        document.getElementById("editName").value = foundUser.name;
+        document.getElementById("editRoll").value = foundUser.roll;
+        document.getElementById("editBranch").value = foundUser.branch;
+        document.getElementById("editSection").value = foundUser.section;
+        document.getElementById("editMobile").value = foundUser.mobile;
+
+        document.querySelector("#editProfileScreen h2").innerText = "🛠️ Fix Registration Details";
+        document.getElementById("editProfileScreen").style.display = "flex";
+      } else {
+        alert("Sorry, no account found matching this DDU Roll Number. You may need to Sign Up first.");
+      }
+    }
+
+    function handleSignUp() {
+      let name = document.getElementById("regName").value.trim();
+      let roll = document.getElementById("regRoll").value.trim();
+      let branch = document.getElementById("regBranch").value;
+      let section = document.getElementById("regSection").value;
+      let mobile = document.getElementById("regMobile").value.trim();
+
+      if (!name || !roll || !branch || !section || !mobile) {
+        alert("Please fill in all details to register!");
+        return;
+      }
+
+      // Check if user already exists
+      if (localStorage.getItem(mobile)) {
+        alert("An account with this mobile number already exists! Please logic.");
+        toggleAuthMode('login');
+        return;
+      }
+
+      let userData = { name, roll, branch, section, mobile };
+      localStorage.setItem(mobile, JSON.stringify(userData));
+      currentUserMobile = mobile;
+
+      alert("Registration Successful! Welcome to NextGen Library.");
+      document.getElementById("loginScreen").style.display = "none";
+      document.getElementById("welcomeScreen").style.display = "flex";
+
+      // Update welcome text with Name
+      document.querySelector("#welcomeScreen p").innerText += `\nWelcome, ${name}!`;
+    }
+
+    function handleLogin() {
+      let name = document.getElementById("loginName").value.trim();
+      let mobile = document.getElementById("loginMobile").value.trim();
+      let section = document.getElementById("loginSection").value;
+
+      if (!name || !mobile || !section) {
+        alert("Please enter Name, Section, and Mobile Number!");
+        return;
+      }
+
+      let savedData = localStorage.getItem(mobile);
+
+      if (savedData) {
+        let user = JSON.parse(savedData);
+        if (user.name.toLowerCase() === name.toLowerCase() && user.section === section) {
+          currentUserMobile = mobile;
+          document.getElementById("loginScreen").style.display = "none";
+          document.getElementById("welcomeScreen").style.display = "flex";
+          document.querySelector("#welcomeScreen p").innerText += `\nWelcome back, ${user.name}!`;
+        } else {
+          alert("Incorrect Name or Section for this Mobile Number.");
+        }
+      } else {
+        alert("Mobile number not found! Please sign up first.");
+        toggleAuthMode('signup');
+      }
+    }
+
+    // EDIT PROFILE FUNCTIONS
+    function openEditProfile() {
+      if (!currentUserMobile) {
+        alert("You must be logged in to edit your profile.");
+        return;
+      }
+      isRecoveringMode = false;
+      document.querySelector("#editProfileScreen h2").innerText = "✏️ Edit Profile";
+
+      let savedData = localStorage.getItem(currentUserMobile);
+      if (savedData) {
+        let user = JSON.parse(savedData);
+        document.getElementById("editName").value = user.name;
+        document.getElementById("editRoll").value = user.roll;
+        document.getElementById("editBranch").value = user.branch;
+        document.getElementById("editSection").value = user.section;
+        document.getElementById("editMobile").value = user.mobile;
+
+        document.getElementById("editProfileScreen").style.display = "flex";
+      }
+    }
+
+    function closeEditProfile() {
+      document.getElementById("editProfileScreen").style.display = "none";
+      isRecoveringMode = false;
+    }
+
+    function saveProfileChanges() {
+      let newName = document.getElementById("editName").value.trim();
+      let newRoll = document.getElementById("editRoll").value.trim();
+      let newBranch = document.getElementById("editBranch").value;
+      let newSection = document.getElementById("editSection").value;
+      let newMobile = document.getElementById("editMobile").value.trim();
+
+      if (!newName || !newRoll || !newBranch || !newSection || !newMobile) {
+        alert("Please fill in all details to update your profile!");
+        return;
+      }
+
+      let activeMobileKey = isRecoveringMode ? tempRecoverMobile : currentUserMobile;
+
+      // Check if mobile changed and new mobile already exists
+      if (newMobile !== activeMobileKey && localStorage.getItem(newMobile)) {
+        alert("The new mobile number is already registered by another user.");
+        return;
+      }
+
+      let updatedData = {
+        name: newName,
+        roll: newRoll,
+        branch: newBranch,
+        section: newSection,
+        mobile: newMobile
+      };
+
+      if (newMobile !== activeMobileKey) {
+        localStorage.removeItem(activeMobileKey);
+      }
+
+      localStorage.setItem(newMobile, JSON.stringify(updatedData));
+
+      if (!isRecoveringMode) {
+        currentUserMobile = newMobile; // update tracking
+        // Update welcome text gracefully
+        document.querySelector("#welcomeScreen p").innerText = "Your Digital Learning Hub\nWelcome, " + newName + "!";
+      }
+
+      alert(isRecoveringMode ? "Registration Fixed Successfully! Please log in." : "Profile updated successfully!");
+      closeEditProfile();
+
+      if (isRecoveringMode) {
+        toggleAuthMode('login');
+      }
+    }
+
+    function enterSite() {
+      document.getElementById("welcomeScreen").style.display = "none";
+      document.querySelector("header").style.display = "flex";
+      document.getElementById("programsWrapper").style.display = "block";
+    }
+
+    function goBackToPrograms() {
+      document.getElementById("programsWrapper").style.display = "block";
+    }
+
+    let studentNavState = { course: "", branch: "", sem: "", subject: "" };
+    let currentNavLevel = "programs"; // programs -> branches -> semesters -> subjects -> chapters
+
+    function openStudentLevel(level, selection) {
+      document.getElementById("programsWrapper").style.display = "none";
+      document.getElementById("semesterMotivationSection").style.display = "none";
+      document.getElementById("dynamicNavSection").style.display = "block";
+
+      let container = document.getElementById("dynamicNavContainer");
+      let html = "";
+
+      if (level === 'course') {
+        studentNavState.course = selection;
+        currentNavLevel = 'branches';
+        let branches = data[selection];
+        for (let br in branches) {
+          html += `<div class="box" onclick="openStudentLevel('branch', '${br}')">🏢 ${br}</div>`;
+        }
+      }
+      else if (level === 'branch') {
+        studentNavState.branch = selection;
+        currentNavLevel = 'semesters';
+        let sems = data[studentNavState.course][selection];
+        for (let s in sems) {
+          html += `<div class="box" onclick="openStudentLevel('semester', '${s}')">📚 Semester ${s}</div>`;
+        }
+        document.getElementById("semesterMotivationSection").style.display = "block";
+      }
+      else if (level === 'semester') {
+        studentNavState.sem = selection;
+        currentNavLevel = 'subjects';
+        let subs = data[studentNavState.course][studentNavState.branch][selection];
+        for (let sub in subs) {
+          html += `<div class="box" onclick="openStudentLevel('subject', '${sub}')">📘 ${sub}</div>`;
+        }
+      }
+      else if (level === 'subject') {
+        studentNavState.subject = selection;
+        currentNavLevel = 'chapters';
+        // Hide dynamicNavSection, show original #chapters UI
+        document.getElementById("dynamicNavSection").style.display = "none";
+        document.getElementById("chapters").style.display = "block";
+        document.getElementById("subjectTitle").innerText = selection + " Chapters";
+
+        let chapters = data[studentNavState.course][studentNavState.branch][studentNavState.sem][selection];
+        let chList = "";
+        for (let ch in chapters) {
+          chList += `<li onclick="openStudentChapter('${ch}')">${ch}</li>`;
+        }
+        document.getElementById("chapterList").innerHTML = chList;
+        return;
+      }
+
+      container.innerHTML = html;
+    }
+
+    function goBackDynamicNav() {
+      if (currentNavLevel === 'branches') {
+        document.getElementById("dynamicNavSection").style.display = "none";
+        document.getElementById("programsWrapper").style.display = "block";
+        currentNavLevel = 'programs';
+      } else if (currentNavLevel === 'semesters') {
+        openStudentLevel('course', studentNavState.course);
+      } else if (currentNavLevel === 'subjects') {
+        openStudentLevel('branch', studentNavState.branch);
+      }
+    }
+
+    function goBackToSubjects() {
+      document.getElementById("chapters").style.display = "none";
+      openStudentLevel('semester', studentNavState.sem);
+    }
+
+    function openStudentChapter(ch) {
+      document.getElementById("chapters").style.display = "none";
+      document.getElementById("content").style.display = "block";
+
+      document.getElementById("chapterTitle").innerText = ch;
+
+      let c = studentNavState.course;
+      let b = studentNavState.branch;
+      let sem = studentNavState.sem;
+      let sub = studentNavState.subject;
+      let chapterData = data[c][b][sem][sub][ch];
+
+      if (chapterData.video) {
+        document.getElementById("videoFrame").src = chapterData.video;
+        document.getElementById("videoSection").style.display = "block";
+      } else {
+        document.getElementById("videoSection").style.display = "none";
+      }
+
+      if (chapterData.assignment) {
+        document.getElementById("assignmentText").innerText = chapterData.assignment;
+        document.getElementById("assignmentSection").style.display = "block";
+      } else {
+        document.getElementById("assignmentSection").style.display = "none";
+      }
+
+      if (chapterData.homework) {
+        document.getElementById("homeworkText").innerText = chapterData.homework;
+        document.getElementById("homeworkSection").style.display = "block";
+      } else {
+        document.getElementById("homeworkSection").style.display = "none";
+      }
+
+      document.getElementById("notesText").innerText = chapterData.notes || "";
+
+      if (chapterData.pdf) {
+        let pdfUrl = chapterData.pdf;
+        let fileId = pdfUrl.match(/\/d\/(.*?)\//)?.[1];
+        if (fileId) {
+          let embedUrl = "https://drive.google.com/file/d/" + fileId + "/preview";
+          document.getElementById("pdfFrame").src = embedUrl;
+          document.getElementById("pdfContainer").style.display = "block";
+        } else {
+          document.getElementById("pdfContainer").style.display = "none";
+        }
+      } else {
+        document.getElementById("pdfContainer").style.display = "none";
+      }
+    }
+
+    function goBack() {
+      document.getElementById("chapters").style.display = "none";
+      document.getElementById("subjects").style.display = "grid";
+    }
+
+    function goBackChapter() {
+      document.getElementById("content").style.display = "none";
+      document.getElementById("chapters").style.display = "block";
+    }
+
+    function toggleTask(checkbox) {
+      let taskItem = checkbox.parentElement;
+      if (checkbox.checked) {
+        taskItem.classList.add("completed");
+      } else {
+        taskItem.classList.remove("completed");
+      }
+    }
+
+    function toggleMode() {
+      document.body.classList.toggle("light");
+      let btn = document.getElementById("themeToggleBtn");
+      if (document.body.classList.contains("light")) {
+        btn.innerText = "🌙";
+      } else {
+        btn.innerText = "🌞";
+      }
+    }
+
+    function searchChapter(val) {
+      let items = document.querySelectorAll("li");
+      items.forEach(i => {
+        i.style.display = i.innerText.toLowerCase().includes(val.toLowerCase()) ? "block" : "none";
+      });
+    }
+
+    // --- GEMINI AI TUTOR LOGIC ---
+    // PASTE YOUR GEMINI API KEY HERE
+    const NEXTGEN_AI = "AIzaSyB_Q8vc7aADtLbqfgSZN7TGnmr0jAmvmVw";
+
+    function toggleChat() {
+      let chatBox = document.getElementById("aiChatBox");
+      if (chatBox.style.display === "none" || chatBox.style.display === "") {
+        chatBox.style.display = "flex";
+      } else {
+        chatBox.style.display = "none";
+      }
+    }
+
+    async function sendChatMessage() {
+      let inputField = document.getElementById("aiChatInput");
+      let message = inputField.value.trim();
+      if (!message) return;
+
+      let chatHistory = document.getElementById("aiChatHistory");
+
+      // Add user message
+      let userBubble = document.createElement("div");
+      userBubble.style.cssText = "align-self: flex-end; background: cyan; color: black; padding: 10px 14px; border-radius: 12px; border-bottom-right-radius: 0; max-width: 85%; font-weight: 500; font-size: 14px;";
+      userBubble.innerText = message;
+      chatHistory.appendChild(userBubble);
+      inputField.value = "";
+
+      // Scroll to bottom
+      chatHistory.scrollTop = chatHistory.scrollHeight;
+
+      // Add loading state
+      let loadingBubble = document.createElement("div");
+      loadingBubble.style.cssText = "align-self: flex-start; background: rgba(0, 255, 255, 0.1); padding: 10px 14px; border-radius: 12px; border-bottom-left-radius: 0; max-width: 85%; border: 1px solid rgba(0, 255, 255, 0.3); font-style: italic; color: cyan; font-size: 14px;";
+      loadingBubble.innerText = "Thinking...";
+      chatHistory.appendChild(loadingBubble);
+      chatHistory.scrollTop = chatHistory.scrollHeight;
+
+      if (!NEXTGEN_AI) {
+        setTimeout(() => {
+          chatHistory.removeChild(loadingBubble);
+          addAiResponse("⚠️ **API Key is missing!** <br><br>Developer needs to paste the Gemini API Key into the JavaScript code (`const NEXTGEN_AI = 'YOUR_KEY_HERE';`) for me to connect to the internet and answer your questions.");
+        }, 1500);
+        return;
+      }
+
+      // Call Gemini API
+      try {
+        let response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${NEXTGEN_AI}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: "You are a helpful AI tutor for a college student. Keep your answers concise, educational, formatted nicely with markdown if needed, and easy to understand. Student's query: " + message }] }]
+          })
+        });
+
+        let data = await response.json();
+        chatHistory.removeChild(loadingBubble);
+
+        if (data.candidates && data.candidates.length > 0) {
+          let aiText = data.candidates[0].content.parts[0].text;
+          addAiResponse(aiText);
+        } else {
+          addAiResponse("Sorry, I couldn't generate a response. Please try again.");
+        }
+      } catch (error) {
+        chatHistory.removeChild(loadingBubble);
+        addAiResponse("Oops! A network error occurred while connecting to my brain. Please check your internet connection.");
+      }
+    }
+
+    function addAiResponse(text) {
+      let chatHistory = document.getElementById("aiChatHistory");
+      let aiBubble = document.createElement("div");
+      aiBubble.style.cssText = "align-self: flex-start; background: rgba(0, 255, 255, 0.1); padding: 10px 14px; border-radius: 12px; border-bottom-left-radius: 0; max-width: 85%; border: 1px solid rgba(0, 255, 255, 0.3); color: white; font-size: 14px; line-height: 1.5;";
+
+      // Convert basic markdown to HTML for better readability
+      text = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+      text = text.replace(/\*(.*?)\*/g, '<i>$1</i>');
+      text = text.replace(/\n/g, '<br>');
+
+      aiBubble.innerHTML = text;
+      chatHistory.appendChild(aiBubble);
+      chatHistory.scrollTop = chatHistory.scrollHeight;
+    }
+
+    /* MOTIVATION ROTATION */
+    /* MOTIVATION ROTATION */
+    const motivations = [
+      // Bhagavad Gita / Mahabharata
+      "\"Karmanye Vadhikaraste, Ma Phaleshu Kadachana. (You have a right to perform your prescribed duty, but you are not entitled to the fruits of action.)\" - Bhagavad Gita",
+      "\"A person can rise through the efforts of his own mind; or draw himself down, in the same manner. Because each person is his own friend or enemy.\" - Bhagavad Gita",
+      "\"Whatever happened, happened for the good. Whatever is happening, is happening for the good. Whatever will happen, will also happen for the good.\" - Mahabharata",
+      "\"There is neither this world nor the world beyond nor happiness for the one who doubts.\" - Bhagavad Gita",
+      "\"No one who does good work will ever come to a bad end, either here or in the world to come.\" - Bhagavad Gita",
+      "\"You are what you believe in. You become that which you believe you can become.\" - Bhagavad Gita",
+      "\"Change is the law of the universe. You can be a millionaire, or a pauper in an instant.\" - Bhagavad Gita",
+      "\"The power of God is with you at all times; through the activities of mind, senses, breathing, and emotions; and is constantly doing all the work using you as a mere instrument.\" - Bhagavad Gita",
+      "\"When meditation is mastered, the mind is unwavering like the flame of a lamp in a windless place.\" - Bhagavad Gita",
+      "\"We are kept from our goal not by obstacles, but by a clear path to a lesser goal.\" - Mahabharata Teachings",
+
+      // Ramayana & Epics
+      "\"Truth, righteousness, and morality will always triumph over evil and deception.\" - Valmiki Ramayana",
+      "\"Only the timid and the weak leave things to destiny (Daivam), but the strong and the self-reliant never fold their hands to destiny.\" - Lakshmana (Ramayana)",
+      "\"There is no deity powerful as time.\" - Valmiki Ramayana",
+      "\"Grief destroys one's courage. It destroys one's learning. There is no enemy greater than grief.\" - Shri Rama (Ramayana)",
+      "\"Even if a person is weak, if he has the courage and the will, he can defeat the strongest of enemies.\" - Ramayana",
+
+      // Swami Vivekananda & Spiritual Leaders
+      "\"Arise, awake, and stop not till the goal is reached.\" - Swami Vivekananda",
+      "\"Take up one idea. Make that one idea your life - think of it, dream of it, live on that idea.\" - Swami Vivekananda",
+      "\"You cannot believe in God until you believe in yourself.\" - Swami Vivekananda",
+      "\"Truth can be stated in a thousand different ways, yet each one can be true.\" - Swami Vivekananda",
+      "\"In a day, when you don't come across any problems - you can be sure that you are travelling in a wrong path.\" - Swami Vivekananda",
+      "\"There is no limit to the power of the human mind. The more concentrated it is, the more power is brought to bear on one point.\" - Swami Vivekananda",
+      "\"Do not dwell in the past, do not dream of the future, concentrate the mind on the present moment.\" - Gautama Buddha",
+      "\"The mind is everything. What you think you become.\" - Gautama Buddha",
+      "\"Your work is to discover your work and then with all your heart to give yourself to it.\" - Gautama Buddha",
+
+      // Scientists & Modern Leaders (APJ Abdul Kalam, etc.)
+      "\"Dream, dream, dream. Dreams transform into thoughts and thoughts result in action.\" - Dr. A.P.J. Abdul Kalam",
+      "\"If you want to shine like a sun, first burn like a sun.\" - Dr. A.P.J. Abdul Kalam",
+      "\"To succeed in your mission, you must have single-minded devotion to your goal.\" - Dr. A.P.J. Abdul Kalam",
+      "\"You have to dream before your dreams can come true.\" - Dr. A.P.J. Abdul Kalam",
+      "\"Man needs difficulties in life because they are necessary to enjoy success.\" - Dr. A.P.J. Abdul Kalam",
+      "\"Be active! Take on responsibility! Work for the things you believe in. If you do not, you are surrendering your fate to others.\" - Dr. A.P.J. Abdul Kalam",
+      "\"Excellence is a continuous process and not an accident.\" - Dr. A.P.J. Abdul Kalam",
+      "\"Science is a beautiful gift to humanity; we should not distort it.\" - Dr. A.P.J. Abdul Kalam",
+      "\"I can't change the direction of the wind, but I can adjust my sails to always reach my destination.\" - Jimmy Dean",
+      "\"First they ignore you, then they laugh at you, then they fight you, then you win.\" - Mahatma Gandhi",
+      "\"Live as if you were to die tomorrow. Learn as if you were to live forever.\" - Mahatma Gandhi",
+      "\"The future depends on what you do today.\" - Mahatma Gandhi",
+      "\"Strength does not come from physical capacity. It comes from an indomitable will.\" - Mahatma Gandhi",
+      "\"Let new India arise out of peasants' cottage, grasping the plough, out of huts, cobbler and sweeper.\" - Netaji Subhas Chandra Bose",
+      "\"One individual may die for an idea, but that idea will, after his death, incarnate itself in a thousand lives.\" - Netaji Subhas Chandra Bose",
+      "\"Freedom is not given, it is taken.\" - Netaji Subhas Chandra Bose",
+
+      // Chanakya (Vishnugupta)
+      "\"Education is the best friend. An educated person is respected everywhere. Education beats the beauty and the youth.\" - Chanakya",
+      "\"A man is born alone and dies alone; and he experiences the good and bad consequences of his karma alone; and he goes alone to hell or the Supreme abode.\" - Chanakya",
+      "\"Learn from the mistakes of others... you can't live long enough to make them all yourselves.\" - Chanakya",
+      "\"As soon as the fear approaches near, attack and destroy it.\" - Chanakya",
+      "\"There is no present and future of the lazy.\" - Chanakya",
+      "\"Even if a snake is not poisonous, it should pretend to be venomous.\" - Chanakya",
+
+      // IAS / IPS / Civil Services Aspirant Motivation
+      "\"A dream does not become reality through magic; it takes sweat, determination, and hard work.\" - Colin Powell (UPSC Ethos)",
+      "\"The rougher the seas, the smoother we sail. Ahoy!\" - Indian Navy / Armed forces ethos",
+      "\"Kadi mehnat, pakka iraada, aur khud par vishwas – yahi ekmatra rasta hai safalta ka.\" - UPSC Aspirant's Mantra",
+      "\"When you feel like quitting, remember why you started.\" - IAS Training Ethos",
+      "\"It’s not about how many hours you study, it’s about how much you study in those hours.\" - Civil Services Motivation",
+      "\"Service before Self.\" - NDA/Defense Motto",
+      "\"No matter how tough the grind, the steel is forged only in the hottest fire.\" - IPS Training Academy (SVPNPA)",
+      "\"Hard work beats talent when talent doesn't work hard.\" - Tim Notke (Student Ethos)",
+      "\"Push yourself, because no one else is going to do it for you.\" - Student Motivation",
+      "\"Success doesn’t just find you. You have to go out and get it.\" - General Motivation",
+      "\"The harder you work for something, the greater you’ll feel when you achieve it.\" - General Motivation",
+      "\"Don’t stop when you’re tired. Stop when you’re done.\" - General Motivation",
+      "\"Wake up with determination. Go to bed with satisfaction.\" - Student Ethos",
+      "\"Do something today that your future self will thank you for.\" - General Motivation"
+    ];
+
+    let currentMotivationIndex = 0;
+    // Set random initial tip to feel dynamic on reload
+    currentMotivationIndex = Math.floor(Math.random() * motivations.length);
+    document.getElementById("motivationText").innerText = motivations[currentMotivationIndex];
+
+    setInterval(() => {
+      currentMotivationIndex = (currentMotivationIndex + 1) % motivations.length;
+      document.getElementById("motivationText").innerText = motivations[currentMotivationIndex];
+    }, 60000); // 60,000 ms = 1 minute
+
+
+
+
+  </script>
+
+</body>
+
+</html>
