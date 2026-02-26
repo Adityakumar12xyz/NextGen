@@ -7,6 +7,7 @@
   <title>NextGen Library</title>
 
   <style>
+    /* Add external dependencies here */
     body {
       margin: 0;
       font-family: "Segoe UI", sans-serif;
@@ -16,6 +17,16 @@
     }
 
     /* HEADER */
+    #globalTicker {
+      background: #ff4757;
+      color: white;
+      padding: 8px;
+      font-weight: bold;
+      text-align: center;
+      font-size: 14px;
+      display: none;
+    }
+
     header {
       padding: 15px;
       display: flex;
@@ -238,6 +249,35 @@
       color: #0056b3;
     }
 
+    /* CMS DYNAMIC FIELDS */
+    .cms-dynamic-field {
+      display: flex;
+      gap: 10px;
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+
+    .cms-add-btn {
+      background: #00cec9;
+      color: black;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: bold;
+      margin-top: 5px;
+    }
+
+    .cms-del-btn {
+      background: #ff4757;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
     /* SELECT DROPDOWN FOR SIGN UP */
     select.login-input {
       appearance: none;
@@ -370,6 +410,20 @@
       background: #ffffff22;
       border-radius: 8px;
       cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Admin Delete Subject Button inside li */
+    .delete-subject-btn {
+      background: #ff4757;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 12px;
     }
 
     /* CONTENT */
@@ -380,60 +434,58 @@
       margin: 15px 0;
     }
 
-    /* TASK STYLES */
-    .task-item {
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
-      padding: 15px;
-      margin: 12px 0;
-      border-radius: 10px;
+    /* PROGRESS TRACKING STYLES */
+    .progress-box {
+      background: linear-gradient(135deg, rgba(46, 204, 113, 0.2) 0%, rgba(39, 174, 96, 0.2) 100%);
+      padding: 25px;
+      border-radius: 12px;
+      border: 2px solid cyan;
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+    }
+
+    .subj-progress {
+      margin-bottom: 20px;
+    }
+
+    .subj-progress-title {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      border: 2px solid rgba(102, 126, 234, 0.3);
-      transition: 0.3s;
-    }
-
-    .task-item:hover {
-      border-color: cyan;
-      box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
-      transform: translateX(5px);
-    }
-
-    .task-item.completed {
-      opacity: 0.6;
-      text-decoration: line-through;
-      background: linear-gradient(135deg, rgba(100, 200, 100, 0.2) 0%, rgba(80, 160, 80, 0.2) 100%);
-    }
-
-    .task-item input[type="checkbox"] {
-      width: 24px;
-      height: 24px;
-      cursor: pointer;
-      margin-right: 15px;
-      accent-color: cyan;
-    }
-
-    .task-text {
-      flex: 1;
-      font-size: 16px;
-      color: #fff;
-    }
-
-    .task-delete {
-      background: #ff6b6b;
-      padding: 8px 15px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      color: white;
+      color: cyan;
       font-weight: bold;
-      transition: 0.3s;
+      margin-bottom: 5px;
     }
 
-    .task-delete:hover {
-      background: #ff0000;
-      transform: scale(1.1);
+    .progress-bar {
+      width: 100%;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 8px;
     }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #00cec9, #74b9ff);
+      border-radius: 6px;
+      transition: width 0.5s ease-in-out;
+    }
+
+    .progress-details {
+      font-size: 13px;
+      color: #ccc;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .progress-details span {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+
 
     /* BUTTON */
     button {
@@ -475,10 +527,7 @@
       gap: 15px;
     }
 
-    padding:15px;
-    background:#000000cc;
-    text-align:center;
-    }
+
 
     /* DARK AND LIGHT MODE */
     .light {
@@ -518,7 +567,7 @@
     }
 
     .light .motivation-box h3,
-    .light .tasks-box h3,
+    .light .progress-box h3,
     .light .info-box h3 {
       color: #0056b3;
       border-bottom-color: #0056b3;
@@ -529,20 +578,26 @@
       text-shadow: none;
     }
 
-    .light .info-box p,
-    .light .info-box li {
-      color: #555;
+    .light .progress-box {
+      border-color: #0056b3;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      background: white;
     }
 
-    .light .task-list li {
-      background: #f9fafb;
-      border: 1px solid #e5e7eb;
-      color: #333;
+    .light .subj-progress-title {
+      color: #0056b3;
     }
 
-    .light .task-list li:hover {
-      background: #f3f4f6;
+    .light .progress-bar {
+      background: #e5e7eb;
     }
+
+    .light .progress-details span {
+      background: #f0f4f8;
+      color: #0056b3;
+      border: 1px solid #d1d5db;
+    }
+
 
     .light h2,
     .light #subjectTitle,
@@ -715,16 +770,250 @@
       accent-color: #00ff00;
     }
 
-    @media (max-width: 768px) {
-      .semester-section {
-        grid-template-columns: 1fr;
-        gap: 20px;
+    /* PREMIUM NOTES & BOOK */
+    .premium-box {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 165, 0, 0.2) 100%);
+      border: 2px solid gold;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+    }
+
+    .premium-box:hover {
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+    }
+
+    .premium-box h1 {
+      filter: drop-shadow(0 0 10px gold) contrast(1.2) brightness(1.2);
+    }
+
+    .locked-option {
+      position: relative;
+    }
+
+    .locked-option::after {
+      content: '🔒';
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 24px;
+      filter: drop-shadow(0 0 5px gold);
+    }
+
+    .light .premium-box {
+      background: #fff8e1;
+      border-color: #ffc107;
+      color: #333;
+      box-shadow: 0 4px 6px rgba(255, 193, 7, 0.3);
+    }
+
+    .light .premium-box:hover {
+      box-shadow: 0 10px 15px rgba(255, 193, 7, 0.5);
+    }
+
+    .light .locked-option::after {
+      filter: none;
+    }
+
+    /* PAYMENT MODAL */
+    #paymentModal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .payment-box {
+      background: rgba(10, 20, 30, 0.95);
+      border: 2px solid gold;
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+      max-width: 400px;
+      width: 90%;
+      max-height: 90vh;
+      /* Set maximum height relative to viewport */
+      overflow-y: auto;
+      /* Enable vertical scrolling */
+      position: relative;
+    }
+
+    .light .payment-box {
+      background: white;
+      border-color: #ffc107;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .payment-box h2 {
+      color: gold;
+      margin-top: 0;
+    }
+
+    .light .payment-box h2 {
+      color: #ff9800;
+    }
+
+    .payment-amount {
+      font-size: 32px;
+      font-weight: bold;
+      color: white;
+      margin: 15px 0;
+    }
+
+    .light .payment-amount {
+      color: #333;
+    }
+
+    .qr-container img {
+      width: 200px;
+      height: 200px;
+      border-radius: 10px;
+      border: 2px solid cyan;
+      margin-bottom: 10px;
+    }
+
+    .upi-id {
+      font-size: 16px;
+      color: cyan;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+
+    .light .upi-id {
+      color: #0056b3;
+    }
+
+    .pay-btn-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .pay-btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      transition: 0.3s;
+    }
+
+    .gpay-btn {
+      background: #ea4335;
+      color: white;
+    }
+
+    .phonepe-btn {
+      background: #5f259f;
+      color: white;
+    }
+
+    .confirm-pay-btn {
+      background: gold;
+      color: black;
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+    }
+
+    .confirm-pay-btn:hover {
+      background: #ffcc00;
+      box-shadow: 0 0 25px gold;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .light .close-modal {
+      color: black;
+    }
+
+    /* CONFETTI ANIMATION */
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: gold;
+      animation: fall linear forwards;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotate(720deg);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
       }
     }
   </style>
 </head>
 
 <body>
+  <div id="globalTicker"
+    style="background:#ff4757; color:white; padding:8px; font-weight:bold; text-align:center; font-size:14px; display:none;">
+    <marquee id="tickerText" scrollamount="5"></marquee>
+  </div>
+
+  <!-- Firebase App (the core Firebase SDK) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <!-- Firebase Realtime Database -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <!-- Firebase Analytics -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+
+  <script>
+    // Initialize Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyBh0dYBbLi_m1-xgn7skbRUBrobrwONJYs",
+      authDomain: "nextgen-6c99e.firebaseapp.com",
+      projectId: "nextgen-6c99e",
+      storageBucket: "nextgen-6c99e.firebasestorage.app",
+      messagingSenderId: "774793697681",
+      appId: "1:774793697681:web:6bcf573562be65701c2230",
+      measurementId: "G-NESY4XEM9R"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    firebase.analytics();
+  </script>
+
+  <!-- SheetJS for Excel Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
   <header style="display:none;">
     <h2 style="font-size: 28px; letter-spacing: 1px; flex-grow: 1; text-align: left; text-shadow: 0 0 10px cyan;">📚
@@ -741,9 +1030,12 @@
 
       <!-- SIGN UP FORM -->
       <div id="signUpForm">
+        <img src="img1.png" alt="Logo"
+          style="width: 80px; height: 80px; margin-bottom: 10px; filter: drop-shadow(0 0 10px cyan);">
         <h2>📝 NextGen Library Registration</h2>
-        <input type="text" id="regName" class="login-input" placeholder="Name">
-        <input type="text" id="regRoll" class="login-input" placeholder="DDU Roll Number">
+        <input type="text" id="regName" class="login-input" placeholder="Name (Letters & Spaces only)">
+        <input type="number" id="regRoll" class="login-input" placeholder="DDU Roll Number (13 Digits)"
+          style="appearance: none; -moz-appearance: textfield;">
 
         <div style="display: flex; gap: 10px;">
           <select id="regBranch" class="login-input" style="flex: 1;">
@@ -777,6 +1069,8 @@
 
       <!-- LOGIN FORM -->
       <div id="loginForm" style="display: none;">
+        <img src="img1.png" alt="Logo"
+          style="width: 80px; height: 80px; margin-bottom: 10px; filter: drop-shadow(0 0 10px cyan);">
         <h2>🔑 NextGen Login</h2>
         <input type="text" id="loginName" class="login-input" placeholder="Name">
         <select id="loginSection" class="login-input">
@@ -820,8 +1114,9 @@
     style="display: none; height: 100vh; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: radial-gradient(circle at center, #001f3f, #000); position: fixed; width: 100%; top: 0; left: 0; z-index: 1000;">
     <div class="login-box">
       <h2>✏️ Edit Profile</h2>
-      <input type="text" id="editName" class="login-input" placeholder="Name">
-      <input type="text" id="editRoll" class="login-input" placeholder="DDU Roll Number">
+      <input type="text" id="editName" class="login-input" placeholder="Name (Letters & Spaces only)">
+      <input type="number" id="editRoll" class="login-input" placeholder="DDU Roll Number (13 Digits)"
+        style="appearance: none; -moz-appearance: textfield;">
 
       <div style="display: flex; gap: 10px;">
         <select id="editBranch" class="login-input" style="flex: 1;">
@@ -853,7 +1148,10 @@
   <div id="adminDashboard">
     <div style="display: flex; justify-content: space-between; align-items: center;">
       <h2 style="color: cyan; text-shadow: 0 0 10px cyan;">🛡️ Secure Admin Dashboard</h2>
-      <button onclick="adminLogout()" style="background: #ff4757; color: white;">Logout Admin</button>
+      <div style="display: flex; gap: 10px;">
+        <button onclick="exportToExcel()" style="background: #28a745; color: white;">📊 Export to Excel</button>
+        <button onclick="adminLogout()" style="background: #ff4757; color: white;">Logout Admin</button>
+      </div>
     </div>
     <p>View all registered student data below. This info is protected.</p>
     <div style="overflow-x: auto;">
@@ -900,28 +1198,213 @@
       </div>
 
       <div id="cmsEditor" style="display: none; text-align: left;">
-        <label style="color: cyan; font-size: 14px;">📹 Video URL (YouTube Embed):</label>
-        <input type="text" id="cmsVideo" class="login-input" style="margin-top: 5px;">
+        <label style="color: cyan; font-size: 14px;">📹 Video URLs (YouTube Embed):</label>
+        <div id="cmsVideoContainer"></div>
+        <button class="cms-add-btn" onclick="addCMSField('video')">➕ Add Video</button>
+        <br><br>
 
         <label style="color: cyan; font-size: 14px;">📝 Study Notes:</label>
-        <textarea id="cmsNotes" class="login-input" style="margin-top: 5px; height: 80px; resize: vertical;"></textarea>
+        <div id="cmsNotesContainer"></div>
+        <button class="cms-add-btn" onclick="addCMSField('notes')">➕ Add Note Block</button>
+        <br><br>
 
-        <label style="color: cyan; font-size: 14px;">📄 PDF URL (Google Drive/Link):</label>
-        <input type="text" id="cmsPdf" class="login-input" style="margin-top: 5px;">
+        <label style="color: cyan; font-size: 14px;">📄 PDF URLs (Google Drive Link):</label>
+        <div id="cmsPdfContainer"></div>
+        <button class="cms-add-btn" onclick="addCMSField('pdf')">➕ Add PDF</button>
+        <br><br>
 
         <label style="color: cyan; font-size: 14px;">📄 Assignment:</label>
-        <textarea id="cmsAssignment" class="login-input"
-          style="margin-top: 5px; height: 60px; resize: vertical;"></textarea>
+        <div id="cmsAssignmentContainer"></div>
+        <button class="cms-add-btn" onclick="addCMSField('assignment')">➕ Add Assignment Block</button>
+        <br><br>
 
         <label style="color: cyan; font-size: 14px;">🏠 Homework:</label>
-        <textarea id="cmsHomework" class="login-input"
-          style="margin-top: 5px; height: 60px; resize: vertical;"></textarea>
+        <div id="cmsHomeworkContainer"></div>
+        <button class="cms-add-btn" onclick="addCMSField('homework')">➕ Add Homework Block</button>
+        <br><br>
 
         <button class="login-btn" onclick="saveAdminContent()"
           style="background: #00e676; color: black; box-shadow: 0 0 15px rgba(0, 230, 118, 0.4);">💾 Save
           Content</button>
       </div>
     </div>
+
+    <!-- ADMIN SUBJECT MANAGEMENT -->
+    <div id="adminSubjectManager"
+      style="margin-top: 40px; border-top: 1px solid rgba(0,255,255,0.3); padding-top: 20px;">
+
+      <!-- MANAGE COURSES -->
+      <h3 style="color: cyan; text-align: left;">🏢 Manage Courses</h3>
+      <div style="display: flex; gap: 10px; margin-bottom: 25px;">
+        <input type="text" id="newCourseName" class="login-input" placeholder="New Course Name (e.g. MCA)"
+          style="flex: 2; margin-bottom: 0;">
+        <button class="login-btn" onclick="addAdminCourse()"
+          style="flex: 1; margin-top: 0; background: #00cec9; color: black;">➕ Add Course</button>
+      </div>
+
+      <!-- MANAGE SUBJECTS -->
+      <h3 style="color: cyan; text-align: left;">📚 Manage Subjects</h3>
+      <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+        <select id="subCourse" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
+          onchange="onSubCourseChange()">
+          <option value="" disabled selected>Course</option>
+        </select>
+        <select id="subBranch" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
+          onchange="onSubBranchChange()">
+          <option value="" disabled selected>Branch</option>
+        </select>
+        <select id="subSemester" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
+          onchange="onSubSemesterChange()">
+          <option value="" disabled selected>Semester</option>
+        </select>
+      </div>
+
+      <div id="subEditor" style="display: none; text-align: left;">
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+          <input type="text" id="newSubjectName" class="login-input" placeholder="New Subject Name"
+            style="flex: 2; margin-bottom: 0;">
+          <button class="login-btn" onclick="addAdminSubject()"
+            style="flex: 1; margin-top: 0; background: #00e676; color: black;">➕ Add Subject</button>
+        </div>
+
+        <h4 style="color: #ddd;">Existing Subjects</h4>
+        <ul id="adminSubjectList" style="list-style: none; padding: 0; max-height: 200px; overflow-y: auto;">
+          <!-- Dynamically populated list of subjects -->
+        </ul>
+      </div>
+    </div>
+
+    <!-- ADMIN PREMIUM SETTINGS -->
+    <div id="adminPremiumSettings"
+      style="margin-top: 40px; border-top: 1px solid rgba(255,215,0,0.5); padding-top: 20px;">
+      <h3 style="color: gold; text-align: left;">💎 Premium Payment Settings</h3>
+
+      <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+        <select id="premConfigCourse" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
+          onchange="onAdminPremConfigCourseChange()">
+          <option value="" disabled selected>Select Premium Course</option>
+          <option value="BCA">BCA</option>
+          <option value="BTECH">BTECH</option>
+          <option value="BBA">BBA</option>
+        </select>
+        <select id="premConfigOption" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
+          onchange="onAdminPremConfigOptionChange()">
+          <option value="" disabled selected>Select Option</option>
+        </select>
+      </div>
+
+      <div id="premiumConfigEditor" style="display: none;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <label style="color: #ccc; font-size: 14px;">Upload QR Code Image:</label>
+            <input type="file" id="premiumQRFile" class="login-input" accept="image/*"
+              onchange="previewPremiumQR(event)" style="padding: 5px;">
+            <img id="premiumQRPreview" src="" alt="QR Preview"
+              style="width: 100px; height: 100px; object-fit: contain; border: 1px solid cyan; border-radius: 5px; display: none;">
+          </div>
+          <div>
+            <label style="color: #ccc; font-size: 14px;">UPI ID:</label>
+            <input type="text" id="premiumUPI" class="login-input" placeholder="e.g. 9876543210@ybl">
+          </div>
+          <div>
+            <label style="color: #ccc; font-size: 14px;">Premium Amount ₹:</label>
+            <input type="number" id="premiumAmount" class="login-input" placeholder="e.g. 499">
+          </div>
+        </div>
+        <button class="login-btn" onclick="savePremiumConfig()"
+          style="background: gold; color: black; box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); margin-top: 15px;">💾 Save
+          Payment
+          Settings</button>
+      </div>
+    </div>
+
+    <!-- ADMIN PREMIUM CONTENT CMS -->
+    <div id="adminPremiumCMS"
+      style="margin-top: 40px; border-top: 1px solid rgba(0, 255, 255, 0.3); padding-top: 20px;">
+      <h3 style="color: cyan; text-align: left;">💎 Manage Premium Content (PDFs)</h3>
+      <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+        <select id="premCmsCourse" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
+          onchange="onPremCourseChange()">
+          <option value="" disabled selected>Select Premium Course</option>
+          <option value="BCA">BCA</option>
+          <option value="BTECH">BTECH</option>
+          <option value="BBA">BBA</option>
+        </select>
+        <select id="premCmsOption" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
+          onchange="onPremOptionChange()">
+          <option value="" disabled selected>Select Option</option>
+        </select>
+      </div>
+
+      <div id="premEditor" style="display: none; text-align: left;">
+        <div style="display: flex; gap: 10px; margin-bottom: 20px; align-items: stretch;">
+          <input type="text" id="newPremOptionName" class="login-input" placeholder="Create New Option (e.g. MBA Agra)"
+            style="flex: 2; margin-bottom: 0;">
+          <button class="login-btn" onclick="addPremiumOption()"
+            style="flex: 1; margin-top: 0; background: gold; color: black;">➕ Add Option</button>
+        </div>
+
+        <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+          <h4 style="color: gold; margin-top: 0;">Add PDF to Selected Option</h4>
+          <input type="text" id="newPremPdfTitle" class="login-input" placeholder="PDF Title (e.g. Chapter 1 Notes)">
+          <input type="text" id="newPremPdfLink" class="login-input" placeholder="Google Drive / PDF Link">
+          <button class="login-btn" onclick="addPremiumPdf()" style="background: cyan; color: black;">Upload PDF
+            Link</button>
+        </div>
+
+        <h4 style="color: #ddd;">Existing PDFs in Option</h4>
+        <ul id="adminPremPdfList" style="list-style: none; padding: 0; max-height: 200px; overflow-y: auto;">
+          <!-- Dynamically populated list of PDFs -->
+        </ul>
+      </div>
+    </div>
+
+    <!-- PENDING PREMIUM APPROVALS -->
+    <div id="adminPendingPayments" style="margin-top: 40px; border-top: 1px solid #ff4757; padding-top: 20px;">
+      <h3 style="color: #ff4757; text-align: left;">⏳ Pending Premium Approvals</h3>
+      <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 10px; overflow-x: auto;">
+        <table style="width: 100%; text-align: left; border-collapse: collapse;">
+          <thead>
+            <tr style="border-bottom: 1px solid #ff4757;">
+              <th style="padding: 10px; color: gold;">Student</th>
+              <th style="padding: 10px; color: gold;">Option</th>
+              <th style="padding: 10px; color: gold;">UTR</th>
+              <th style="padding: 10px; color: gold;">Proof</th>
+              <th style="padding: 10px; color: gold;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="pendingPaymentsTableBody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SITE SETTINGS -->
+    <div id="adminSiteSettings"
+      style="margin-top: 40px; border-top: 1px solid rgba(0, 255, 255, 0.3); padding-top: 20px; margin-bottom: 40px;">
+      <h3 style="color: cyan; text-align: left;">⚙️ Advanced Site Settings</h3>
+      <div style="display: flex; flex-direction: column; gap: 15px;">
+        <div>
+          <label style="color: #ccc; font-size: 14px;">Live Scrolling Announcement (Top Ticker):</label>
+          <input type="text" id="siteTickerText" class="login-input"
+            placeholder="Type announcement here... Leave blank to hide." style="margin-bottom: 0;">
+        </div>
+        <div>
+          <label style="color: #ccc; font-size: 14px;">Welcome Subtitle (under logo):</label>
+          <input type="text" id="siteWelcomeText" class="login-input" placeholder="e.g. Your Digital Learning Hub"
+            style="margin-bottom: 0;">
+        </div>
+        <div>
+          <label style="color: #ccc; font-size: 14px;">About Us Content:</label>
+          <textarea id="siteAboutText" class="login-input" placeholder="Welcome to NextGen Library..."
+            style="height: 80px; margin-bottom: 0;"></textarea>
+        </div>
+      </div>
+      <button class="login-btn" onclick="saveSiteSettings()"
+        style="background: #28a745; color: white; margin-top: 15px;">💾 Save Site Settings</button>
+    </div>
+
   </div>
 
   <!-- WELCOME -->
@@ -934,7 +1417,7 @@
     <img src="img1.png" alt="NextGen Library"
       style="width:250px; height:250px; margin-bottom:20px; filter:drop-shadow(0 0 20px cyan);">
     <h1 id="typingText"></h1>
-    <p>Your Digital Learning Hub</p>
+    <p id="welcomeSubtitle">Your Digital Learning Hub</p>
     <button onclick="enterSite()">Enter Library</button>
   </div>
 
@@ -944,6 +1427,9 @@
       <div class="box" onclick="openStudentLevel('course', 'BCA')">🎓 BCA</div>
       <div class="box" onclick="openStudentLevel('course', 'BTECH')">🏢 BTECH</div>
       <div class="box" onclick="openStudentLevel('course', 'BBA')">💼 BBA</div>
+      <div class="box premium-box" onclick="openPremiumHub()">
+        <h1>💎</h1>Premium Notes & Book
+      </div>
     </div>
 
     <!-- ABOUT & TERMS SECTION -->
@@ -951,19 +1437,21 @@
       <div class="info-container">
         <div class="info-box">
           <h3>📚 About NextGen Library</h3>
-          <p>Welcome to NextGen Library, your premier digital learning platform designed for modern students. We
-            believe
-            that quality education should be structured, accessible, and interactive.</p>
-          <p>Our platform integrates:</p>
-          <ul>
-            <li>High-quality Video Lectures</li>
-            <li>Meticulously curated Study Notes</li>
-            <li>Rigorous Assignments & Practice</li>
-            <li>Comprehensive Homework Guidance</li>
-            <li>Instant Doubt Resolution Support</li>
-          </ul>
-          <p>Whether you're tackling daily challenges or seeking clarity, we provide the tools necessary for academic
-            excellence and personal growth.</p>
+          <div id="aboutUsContent">
+            <p>Welcome to NextGen Library, your premier digital learning platform designed for modern students. We
+              believe
+              that quality education should be structured, accessible, and interactive.</p>
+            <p>Our platform integrates:</p>
+            <ul>
+              <li>High-quality Video Lectures</li>
+              <li>Meticulously curated Study Notes</li>
+              <li>Rigorous Assignments & Practice</li>
+              <li>Comprehensive Homework Guidance</li>
+              <li>Instant Doubt Resolution Support</li>
+            </ul>
+            <p>Whether you're tackling daily challenges or seeking clarity, we provide the tools necessary for academic
+              excellence and personal growth.</p>
+          </div>
         </div>
 
         <div class="info-box">
@@ -990,6 +1478,76 @@
     <div id="dynamicNavContainer" class="subjects"></div>
   </div>
 
+  <!-- PREMIUM HUB NAVIGATION SECTION -->
+  <div id="premiumNavSection" style="display:none; text-align:center;">
+    <button onclick="goBackFromPremium()" style="margin-bottom:20px; padding: 12px 20px; font-size:16px;">⬅
+      Back</button>
+    <h2 style="color: gold; text-shadow: 0 0 10px gold; font-size: 28px;">💎 Premium Notes & Book</h2>
+    <p style="color: #ddd;">Unlock exclusive exam-oriented materials!</p>
+    <div id="premiumCoursesContainer" class="subjects">
+      <!-- Injected dynamically or statically -->
+      <div class="box" onclick="showPremiumOptions('BCA')">
+        <h1>🎓</h1>Premium BCA
+      </div>
+      <div class="box" onclick="showPremiumOptions('BTECH')">
+        <h1>🏢</h1>Premium BTECH
+      </div>
+      <div class="box" onclick="showPremiumOptions('BBA')">
+        <h1>💼</h1>Premium BBA
+      </div>
+    </div>
+    <div id="premiumOptionsContainer" class="subjects" style="display:none;">
+      <!-- Injected dynamically based on selection -->
+    </div>
+
+    <div id="premiumContentContainer"
+      style="display:none; text-align:left; max-width: 800px; margin: 0 auto; padding: 20px;">
+      <button onclick="goBackToPremiumOptions()"
+        style="margin-bottom:20px; padding: 8px 15px; font-size:14px; background: rgba(255,215,0,0.2); border: 1px solid gold; color: gold;">⬅
+        Back to Options</button>
+      <h3 id="activePremiumOptionTitle" style="color: gold; text-shadow: 0 0 10px gold; font-size: 24px;">Option Title
+      </h3>
+      <div id="premiumPdfsGrid"
+        style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
+        <!-- PDFs injected here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- PAYMENT MODAL -->
+  <div id="paymentModal">
+    <div class="payment-box">
+      <button class="close-modal" onclick="closePaymentModal()">✖</button>
+      <h2>Unlock Premium Content</h2>
+      <p style="color: #ccc;" id="paymentDesc">Complete payment to access this section indefinitely.</p>
+      <div class="payment-amount" id="paymentAmountDisplay">₹0</div>
+
+      <div class="qr-container">
+        <img id="paymentQRDisplay" src="" alt="Scan QR Code to Pay" style="display: none;">
+      </div>
+      <div class="upi-id" id="paymentUPIDisplay">UPI ID: Not Set</div>
+
+      <div class="pay-btn-group">
+        <button class="pay-btn gpay-btn" onclick="payWithUpiApp('gpay')">Pay via GPay</button>
+        <button class="pay-btn phonepe-btn" onclick="payWithUpiApp('phonepe')">Pay via PhonePe</button>
+      </div>
+
+      <div style="text-align: left; margin: 15px 0;">
+        <label style="color: #ccc; font-size: 14px;">12-Digit UTR / Transaction ID (Mandatory):</label>
+        <input type="number" id="paymentUtrInput" class="login-input" placeholder="Enter exactly 12 digits"
+          style="margin-bottom: 10px;">
+
+        <label style="color: #ccc; font-size: 14px;">Upload Payment Screenshot (Required):</label>
+        <input type="file" id="paymentScreenshotInput" class="login-input" accept="image/*" style="padding: 5px;"
+          onchange="previewPaymentScreenshot(event)">
+        <img id="paymentScreenshotPreview" src="" alt="Screenshot"
+          style="width: 100%; max-height: 150px; object-fit: contain; border: 1px solid cyan; border-radius: 5px; display: none; margin-top: 10px;">
+      </div>
+
+      <button class="confirm-pay-btn" onclick="confirmPremiumPayment()">Submit for Verification</button>
+    </div>
+  </div>
+
   <!-- MOTIVATION SECTION -->
   <div id="semesterMotivationSection" style="display:none;">
     <div class="semester-section">
@@ -1002,16 +1560,13 @@
           process, and the results will follow!"</p>
       </div>
 
-      <div class="tasks-box">
-        <h3>📋 Today's Tasks</h3>
-        <ul class="task-list">
-          <li><input type="checkbox" onchange="toggleTask(this)"> <span>Review today's lecture notes</span></li>
-          <li><input type="checkbox" onchange="toggleTask(this)"> <span>Complete assigned problems</span></li>
-          <li><input type="checkbox" onchange="toggleTask(this)"> <span>Read textbook chapter</span></li>
-          <li><input type="checkbox" onchange="toggleTask(this)"> <span>Prepare for tomorrow's class</span></li>
-          <li><input type="checkbox" onchange="toggleTask(this)"> <span>Practice previous year questions</span></li>
-          <li><input type="checkbox" onchange="toggleTask(this)"> <span>Join study group discussion</span></li>
-        </ul>
+      <div class="progress-box" id="progressDashboard">
+        <h3>📊 Analytics & Progress Tracking</h3>
+        <p style="color: #aaa; font-size: 14px; margin-bottom: 15px;">Automatically tracking your completed videos,
+          PDFs, and assignments across all subjects in this semester.</p>
+        <div id="progressContent">
+          <!-- Dynamically Injected Progress Bars -->
+        </div>
       </div>
     </div>
   </div>
@@ -1029,30 +1584,28 @@
     <h2 id="chapterTitle"></h2>
 
     <div class="section" id="videoSection">
-      📹 Video:<br>
-      <iframe id="videoFrame" width="560" height="315" frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="max-width:100%;"></iframe>
+      📹 Video(s):<br>
+      <div id="videoContainer" style="display: flex; flex-direction: column; gap: 15px; margin-top: 10px;"></div>
     </div>
 
     <div class="section" id="notesSection">
       📝 Notes:
-      <p id="notesText"></p>
+      <div id="notesText" style="margin-top: 10px;"></div>
     </div>
 
-    <div class="section" id="pdfContainer" style="display:none;">
+    <div class="section" id="pdfSection" style="display:none;">
       📄 PDF Notes:<br>
-      <iframe id="pdfFrame" width="100%" height="500" frameborder="0" style="border-radius:8px;"></iframe>
+      <div id="pdfContainer" style="display: flex; flex-direction: column; gap: 15px; margin-top: 10px;"></div>
     </div>
 
     <div class="section" id="assignmentSection">
       📄 Assignment:
-      <p id="assignmentText"></p>
+      <div id="assignmentText" style="margin-top: 10px;"></div>
     </div>
 
     <div class="section" id="homeworkSection">
       🏠 Homework:
-      <p id="homeworkText"></p>
+      <div id="homeworkText" style="margin-top: 10px;"></div>
     </div>
 
     <!-- AI TUTOR CHATBOT -->
@@ -1074,7 +1627,7 @@
           style="height: 320px; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; font-size: 14px;">
           <div
             style="align-self: flex-start; background: rgba(0, 255, 255, 0.1); padding: 10px 14px; border-radius: 12px; border-bottom-left-radius: 0; max-width: 85%; border: 1px solid rgba(0, 255, 255, 0.3); color: white; line-height: 1.4;">
-            Hello! I'm your AI Tutor powered by Gemini. Ask me any doubt related to your studies, assignments, or
+            Hello! I'm your AI Assistant. Ask me any doubt related to your studies, assignments, or
             homework!
           </div>
         </div>
@@ -1239,7 +1792,7 @@
           notes: "Basic Concepts of OOP, Comparison of procedural programming and OOP, Advantages of OOP, OOP Languages, Definitions: .Class, Objects, Concepts of inheritance and encapsulation, Operator overloading, Dynamic binding. Over view of OOP using C++, Basic Program construction: main and functions, Program statements, class declaration, comments++ compilation.",
           pdf: "",
           assignment: "Write simple C++ program with classes.",
-          homework: "Revise OOP concepts."
+          homework: "Homework 1 (1) Define low-level, mid-level and high-level languages , (2) Write applications of OOP concepts. Homework 2 (1) Explain how namespace and header files differ from each other using real-life examples. (2) Why is procedural programming unsuitable for large-scale software systems? Explain in depth. (3) Homework 3 (1) Write the difference between function prototype and function declaration with syntax. (2) Explain the difference between class and structure. Write a small code to explain the same."
         },
         "OOPS - UNIT 2: Elements of C++ Language": {
           video: "https://www.youtube.com/embed/TOG6xCEJU3M?si=2lA-jZb7wHUhh1j7",
@@ -1384,10 +1937,35 @@
     }
 
     let data = JSON.parse(localStorage.getItem("courseData")) || defaultData;
+    let isRecoveringMode = false;
+    let currentUserMobile = "";
 
+    // CHECK PERSISTENT LOGIN ON LOAD
+    window.onload = function () {
+      loadSiteSettings();
+      let activeUser = localStorage.getItem("activeSessionMobile");
+      let expTime = localStorage.getItem("activeSessionExp");
+      if (activeUser && expTime && Date.now() < parseInt(expTime)) {
+        database.ref('users/' + activeUser).once('value').then((snapshot) => {
+          let userData = snapshot.val();
+          if (userData) {
+            currentUserMobile = activeUser;
+            document.getElementById("loginScreen").style.display = "none";
+            document.getElementById("welcomeScreen").style.display = "flex";
+            document.querySelector("#welcomeScreen p").innerText += `\nWelcome back, ${userData.name}!`;
+
+            // Backwards compatibility sync if needed
+            localStorage.setItem(activeUser, JSON.stringify(userData));
+          }
+        });
+      } else {
+        // Clear expired session if any
+        localStorage.removeItem("activeSessionMobile");
+        localStorage.removeItem("activeSessionExp");
+      }
+    };
 
     /* AUTHENTICATION FUNCTIONS */
-    let currentUserMobile = "";
 
     function toggleAuthMode(mode) {
       document.getElementById('signUpForm').style.display = 'none';
@@ -1413,6 +1991,7 @@
         document.getElementById("loginScreen").style.display = "none";
         document.getElementById("adminDashboard").style.display = "block";
         loadAdminData();
+        renderPendingPayments();
       } else {
         alert("Invalid Admin Credentials!");
       }
@@ -1426,30 +2005,118 @@
       document.getElementById("adminPass").value = "";
     }
 
+    /* PENDING PAYMENTS ADMIN LOGIC */
+    function renderPendingPayments() {
+      let tbody = document.getElementById("pendingPaymentsTableBody");
+      tbody.innerHTML = "<tr><td colspan='5' style='padding: 15px; text-align: center; color: cyan;'>Loading...</td></tr>";
+
+      database.ref('pendingPayments').on('value', snap => {
+        tbody.innerHTML = "";
+        let pendingData = snap.val() || {};
+        let pendingArr = Object.values(pendingData);
+        let pendingOnly = pendingArr.filter(req => req.status === "pending");
+
+        if (pendingOnly.length === 0) {
+          tbody.innerHTML = "<tr><td colspan='5' style='padding: 15px; text-align: center; color: #aaa;'>No pending Premium approvals.</td></tr>";
+          return;
+        }
+
+        pendingOnly.forEach(req => {
+          let tr = document.createElement("tr");
+          tr.style.borderBottom = "1px solid rgba(255,255,255,0.1)";
+          tr.innerHTML = `
+            <td style="padding: 10px;">${req.name}<br><small style="color:cyan;">${req.mobile}</small></td>
+            <td style="padding: 10px;">${req.itemKey.replace('_', ' - ')}</td>
+            <td style="padding: 10px; font-family: monospace;">${req.utr}</td>
+            <td style="padding: 10px;">
+              <button class="login-btn" onclick="viewScreenshot('${req.id}')" style="background: cyan; color: black; padding: 5px 10px; margin: 0; font-size: 12px;">🖼️ View Proof</button>
+            </td>
+            <td style="padding: 10px; display: flex; gap: 5px;">
+              <button class="login-btn" onclick="approvePayment('${req.id}', '${req.mobile}', '${req.itemKey}')" style="background: #28a745; color: white; padding: 5px 10px; margin: 0; font-size: 12px;">✅ Approve</button>
+              <button class="login-btn" onclick="rejectPayment('${req.id}')" style="background: #ff4757; color: white; padding: 5px 10px; margin: 0; font-size: 12px;">❌ Reject</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      });
+    }
+
+    function viewScreenshot(reqId) {
+      database.ref('pendingPayments/' + reqId).once('value').then(snap => {
+        let req = snap.val();
+        if (req && req.screenshot) {
+          let win = window.open("");
+          win.document.write(`<img src="${req.screenshot}" style="max-width:100%; display:block; margin:auto;" />`);
+        } else {
+          alert("Screenshot not available.");
+        }
+      });
+    }
+
+    function approvePayment(reqId, mobile, itemKey) {
+      if (confirm("Are you sure you want to approve this payment and grant access?")) {
+        // Set premiumUnlocked inside user's node
+        database.ref(`users/${mobile}/premiumUnlocked/${itemKey}`).set(true).then(() => {
+          // Remove the pending request entirely
+          return database.ref('pendingPayments/' + reqId).remove();
+        }).then(() => {
+          alert("✅ Payment Approved! User now has access to " + itemKey);
+        }).catch(err => {
+          console.error(err);
+          alert("❌ Failed to approve payment due to network error.");
+        });
+      }
+    }
+
+    function rejectPayment(reqId) {
+      let reason = prompt("Enter rejection reason (e.g., Fake UTR, Unclear Image):");
+      if (reason === null || reason.trim() === "") return; // cancelled
+
+      // Update the request status to rejected
+      database.ref('pendingPayments/' + reqId).update({
+        status: "rejected",
+        reason: reason.trim()
+      }).then(() => {
+        alert("❌ Request rejected and user notified.");
+      }).catch(err => {
+        alert("❌ Network Error.");
+      });
+    }
+
     function loadAdminData() {
       let tbody = document.getElementById("adminTableBody");
       tbody.innerHTML = ""; // clear old
 
       let hasData = false;
+      let studentInfoList = [];
       for (let i = 0; i < localStorage.length; i++) {
         let key = localStorage.key(i);
+        // Exclude system keys like courseData, session handles
+        if (key === "courseData" || key === "activeSessionMobile" || key === "activeSessionExp") continue;
+
         try {
           let data = JSON.parse(localStorage.getItem(key));
-          if (data && data.name && data.mobile) {
-            hasData = true;
-            let tr = document.createElement("tr");
-            tr.innerHTML = `
-              <td>${data.name}</td>
-              <td>${data.roll}</td>
-              <td>${data.branch}</td>
-              <td>${data.section}</td>
-              <td>${data.mobile}</td>
-            `;
-            tbody.appendChild(tr);
+          if (data && data.name && data.mobile && key === data.mobile) { // Verify it's a student record
+            studentInfoList.push(data);
           }
         } catch (e) {
           // ignore non-json localstorage keys
         }
+      }
+
+      if (studentInfoList.length > 0) {
+        hasData = true;
+        studentInfoList.forEach(data => {
+          let tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${data.name}</td>
+            <td>${data.roll}</td>
+            <td>${data.branch}</td>
+            <td>${data.section}</td>
+            <td>${data.mobile}</td>
+          `;
+          tbody.appendChild(tr);
+        });
       }
 
       if (!hasData) {
@@ -1457,16 +2124,342 @@
       }
 
       initAdminCMS(); // Initialize the Content Management dropdowns
+
+      let prPreview = document.getElementById("premiumQRPreview");
+      let pConf = JSON.parse(localStorage.getItem("premiumConfig")) || { qr: "", upi: "", amount: "" };
+      if (pConf.qr) {
+        prPreview.src = pConf.qr;
+        prPreview.style.display = "block";
+      } else {
+        prPreview.style.display = "none";
+      }
+      document.getElementById("premiumUPI").value = pConf.upi || "";
+      document.getElementById("premiumAmount").value = pConf.amount || "";
+
+      // Initialize Premium Config Dropdowns
+      let pCmsCourse = document.getElementById("premConfigCourse");
+      pCmsCourse.innerHTML = '<option value="" disabled selected>Select Premium Course</option>';
+      for (let c in premiumData) {
+        let opt = document.createElement("option"); opt.value = c; opt.innerText = c; pCmsCourse.appendChild(opt);
+      }
+      document.getElementById("premiumConfigEditor").style.display = "none";
     }
 
-    // CMS FUNCTIONS
+    function onAdminPremConfigCourseChange() {
+      let course = document.getElementById("premConfigCourse").value;
+      if (!course) return;
+
+      let optSelect = document.getElementById("premConfigOption");
+      optSelect.innerHTML = '<option value="" disabled selected>Select Option</option>';
+
+      let options = premiumData[course] || {};
+      for (let opt in options) {
+        let op = document.createElement("option");
+        op.value = opt;
+        op.innerText = opt;
+        optSelect.appendChild(op);
+      }
+      document.getElementById("premiumConfigEditor").style.display = "none";
+    }
+
+    function onAdminPremConfigOptionChange() {
+      let course = document.getElementById("premConfigCourse").value;
+      let option = document.getElementById("premConfigOption").value;
+      if (!course || !option) return;
+
+      let pConf = JSON.parse(localStorage.getItem("premiumCourseConfigs")) || {};
+      let itemKey = course + "_" + option;
+      let config = pConf[itemKey] || { qr: "", upi: "", amount: "" };
+
+      let prPreview = document.getElementById("premiumQRPreview");
+      if (config.qr) {
+        prPreview.src = config.qr;
+        prPreview.style.display = "block";
+      } else {
+        prPreview.style.display = "none";
+      }
+      document.getElementById("premiumUPI").value = config.upi || "";
+      document.getElementById("premiumAmount").value = config.amount || "";
+
+      document.getElementById("premiumConfigEditor").style.display = "block";
+    }
+
     function initAdminCMS() {
+      // Content Manager
       let cSelect = document.getElementById("cmsCourse");
       cSelect.innerHTML = '<option value="" disabled selected>Course</option>';
       for (let c in data) {
         let opt = document.createElement("option"); opt.value = c; opt.innerText = c; cSelect.appendChild(opt);
       }
       document.getElementById("cmsEditor").style.display = "none";
+
+      // Subject Manager
+      let subSelect = document.getElementById("subCourse");
+      subSelect.innerHTML = '<option value="" disabled selected>Course</option>';
+      for (let c in data) {
+        let opt = document.createElement("option"); opt.value = c; opt.innerText = c; subSelect.appendChild(opt);
+      }
+      document.getElementById("subEditor").style.display = "none";
+    }
+
+    // CMS DYNAMIC FIELDS SCRIPTING
+    function addCMSField(type, value = "") {
+      let container = document.getElementById(`cms${type.charAt(0).toUpperCase() + type.slice(1)}Container`);
+      let div = document.createElement("div");
+      div.className = "cms-dynamic-field";
+
+      let isTextArea = type === "notes" || type === "assignment" || type === "homework";
+      let input = document.createElement(isTextArea ? "textarea" : "input");
+      input.className = "login-input cms-input-val";
+      input.style.marginTop = "0";
+      input.style.marginBottom = "0";
+      input.style.flex = "1";
+      if (isTextArea) input.style.height = "60px";
+      else input.type = "text";
+      input.value = value;
+      input.dataset.type = type;
+
+      let delBtn = document.createElement("button");
+      delBtn.className = "cms-del-btn";
+      delBtn.innerText = "✖";
+      delBtn.onclick = function () { container.removeChild(div); };
+
+      div.appendChild(input);
+      div.appendChild(delBtn);
+      container.appendChild(div);
+    }
+
+    function clearCMSFields() {
+      ["Video", "Notes", "Pdf", "Assignment", "Homework"].forEach(t => {
+        document.getElementById(`cms${t}Container`).innerHTML = "";
+      });
+    }
+
+    function collectCMSFields(type) {
+      let container = document.getElementById(`cms${type.charAt(0).toUpperCase() + type.slice(1)}Container`);
+      let inputs = container.querySelectorAll(".cms-input-val");
+      let values = [];
+      inputs.forEach(ip => {
+        if (ip.value.trim() !== "") values.push(ip.value.trim());
+      });
+      return values;
+    }
+
+    function exportToExcel() {
+      let studentInfoList = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        let key = localStorage.key(i);
+        if (key === "courseData" || key === "activeSessionMobile" || key === "activeSessionExp") continue;
+        try {
+          let st = JSON.parse(localStorage.getItem(key));
+          if (st && st.name && st.mobile && key === st.mobile) {
+            studentInfoList.push(st);
+          }
+        } catch (e) { }
+      }
+
+      if (studentInfoList.length === 0) {
+        alert("No student data available to export.");
+        return;
+      }
+
+      let ws = XLSX.utils.json_to_sheet(studentInfoList);
+      let wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Students");
+      XLSX.writeFile(wb, "NextGenLibrary_Students.xlsx");
+    }
+
+    /* ADVANCED SITE SETTINGS */
+    function loadSiteSettings() {
+      let config = JSON.parse(localStorage.getItem("siteConfig")) || { ticker: "", welcome: "", about: "" };
+      let tickerEl = document.getElementById("globalTicker");
+      let tickerTextEl = document.getElementById("tickerText");
+
+      if (config.ticker && config.ticker.trim() !== "") {
+        tickerTextEl.innerText = config.ticker;
+        tickerEl.style.display = "block";
+        document.getElementById("siteTickerText").value = config.ticker;
+      } else {
+        tickerEl.style.display = "none";
+        document.getElementById("siteTickerText").value = "";
+      }
+
+      let welcomeEl = document.getElementById("welcomeSubtitle");
+      if (document.getElementById("siteWelcomeText")) {
+        if (config.welcome && config.welcome.trim() !== "") {
+          welcomeEl.innerText = config.welcome;
+          document.getElementById("siteWelcomeText").value = config.welcome;
+        } else {
+          welcomeEl.innerText = "Your Digital Learning Hub"; // fallback
+          document.getElementById("siteWelcomeText").value = "";
+        }
+      }
+
+      let aboutEl = document.getElementById("aboutUsContent");
+      if (document.getElementById("siteAboutText")) {
+        if (config.about && config.about.trim() !== "") {
+          // split by newlines and wrap in p tags for basic formatting
+          let formattedAbout = config.about.split('\n').filter(p => p.trim() !== '').map(p => `<p>${p}</p>`).join('');
+          aboutEl.innerHTML = formattedAbout;
+          document.getElementById("siteAboutText").value = config.about;
+        } else {
+          // fallback to default
+          aboutEl.innerHTML = `
+            <p>Welcome to NextGen Library, your premier digital learning platform designed for modern students. We believe that quality education should be structured, accessible, and interactive.</p>
+            <p>Our platform integrates:</p>
+            <ul>
+              <li>High-quality Video Lectures</li>
+              <li>Meticulously curated Study Notes</li>
+              <li>Rigorous Assignments & Practice</li>
+              <li>Comprehensive Homework Guidance</li>
+              <li>Instant Doubt Resolution Support</li>
+            </ul>
+            <p>Whether you're tackling daily challenges or seeking clarity, we provide the tools necessary for academic excellence and personal growth.</p>
+          `;
+          document.getElementById("siteAboutText").value = "";
+        }
+      }
+    }
+
+    function saveSiteSettings() {
+      let ticker = document.getElementById("siteTickerText").value.trim();
+      let welcome = document.getElementById("siteWelcomeText").value.trim();
+      let about = document.getElementById("siteAboutText").value.trim();
+
+      let payload = { ticker, welcome, about };
+
+      database.ref('siteConfig').set(payload).then(() => {
+        localStorage.setItem("siteConfig", JSON.stringify(payload));
+        loadSiteSettings();
+        alert("✅ Site settings updated!");
+      }).catch(err => {
+        alert("❌ Failed to update site settings.");
+      });
+    }
+
+    /* PREMIUM CONTENT CMS SETTINGS */
+    let premiumData = JSON.parse(localStorage.getItem("premiumData")) || {
+      "BCA": {
+        "Nimcet & MCA": [],
+        "Exam point of view": []
+      },
+      "BBA": {
+        "MBA": [],
+        "Exam point of view": []
+      },
+      "BTECH": {
+        "MTech": [],
+        "Semester point of view": []
+      }
+    };
+
+    function savePremiumData() {
+      database.ref('premiumData').set(premiumData).then(() => {
+        // Sync to local memory
+        localStorage.setItem("premiumData", JSON.stringify(premiumData));
+      }).catch(err => {
+        console.error("Premium data save failed", err);
+      });
+    }
+
+    function onPremCourseChange() {
+      let course = document.getElementById("premCmsCourse").value;
+      if (!course) return;
+      document.getElementById("premEditor").style.display = "block";
+
+      let optSelect = document.getElementById("premCmsOption");
+      optSelect.innerHTML = '<option value="" disabled selected>Select Option</option>';
+
+      let options = premiumData[course] || {};
+      for (let opt in options) {
+        let op = document.createElement("option");
+        op.value = opt;
+        op.innerText = opt;
+        optSelect.appendChild(op);
+      }
+
+      document.getElementById("adminPremPdfList").innerHTML = "";
+    }
+
+    function onPremOptionChange() {
+      renderPremPdfList();
+    }
+
+    function addPremiumOption() {
+      let course = document.getElementById("premCmsCourse").value;
+      let newOptName = document.getElementById("newPremOptionName").value.trim();
+      if (!course || !newOptName) {
+        alert("Please select a course and type an option name.");
+        return;
+      }
+
+      if (!premiumData[course]) premiumData[course] = {};
+      if (premiumData[course][newOptName]) {
+        alert("Option already exists!");
+        return;
+      }
+
+      premiumData[course][newOptName] = [];
+      savePremiumData();
+
+      document.getElementById("newPremOptionName").value = "";
+      onPremCourseChange(); // Reload dropdown
+      document.getElementById("premCmsOption").value = newOptName;
+      onPremOptionChange();
+    }
+
+    function addPremiumPdf() {
+      let course = document.getElementById("premCmsCourse").value;
+      let option = document.getElementById("premCmsOption").value;
+      let title = document.getElementById("newPremPdfTitle").value.trim();
+      let link = document.getElementById("newPremPdfLink").value.trim();
+
+      if (!course || !option || !title || !link) {
+        alert("Please fill out all fields.");
+        return;
+      }
+
+      premiumData[course][option].push({ title, link });
+      savePremiumData();
+
+      document.getElementById("newPremPdfTitle").value = "";
+      document.getElementById("newPremPdfLink").value = "";
+      renderPremPdfList();
+    }
+
+    function removePremiumPdf(index) {
+      if (!confirm("Are you sure you want to delete this PDF?")) return;
+      let course = document.getElementById("premCmsCourse").value;
+      let option = document.getElementById("premCmsOption").value;
+
+      premiumData[course][option].splice(index, 1);
+      savePremiumData();
+      renderPremPdfList();
+    }
+
+    function renderPremPdfList() {
+      let course = document.getElementById("premCmsCourse").value;
+      let option = document.getElementById("premCmsOption").value;
+      let list = document.getElementById("adminPremPdfList");
+      list.innerHTML = "";
+
+      if (!course || !option) return;
+
+      let pdfs = premiumData[course][option];
+      if (!pdfs || pdfs.length === 0) {
+        list.innerHTML = "<li style='color:#ccc;'>No PDFs added yet.</li>";
+        return;
+      }
+
+      pdfs.forEach((pdf, index) => {
+        let li = document.createElement("li");
+        li.style.cssText = "display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(0,255,255,0.05); margin-bottom: 5px; border-radius: 5px;";
+        li.innerHTML = `
+          <span><b>${pdf.title}</b> <small style="color:#aaa;">(${pdf.link})</small></span>
+          <button onclick="removePremiumPdf(${index})" style="background: transparent; color: #ff4757; border: 1px solid #ff4757; padding: 3px 8px; border-radius: 3px; cursor: pointer;">Delete</button>
+        `;
+        list.appendChild(li);
+      });
     }
 
     function onAdminCourseChange() {
@@ -1536,13 +2529,34 @@
       let sub = document.getElementById("cmsSubject").value;
       let chap = document.getElementById("cmsChapter").value;
 
+      clearCMSFields();
+
       if (c && b && sem && sub && chap && data[c] && data[c][b] && data[c][b][sem] && data[c][b][sem][sub] && data[c][b][sem][sub][chap]) {
         let content = data[c][b][sem][sub][chap];
-        document.getElementById("cmsVideo").value = content.video || "";
-        document.getElementById("cmsNotes").value = content.notes || "";
-        document.getElementById("cmsPdf").value = content.pdf || "";
-        document.getElementById("cmsAssignment").value = content.assignment || "";
-        document.getElementById("cmsHomework").value = content.homework || "";
+
+        // Handle migration from old string format -> array format seamlessly
+        const populateFields = (type, val) => {
+          if (!val) return;
+          if (Array.isArray(val)) {
+            val.forEach(v => addCMSField(type, v));
+          } else if (typeof val === "string") {
+            // Old format: split by newline if applicable, otherwise just 1
+            let arr = val.split('\n');
+            arr.forEach(v => { if (v.trim()) addCMSField(type, v.trim()); });
+          }
+        };
+
+        populateFields('video', content.video);
+        populateFields('notes', content.notes);
+        populateFields('pdf', content.pdf);
+        populateFields('assignment', content.assignment);
+        populateFields('homework', content.homework);
+
+        // Auto-add 1 empty field if entirely empty
+        ["video", "notes", "pdf", "assignment", "homework"].forEach(type => {
+          let container = document.getElementById(`cms${type.charAt(0).toUpperCase() + type.slice(1)}Container`);
+          if (container.children.length === 0) addCMSField(type, "");
+        });
 
         document.getElementById("cmsEditor").style.display = "block";
       }
@@ -1557,20 +2571,146 @@
 
       if (!c || !b || !sem || !sub || !chap) return;
 
-      data[c][b][sem][sub][chap] = {
-        video: document.getElementById("cmsVideo").value.trim(),
-        notes: document.getElementById("cmsNotes").value.trim(),
-        pdf: document.getElementById("cmsPdf").value.trim(),
-        assignment: document.getElementById("cmsAssignment").value.trim(),
-        homework: document.getElementById("cmsHomework").value.trim()
+      let payload = {
+        video: collectCMSFields('video'),
+        notes: collectCMSFields('notes'),
+        pdf: collectCMSFields('pdf'),
+        assignment: collectCMSFields('assignment'),
+        homework: collectCMSFields('homework')
       };
 
-      localStorage.setItem("courseData", JSON.stringify(data));
-      alert("✅ Content for '" + chap + "' has been updated successfully!");
+      data[c][b][sem][sub][chap] = payload;
+
+      database.ref(`courseData/${c}/${b}/${sem}/${sub}/${chap}`).set(payload).then(() => {
+        localStorage.setItem("courseData", JSON.stringify(data));
+        alert("✅ Content for '" + chap + "' has been updated successfully!");
+      }).catch(err => {
+        alert("❌ Failed to save content to database.");
+      });
+    }
+
+    // COURSE & SUBJECT MANAGER FUNCTIONS
+    function addAdminCourse() {
+      let newCourse = document.getElementById("newCourseName").value.trim().toUpperCase();
+      if (!newCourse) return alert("Course name cannot be empty.");
+      if (data[newCourse]) return alert(`Course '${newCourse}' already exists!`);
+
+      // Initialize completely new course with generic branches & semesters
+      data[newCourse] = {
+        "General": {
+          1: {}, 2: {}, 3: {}, 4: {}, 5: {}, 6: {}
+        }
+      };
+
+      database.ref(`courseData/${newCourse}`).set(data[newCourse]).then(() => {
+        localStorage.setItem("courseData", JSON.stringify(data));
+        document.getElementById("newCourseName").value = "";
+        alert(`✅ Course '${newCourse}' added successfully! Branches 'General' and Semesters 1-6 created by default.`);
+        initAdminCMS(); // Reload dropdowns
+      });
+    }
+
+    function onSubCourseChange() {
+      let c = document.getElementById("subCourse").value;
+      let bSelect = document.getElementById("subBranch");
+      bSelect.innerHTML = '<option value="" disabled selected>Branch</option>';
+      if (data[c]) {
+        for (let b in data[c]) {
+          let opt = document.createElement("option"); opt.value = b; opt.innerText = b; bSelect.appendChild(opt);
+        }
+      }
+      document.getElementById("subSemester").innerHTML = '<option value="" disabled selected>Semester</option>';
+      document.getElementById("subEditor").style.display = "none";
+    }
+
+    function onSubBranchChange() {
+      let c = document.getElementById("subCourse").value;
+      let b = document.getElementById("subBranch").value;
+      let sSelect = document.getElementById("subSemester");
+      sSelect.innerHTML = '<option value="" disabled selected>Semester</option>';
+      if (data[c] && data[c][b]) {
+        for (let s in data[c][b]) {
+          let opt = document.createElement("option"); opt.value = s; opt.innerText = "Semester " + s; sSelect.appendChild(opt);
+        }
+      }
+      document.getElementById("subEditor").style.display = "none";
+    }
+
+    function onSubSemesterChange() {
+      renderAdminSubjectList();
+    }
+
+    function renderAdminSubjectList() {
+      let c = document.getElementById("subCourse").value;
+      let b = document.getElementById("subBranch").value;
+      let sem = document.getElementById("subSemester").value;
+      let list = document.getElementById("adminSubjectList");
+      list.innerHTML = "";
+
+      if (c && b && sem && data[c] && data[c][b] && data[c][b][sem]) {
+        let subjects = Object.keys(data[c][b][sem]);
+        if (subjects.length === 0) {
+          list.innerHTML = "<li style='color:#888;'>No subjects found in this semester.</li>";
+        } else {
+          subjects.forEach(sub => {
+            let li = document.createElement("li");
+            li.innerHTML = `
+              <span>📘 ${sub}</span>
+              <button class="delete-subject-btn" onclick="deleteAdminSubject('${c}', '${b}', '${sem}', '${sub}')">🗑️ Delete</button>
+            `;
+            list.appendChild(li);
+          });
+        }
+        document.getElementById("subEditor").style.display = "block";
+      }
+    }
+
+    function addAdminSubject() {
+      let c = document.getElementById("subCourse").value;
+      let b = document.getElementById("subBranch").value;
+      let sem = document.getElementById("subSemester").value;
+      let subName = document.getElementById("newSubjectName").value.trim();
+
+      if (!c || !b || !sem) return alert("Please select Course, Branch, and Semester first.");
+      if (!subName) return alert("Subject name cannot be empty.");
+
+      if (data[c][b][sem][subName]) {
+        return alert("Subject already exists in this semester!");
+      }
+
+      // Initialize with basic Units 1 to 5 mapping
+      let initPayload = {
+        "UNIT 1: Introduction": { video: "", notes: "", pdf: "", assignment: "", homework: "" },
+        "UNIT 2: Basics": { video: "", notes: "", pdf: "", assignment: "", homework: "" },
+        "UNIT 3: Intermediate": { video: "", notes: "", pdf: "", assignment: "", homework: "" },
+        "UNIT 4: Advanced": { video: "", notes: "", pdf: "", assignment: "", homework: "" },
+        "UNIT 5: Expert": { video: "", notes: "", pdf: "", assignment: "", homework: "" }
+      };
+
+      data[c][b][sem][subName] = initPayload;
+
+      database.ref(`courseData/${c}/${b}/${sem}/${subName}`).set(initPayload).then(() => {
+        localStorage.setItem("courseData", JSON.stringify(data));
+        document.getElementById("newSubjectName").value = "";
+        alert("✅ Subject '" + subName + "' added successfully!");
+        renderAdminSubjectList();
+        onAdminSemesterChange(); // Update CMS dropdown if affected
+      });
+    }
+
+    function deleteAdminSubject(c, b, sem, sub) {
+      if (confirm(`Are you sure you want to delete the subject '${sub}'? This will remove all its content permanently.`)) {
+        delete data[c][b][sem][sub];
+        database.ref(`courseData/${c}/${b}/${sem}/${sub}`).remove().then(() => {
+          localStorage.setItem("courseData", JSON.stringify(data));
+          renderAdminSubjectList();
+          onAdminSemesterChange(); // Update CMS dropdown
+        });
+      }
     }
 
     // FORGOT DETAILS RECOVERY & EDIT PROFILE VARS
-    let isRecoveringMode = false;
+    // isRecoveringMode is declared above
 
     function recoverDetails() {
       let rollSearch = prompt("Enter your registered DDU Roll Number to recover/edit your details:");
@@ -1606,6 +2746,23 @@
       }
     }
 
+    // VALIDATION HELPERS
+    function validateInput(name, roll, mobile) {
+      if (!/^[A-Za-z\s]+$/.test(name)) {
+        alert("Validation Error: Name must contain only English alphabets and spaces.");
+        return false;
+      }
+      if (!/^\d{13}$/.test(roll)) {
+        alert("Validation Error: DDU Roll Number must be exactly 13 digits long.");
+        return false;
+      }
+      if (!/^\d{10}$/.test(mobile)) {
+        alert("Validation Error: Mobile Number must be exactly 10 digits long.");
+        return false;
+      }
+      return true;
+    }
+
     function handleSignUp() {
       let name = document.getElementById("regName").value.trim();
       let roll = document.getElementById("regRoll").value.trim();
@@ -1618,23 +2775,59 @@
         return;
       }
 
+      if (!validateInput(name, roll, mobile)) return;
+
+      // Disable button to prevent double clicks
+      let btn = document.querySelector("#signUpForm .login-btn");
+      btn.innerText = "Registering...";
+      btn.disabled = true;
+
       // Check if user already exists
-      if (localStorage.getItem(mobile)) {
-        alert("An account with this mobile number already exists! Please logic.");
-        toggleAuthMode('login');
-        return;
-      }
+      database.ref('users/' + mobile).once('value').then((snapshot) => {
+        if (snapshot.exists()) {
+          alert("An account with this mobile number already exists! Please login.");
+          toggleAuthMode('login');
+          btn.innerText = "Sign Up & Enter";
+          btn.disabled = false;
+          return;
+        }
 
-      let userData = { name, roll, branch, section, mobile };
-      localStorage.setItem(mobile, JSON.stringify(userData));
-      currentUserMobile = mobile;
+        let userData = {
+          name,
+          roll,
+          branch,
+          section,
+          mobile,
+          registeredAt: Date.now()
+        };
 
-      alert("Registration Successful! Welcome to NextGen Library.");
-      document.getElementById("loginScreen").style.display = "none";
-      document.getElementById("welcomeScreen").style.display = "flex";
+        database.ref('users/' + mobile).set(userData).then(() => {
+          // Sync to local for offline backwards compatibility for progress trackers
+          localStorage.setItem(mobile, JSON.stringify(userData));
 
-      // Update welcome text with Name
-      document.querySelector("#welcomeScreen p").innerText += `\nWelcome, ${name}!`;
+          // Save Persistent Session (5 hours = 5 * 60 * 60 * 1000 ms)
+          localStorage.setItem("activeSessionMobile", mobile);
+          localStorage.setItem("activeSessionExp", (Date.now() + 5 * 60 * 60 * 1000).toString());
+
+          currentUserMobile = mobile;
+
+          alert("Registration Successful! Welcome to NextGen Library.");
+          document.getElementById("loginScreen").style.display = "none";
+          document.getElementById("welcomeScreen").style.display = "flex";
+
+          // Update welcome text with Name
+          let wsP = document.querySelector("#welcomeScreen p");
+          wsP.innerText = wsP.innerText.split('\n')[0] + `\nWelcome, ${name}!`;
+
+          btn.innerText = "Sign Up & Enter";
+          btn.disabled = false;
+        }).catch(err => {
+          console.error(err);
+          alert("Network error, please try again.");
+          btn.innerText = "Sign Up & Enter";
+          btn.disabled = false;
+        });
+      });
     }
 
     function handleLogin() {
@@ -1647,22 +2840,45 @@
         return;
       }
 
-      let savedData = localStorage.getItem(mobile);
+      let btn = document.querySelector("#loginForm .login-btn");
+      btn.innerText = "Logging in...";
+      btn.disabled = true;
 
-      if (savedData) {
-        let user = JSON.parse(savedData);
-        if (user.name.toLowerCase() === name.toLowerCase() && user.section === section) {
-          currentUserMobile = mobile;
-          document.getElementById("loginScreen").style.display = "none";
-          document.getElementById("welcomeScreen").style.display = "flex";
-          document.querySelector("#welcomeScreen p").innerText += `\nWelcome back, ${user.name}!`;
+      database.ref('users/' + mobile).once('value').then((snapshot) => {
+        let savedData = snapshot.val();
+
+        if (savedData) {
+          if (savedData.name.toLowerCase() === name.toLowerCase() && savedData.section === section) {
+
+            // Backwards compatibility sync
+            let stObj = JSON.parse(localStorage.getItem(mobile)) || {};
+            let merged = { ...savedData, progressTracker: stObj.progressTracker || {} };
+            localStorage.setItem(mobile, JSON.stringify(merged));
+
+            // Save Persistent Session
+            localStorage.setItem("activeSessionMobile", mobile);
+            localStorage.setItem("activeSessionExp", (Date.now() + 5 * 60 * 60 * 1000).toString());
+
+            currentUserMobile = mobile;
+            document.getElementById("loginScreen").style.display = "none";
+            document.getElementById("welcomeScreen").style.display = "flex";
+            let wsP = document.querySelector("#welcomeScreen p");
+            wsP.innerText = wsP.innerText.split('\n')[0] + `\nWelcome back, ${savedData.name}!`;
+
+          } else {
+            alert("Incorrect Name or Section for this Mobile Number.");
+          }
         } else {
-          alert("Incorrect Name or Section for this Mobile Number.");
+          alert("Mobile number not found! Please sign up first.");
+          toggleAuthMode('signup');
         }
-      } else {
-        alert("Mobile number not found! Please sign up first.");
-        toggleAuthMode('signup');
-      }
+        btn.innerText = "Log In";
+        btn.disabled = false;
+      }).catch(err => {
+        alert("Network Error, please try again.");
+        btn.innerText = "Log In";
+        btn.disabled = false;
+      });
     }
 
     // EDIT PROFILE FUNCTIONS
@@ -1704,14 +2920,26 @@
         return;
       }
 
+      if (!validateInput(newName, newRoll, newMobile)) return;
+
       let activeMobileKey = isRecoveringMode ? tempRecoverMobile : currentUserMobile;
 
       // Check if mobile changed and new mobile already exists
-      if (newMobile !== activeMobileKey && localStorage.getItem(newMobile)) {
-        alert("The new mobile number is already registered by another user.");
-        return;
+      if (newMobile !== activeMobileKey) {
+        database.ref('users/' + newMobile).once('value').then(snap => {
+          if (snap.exists()) {
+            alert("The new mobile number is already registered by another user.");
+            return;
+          } else {
+            executeProfileUpdate(activeMobileKey, newName, newRoll, newBranch, newSection, newMobile);
+          }
+        });
+      } else {
+        executeProfileUpdate(activeMobileKey, newName, newRoll, newBranch, newSection, newMobile);
       }
+    }
 
+    function executeProfileUpdate(activeMobileKey, newName, newRoll, newBranch, newSection, newMobile) {
       let updatedData = {
         name: newName,
         roll: newRoll,
@@ -1720,23 +2948,167 @@
         mobile: newMobile
       };
 
-      if (newMobile !== activeMobileKey) {
-        localStorage.removeItem(activeMobileKey);
+      // Keep offline compat tracker
+      let stObj = JSON.parse(localStorage.getItem(activeMobileKey)) || {};
+
+      database.ref('users/' + newMobile).update(updatedData).then(() => {
+        if (newMobile !== activeMobileKey) {
+          database.ref('users/' + activeMobileKey).remove(); // clear old node
+          localStorage.removeItem(activeMobileKey);
+        }
+
+        let merged = { ...updatedData, progressTracker: stObj.progressTracker || {}, premiumUnlocked: stObj.premiumUnlocked || {} };
+        localStorage.setItem(newMobile, JSON.stringify(merged));
+
+        if (!isRecoveringMode) {
+          currentUserMobile = newMobile; // update tracking
+          localStorage.setItem("activeSessionMobile", newMobile);
+          let wsP = document.querySelector("#welcomeScreen p");
+          wsP.innerText = wsP.innerText.split('\n')[0] + `\nWelcome, ${newName}!`;
+        }
+
+        alert(isRecoveringMode ? "Registration Fixed Successfully! Please log in." : "Profile updated successfully!");
+        closeEditProfile();
+
+        if (isRecoveringMode) {
+          toggleAuthMode('login');
+        }
+      });
+    }
+
+    // -------------- PROGRESS TRACKING LOGIC --------------
+    function getStudentTracker() {
+      let stObj = JSON.parse(localStorage.getItem(currentUserMobile));
+      if (!stObj.progressTracker) {
+        stObj.progressTracker = {}; // Backwards compat fix
+        localStorage.setItem(currentUserMobile, JSON.stringify(stObj));
+      }
+      return stObj;
+    }
+
+    function toggleProgress(type, index, isChecked) {
+      let stObj = getStudentTracker();
+      let c = studentNavState.course;
+      let b = studentNavState.branch;
+      let sem = studentNavState.sem;
+      let sub = studentNavState.subject;
+      let ch = studentNavState.chapter;
+
+      if (!stObj.progressTracker[c]) stObj.progressTracker[c] = {};
+      if (!stObj.progressTracker[c][b]) stObj.progressTracker[c][b] = {};
+      if (!stObj.progressTracker[c][b][sem]) stObj.progressTracker[c][b][sem] = {};
+      if (!stObj.progressTracker[c][b][sem][sub]) stObj.progressTracker[c][b][sem][sub] = {};
+      if (!stObj.progressTracker[c][b][sem][sub][ch]) stObj.progressTracker[c][b][sem][sub][ch] = {};
+      if (!stObj.progressTracker[c][b][sem][sub][ch][type]) stObj.progressTracker[c][b][sem][sub][ch][type] = {};
+
+      stObj.progressTracker[c][b][sem][sub][ch][type][index] = isChecked;
+      localStorage.setItem(currentUserMobile, JSON.stringify(stObj));
+    }
+
+    function isProgressCompleted(type, index) {
+      let stObj = getStudentTracker();
+      let c = studentNavState.course;
+      let b = studentNavState.branch;
+      let sem = studentNavState.sem;
+      let sub = studentNavState.subject;
+      let ch = studentNavState.chapter;
+
+      try {
+        return !!stObj.progressTracker[c][b][sem][sub][ch][type][index];
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function renderProgressDashboard() {
+      let dashView = document.getElementById("progressContent");
+      if (!dashView) return;
+      dashView.innerHTML = "";
+
+      let c = studentNavState.course;
+      let b = studentNavState.branch;
+      let sem = studentNavState.sem;
+
+      if (!data[c] || !data[c][b] || !data[c][b][sem]) {
+        dashView.innerHTML = "<p>No data to analyze for this semester.</p>";
+        return;
       }
 
-      localStorage.setItem(newMobile, JSON.stringify(updatedData));
+      let semesterData = data[c][b][sem];
+      let stObj = getStudentTracker();
+      let overallContentSum = 0;
+      let overallCompletedSum = 0;
 
-      if (!isRecoveringMode) {
-        currentUserMobile = newMobile; // update tracking
-        // Update welcome text gracefully
-        document.querySelector("#welcomeScreen p").innerText = "Your Digital Learning Hub\nWelcome, " + newName + "!";
+      let htmlOutput = "";
+
+      for (let subName in semesterData) {
+        let totalItems = 0;
+        let completedItems = 0;
+        let breakdown = { video: { t: 0, c: 0 }, pdf: { t: 0, c: 0 }, assign: { t: 0, c: 0 }, hw: { t: 0, c: 0 } };
+
+        let subChapters = semesterData[subName];
+        for (let chName in subChapters) {
+          let content = subChapters[chName];
+
+          const processType = (type, alias) => {
+            let arr = [];
+            if (Array.isArray(content[type])) arr = content[type];
+            else if (typeof content[type] === "string" && content[type].trim()) arr = content[type].split('\n').filter(x => x.trim());
+
+            totalItems += arr.length;
+            breakdown[alias].t += arr.length;
+            overallContentSum += arr.length;
+
+            if (arr.length > 0) {
+              for (let i = 0; i < arr.length; i++) {
+                try {
+                  if (stObj.progressTracker[c][b][sem][subName][chName][type][i]) {
+                    completedItems++;
+                    breakdown[alias].c++;
+                    overallCompletedSum++;
+                  }
+                } catch (e) { }
+              }
+            }
+          };
+
+          processType('video', 'video');
+          processType('pdf', 'pdf');
+          processType('assignment', 'assign');
+          processType('homework', 'hw');
+        }
+
+        if (totalItems > 0) {
+          let percentage = Math.round((completedItems / totalItems) * 100);
+
+          htmlOutput += `
+            <div class="subj-progress">
+              <div class="subj-progress-title">
+                <span>${subName}</span>
+                <span>${percentage}%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: ${percentage}%"></div>
+              </div>
+              <div class="progress-details">
+                ${breakdown.video.t > 0 ? `<span>📹 Videos: ${breakdown.video.c}/${breakdown.video.t}</span>` : ""}
+                ${breakdown.pdf.t > 0 ? `<span>📄 PDFs: ${breakdown.pdf.c}/${breakdown.pdf.t}</span>` : ""}
+                ${breakdown.assign.t > 0 ? `<span>✏️ Assignments: ${breakdown.assign.c}/${breakdown.assign.t}</span>` : ""}
+                ${breakdown.hw.t > 0 ? `<span>🏠 HW: ${breakdown.hw.c}/${breakdown.hw.t}</span>` : ""}
+              </div>
+            </div>
+          `;
+        }
       }
 
-      alert(isRecoveringMode ? "Registration Fixed Successfully! Please log in." : "Profile updated successfully!");
-      closeEditProfile();
-
-      if (isRecoveringMode) {
-        toggleAuthMode('login');
+      if (htmlOutput) {
+        let grandTotal = overallContentSum > 0 ? Math.round((overallCompletedSum / overallContentSum) * 100) : 0;
+        dashView.innerHTML = `
+          <h4 style="color: white; margin-bottom: 20px;">Semester Completion: ${grandTotal}% (${overallCompletedSum}/${overallContentSum} items)</h4>
+          ${htmlOutput}
+        `;
+      } else {
+        dashView.innerHTML = "<p>Ask your Admin to upload Videos/PDFs to start tracking your progress!</p>";
       }
     }
 
@@ -1777,6 +3149,7 @@
           html += `<div class="box" onclick="openStudentLevel('semester', '${s}')">📚 Semester ${s}</div>`;
         }
         document.getElementById("semesterMotivationSection").style.display = "block";
+        renderProgressDashboard();
       }
       else if (level === 'semester') {
         studentNavState.sem = selection;
@@ -1815,6 +3188,7 @@
         openStudentLevel('course', studentNavState.course);
       } else if (currentNavLevel === 'subjects') {
         openStudentLevel('branch', studentNavState.branch);
+        renderProgressDashboard();
       }
     }
 
@@ -1824,6 +3198,7 @@
     }
 
     function openStudentChapter(ch) {
+      studentNavState.chapter = ch;
       document.getElementById("chapters").style.display = "none";
       document.getElementById("content").style.display = "block";
 
@@ -1835,41 +3210,127 @@
       let sub = studentNavState.subject;
       let chapterData = data[c][b][sem][sub][ch];
 
-      if (chapterData.video) {
-        document.getElementById("videoFrame").src = chapterData.video;
+      // Helper to uniformly process arrays or fallback legacy strings
+      const getArray = (val) => {
+        if (!val) return [];
+        if (Array.isArray(val)) return val;
+        if (typeof val === "string") return val.split('\n').filter(v => v.trim() !== "");
+        return [];
+      };
+
+      // Format Multi-line Text blocks with Line Breaks cleanly
+      const formatTextBlocks = (arr) => arr.map(t => t ? t.replace(/\n/g, '<br>') : "").join('<br><br>');
+
+      // Render Multiple Videos
+      let vContainer = document.getElementById("videoContainer");
+      vContainer.innerHTML = "";
+      let videoArr = getArray(chapterData.video);
+
+      if (videoArr.length > 0) {
+        videoArr.forEach((v, idx) => {
+          let wrapper = document.createElement("div");
+          let iframe = document.createElement("iframe");
+          iframe.width = "560";
+          iframe.height = "315";
+          iframe.frameBorder = "0";
+          iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+          iframe.allowFullscreen = true;
+          iframe.style.maxWidth = "100%";
+          iframe.src = v;
+          wrapper.appendChild(iframe);
+
+          // Auto-mark as completed when rendered
+          let isDone = isProgressCompleted("video", idx);
+          if (!isDone) {
+            toggleProgress('video', idx, true);
+          }
+
+          vContainer.appendChild(wrapper);
+        });
         document.getElementById("videoSection").style.display = "block";
       } else {
         document.getElementById("videoSection").style.display = "none";
       }
 
-      if (chapterData.assignment) {
-        document.getElementById("assignmentText").innerText = chapterData.assignment;
-        document.getElementById("assignmentSection").style.display = "block";
-      } else {
-        document.getElementById("assignmentSection").style.display = "none";
-      }
+      // Render Content Blocks
+      const renderBlock = (arr, elementId, secId, type) => {
+        let wrapper = document.getElementById(elementId);
+        wrapper.innerHTML = "";
 
-      if (chapterData.homework) {
-        document.getElementById("homeworkText").innerText = chapterData.homework;
-        document.getElementById("homeworkSection").style.display = "block";
-      } else {
-        document.getElementById("homeworkSection").style.display = "none";
-      }
+        if (arr.length > 0) {
+          arr.forEach((text, idx) => {
+            let pDiv = document.createElement("div");
+            pDiv.innerHTML = formatTextBlocks([text]);
 
-      document.getElementById("notesText").innerText = chapterData.notes || "";
+            // Auto-mark as completed when rendered
+            let isDone = isProgressCompleted(type, idx);
+            if (!isDone) {
+              toggleProgress(type, idx, true);
+            }
 
-      if (chapterData.pdf) {
-        let pdfUrl = chapterData.pdf;
-        let fileId = pdfUrl.match(/\/d\/(.*?)\//)?.[1];
-        if (fileId) {
-          let embedUrl = "https://drive.google.com/file/d/" + fileId + "/preview";
-          document.getElementById("pdfFrame").src = embedUrl;
-          document.getElementById("pdfContainer").style.display = "block";
+            pDiv.appendChild(document.createElement("hr"));
+            wrapper.appendChild(pDiv);
+          });
+          document.getElementById(secId).style.display = "block";
         } else {
-          document.getElementById("pdfContainer").style.display = "none";
+          document.getElementById(secId).style.display = "none";
         }
+      };
+
+      renderBlock(getArray(chapterData.assignment), "assignmentText", "assignmentSection", "assignment");
+      renderBlock(getArray(chapterData.homework), "homeworkText", "homeworkSection", "homework");
+
+      let notesArr = getArray(chapterData.notes);
+      document.getElementById("notesText").innerHTML = formatTextBlocks(notesArr);
+
+      // Render Multiple PDFs
+      let pContainer = document.getElementById("pdfContainer");
+      pContainer.innerHTML = "";
+      let pdfArr = getArray(chapterData.pdf);
+
+      if (pdfArr.length > 0) {
+        pdfArr.forEach((pUrl, idx) => {
+          let fileId = pUrl.match(/\/d\/(.*?)\//)?.[1];
+          if (fileId) {
+            let wrapper = document.createElement("div");
+            wrapper.style.position = "relative"; // Key for absolute overlay
+
+            let iframe = document.createElement("iframe");
+            iframe.width = "100%";
+            iframe.height = "500";
+            iframe.frameBorder = "0";
+            iframe.style.borderRadius = "8px";
+            // Prevent pop-ups to block opening in a new tab for download
+            iframe.setAttribute("sandbox", "allow-scripts allow-same-origin");
+            iframe.src = "https://drive.google.com/file/d/" + fileId + "/preview?rm=minimal#toolbar=0";
+            wrapper.appendChild(iframe);
+
+            // Block clicks on the top-right toolbar (Google Drive action buttons)
+            let securityOverlay = document.createElement("div");
+            securityOverlay.style.position = "absolute";
+            securityOverlay.style.top = "0";
+            securityOverlay.style.left = "0";
+            securityOverlay.style.width = "100%";
+            securityOverlay.style.height = "60px"; // Size of the top header toolbar
+            securityOverlay.style.background = "transparent";
+            securityOverlay.style.zIndex = "10";
+            securityOverlay.oncontextmenu = () => false; // Prevent right-click options in this zone
+            wrapper.appendChild(securityOverlay);
+
+            wrapper.style.marginBottom = "15px";
+
+            // Auto-mark as completed when rendered
+            let isDone = isProgressCompleted("pdf", idx);
+            if (!isDone) {
+              toggleProgress('pdf', idx, true);
+            }
+
+            pContainer.appendChild(wrapper);
+          }
+        });
+        document.getElementById("pdfSection").style.display = pContainer.children.length > 0 ? "block" : "none";
       } else {
-        document.getElementById("pdfContainer").style.display = "none";
+        document.getElementById("pdfSection").style.display = "none";
       }
     }
 
@@ -1992,6 +3453,360 @@
       aiBubble.innerHTML = text;
       chatHistory.appendChild(aiBubble);
       chatHistory.scrollTop = chatHistory.scrollHeight;
+    }
+
+    function previewPremiumQR(event) {
+      let file = event.target.files[0];
+      if (file) {
+        let reader = new FileReader();
+        reader.onload = function (e) {
+          let img = new Image();
+          img.onload = function () {
+            let canvas = document.createElement("canvas");
+            let MAX_WIDTH = 400;
+            let MAX_HEIGHT = 400;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height) {
+              if (width > MAX_WIDTH) {
+                height *= MAX_WIDTH / width;
+                width = MAX_WIDTH;
+              }
+            } else {
+              if (height > MAX_HEIGHT) {
+                width *= MAX_HEIGHT / height;
+                height = MAX_HEIGHT;
+              }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            let ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, width, height);
+
+            let preview = document.getElementById("premiumQRPreview");
+            preview.src = canvas.toDataURL("image/jpeg", 0.6); // Compress aggressively
+            preview.style.display = "block";
+          };
+          img.src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function savePremiumConfig() {
+      let course = document.getElementById("premConfigCourse") ? document.getElementById("premConfigCourse").value : "";
+      let option = document.getElementById("premConfigOption") ? document.getElementById("premConfigOption").value : "";
+
+      if (!course || !option) {
+        // fallback to saving global config if elements missing or not selected 
+        saveGlobalPremiumConfig();
+        return;
+      }
+
+      let preview = document.getElementById("premiumQRPreview");
+      let qrBase64 = preview.src && preview.style.display !== "none" ? preview.src : "";
+
+      let upi = document.getElementById("premiumUPI").value.trim();
+      let amount = document.getElementById("premiumAmount").value.trim();
+
+      let payload = {
+        qr: qrBase64,
+        upi,
+        amount
+      };
+
+      let itemKey = course + "_" + option;
+      let pConf = JSON.parse(localStorage.getItem("premiumCourseConfigs")) || {};
+      pConf[itemKey] = payload;
+
+      database.ref('premiumCourseConfigs/' + itemKey).set(payload).then(() => {
+        localStorage.setItem("premiumCourseConfigs", JSON.stringify(pConf));
+        alert("✅ Premium Payment Settings for " + course + " - " + option + " saved successfully!");
+      }).catch(err => {
+        console.error(err);
+        alert("❌ Failed to save! Your QR image might still be too large. Please upload an image under 1MB.");
+      });
+    }
+
+    function saveGlobalPremiumConfig() {
+      let preview = document.getElementById("premiumQRPreview");
+      let qrBase64 = preview.src && preview.style.display !== "none" ? preview.src : "";
+
+      let upi = document.getElementById("premiumUPI").value.trim();
+      let amount = document.getElementById("premiumAmount").value.trim();
+
+      let payload = {
+        qr: qrBase64,
+        upi,
+        amount
+      };
+
+      database.ref('premiumConfig').set(payload).then(() => {
+        localStorage.setItem("premiumConfig", JSON.stringify(payload));
+        alert("✅ Global Premium Payment Settings saved successfully!");
+      }).catch(err => {
+        console.error(err);
+        alert("❌ Failed to save! Your QR image might still be too large. Please upload an image under 1MB.");
+      });
+    }
+
+    /* PREMIUM NOTES & BOOK LOGIC */
+    let selectedPremiumItem = "";
+
+    function openPremiumHub() {
+      document.getElementById("programsWrapper").style.display = "none";
+      document.getElementById("semesterMotivationSection").style.display = "none";
+      document.getElementById("premiumNavSection").style.display = "block";
+      document.getElementById("premiumCoursesContainer").style.display = "grid";
+      document.getElementById("premiumOptionsContainer").style.display = "none";
+    }
+
+    function goBackFromPremium() {
+      if (document.getElementById("premiumContentContainer").style.display === "block") {
+        document.getElementById("premiumContentContainer").style.display = "none";
+        document.getElementById("premiumOptionsContainer").style.display = "grid";
+      } else if (document.getElementById("premiumOptionsContainer").style.display === "grid") {
+        document.getElementById("premiumOptionsContainer").style.display = "none";
+        document.getElementById("premiumCoursesContainer").style.display = "grid";
+      } else {
+        document.getElementById("premiumNavSection").style.display = "none";
+        document.getElementById("programsWrapper").style.display = "block";
+      }
+    }
+
+    function goBackToPremiumOptions() {
+      document.getElementById("premiumContentContainer").style.display = "none";
+      document.getElementById("premiumOptionsContainer").style.display = "grid";
+    }
+
+    function showPremiumOptions(course) {
+      document.getElementById("premiumCoursesContainer").style.display = "none";
+      document.getElementById("premiumContentContainer").style.display = "none"; // Hide content if any
+      let container = document.getElementById("premiumOptionsContainer");
+      container.style.display = "grid";
+      container.innerHTML = "<p style='color:cyan; grid-column:1/-1;'>Loading premium items...</p>";
+
+      let optionsObj = premiumData[course] || {};
+      let options = Object.keys(optionsObj);
+
+      if (options.length === 0) {
+        container.innerHTML = "<p style='color:#ccc; grid-column:1/-1;'>No premium options available for this course yet.</p>";
+        return;
+      }
+
+      database.ref('users/' + currentUserMobile).once('value').then(snap => {
+        let stObj = snap.val() || {};
+        if (!stObj.premiumUnlocked) stObj.premiumUnlocked = {};
+
+        container.innerHTML = "";
+        options.forEach(opt => {
+          let itemKey = course + "_" + opt;
+          let isUnlocked = stObj.premiumUnlocked[itemKey];
+
+          let classes = "box premium-box ";
+          let icon = isUnlocked ? "🔓" : "🔒";
+          if (!isUnlocked) classes += "locked-option";
+
+          container.innerHTML += `<div class="${classes}" onclick="handlePremiumClick('${course}', '${opt}', ${isUnlocked ? 'true' : 'false'})">
+            <h2>${icon} ${opt}</h2>
+          </div>`;
+        });
+      });
+    }
+
+    function handlePremiumClick(course, option, isUnlocked) {
+      let itemKey = course + "_" + option;
+      if (isUnlocked) {
+        showPremiumContent(course, option);
+      } else {
+        // Check if there's a pending or rejected payment in Firebase DB
+        database.ref('pendingPayments').once('value').then(snap => {
+          let pendingData = snap.val() || {};
+          let existingReqId = null;
+          let existingReq = null;
+
+          for (let id in pendingData) {
+            let req = pendingData[id];
+            if (req.mobile === currentUserMobile && req.itemKey === itemKey) {
+              existingReqId = id;
+              existingReq = req;
+              break;
+            }
+          }
+
+          if (existingReq) {
+            if (existingReq.status === "pending") {
+              alert("⏳ Your payment for this item is currently under verification by Admin.");
+              return;
+            } else if (existingReq.status === "rejected") {
+              alert("❌ Admin rejected your previous payment attempt.\nReason: " + existingReq.reason + "\n\nPlease provide real proofs.");
+              // Remove the rejected request so they can try again
+              database.ref('pendingPayments/' + existingReqId).remove();
+            }
+          }
+
+          selectedPremiumItem = itemKey;
+          openPaymentModal();
+        });
+      }
+    }
+
+    function showPremiumContent(course, option) {
+      document.getElementById("premiumOptionsContainer").style.display = "none";
+      let pContainer = document.getElementById("premiumContentContainer");
+      pContainer.style.display = "block";
+
+      document.getElementById("activePremiumOptionTitle").innerHTML = `💎 ${course} - ${option}`;
+
+      let grid = document.getElementById("premiumPdfsGrid");
+      grid.innerHTML = "";
+
+      let pdfs = premiumData[course][option] || [];
+
+      if (pdfs.length === 0) {
+        grid.innerHTML = "<p style='color:#ccc;'>No PDFs available in this section yet.</p>";
+        return;
+      }
+
+      pdfs.forEach(pdf => {
+        let box = document.createElement("div");
+        box.style.cssText = "background: rgba(255, 255, 255, 0.05); border: 1px solid cyan; border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; transition: 0.3s; box-shadow: 0 0 10px rgba(0,255,255,0.1);";
+        box.innerHTML = `<h1 style="margin:0 0 10px 0; font-size:40px; text-shadow: 0 0 10px gold;">📄</h1>
+                         <h3 style="margin:0; color:white;">${pdf.title}</h3>`;
+        box.onmouseenter = () => box.style.transform = "scale(1.05)";
+        box.onmouseleave = () => box.style.transform = "scale(1)";
+        box.onclick = () => window.open(pdf.link, "_blank");
+        grid.appendChild(box);
+      });
+    }
+
+    function openPaymentModal() {
+      let globalConf = JSON.parse(localStorage.getItem("premiumConfig")) || {};
+      let courseConfigs = JSON.parse(localStorage.getItem("premiumCourseConfigs")) || {};
+
+      let specificConfig = courseConfigs[selectedPremiumItem];
+      let pConf = specificConfig ? specificConfig : globalConf;
+
+      let activeAmount = pConf.amount || "499"; // Fallback demo value
+      let baseUpi = pConf.upi || "admin@upi"; // Fallback demo value
+
+      document.getElementById("paymentAmountDisplay").innerText = "₹" + activeAmount;
+      document.getElementById("paymentUPIDisplay").innerText = "UPI ID: " + baseUpi;
+      let qrImg = document.getElementById("paymentQRDisplay");
+      if (pConf.qr && pConf.qr.startsWith("data:image")) {
+        qrImg.src = pConf.qr;
+        qrImg.style.display = "inline-block";
+      } else if (pConf.qr) {
+        // Fallback for old URL-based configs if any
+        qrImg.src = pConf.qr;
+        qrImg.style.display = "inline-block";
+      } else {
+        // Default UI fallback QR if not configured via admin panel
+        qrImg.src = "payment Qr.jpeg";
+        qrImg.style.display = "inline-block";
+      }
+
+      document.getElementById("paymentModal").style.display = "flex";
+    }
+
+    function closePaymentModal() {
+      document.getElementById("paymentModal").style.display = "none";
+      selectedPremiumItem = "";
+    }
+
+    function payWithUpiApp(app) {
+      let globalConf = JSON.parse(localStorage.getItem("premiumConfig")) || {};
+      let courseConfigs = JSON.parse(localStorage.getItem("premiumCourseConfigs")) || {};
+
+      let specificConfig = courseConfigs[selectedPremiumItem];
+      let pConf = specificConfig ? specificConfig : globalConf;
+
+      let activeAmount = pConf.amount || "499";
+      let baseUpi = pConf.upi || "admin@upi";
+
+      let upiStr = `upi://pay?pa=${baseUpi}&pn=NextGenLibrary&am=${activeAmount}&cu=INR`;
+      if (app === 'gpay') {
+        upiStr = `tez://upi/pay?pa=${baseUpi}&pn=NextGenLibrary&am=${activeAmount}&cu=INR`;
+      } else if (app === 'phonepe') {
+        upiStr = `phonepe://pay?pa=${baseUpi}&pn=NextGenLibrary&am=${activeAmount}&cu=INR`;
+      }
+      window.location.href = upiStr;
+    }
+
+    let currentScreenshotBase64 = "";
+
+    function previewPaymentScreenshot(event) {
+      let file = event.target.files[0];
+      if (file) {
+        let reader = new FileReader();
+        reader.onload = function (e) {
+          currentScreenshotBase64 = e.target.result;
+          let preview = document.getElementById("paymentScreenshotPreview");
+          preview.src = currentScreenshotBase64;
+          preview.style.display = "block";
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function confirmPremiumPayment() {
+      if (!selectedPremiumItem) return;
+
+      let utrInput = document.getElementById("paymentUtrInput").value.trim();
+      if (!utrInput || utrInput.length !== 12) {
+        alert("⚠️ Please enter a valid 12-Digit UTR / Transaction ID.");
+        return;
+      }
+
+      if (!currentScreenshotBase64) {
+        alert("⚠️ Please upload a Payment Screenshot as proof.");
+        return;
+      }
+
+      let btn = document.querySelector(".confirm-pay-btn");
+      btn.innerText = "Submitting...";
+      btn.disabled = true;
+
+      // Make sure we have the latest user name from Firebase
+      database.ref('users/' + currentUserMobile).once('value').then(snap => {
+        let userName = "Student";
+        if (snap.exists() && snap.val().name) {
+          userName = snap.val().name;
+        }
+
+        let newReqId = Date.now().toString();
+        let payload = {
+          id: newReqId,
+          mobile: currentUserMobile,
+          name: userName,
+          itemKey: selectedPremiumItem,
+          utr: utrInput,
+          screenshot: currentScreenshotBase64,
+          status: "pending",
+          timestamp: Date.now()
+        };
+
+        return database.ref('pendingPayments/' + newReqId).set(payload);
+      }).then(() => {
+        alert("⏳ Payment Request Submitted!\nAdmin will verify your UTR and Screenshot. Access will be granted shortly.");
+
+        // Cleanup Modal
+        document.getElementById("paymentUtrInput").value = "";
+        document.getElementById("paymentScreenshotInput").value = "";
+        document.getElementById("paymentScreenshotPreview").style.display = "none";
+        currentScreenshotBase64 = "";
+
+        btn.innerText = "Submit for Verification";
+        btn.disabled = false;
+        closePaymentModal();
+      }).catch(err => {
+        console.error(err);
+        alert("❌ Failed to submit request due to a network error or the screenshot is too large.");
+        btn.innerText = "Submit for Verification";
+        btn.disabled = false;
+      });
     }
 
     /* MOTIVATION ROTATION */
