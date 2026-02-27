@@ -3,17 +3,20 @@
 
 <head>
   <title>NextGen Digital Library | Web Development Project by Aditya Kumar</title>
-<meta name="description" content="NextGen Digital Library - A modern web platform for digital resources. Created by Aditya Kumar, Web Developer.">
-<meta name="keywords" content="NextGen, Digital Library, Aditya Kumar, Web Developer, NIELIT, Project">
-<meta name="author" content="Aditya Kumar">
+  <meta name="description"
+    content="NextGen Digital Library - A modern web platform for digital resources. Created by Aditya Kumar, Web Developer.">
+  <meta name="keywords" content="NextGen, Digital Library, Aditya Kumar, Web Developer, NIELIT, Project">
+  <meta name="author" content="Aditya Kumar">
 
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://adityakumar12xyz.github.io/NextGen/">
-<meta property="og:title" content="NextGen Digital Library - Aditya Kumar">
-<meta property="og:description" content="Explore the NextGen Digital Library, a web development project showcasing digital resource management.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://adityakumar12xyz.github.io/NextGen/">
+  <meta property="og:title" content="NextGen Digital Library - Aditya Kumar">
+  <meta property="og:description"
+    content="Explore the NextGen Digital Library, a web development project showcasing digital resource management.">
   <meta name="google-site-verification" content="9uLHaP53sHpPBy6U9jzpeNOmJIbCl11ZRMo8hN7dyaw" />
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=1200">
   <title>NextGen Library</title>
   <link rel="icon" type="image/png" href="favicon1.png">
 
@@ -1033,15 +1036,37 @@
 
   <header style="display:none;">
     <div style="display:flex; align-items:center; gap:10px; flex-grow:1;">
+      <div style="position: relative; cursor: pointer;" onclick="openEditProfile()" title="Edit Profile">
+        <img id="userProfilePicHeader" src="https://ui-avatars.com/api/?name=U&background=cyan&color=000" alt="Profile"
+          style="width: 45px; height: 45px; border-radius: 50%; border: 2px solid cyan; object-fit: cover; display: none;">
+      </div>
       <img src="img1.png" alt="Logo" style="width: 40px; height: 40px; filter: drop-shadow(0 0 5px cyan);">
       <h2 style="font-size: 28px; letter-spacing: 1px; margin: 0; text-align: left; text-shadow: 0 0 10px cyan;">📚
         NextGen Library</h2>
     </div>
     <div style="display: flex; gap: 10px; align-items: center;">
+      <button onclick="openLeaderboard()"
+        style="font-size: 14px; padding: 6px 12px; background: gold; color: black; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; box-shadow: 0 0 10px gold;">🏆
+        Leadership</button>
       <button id="themeToggleBtn" onclick="toggleMode()"
         style="font-size: 20px; padding: 8px 15px; background: transparent; border: none; box-shadow: none; cursor: pointer;"></button>
     </div>
   </header>
+
+
+  <!-- LEADERBOARD MODAL -->
+  <div id="leaderboardModal"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 2000; justify-content: center; align-items: center;">
+    <div class="login-box"
+      style="text-align: center; max-height: 80vh; overflow-y: auto; width: 90%; max-width: 500px; position: relative;">
+      <button class="close-modal" onclick="closeLeaderboard()">✖</button>
+      <h2 style="color: gold; text-shadow: 0 0 10px gold; margin-top: 10px;">🏆 Leadership</h2>
+      <p style="color: #ccc; font-size: 14px; margin-bottom: 20px;">Top explorers of NextGen Library</p>
+      <div id="leaderboardList" style="display: flex; flex-direction: column; gap: 10px;">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </div>
 
   <!-- AUTHENTICATION SCREEN -->
   <div id="loginScreen">
@@ -1131,8 +1156,14 @@
   <!-- EDIT PROFILE SCREEN -->
   <div id="editProfileScreen"
     style="display: none; height: 100vh; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: radial-gradient(circle at center, #001f3f, #000); position: fixed; width: 100%; top: 0; left: 0; z-index: 1000;">
-    <div class="login-box">
+    <div class="login-box" style="position: relative;">
       <h2>✏️ Edit Profile</h2>
+      <div style="margin-bottom: 20px;">
+        <img id="editProfilePicPreview" src="https://ui-avatars.com/api/?name=U"
+          style="width: 100px; height: 100px; border-radius: 50%; border: 2px solid cyan; object-fit: cover; margin-bottom: 15px;">
+        <input type="file" id="editProfilePicInput" accept="image/*" class="login-input"
+          onchange="previewEditProfilePic(event)" style="padding: 5px;">
+      </div>
       <input type="text" id="editName" class="login-input" placeholder="Name (Letters & Spaces only)">
       <input type="number" id="editRoll" class="login-input" placeholder="DDU Roll Number (13 Digits)"
         style="appearance: none; -moz-appearance: textfield;">
@@ -1158,6 +1189,8 @@
       <input type="tel" id="editMobile" class="login-input" placeholder="Mobile Number">
 
       <button class="login-btn" onclick="saveProfileChanges()" style="margin-bottom: 15px;">💾 Save Changes</button>
+      <button class="login-btn" onclick="logoutUser()"
+        style="background: #ff4757; color: white; margin-bottom: 15px;">🚪 Logout</button>
       <button class="login-btn" onclick="closeEditProfile()"
         style="background: transparent; border: 1px solid cyan; color: cyan; box-shadow: none;">❌ Cancel</button>
     </div>
@@ -2098,43 +2131,36 @@
 
     function loadAdminData() {
       let tbody = document.getElementById("adminTableBody");
-      tbody.innerHTML = ""; // clear old
+      tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>Loading data...</td></tr>";
 
-      let hasData = false;
-      let studentInfoList = [];
-      for (let i = 0; i < localStorage.length; i++) {
-        let key = localStorage.key(i);
-        // Exclude system keys like courseData, session handles
-        if (key === "courseData" || key === "activeSessionMobile" || key === "activeSessionExp") continue;
-
-        try {
-          let data = JSON.parse(localStorage.getItem(key));
-          if (data && data.name && data.mobile && key === data.mobile) { // Verify it's a student record
-            studentInfoList.push(data);
+      database.ref('users').once('value').then(snap => {
+        tbody.innerHTML = "";
+        let hasData = false;
+        let usersData = snap.val();
+        if (usersData) {
+          for (let key in usersData) {
+            let data = usersData[key];
+            if (data && data.name && data.mobile && data.mobile === key && data.role !== "admin") {
+              hasData = true;
+              let tr = document.createElement("tr");
+              tr.innerHTML = `
+                <td>${data.name}</td>
+                <td>${data.roll || 'N/A'}</td>
+                <td>${data.branch || 'N/A'}</td>
+                <td>${data.section || 'N/A'}</td>
+                <td>${data.mobile}</td>
+              `;
+              tbody.appendChild(tr);
+            }
           }
-        } catch (e) {
-          // ignore non-json localstorage keys
         }
-      }
 
-      if (studentInfoList.length > 0) {
-        hasData = true;
-        studentInfoList.forEach(data => {
-          let tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${data.name}</td>
-            <td>${data.roll}</td>
-            <td>${data.branch}</td>
-            <td>${data.section}</td>
-            <td>${data.mobile}</td>
-          `;
-          tbody.appendChild(tr);
-        });
-      }
-
-      if (!hasData) {
-        tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>No registered students yet.</td></tr>";
-      }
+        if (!hasData) {
+          tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>No registered students yet.</td></tr>";
+        }
+      }).catch(err => {
+        tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;color:red;'>Failed to load student data.</td></tr>";
+      });
 
       initAdminCMS(); // Initialize the Content Management dropdowns
 
@@ -2259,27 +2285,38 @@
     }
 
     function exportToExcel() {
-      let studentInfoList = [];
-      for (let i = 0; i < localStorage.length; i++) {
-        let key = localStorage.key(i);
-        if (key === "courseData" || key === "activeSessionMobile" || key === "activeSessionExp") continue;
-        try {
-          let st = JSON.parse(localStorage.getItem(key));
-          if (st && st.name && st.mobile && key === st.mobile) {
-            studentInfoList.push(st);
+      database.ref('users').once('value').then(snap => {
+        let studentInfoList = [];
+        let usersData = snap.val();
+        if (usersData) {
+          for (let key in usersData) {
+            let data = usersData[key];
+            if (data && data.name && data.mobile && key === data.mobile && data.role !== "admin") {
+              studentInfoList.push({
+                Name: data.name,
+                RollNumber: data.roll || 'N/A',
+                Branch: data.branch || 'N/A',
+                Section: data.section || 'N/A',
+                Mobile: data.mobile,
+                TimeSpentMins: data.timeSpent || 0,
+                RegisteredAt: data.registeredAt ? new Date(data.registeredAt).toLocaleString() : 'N/A'
+              });
+            }
           }
-        } catch (e) { }
-      }
+        }
 
-      if (studentInfoList.length === 0) {
-        alert("No student data available to export.");
-        return;
-      }
+        if (studentInfoList.length === 0) {
+          alert("No student data available to export.");
+          return;
+        }
 
-      let ws = XLSX.utils.json_to_sheet(studentInfoList);
-      let wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "Students");
-      XLSX.writeFile(wb, "NextGenLibrary_Students.xlsx");
+        let ws = XLSX.utils.json_to_sheet(studentInfoList);
+        let wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Students");
+        XLSX.writeFile(wb, "NextGenLibrary_Students.xlsx");
+      }).catch(err => {
+        alert("Failed to fetch data for export.");
+      });
     }
 
     /* ADVANCED SITE SETTINGS */
@@ -2895,6 +2932,28 @@
     }
 
     // EDIT PROFILE FUNCTIONS
+    let editProfilePicBase64 = null;
+
+    function previewEditProfilePic(event) {
+      let file = event.target.files[0];
+      if (!file) return;
+      let reader = new FileReader();
+      reader.onload = function (e) {
+        let img = new Image();
+        img.onload = function () {
+          let canvas = document.createElement("canvas");
+          canvas.width = 150;
+          canvas.height = 150;
+          let ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, 150, 150);
+          editProfilePicBase64 = canvas.toDataURL("image/jpeg", 0.7);
+          document.getElementById('editProfilePicPreview').src = editProfilePicBase64;
+        }
+        img.src = e.target.result;
+      }
+      reader.readAsDataURL(file);
+    }
+
     function openEditProfile() {
       if (!currentUserMobile) {
         alert("You must be logged in to edit your profile.");
@@ -2906,12 +2965,20 @@
       let savedData = localStorage.getItem(currentUserMobile);
       if (savedData) {
         let user = JSON.parse(savedData);
-        document.getElementById("editName").value = user.name;
-        document.getElementById("editRoll").value = user.roll;
-        document.getElementById("editBranch").value = user.branch;
-        document.getElementById("editSection").value = user.section;
-        document.getElementById("editMobile").value = user.mobile;
+        document.getElementById("editName").value = user.name || "";
+        document.getElementById("editRoll").value = user.roll || "";
+        document.getElementById("editBranch").value = user.branch || "BCA";
+        document.getElementById("editSection").value = user.section || "A1";
+        document.getElementById("editMobile").value = user.mobile || "";
 
+        editProfilePicBase64 = user.profilePic || null;
+        if (editProfilePicBase64) {
+          document.getElementById('editProfilePicPreview').src = editProfilePicBase64;
+        } else {
+          document.getElementById('editProfilePicPreview').src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(user.name || 'U') + "&background=cyan&color=000";
+        }
+
+        document.getElementById('editProfilePicInput').value = ""; // Reset the file input
         document.getElementById("editProfileScreen").style.display = "flex";
       }
     }
@@ -2960,9 +3027,16 @@
         section: newSection,
         mobile: newMobile
       };
+      if (editProfilePicBase64) {
+        updatedData.profilePic = editProfilePicBase64;
+      }
 
       // Keep offline compat tracker
       let stObj = JSON.parse(localStorage.getItem(activeMobileKey)) || {};
+
+      let btn = document.querySelector("#editProfileScreen .login-btn");
+      btn.innerText = "Saving...";
+      btn.disabled = true;
 
       database.ref('users/' + newMobile).update(updatedData).then(() => {
         if (newMobile !== activeMobileKey) {
@@ -2970,7 +3044,7 @@
           localStorage.removeItem(activeMobileKey);
         }
 
-        let merged = { ...updatedData, progressTracker: stObj.progressTracker || {}, premiumUnlocked: stObj.premiumUnlocked || {} };
+        let merged = { ...stObj, ...updatedData, progressTracker: stObj.progressTracker || {}, premiumUnlocked: stObj.premiumUnlocked || {} };
         localStorage.setItem(newMobile, JSON.stringify(merged));
 
         if (!isRecoveringMode) {
@@ -2978,15 +3052,41 @@
           localStorage.setItem("activeSessionMobile", newMobile);
           let wsP = document.querySelector("#welcomeScreen p");
           wsP.innerText = wsP.innerText.split('\n')[0] + `\nWelcome, ${newName}!`;
+
+          if (editProfilePicBase64 && document.getElementById('userProfilePicHeader')) {
+            document.getElementById('userProfilePicHeader').src = editProfilePicBase64;
+            document.getElementById('userProfilePicHeader').style.display = "block";
+          }
         }
 
         alert(isRecoveringMode ? "Registration Fixed Successfully! Please log in." : "Profile updated successfully!");
         closeEditProfile();
 
+        btn.innerText = "💾 Save Changes";
+        btn.disabled = false;
+
         if (isRecoveringMode) {
           toggleAuthMode('login');
         }
+      }).catch(err => {
+        alert("Network Error, Failed to update profile details.");
+        btn.innerText = "💾 Save Changes";
+        btn.disabled = false;
       });
+    }
+
+    function logoutUser() {
+      if (!confirm("Are you sure you want to log out?")) return;
+      localStorage.removeItem("activeSessionMobile");
+      localStorage.removeItem("activeSessionExp");
+      currentUserMobile = "";
+      closeEditProfile();
+      document.getElementById("welcomeScreen").style.display = "none";
+      document.getElementById("programsWrapper").style.display = "none";
+      document.querySelector("header").style.display = "none";
+      document.getElementById("loginScreen").style.display = "flex";
+      toggleAuthMode('login');
+      if (timeSpentInterval) clearInterval(timeSpentInterval);
     }
 
     // -------------- PROGRESS TRACKING LOGIC --------------
@@ -3129,6 +3229,80 @@
       document.getElementById("welcomeScreen").style.display = "none";
       document.querySelector("header").style.display = "flex";
       document.getElementById("programsWrapper").style.display = "block";
+      startTimeTracking(); // start time tracking when they enter
+
+      // Setup profile pic in header
+      let stObj = JSON.parse(localStorage.getItem(currentUserMobile) || "{}");
+      if (stObj.profilePic) {
+        document.getElementById('userProfilePicHeader').src = stObj.profilePic;
+      } else {
+        document.getElementById('userProfilePicHeader').src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(stObj.name || 'U') + "&background=cyan&color=000";
+      }
+      document.getElementById('userProfilePicHeader').style.display = 'block';
+    }
+
+
+
+    let timeSpentInterval;
+    function startTimeTracking() {
+      if (timeSpentInterval) clearInterval(timeSpentInterval);
+      timeSpentInterval = setInterval(() => {
+        if (currentUserMobile) {
+          database.ref('users/' + currentUserMobile + '/timeSpent').transaction((currentVal) => {
+            return (currentVal || 0) + 1; // 1 unit per minute
+          });
+        }
+      }, 60000); // Every 1 minute
+    }
+
+    function openLeaderboard() {
+      document.getElementById('leaderboardModal').style.display = 'flex';
+      let list = document.getElementById('leaderboardList');
+      list.innerHTML = "<p style='color:cyan;'>Loading leaders...</p>";
+
+      database.ref('users').once('value').then(snap => {
+        let usersData = snap.val();
+        if (!usersData) {
+          list.innerHTML = "<p>No users found on platform yet.</p>";
+          return;
+        }
+        let usersArr = [];
+        for (let key in usersData) {
+          let u = usersData[key];
+          if (u.name && u.role !== 'admin') { // assume we only show students
+            usersArr.push({
+              name: u.name,
+              timeSpent: u.timeSpent || 0,
+              pic: u.profilePic || "https://ui-avatars.com/api/?name=" + encodeURIComponent(u.name) + "&background=cyan&color=000"
+            });
+          }
+        }
+        // Ranking by timeSpent highest first
+        usersArr.sort((a, b) => b.timeSpent - a.timeSpent);
+
+        list.innerHTML = "";
+        usersArr.forEach((u, idx) => {
+          let isTop = idx === 0 ? "👑 " : (idx === 1 ? "🥈 " : (idx === 2 ? "🥉 " : ""));
+          let borderCol = idx === 0 ? "gold" : (idx === 1 ? "silver" : (idx === 2 ? "#cd7f32" : "rgba(0,255,255,0.3)"));
+          let bgCol = idx === 0 ? "rgba(255,215,0,0.1)" : "rgba(255,255,255,0.05)";
+          list.innerHTML += `
+            <div style="display: flex; align-items: center; gap: 15px; background: ${bgCol}; padding: 10px; border-radius: 10px; border: 1px solid ${borderCol}; transition: transform 0.2s;">
+              <span style="font-size: 20px; font-weight: bold; width: 25px; color:${borderCol};">${idx + 1}.</span>
+              <img src="${u.pic}" style="width: 45px; height: 45px; border-radius: 50%; border: 2px solid ${borderCol}; object-fit: cover;">
+              <div style="text-align: left; flex: 1;">
+                <h4 style="margin: 0; color: white;">${isTop}${u.name}</h4>
+                <small style="color: #aaa;">Score: ${u.timeSpent} pts</small>
+              </div>
+            </div>
+          `;
+        });
+      }).catch(err => {
+        list.innerHTML = "<p style='color:red;'>Failed to load leaderboard.</p>";
+      });
+    }
+
+    function closeLeaderboard() {
+      document.getElementById('leaderboardModal').style.display = 'none';
     }
 
     function goBackToPrograms() {
@@ -3423,7 +3597,7 @@
       if (!NEXTGEN_AI) {
         setTimeout(() => {
           chatHistory.removeChild(loadingBubble);
-          addAiResponse("⚠️ **API Key is missing!** <br><br>Developer needs to paste the Gemini API Key into the JavaScript code (`const NEXTGEN_AI = 'YOUR_KEY_HERE';`) for me to connect to the internet and answer your questions.");
+          addAiResponse("⚠️ **API Key is missing!** <br><br>Developer needs to paste the Gemini API Key into the JavaScript code (`const NEXTGEN_AI = 'YOUR_KEY_HERE'; `) for me to connect to the internet and answer your questions.");
         }, 1500);
         return;
       }
@@ -3919,5 +4093,3 @@
 </body>
 
 </html>
-
-
