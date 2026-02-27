@@ -997,6 +997,71 @@
         transform: scale(1);
       }
     }
+
+    /* BANNER SLIDER */
+    .slider-main {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto 20px auto;
+      position: relative;
+      overflow: hidden;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+    }
+
+    .slider-wrapper {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+      width: 100%;
+    }
+
+    .slider-slide {
+      min-width: 100%;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .slider-slide img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .slider-slide img {
+        height: 180px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .slider-slide img {
+        height: 130px;
+      }
+    }
+
+    .slider-nav {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+    }
+
+    .slider-dot {
+      width: 12px;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .slider-dot.active {
+      background: cyan;
+      box-shadow: 0 0 10px cyan;
+    }
   </style>
 </head>
 
@@ -1215,6 +1280,7 @@
             <th>Branch</th>
             <th>Section</th>
             <th>Mobile Number</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody id="adminTableBody">
@@ -1432,11 +1498,37 @@
       </div>
     </div>
 
+    <!-- ACTIVE PREMIUM MEMBERS -->
+    <div id="adminActivePremium" style="margin-top: 40px; border-top: 1px solid gold; padding-top: 20px;">
+      <h3 style="color: gold; text-align: left;">💎 Active Premium Members</h3>
+      <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 10px; overflow-x: auto;">
+        <table style="width: 100%; text-align: left; border-collapse: collapse;">
+          <thead>
+            <tr style="border-bottom: 1px solid gold;">
+              <th style="padding: 10px; color: gold;">Student</th>
+              <th style="padding: 10px; color: gold;">Mobile</th>
+              <th style="padding: 10px; color: gold;">Detailed Plans</th>
+            </tr>
+          </thead>
+          <tbody id="activePremiumTableBody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
     <!-- SITE SETTINGS -->
     <div id="adminSiteSettings"
       style="margin-top: 40px; border-top: 1px solid rgba(0, 255, 255, 0.3); padding-top: 20px; margin-bottom: 40px;">
       <h3 style="color: cyan; text-align: left;">⚙️ Advanced Site Settings</h3>
       <div style="display: flex; flex-direction: column; gap: 15px;">
+        <div>
+          <label style="color: #ccc; font-size: 14px;">Enable Premium Hub Globally:</label>
+          <select id="sitePremiumToggle" class="login-input" style="margin-bottom: 0;">
+            <option value="true">ON (Users can see Premium Hub)</option>
+            <option value="false">OFF (Hide Premium Hub)</option>
+          </select>
+        </div>
         <div>
           <label style="color: #ccc; font-size: 14px;">Live Scrolling Announcement (Top Ticker):</label>
           <input type="text" id="siteTickerText" class="login-input"
@@ -1452,6 +1544,23 @@
           <textarea id="siteAboutText" class="login-input" placeholder="Welcome to NextGen Library..."
             style="height: 80px; margin-bottom: 0;"></textarea>
         </div>
+
+        <div style="margin-top: 15px; border-top: 1px dashed cyan; padding-top: 15px;">
+          <label style="color: cyan; font-size: 16px; font-weight: bold;">🖼️ Announcement Banners
+            (Auto-Swiping)</label>
+          <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 8px; margin-top: 10px;">
+            <input type="file" id="siteBannerImageInput" accept="image/*" class="login-input" style="padding: 5px;">
+            <input type="text" id="siteBannerLinkInput" class="login-input"
+              placeholder="Redirect Link (e.g. https://google.com) Optional">
+            <button class="login-btn" onclick="addSiteBanner()"
+              style="background: #00cec9; color: black; margin-top: 0;">➕ Add Banner</button>
+          </div>
+          <ul id="adminBannerList"
+            style="list-style: none; padding: 0; margin-top: 15px; max-height: 250px; overflow-y: auto;">
+            <!-- Banners injected here -->
+          </ul>
+        </div>
+
       </div>
       <button class="login-btn" onclick="saveSiteSettings()"
         style="background: #28a745; color: white; margin-top: 15px;">💾 Save Site Settings</button>
@@ -1475,6 +1584,7 @@
 
   <!-- PROGRAMS VIEW WITH INFO -->
   <div id="programsWrapper" style="display:none;">
+    <div id="homeSliderContainer" style="display:none;"></div>
     <div class="subjects" id="programs">
       <div class="box" onclick="openStudentLevel('course', 'BCA')">🎓 BCA</div>
       <div class="box" onclick="openStudentLevel('course', 'BTECH')">🏢 BTECH</div>
@@ -1527,6 +1637,7 @@
   <div id="dynamicNavSection" style="display:none; text-align:center;">
     <button id="dynamicNavBackBtn" onclick="goBackDynamicNav()"
       style="margin-bottom:20px; padding: 12px 20px; font-size:16px;">⬅ Back</button>
+    <div id="branchSliderContainer" style="display:none;"></div>
     <div id="dynamicNavContainer" class="subjects"></div>
   </div>
 
@@ -2038,6 +2149,7 @@
         document.getElementById("adminDashboard").style.display = "block";
         loadAdminData();
         renderPendingPayments();
+        renderActivePremiumUsers();
       } else {
         alert("Invalid Admin Credentials!");
       }
@@ -2100,9 +2212,22 @@
     }
 
     function approvePayment(reqId, mobile, itemKey) {
+      let days = prompt("Approve Payment - Enter number of days for premium access (leave blank for lifetime):");
+      if (days === null) return; // User cancelled prompt
+
+      let expiresAt = null;
+      if (days && !isNaN(days) && parseInt(days) > 0) {
+        expiresAt = Date.now() + (parseInt(days) * 24 * 60 * 60 * 1000);
+      }
+
+      let payload = {
+        active: true,
+        expiresAt: expiresAt
+      };
+
       if (confirm("Are you sure you want to approve this payment and grant access?")) {
         // Set premiumUnlocked inside user's node
-        database.ref(`users/${mobile}/premiumUnlocked/${itemKey}`).set(true).then(() => {
+        database.ref(`users/${mobile}/premiumUnlocked/${itemKey}`).set(payload).then(() => {
           // Remove the pending request entirely
           return database.ref('pendingPayments/' + reqId).remove();
         }).then(() => {
@@ -2142,13 +2267,27 @@
             let data = usersData[key];
             if (data && data.name && data.mobile && data.mobile === key && data.role !== "admin") {
               hasData = true;
+
+              let isPremium = data.premiumUnlocked && Object.keys(data.premiumUnlocked).some(k => {
+                let pu = data.premiumUnlocked[k];
+                if (typeof pu === 'object' && pu.active) {
+                  if (!pu.expiresAt || Date.now() <= pu.expiresAt) return true;
+                }
+                return pu === true;
+              });
+
+              let rowStyle = isPremium ? "background: rgba(255, 215, 0, 0.1);" : "";
+              let nameDisplay = isPremium ? `👑 <span style="color: gold;">${data.name}</span>` : data.name;
+
               let tr = document.createElement("tr");
+              tr.style.cssText = rowStyle;
               tr.innerHTML = `
-                <td>${data.name}</td>
+                <td>${nameDisplay}</td>
                 <td>${data.roll || 'N/A'}</td>
                 <td>${data.branch || 'N/A'}</td>
                 <td>${data.section || 'N/A'}</td>
                 <td>${data.mobile}</td>
+                <td><button class="login-btn" style="background: gold; color: black; padding: 5px 10px; margin: 0; font-size: 12px; border-radius: 5px;" onclick="grantPremiumManually('${data.mobile}')">💎 Grant Premium</button></td>
               `;
               tbody.appendChild(tr);
             }
@@ -2156,10 +2295,10 @@
         }
 
         if (!hasData) {
-          tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>No registered students yet.</td></tr>";
+          tbody.innerHTML = "<tr><td colspan='6' style='text-align:center;'>No registered students yet.</td></tr>";
         }
       }).catch(err => {
-        tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;color:red;'>Failed to load student data.</td></tr>";
+        tbody.innerHTML = "<tr><td colspan='6' style='text-align:center;color:red;'>Failed to load student data.</td></tr>";
       });
 
       initAdminCMS(); // Initialize the Content Management dropdowns
@@ -2321,26 +2460,47 @@
 
     /* ADVANCED SITE SETTINGS */
     function loadSiteSettings() {
-      let config = JSON.parse(localStorage.getItem("siteConfig")) || { ticker: "", welcome: "", about: "" };
+      // First load from local storage for instant feedback
+      let localConfig = JSON.parse(localStorage.getItem("siteConfig")) || { ticker: "", welcome: "", about: "", premiumEnabled: true, banners: [] };
+      applySiteSettings(localConfig);
+
+      // Then fetch latest from Firebase
+      database.ref('siteConfig').once('value').then(snapshot => {
+        let fbConfig = snapshot.val();
+        if (fbConfig) {
+          if (!fbConfig.banners) fbConfig.banners = [];
+          localStorage.setItem("siteConfig", JSON.stringify(fbConfig));
+          applySiteSettings(fbConfig);
+        }
+      });
+    }
+
+    function applySiteSettings(config) {
+      if (!config.banners) config.banners = [];
+      let premToggle = document.getElementById("sitePremiumToggle");
+      if (premToggle) {
+        premToggle.value = (config.premiumEnabled !== false) ? "true" : "false";
+      }
+
       let tickerEl = document.getElementById("globalTicker");
       let tickerTextEl = document.getElementById("tickerText");
 
       if (config.ticker && config.ticker.trim() !== "") {
         tickerTextEl.innerText = config.ticker;
         tickerEl.style.display = "block";
-        document.getElementById("siteTickerText").value = config.ticker;
+        if (document.getElementById("siteTickerText")) document.getElementById("siteTickerText").value = config.ticker;
       } else {
         tickerEl.style.display = "none";
-        document.getElementById("siteTickerText").value = "";
+        if (document.getElementById("siteTickerText")) document.getElementById("siteTickerText").value = "";
       }
 
       let welcomeEl = document.getElementById("welcomeSubtitle");
       if (document.getElementById("siteWelcomeText")) {
         if (config.welcome && config.welcome.trim() !== "") {
-          welcomeEl.innerText = config.welcome;
+          if (welcomeEl) welcomeEl.innerText = config.welcome;
           document.getElementById("siteWelcomeText").value = config.welcome;
         } else {
-          welcomeEl.innerText = "Your Digital Learning Hub"; // fallback
+          if (welcomeEl) welcomeEl.innerText = "Your Digital Learning Hub"; // fallback
           document.getElementById("siteWelcomeText").value = "";
         }
       }
@@ -2348,13 +2508,11 @@
       let aboutEl = document.getElementById("aboutUsContent");
       if (document.getElementById("siteAboutText")) {
         if (config.about && config.about.trim() !== "") {
-          // split by newlines and wrap in p tags for basic formatting
           let formattedAbout = config.about.split('\n').filter(p => p.trim() !== '').map(p => `<p>${p}</p>`).join('');
-          aboutEl.innerHTML = formattedAbout;
+          if (aboutEl) aboutEl.innerHTML = formattedAbout;
           document.getElementById("siteAboutText").value = config.about;
         } else {
-          // fallback to default
-          aboutEl.innerHTML = `
+          let def = `
             <p>Welcome to NextGen Library, your premier digital learning platform designed for modern students. We believe that quality education should be structured, accessible, and interactive.</p>
             <p>Our platform integrates:</p>
             <ul>
@@ -2366,25 +2524,232 @@
             </ul>
             <p>Whether you're tackling daily challenges or seeking clarity, we provide the tools necessary for academic excellence and personal growth.</p>
           `;
+          if (aboutEl) aboutEl.innerHTML = def;
           document.getElementById("siteAboutText").value = "";
         }
       }
+
+      if (document.getElementById("adminBannerList")) {
+        renderAdminBanners(config.banners);
+      }
+      renderUserBanners(config.banners);
     }
 
     function saveSiteSettings() {
+      let config = JSON.parse(localStorage.getItem("siteConfig")) || { banners: [] };
       let ticker = document.getElementById("siteTickerText").value.trim();
       let welcome = document.getElementById("siteWelcomeText").value.trim();
       let about = document.getElementById("siteAboutText").value.trim();
+      let premiumEnabled = document.getElementById("sitePremiumToggle").value === "true";
+      let banners = config.banners || [];
 
-      let payload = { ticker, welcome, about };
+      let payload = { ticker, welcome, about, premiumEnabled, banners };
 
       database.ref('siteConfig').set(payload).then(() => {
         localStorage.setItem("siteConfig", JSON.stringify(payload));
         loadSiteSettings();
         alert("✅ Site settings updated!");
       }).catch(err => {
+        console.error(err);
         alert("❌ Failed to update site settings.");
       });
+    }
+
+    function addSiteBanner() {
+      let fileInput = document.getElementById("siteBannerImageInput");
+      let linkInput = document.getElementById("siteBannerLinkInput");
+
+      let file = fileInput.files[0];
+      let link = linkInput.value.trim();
+
+      if (!file) {
+        alert("Please select an image for the banner.");
+        return;
+      }
+      if (file.size > 1024 * 1024) {
+        alert("Image size should be less than 1MB.");
+        return;
+      }
+
+      let reader = new FileReader();
+      reader.onload = function (e) {
+        let img = new Image();
+        img.onload = function () {
+          let canvas = document.createElement("canvas");
+          let MAX_WIDTH = 800;
+          let MAX_HEIGHT = 400;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          let ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, width, height);
+
+          let base64 = canvas.toDataURL("image/jpeg", 0.7);
+
+          let config = JSON.parse(localStorage.getItem("siteConfig")) || { banners: [] };
+          if (!config.banners) config.banners = [];
+          config.banners.push({ image: base64, link: link });
+
+          localStorage.setItem("siteConfig", JSON.stringify(config));
+          database.ref('siteConfig/banners').set(config.banners).then(() => {
+            renderAdminBanners(config.banners);
+            renderUserBanners(config.banners);
+            fileInput.value = "";
+            linkInput.value = "";
+            alert("Banner added successfully!");
+          });
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function deleteSiteBanner(index) {
+      if (!confirm("Are you sure you want to delete this banner?")) return;
+      let config = JSON.parse(localStorage.getItem("siteConfig")) || { banners: [] };
+      if (!config.banners) return;
+
+      config.banners.splice(index, 1);
+      localStorage.setItem("siteConfig", JSON.stringify(config));
+
+      database.ref('siteConfig/banners').set(config.banners).then(() => {
+        renderAdminBanners(config.banners);
+        renderUserBanners(config.banners);
+      });
+    }
+
+    function renderAdminBanners(banners) {
+      let list = document.getElementById("adminBannerList");
+      if (!list) return;
+      list.innerHTML = "";
+      if (!banners || banners.length === 0) {
+        list.innerHTML = "<p style='color:#ccc;'>No banners added yet.</p>";
+        return;
+      }
+
+      banners.forEach((b, index) => {
+        let li = document.createElement("li");
+        li.style.display = "flex";
+        li.style.justifyContent = "space-between";
+        li.style.alignItems = "center";
+        li.style.background = "rgba(255,255,255,0.05)";
+        li.style.padding = "10px";
+        li.style.marginBottom = "5px";
+        li.style.borderRadius = "5px";
+
+        let info = document.createElement("div");
+        info.innerHTML = `<img src="${b.image}" style="width:100px; height:50px; object-fit:cover; vertical-align:middle; margin-right:10px; border-radius:5px;">` +
+          `<a href="${b.link}" target="_blank" style="color:cyan; font-size:12px;">${b.link || 'No Link'}</a>`;
+
+        let delBtn = document.createElement("button");
+        delBtn.innerText = "❌ Delete";
+        delBtn.style.background = "#ff4757";
+        delBtn.style.color = "white";
+        delBtn.style.border = "none";
+        delBtn.style.padding = "5px 10px";
+        delBtn.style.borderRadius = "5px";
+        delBtn.style.cursor = "pointer";
+        delBtn.onclick = () => deleteSiteBanner(index);
+
+        li.appendChild(info);
+        li.appendChild(delBtn);
+        list.appendChild(li);
+      });
+    }
+
+    let sliderIntervals = {};
+    window.sliderCurrentIndex = { home: 0, branch: 0 };
+
+    function renderUserBanners(banners) {
+      let homeContainer = document.getElementById("homeSliderContainer");
+      let branchContainer = document.getElementById("branchSliderContainer");
+
+      if (!banners || banners.length === 0) {
+        if (homeContainer) { homeContainer.style.display = "none"; homeContainer.innerHTML = ""; }
+        if (branchContainer) { branchContainer.style.display = "none"; branchContainer.innerHTML = ""; }
+        return;
+      }
+
+      function buildSliderHtml(idPrefix) {
+        let slidesHtml = banners.map((b, i) => `
+          <div class="slider-slide" ${b.link ? `onclick="window.open('${b.link}', '_blank')"` : ''}>
+            <img src="${b.image}">
+          </div>
+        `).join('');
+
+        let dotsHtml = banners.map((b, i) => `
+          <div class="slider-dot ${i === 0 ? 'active' : ''}" onclick="goToSlide('${idPrefix}', ${i})"></div>
+        `).join('');
+
+        return `
+          <div class="slider-main" id="${idPrefix}Main">
+            <div class="slider-wrapper" id="${idPrefix}Wrapper" style="transform: translateX(0%); display: flex; transition: transform 0.5s ease-in-out;">
+              ${slidesHtml}
+            </div>
+            ${banners.length > 1 ? `<div class="slider-nav" id="${idPrefix}Nav">${dotsHtml}</div>` : ''}
+          </div>
+        `;
+      }
+
+      if (homeContainer) {
+        homeContainer.innerHTML = buildSliderHtml('home');
+        homeContainer.style.display = "block";
+        window.sliderCurrentIndex['home'] = 0;
+        startBannerSlider('home', banners.length);
+      }
+      if (branchContainer) {
+        branchContainer.innerHTML = buildSliderHtml('branch');
+        branchContainer.style.display = "block";
+        window.sliderCurrentIndex['branch'] = 0;
+        startBannerSlider('branch', banners.length);
+      }
+    }
+
+    window.goToSlide = function (idPrefix, index) {
+      window.sliderCurrentIndex[idPrefix] = index;
+      updateSlider(idPrefix);
+      let totalSlides = document.querySelectorAll(`#${idPrefix}Wrapper .slider-slide`).length;
+      if (totalSlides > 1) {
+        startBannerSlider(idPrefix, totalSlides);
+      }
+    };
+
+    function updateSlider(idPrefix) {
+      let wrapper = document.getElementById(`${idPrefix}Wrapper`);
+      let dots = document.querySelectorAll(`#${idPrefix}Nav .slider-dot`);
+      if (!wrapper) return;
+
+      let index = window.sliderCurrentIndex[idPrefix] || 0;
+      wrapper.style.transform = `translateX(-${index * 100}%)`;
+
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+      });
+    }
+
+    function startBannerSlider(idPrefix, totalSlides) {
+      if (totalSlides <= 1) return;
+      if (sliderIntervals[idPrefix]) clearInterval(sliderIntervals[idPrefix]);
+
+      sliderIntervals[idPrefix] = setInterval(() => {
+        let currentIndex = window.sliderCurrentIndex[idPrefix] || 0;
+        window.sliderCurrentIndex[idPrefix] = (currentIndex + 1) % totalSlides;
+        updateSlider(idPrefix);
+      }, 3000);
     }
 
     /* PREMIUM CONTENT CMS SETTINGS */
@@ -2706,7 +3071,10 @@
             let li = document.createElement("li");
             li.innerHTML = `
               <span>📘 ${sub}</span>
-              <button class="delete-subject-btn" onclick="deleteAdminSubject('${c}', '${b}', '${sem}', '${sub}')">🗑️ Delete</button>
+              <div style="display: flex; gap: 5px;">
+                <button class="login-btn" onclick="renameAdminSubject('${c}', '${b}', '${sem}', '${sub}')" style="background: #00e676; color: black; padding: 5px 10px; margin: 0; font-size: 12px; border-radius: 5px;">✏️ Rename</button>
+                <button class="delete-subject-btn" onclick="deleteAdminSubject('${c}', '${b}', '${sem}', '${sub}')">🗑️ Delete</button>
+              </div>
             `;
             list.appendChild(li);
           });
@@ -2757,6 +3125,110 @@
           onAdminSemesterChange(); // Update CMS dropdown
         });
       }
+    }
+
+    function renameAdminSubject(c, b, sem, oldSub) {
+      let newSub = prompt("Enter new name for the subject:", oldSub);
+      if (!newSub || newSub.trim() === "" || newSub === oldSub) return;
+      newSub = newSub.trim();
+
+      if (data[c][b][sem][newSub]) {
+        return alert("A subject with this name already exists in this semester!");
+      }
+
+      let subData = data[c][b][sem][oldSub];
+      data[c][b][sem][newSub] = subData;
+      delete data[c][b][sem][oldSub];
+
+      database.ref(`courseData/${c}/${b}/${sem}/${oldSub}`).remove().then(() => {
+        return database.ref(`courseData/${c}/${b}/${sem}/${newSub}`).set(subData);
+      }).then(() => {
+        localStorage.setItem("courseData", JSON.stringify(data));
+        renderAdminSubjectList();
+        onAdminSemesterChange();
+        alert("✅ Subject renamed successfully!");
+      }).catch(err => alert("❌ Failed to rename subject."));
+    }
+
+    function grantPremiumManually(mobile) {
+      let itemKey = prompt("Enter Premium Option Key (e.g. BCA_Exam point of view):");
+      if (!itemKey) return;
+      let days = prompt("Enter number of days for premium access (leave blank for lifetime):");
+
+      let expiresAt = null;
+      if (days && !isNaN(days) && parseInt(days) > 0) {
+        expiresAt = Date.now() + (parseInt(days) * 24 * 60 * 60 * 1000);
+      }
+
+      let payload = {
+        active: true,
+        expiresAt: expiresAt,
+        grantedBy: 'Admin'
+      };
+
+      database.ref(`users/${mobile}/premiumUnlocked/${itemKey}`).set(payload).then(() => {
+        alert("✅ Premium granted to " + mobile + " for " + itemKey);
+        loadAdminData();
+        renderActivePremiumUsers();
+      }).catch(err => {
+        alert("❌ Error granting premium.");
+      });
+    }
+
+    function renderActivePremiumUsers() {
+      let tbody = document.getElementById("activePremiumTableBody");
+      if (!tbody) return;
+      tbody.innerHTML = "<tr><td colspan='3' style='padding: 15px; text-align: center; color: cyan;'>Loading...</td></tr>";
+
+      database.ref('users').once('value').then(snap => {
+        tbody.innerHTML = "";
+        let usersData = snap.val() || {};
+        let count = 0;
+
+        for (let key in usersData) {
+          let u = usersData[key];
+          if (u.role === 'admin' || !u.premiumUnlocked) continue;
+
+          let activePlans = [];
+          for (let itemKey in u.premiumUnlocked) {
+            let pu = u.premiumUnlocked[itemKey];
+            let isAct = false;
+            let expText = "Lifetime";
+
+            if (typeof pu === 'object' && pu.active) {
+              if (!pu.expiresAt || Date.now() <= pu.expiresAt) {
+                isAct = true;
+                if (pu.expiresAt) {
+                  let daysLeft = Math.ceil((pu.expiresAt - Date.now()) / (1000 * 60 * 60 * 24));
+                  expText = `Expires in ${daysLeft} days`;
+                }
+              }
+            } else if (pu === true) {
+              isAct = true;
+            }
+
+            if (isAct) {
+              activePlans.push(`<span style="background:rgba(255,215,0,0.2); padding:2px 5px; border-radius:3px; margin:2px; display:inline-block; font-size:12px;">${itemKey} (${expText})</span>`);
+            }
+          }
+
+          if (activePlans.length > 0) {
+            count++;
+            let tr = document.createElement("tr");
+            tr.style.borderBottom = "1px solid rgba(255,255,255,0.1)";
+            tr.innerHTML = `
+               <td style="padding: 10px; color: white;">👑 ${u.name}</td>
+               <td style="padding: 10px; color: cyan;">${u.mobile}</td>
+               <td style="padding: 10px;">${activePlans.join(' ')}</td>
+             `;
+            tbody.appendChild(tr);
+          }
+        }
+
+        if (count === 0) {
+          tbody.innerHTML = "<tr><td colspan='3' style='padding: 15px; text-align: center; color: #aaa;'>No active premium members.</td></tr>";
+        }
+      });
     }
 
     // FORGOT DETAILS RECOVERY & EDIT PROFILE VARS
@@ -3745,6 +4217,11 @@
     let selectedPremiumItem = "";
 
     function openPremiumHub() {
+      let config = JSON.parse(localStorage.getItem("siteConfig")) || {};
+      if (config.premiumEnabled === false) {
+        alert("Premium features are currently disabled by Admin.");
+        return;
+      }
       document.getElementById("programsWrapper").style.display = "none";
       document.getElementById("semesterMotivationSection").style.display = "none";
       document.getElementById("premiumNavSection").style.display = "block";
@@ -3792,7 +4269,20 @@
         container.innerHTML = "";
         options.forEach(opt => {
           let itemKey = course + "_" + opt;
-          let isUnlocked = stObj.premiumUnlocked[itemKey];
+
+          let isUnlocked = false;
+          let unlockData = stObj.premiumUnlocked[itemKey];
+          if (unlockData) {
+            if (typeof unlockData === 'object' && unlockData.active) {
+              if (unlockData.expiresAt && Date.now() > unlockData.expiresAt) {
+                isUnlocked = false; // Expired
+              } else {
+                isUnlocked = true;
+              }
+            } else if (unlockData === true) {
+              isUnlocked = true; // Legacy
+            }
+          }
 
           let classes = "box premium-box ";
           let icon = isUnlocked ? "🔓" : "🔒";
