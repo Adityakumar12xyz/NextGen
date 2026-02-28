@@ -16,14 +16,16 @@
   <meta name="google-site-verification" content="9uLHaP53sHpPBy6U9jzpeNOmJIbCl11ZRMo8hN7dyaw" />
 
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>NextGen Library</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="icon" type="image/png" href="favicon1.png">
 
   <!-- Cropper.js CSS for circular photo cropping -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" />
   <!-- Google Fonts: Outfit for Premium Branding -->
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+  <!-- html2canvas for card sharing -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <style>
     /* Add external dependencies here */
@@ -196,7 +198,88 @@
 
     .login-box:hover {
       transform: translateY(-5px);
-      box-shadow: 0 20px 40px rgba(0, 255, 255, 0.15), inset 0 0 20px rgba(0, 255, 255, 0.2);
+      box-shadow: 0 20px 45px rgba(0, 255, 255, 0.3);
+    }
+
+    /* BATTLE ARENA STYLES */
+    .battle-card {
+      background: rgba(11, 19, 43, 0.8);
+      border: 1px solid #ff4757;
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .battle-card:hover {
+      box-shadow: 0 0 20px rgba(255, 71, 87, 0.4);
+      transform: scale(1.02);
+    }
+
+    .battle-card.active {
+      border-color: #00f2fe;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+    }
+
+    .battle-card h3 {
+      margin: 0 0 10px 0;
+      color: #fff;
+    }
+
+    .battle-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 4px 10px;
+      border-radius: 5px;
+      font-size: 10px;
+      font-weight: bold;
+      color: #fff;
+      z-index: 1;
+    }
+
+    .join-battle-btn {
+      background: #2ecc71;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 800;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 15px;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+    }
+
+    .join-battle-btn:hover {
+      background: #27ae60;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(46, 204, 113, 0.5);
+    }
+
+    .wallet-status {
+      background: linear-gradient(135deg, #1c2541, #0b132b);
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      padding: 15px 25px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 30px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .wallet-balance {
+      font-size: 24px;
+      font-weight: 900;
+      color: gold;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
     }
 
     .light .login-box {
@@ -1751,6 +1834,456 @@
 
   <div id="neuralSyncHUD">📡 Incoming Data Stream...</div>
 
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- SUNO PROFILE ID CARD — Premium CSS Styles                  -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <style>
+    /* ── WRAPPER ────────────────────────────────────────────── */
+    .profile-idcard-wrapper {
+      width: 100%;
+      margin: 0 0 20px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .profile-idcard-label {
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(0, 242, 254, 0.7);
+      text-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
+    }
+
+    /* ── CARD SHELL ─────────────────────────────────────────── */
+    .profile-live-idcard {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      min-height: 220px;
+      border-radius: 20px;
+      border: 1.5px solid rgba(0, 242, 254, 0.35);
+      overflow: hidden;
+      background: linear-gradient(140deg, #050a14 0%, #0b1a30 60%, #0d0621 100%);
+      box-shadow:
+        0 0 0 1px rgba(0, 242, 254, 0.08),
+        0 8px 40px rgba(0, 0, 0, 0.8),
+        0 0 60px rgba(0, 100, 255, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      font-family: 'Outfit', sans-serif;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: default;
+    }
+
+    .profile-live-idcard:hover {
+      transform: translateY(-4px) scale(1.01);
+      box-shadow:
+        0 0 0 1px rgba(0, 242, 254, 0.2),
+        0 16px 60px rgba(0, 0, 0, 0.9),
+        0 0 80px rgba(0, 180, 255, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    /* ── BACKGROUND EFFECTS ─────────────────────────────────── */
+    .plc-holo-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: linear-gradient(110deg,
+          transparent 20%,
+          rgba(0, 242, 254, 0.04) 35%,
+          rgba(100, 0, 255, 0.04) 50%,
+          rgba(255, 0, 150, 0.03) 65%,
+          transparent 80%);
+      animation: holoShimmer 5s ease-in-out infinite alternate;
+    }
+
+    @keyframes holoShimmer {
+      0% {
+        background-position: 0% 50%;
+        opacity: 0.6;
+      }
+
+      100% {
+        background-position: 100% 50%;
+        opacity: 1;
+      }
+    }
+
+    .plc-grid-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(0, 242, 254, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 242, 254, 0.04) 1px, transparent 1px);
+      background-size: 30px 30px;
+      opacity: 0.5;
+    }
+
+    .plc-glow-orb {
+      position: absolute;
+      z-index: 0;
+      border-radius: 50%;
+      filter: blur(40px);
+    }
+
+    .plc-orb1 {
+      width: 180px;
+      height: 180px;
+      top: -60px;
+      right: -60px;
+      background: radial-gradient(circle, rgba(0, 242, 254, 0.15), transparent 70%);
+      animation: orbFloat1 6s ease-in-out infinite alternate;
+    }
+
+    .plc-orb2 {
+      width: 160px;
+      height: 160px;
+      bottom: -50px;
+      left: -40px;
+      background: radial-gradient(circle, rgba(180, 0, 255, 0.12), transparent 70%);
+      animation: orbFloat2 7s ease-in-out infinite alternate;
+    }
+
+    @keyframes orbFloat1 {
+      from {
+        transform: translate(0, 0);
+      }
+
+      to {
+        transform: translate(15px, 20px);
+      }
+    }
+
+    @keyframes orbFloat2 {
+      from {
+        transform: translate(0, 0);
+      }
+
+      to {
+        transform: translate(20px, -15px);
+      }
+    }
+
+    /* ── HEADER ─────────────────────────────────────────────── */
+    .plc-header {
+      position: relative;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 18px 10px;
+      background: rgba(0, 0, 0, 0.4);
+      border-bottom: 1px solid rgba(0, 242, 254, 0.12);
+      backdrop-filter: blur(4px);
+    }
+
+    .plc-header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .plc-logo-ring {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid #00f2fe;
+      box-shadow: 0 0 12px rgba(0, 242, 254, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .plc-school-name {
+      font-size: 14px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .plc-school-sub {
+      font-size: 7.5px;
+      color: rgba(170, 170, 170, 0.8);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 1px;
+    }
+
+    /* Chip design */
+    .plc-chip {
+      width: 32px;
+      height: 22px;
+      background: linear-gradient(135deg, #c8a84b, #f5e07e, #c8a84b);
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      padding: 3px 5px;
+      box-sizing: border-box;
+      box-shadow: 0 0 8px rgba(200, 160, 70, 0.6);
+    }
+
+    .plc-chip-line {
+      width: 100%;
+      height: 2px;
+      background: rgba(80, 50, 0, 0.5);
+      border-radius: 1px;
+    }
+
+    /* ── BODY ───────────────────────────────────────────────── */
+    .plc-body {
+      position: relative;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 16px 18px;
+    }
+
+    /* Avatar ring */
+    .plc-avatar-ring {
+      position: relative;
+      flex-shrink: 0;
+      width: 90px;
+      height: 90px;
+    }
+
+    .plc-avatar-border-spin {
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, #00f2fe, #ff007a, #7b00ff, #00f2fe);
+      animation: spinBorder 3s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes spinBorder {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .plc-avatar-img {
+      position: relative;
+      z-index: 2;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #050a14;
+    }
+
+    .plc-scan-line {
+      position: absolute;
+      z-index: 3;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(0, 242, 254, 0.8), transparent);
+      box-shadow: 0 0 8px #00f2fe;
+      animation: scanLine 2.5s ease-in-out infinite;
+      top: 0;
+    }
+
+    @keyframes scanLine {
+      0% {
+        top: 0;
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      90% {
+        opacity: 1;
+      }
+
+      100% {
+        top: 90px;
+        opacity: 0;
+      }
+    }
+
+    /* Info section */
+    .plc-info {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .plc-name {
+      font-size: 18px;
+      font-weight: 900;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 3px;
+    }
+
+    .plc-rank {
+      font-size: 9.5px;
+      font-weight: 800;
+      color: #ff4dc5;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .plc-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+    }
+
+    .plc-field {
+      display: flex;
+      flex-direction: column;
+      border-left: 2px solid rgba(0, 242, 254, 0.4);
+      padding: 2px 0 2px 8px;
+      background: rgba(0, 242, 254, 0.03);
+      border-radius: 0 4px 4px 0;
+    }
+
+    .plc-field-gold {
+      border-left-color: gold;
+      background: rgba(255, 215, 0, 0.04);
+    }
+
+    .plc-field-label {
+      font-size: 7.5px;
+      font-weight: 900;
+      color: rgba(140, 180, 200, 0.7);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .plc-field-value {
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      font-family: 'Outfit', monospace;
+    }
+
+    .plc-field-gold .plc-field-value {
+      color: gold;
+    }
+
+    /* ── FOOTER ─────────────────────────────────────────────── */
+    .plc-footer {
+      position: relative;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 18px;
+      background: rgba(0, 0, 0, 0.45);
+      border-top: 1px solid rgba(0, 242, 254, 0.1);
+    }
+
+    .plc-barcode {
+      font-family: monospace;
+      font-size: 13px;
+      color: rgba(0, 242, 254, 0.25);
+      letter-spacing: -1px;
+      transform: scaleY(1.5);
+    }
+
+    .plc-site-tag {
+      font-size: 8px;
+      font-weight: 900;
+      color: rgba(0, 242, 254, 0.5);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-family: monospace;
+    }
+
+    /* ── ACTION BUTTONS ─────────────────────────────────────── */
+    .plc-action-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .plc-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px 10px;
+      border: none;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 800;
+      font-family: 'Outfit', sans-serif;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .plc-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateX(-110%) skewX(-15deg);
+      transition: transform 0.4s ease;
+    }
+
+    .plc-btn:hover::before {
+      transform: translateX(110%) skewX(-15deg);
+    }
+
+    .plc-btn:hover {
+      transform: translateY(-3px) scale(1.03);
+    }
+
+    .plc-btn:active {
+      transform: scale(0.97);
+    }
+
+    .plc-btn-icon {
+      font-size: 18px;
+    }
+
+    .plc-btn-download {
+      background: linear-gradient(135deg, #0f9b58, #38ef7d);
+      color: #fff;
+      box-shadow: 0 6px 25px rgba(56, 239, 125, 0.45);
+    }
+
+    .plc-btn-download:hover {
+      box-shadow: 0 10px 35px rgba(56, 239, 125, 0.65);
+    }
+
+    .plc-btn-share {
+      background: linear-gradient(135deg, #0b72e4, #00f2fe);
+      color: #000;
+      box-shadow: 0 6px 25px rgba(0, 200, 255, 0.45);
+    }
+
+    .plc-btn-share:hover {
+      box-shadow: 0 10px 35px rgba(0, 200, 255, 0.65);
+    }
+  </style>
+
+
 
   <header style="display:none;">
     <div style="display:flex; align-items:center; gap:10px; flex-grow:1;">
@@ -1934,109 +2467,201 @@
 
       <input type="tel" id="editMobile" class="login-input" placeholder="Mobile Number">
 
-      <button class="login-btn" onclick="saveProfileChanges()" style="margin-bottom: 15px;">💾 Save Changes</button>
-      <button class="login-btn" onclick="downloadIDCard()"
-        style="background: linear-gradient(90deg, #11998e 0%, #38ef7d 100%); color: white; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(56,239,125,0.4);">⬇️
-        Download ID Card</button>
+      <button class="login-btn" onclick="saveProfileChanges()" style="margin-bottom: 18px; border-radius: 10px;">💾 Save
+        Changes</button>
+
+      <!-- ══════════════════════════════════════════════════════ -->
+      <!-- LIVE SUNO PROFILE ID CARD PREVIEW (Visible in Profile) -->
+      <!-- ══════════════════════════════════════════════════════ -->
+      <div class="profile-idcard-wrapper">
+        <div class="profile-idcard-label">🪪 Your id card</div>
+
+        <!-- THE LIVE CARD -->
+        <div class="profile-live-idcard" id="profileLiveCard">
+
+          <!-- Animated holographic background layers -->
+          <div class="plc-holo-layer"></div>
+          <div class="plc-grid-layer"></div>
+          <div class="plc-glow-orb plc-orb1"></div>
+          <div class="plc-glow-orb plc-orb2"></div>
+
+          <!-- Top Header Bar -->
+          <div class="plc-header">
+            <div class="plc-header-left">
+              <div class="plc-logo-ring">
+                <img src="favicon1.png" style="width:22px;height:22px;object-fit:contain;" alt="Logo">
+              </div>
+              <div>
+                <div class="plc-school-name">NEXTGEN <span style="color:#00f2fe;">LIBRARY</span></div>
+                <div class="plc-school-sub">NEURAL LEARNING NETWORK</div>
+              </div>
+            </div>
+            <div class="plc-chip">
+              <div class="plc-chip-line"></div>
+              <div class="plc-chip-line"></div>
+              <div class="plc-chip-line"></div>
+            </div>
+          </div>
+
+          <!-- Body: Avatar + Info -->
+          <div class="plc-body">
+            <!-- Avatar -->
+            <div class="plc-avatar-ring">
+              <div class="plc-avatar-border-spin"></div>
+              <img id="plcAvatar" src="https://ui-avatars.com/api/?name=S&background=0b132b&color=00f2fe"
+                class="plc-avatar-img" alt="Avatar">
+              <div class="plc-scan-line"></div>
+            </div>
+
+            <!-- Info -->
+            <div class="plc-info">
+              <div class="plc-name" id="plcName">STUDENT NAME</div>
+              <div class="plc-rank" id="plcRank">⚡ LEVEL: EXPLORER</div>
+              <div class="plc-fields">
+                <div class="plc-field">
+                  <span class="plc-field-label">ROLL NO</span>
+                  <span class="plc-field-value" id="plcRoll">—</span>
+                </div>
+                <div class="plc-field">
+                  <span class="plc-field-label">COURSE</span>
+                  <span class="plc-field-value" id="plcCourse">—</span>
+                </div>
+                <div class="plc-field">
+                  <span class="plc-field-label">SECTION</span>
+                  <span class="plc-field-value" id="plcSection">—</span>
+                </div>
+                <div class="plc-field plc-field-gold">
+                  <span class="plc-field-label">TECH XP</span>
+                  <span class="plc-field-value" id="plcPoints">0 ✨</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer Bar -->
+          <div class="plc-footer">
+            <div class="plc-barcode">|| | ||| | || ||| | | || |||</div>
+            <div class="plc-site-tag">nextgen-6c99e.web.app</div>
+          </div>
+
+        </div>
+        <!-- /LIVE CARD -->
+
+        <!-- Action Buttons Under Card -->
+        <div class="plc-action-row">
+          <button class="plc-btn plc-btn-download" onclick="downloadIDCard()">
+            <span class="plc-btn-icon">📥</span>
+            <span>Download Card</span>
+          </button>
+          <button class="plc-btn plc-btn-share" onclick="shareIDCard()">
+            <span class="plc-btn-icon">🚀</span>
+            <span>Share Card</span>
+          </button>
+        </div>
+      </div>
+      <!-- /ID CARD PREVIEW SECTION -->
+
       <button class="login-btn" onclick="logoutUser()"
-        style="background: linear-gradient(90deg, #ff416c, #ff4b2b); color: white; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(255,75,43,0.4);">🚪
-        Logout</button>
+        style="background: linear-gradient(90deg, #ff416c, #ff4b2b); color: white; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(255,75,43,0.4); border-radius: 10px;">🚪
+        Logout Identity</button>
       <button class="login-btn" onclick="closeEditProfile()"
         style="background: transparent; border: 1px solid rgba(0,242,254,0.5); color: #00f2fe; box-shadow: none;">❌
         Cancel</button>
     </div>
 
-    <!-- DIGITAL ID CARD UI (Hidden but used for rendering/downloading) -->
+    <!-- DIGITAL ID CARD UI (Restored and Redesigned for Premium Look) -->
     <div id="studentIdCard"
-      style="width: 486px; height: 306px; background: #000; position: fixed; left: 0; top: 0; overflow: hidden; border-radius: 16px; border: 1px solid rgba(0,242,254,0.3); font-family: 'Segoe UI', sans-serif; box-shadow: 0 10px 30px rgba(0,0,0,0.8); text-align: left; box-sizing: border-box; z-index: -9999; pointer-events: none;">
+      style="width: 500px; height: 320px; background: linear-gradient(135deg, #050a14 0%, #0b132b 100%); position: fixed; left: -10000px; top: 0; overflow: hidden; border-radius: 20px; border: 2px solid rgba(0,242,254,0.3); font-family: 'Outfit', sans-serif; box-shadow: 0 10px 50px rgba(0,0,0,1); text-align: left; box-sizing: border-box; z-index: -9999; pointer-events: none;">
 
-      <!-- Premium Tech/AI Background -->
-      <img src="https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=600&auto=format&fit=crop"
-        crossorigin="anonymous"
-        style="position: absolute; width:100%; height:100%; object-fit:cover; opacity: 0.6; z-index: 1; filter: contrast(1.2) saturate(1.5);">
+      <!-- Premium Background Elements -->
       <div
-        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; background: linear-gradient(135deg, #0b132b, #1c2541);">
+        style="position: absolute; top: -100px; right: -100px; width: 250px; height: 250px; background: radial-gradient(circle, rgba(0,242,254,0.1) 0%, transparent 70%); border-radius: 50%;">
       </div>
       <div
-        style="position: absolute; top: -50px; left: -50px; width: 250px; height: 250px; background: rgba(0,242,254,0.3); border-radius: 50%; filter: blur(50px); z-index: 2;">
+        style="position: absolute; bottom: -50px; left: -50px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(255,0,150,0.08) 0%, transparent 70%); border-radius: 50%;">
       </div>
+
+      <!-- Header Section -->
       <div
-        style="position: absolute; bottom: -50px; right: -50px; width: 200px; height: 200px; background: rgba(255,0,150,0.2); border-radius: 50%; filter: blur(60px); z-index: 2;">
-      </div>
-
-      <!-- Content -->
-      <div style="position: relative; z-index: 3; display: flex; flex-direction: column; height: 100%;">
-
-        <!-- Header -->
-        <div
-          style="display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0,242,254,0.2);">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <img src="img1.png" style="width: 30px; height: 30px; filter: drop-shadow(0 0 5px cyan);">
-            <div>
-              <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #fff; letter-spacing: 1px;">NEXTGEN <span
-                  style="color: #00f2fe;">LIBRARY</span></h3>
-              <p style="margin: 0; font-size: 9px; color: #aaa; letter-spacing: 2px;">VIRTUAL STUDENT IDENTITY</p>
-            </div>
-          </div>
-          <!-- Gamification Top Icon -->
-          <div id="idCardRankIcon"
-            style="width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #00f2fe, #4facfe); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px rgba(0,242,254,0.5);">
-            <span style="font-size: 14px;">🎓</span>
-          </div>
-        </div>
-
-        <!-- Body -->
-        <div style="display: flex; padding: 15px 20px; gap: 20px; align-items: center; flex-grow: 1;">
-          <!-- Photo -->
-          <div style="position: relative; flex-shrink: 0; width: 100px; height: 100px;">
-            <div
-              style="position: absolute; inset: -3px; border-radius: 50%; background: linear-gradient(135deg, #00f2fe, #ff007a); z-index: 0; box-shadow: 0 0 15px rgba(0,242,254,0.5);">
-            </div>
-            <img id="idCardPic" src="" crossorigin="anonymous"
-              style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; position: relative; z-index: 1; border: 2px solid #000;">
-          </div>
-
-          <!-- Details -->
-          <div style="flex-grow: 1; color: white;">
-            <h2 id="idCardName"
-              style="margin: 0 0 2px 0; font-size: 22px; font-weight: 900; text-transform: uppercase; color: #fff; text-shadow: 0 0 10px rgba(0,242,254,0.5);">
-              --</h2>
-
-            <!-- Rank / Congratulations Text -->
-            <p id="idCardCongrats"
-              style="margin: 0 0 10px 0; font-size: 10px; color: gold; font-weight: bold; text-transform: uppercase;">
-              CONGRATULATIONS ON ACHIEVING <span id="idCardRankText" style="color: #fff;">RANK</span> LEVEL ✨</p>
-
-            <table style="width: 100%; font-size: 11px; border-collapse: separate; border-spacing: 0 4px;">
-              <tr>
-                <td style="color: #00f2fe; font-weight: 600; width: 80px; letter-spacing: 1px;">REG/ROLL NO</td>
-                <td style="color: #fff; font-weight: bold; font-family: monospace; font-size: 12px;" id="idCardRoll">--
-                </td>
-              </tr>
-              <tr>
-                <td style="color: #00f2fe; font-weight: 600; letter-spacing: 1px;">COURSE</td>
-                <td style="color: #fff; font-weight: bold;" id="idCardCourse">--</td>
-              </tr>
-              <tr>
-                <td style="color: #00f2fe; font-weight: 600; letter-spacing: 1px;">LIBRARY PTS</td>
-                <td style="color: #fff; font-weight: bold; font-size: 12px; color: cyan;" id="idCardPoints">--</td>
-              </tr>
-            </table>
-          </div>
-        </div>
-
-        <!-- Footer -->
-        <div
-          style="padding: 10px 20px; background: rgba(0,0,0,0.8); border-top: 1px solid rgba(0,242,254,0.3); display: flex; justify-content: space-between; align-items: center;">
+        style="display: flex; align-items: center; justify-content: space-between; padding: 18px 25px; background: rgba(0,0,0,0.4); border-bottom: 1px solid rgba(0,242,254,0.15);">
+        <div style="display: flex; align-items: center; gap: 12px;">
           <div
-            style="font-family: monospace; font-size: 14px; color: rgba(255,255,255,0.7); letter-spacing: -1px; transform: scaleY(1.5);">
-            || | ||| || || | | ||||</div>
-          <div style="font-size: 9px; color: #00f2fe; font-weight: bold; letter-spacing: 1px;">
-            adityakumar12xyz.github.io/NextGen/
+            style="width: 38px; height: 38px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid cyan; box-shadow: 0 0 15px rgba(0,242,254,0.4);">
+            <img src="favicon1.png" style="width: 25px; height: 25px; object-fit: contain;">
+          </div>
+          <div>
+            <h3
+              style="margin: 0; font-size: 16px; font-weight: 900; color: #fff; letter-spacing: 1px; text-transform: uppercase;">
+              NEXTGEN <span style="color: cyan;">LIBRARY</span></h3>
+            <p style="margin: 0; font-size: 8px; color: #aaa; letter-spacing: 2.5px; font-weight: 700;">NEURAL LEARNING
+              NETWORK</p>
           </div>
         </div>
+        <div id="idCardRankIcon"
+          style="width: 35px; height: 35px; border-radius: 50%; background: linear-gradient(135deg, #00f2fe, #4facfe); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(0,242,254,0.5); border: 1px solid rgba(255,255,255,0.2);">
+          <span style="font-size: 16px;">🎓</span>
+        </div>
+      </div>
+
+      <!-- Detail Body -->
+      <div
+        style="display: flex; padding: 25px 30px; gap: 25px; align-items: flex-start; position: relative; z-index: 5;">
+        <!-- Avatar Section -->
+        <div style="position: relative; flex-shrink: 0; width: 110px; height: 110px;">
+          <div
+            style="position: absolute; inset: -3px; border-radius: 50%; background: linear-gradient(45deg, cyan, #ff007a, cyan); animation: neuralPulse 3s infinite linear; z-index: 0; opacity: 0.6;">
+          </div>
+          <img id="idCardPic" src="" crossorigin="anonymous"
+            style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; position: relative; z-index: 2; border: 3px solid #050a14;">
+        </div>
+
+        <!-- Name & Bio -->
+        <div style="flex-grow: 1;">
+          <h2 id="idCardName"
+            style="margin: 0; font-size: 24px; font-weight: 900; color: #fff; text-shadow: 0 0 10px rgba(0,242,254,0.3); text-transform: uppercase;">
+            STUDENT NAME</h2>
+          <p id="idCardCongrats"
+            style="margin: 3px 0 12px 0; font-size: 10px; font-weight: 900; color: #ff007a; letter-spacing: 1px;"> <span
+              id="idCardRankText" style="color: cyan;">LEVEL: EXPLORER</span> ✨</p>
+
+          <div style="display: grid; grid-template-columns: 1fr; gap: 6px;">
+            <div
+              style="display: flex; border-left: 2px solid cyan; padding-left: 10px; background: rgba(0,242,254,0.03); padding-top: 2px; padding-bottom: 2px;">
+              <div style="width: 80px;"><small
+                  style="color: #666; font-size: 9px; font-weight: 900; text-transform: uppercase;">Roll No</small>
+              </div>
+              <div style="color: white; font-weight: 700; font-size: 13px; font-family: monospace;" id="idCardRoll">--
+              </div>
+            </div>
+            <div
+              style="display: flex; border-left: 2px solid #ff007a; padding-left: 10px; background: rgba(255,0,122,0.03); padding-top: 2px; padding-bottom: 2px;">
+              <div style="width: 80px;"><small
+                  style="color: #666; font-size: 9px; font-weight: 900; text-transform: uppercase;">Course</small></div>
+              <div style="color: white; font-weight: 700; font-size: 12px;" id="idCardCourse">--</div>
+            </div>
+            <div
+              style="display: flex; border-left: 2px solid gold; padding-left: 10px; background: rgba(255,215,0,0.03); padding-top: 2px; padding-bottom: 2px;">
+              <div style="width: 80px;"><small
+                  style="color: #666; font-size: 9px; font-weight: 900; text-transform: uppercase;">Tech XP</small>
+              </div>
+              <div style="color: gold; font-weight: 900; font-size: 14px;" id="idCardPoints">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer / ID Bar -->
+      <div
+        style="position: absolute; bottom: 0; width: 100%; background: rgba(0,0,0,0.5); border-top: 1px solid rgba(0,242,254,0.2); padding: 10px 25px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box;">
+        <div
+          style="font-family: monospace; font-size: 14px; color: rgba(0,242,254,0.3); letter-spacing: -1px; transform: scaleY(1.4);">
+          || ||| | || |||| | |</div>
+        <div style="color: cyan; font-size: 11px; font-weight: 900; font-family: monospace;">
+          ADITYAKUMAR12XYZ.GITHUB.IO/NEXTGEN/</div>
       </div>
     </div>
+  </div>
+  </div>
   </div>
 
   <!-- CROPPER UI MODAL (For Profile Photos) -->
@@ -2075,23 +2700,37 @@
       </div>
     </div>
 
-    <p>View all registered student data below. This info is protected.</p>
-    <div style="overflow-x: auto;">
-      <table class="admin-table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Roll Number</th>
-            <th>Branch</th>
-            <th>Section</th>
-            <th>Mobile Number</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="adminTableBody">
-          <!-- Rows injected via JS -->
-        </tbody>
-      </table>
+    <div
+      style="background: rgba(255,255,255,0.05); padding: 5px; border-radius: 10px; margin-bottom: 20px; display: flex; gap: 5px; overflow-x: auto; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(10px);">
+      <button onclick="switchAdminTab('students')" class="admin-tab-btn active">👥 Student Database</button>
+      <button onclick="switchAdminTab('cms')" class="admin-tab-btn">📝 CMS Editor</button>
+      <button onclick="switchAdminTab('recharges')" class="admin-tab-btn">💰 Recharge Requests</button>
+      <button onclick="switchAdminTab('battles')" class="admin-tab-btn">⚔️ Battle Manager</button>
+      <button onclick="switchAdminTab('premium')" class="admin-tab-btn">💎 Premium Users</button>
+      <button onclick="switchAdminTab('settings')" class="admin-tab-btn">⚙️ Site Settings</button>
+    </div>
+
+    <!-- STUDENT DATABASE SECTION -->
+    <div id="adminSection_students" class="admin-section">
+      <p>View all registered student data below. This info is protected.</p>
+      <div style="overflow-x: auto;">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Roll Number</th>
+              <th>Branch</th>
+              <th>Section</th>
+              <th>Mobile Number</th>
+              <th>Wallet (🪙)</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="adminTableBody">
+            <!-- Rows injected via JS -->
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- ADMIN HACK: USER SHADOW MODAL (Activity Logs - ID Card Style) -->
@@ -2164,260 +2803,394 @@
       </div>
     </div>
 
-    <!-- ADMIN CONTENT MANAGEMENT SYSTEM -->
-    <div id="adminCMS" style="margin-top: 40px; border-top: 1px solid rgba(0,255,255,0.3); padding-top: 20px;">
-      <h3 style="color: cyan; text-align: left;">📂 Manage Course Content</h3>
-      <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
-        <select id="cmsCourse" class="login-input" style="flex: 1; margin: 0; min-width: 150px;"
-          onchange="onAdminCMSCourseChange()">
-          <option value="" disabled selected>Course</option>
-        </select>
-        <select id="cmsBranch" class="login-input" style="flex: 1; margin: 0; min-width: 150px;"
-          onchange="onAdminCMSBranchChange()">
-          <option value="" disabled selected>Branch</option>
-        </select>
-      </div>
-
-      <!-- NEW INTEGRATED INTERACTION AREA -->
-      <div id="cmsInteractionArea" style="margin-top: 20px;">
-        <p style="color: #888; text-align: center; padding: 20px;">Select Course and Branch to manage Semesters,
-          Subjects,
-          and Chapters.</p>
-      </div>
-
-      <!-- Content Editor (Visible only when a chapter is selected) -->
-      <div id="cmsContentEditor" style="display: none; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
-        <h4 id="selectedPathDisplay" style="color: cyan; margin-bottom: 15px;">Selected: ...</h4>
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-          <!-- Existing Editor Fields -->
-          <div style="text-align: left;">
-            <label style="color: #aaa; font-size: 14px;">📹 Video URLs (one per line)</label>
-            <textarea id="cmsVideo" class="login-input" style="height: 80px;"></textarea>
-          </div>
-          <div style="text-align: left;">
-            <label style="color: #aaa; font-size: 14px;">📄 PDF Google Drive Links (one per line)</label>
-            <textarea id="cmsPdf" class="login-input" style="height: 80px;"></textarea>
-          </div>
-          <div style="text-align: left;">
-            <label style="color: #aaa; font-size: 14px;">📝 Explanatory Notes (Multi-line Support)</label>
-            <textarea id="cmsNotes" class="login-input" style="height: 120px;"></textarea>
-          </div>
-          <div style="text-align: left;">
-            <label style="color: #aaa; font-size: 14px;">✏️ Assignment Text (Multi-line Support)</label>
-            <textarea id="cmsAssignment" class="login-input" style="height: 100px;"></textarea>
-          </div>
-          <div style="text-align: left;">
-            <label style="color: #aaa; font-size: 14px;">🏠 Homework Text (Multi-line Support)</label>
-            <textarea id="cmsHomework" class="login-input" style="height: 100px;"></textarea>
-          </div>
-          <button class="login-btn" onclick="saveAdminContent()"
-            style="background: cyan; color: black; margin-top: 10px;">💾 Save Data to Firebase</button>
+    <!-- 2. ADMIN CONTENT MANAGEMENT SYSTEM -->
+    <div id="adminSection_cms" class="admin-section" style="display:none;">
+      <div id="adminCMS" style="margin-top: 0; border: none; padding-top: 0;">
+        <h3 style="color: cyan; text-align: left;">📂 Manage Course Content</h3>
+        <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+          <select id="cmsCourse" class="login-input" style="flex: 1; margin: 0; min-width: 150px;"
+            onchange="onAdminCMSCourseChange()">
+            <option value="" disabled selected>Course</option>
+          </select>
+          <select id="cmsBranch" class="login-input" style="flex: 1; margin: 0; min-width: 150px;"
+            onchange="onAdminCMSBranchChange()">
+            <option value="" disabled selected>Branch</option>
+          </select>
         </div>
-      </div>
-    </div>
 
-    <!-- ADMIN SUBJECT MANAGEMENT -->
-    <div id="adminSubjectManager"
-      style="margin-top: 40px; border-top: 1px solid rgba(0,255,255,0.3); padding-top: 20px;">
+        <!-- NEW INTEGRATED INTERACTION AREA -->
+        <div id="cmsInteractionArea" style="margin-top: 20px;">
+          <p style="color: #888; text-align: center; padding: 20px;">Select Course and Branch to manage Semesters,
+            Subjects,
+            and Chapters.</p>
+        </div>
 
-      <!-- MANAGE COURSES -->
-      <h3 style="color: cyan; text-align: left;">🏢 Manage Courses</h3>
-      <div style="display: flex; gap: 10px; margin-bottom: 25px;">
-        <input type="text" id="newCourseName" class="login-input" placeholder="New Course Name (e.g. MCA)"
-          style="flex: 2; margin-bottom: 0;">
-        <button class="login-btn" onclick="addAdminCourse()"
-          style="flex: 1; margin-top: 0; background: #00cec9; color: black;">➕ Add Course</button>
-      </div>
-
-      <!-- MANAGING SUBJECTS INTEGRATED INTO CMS ABOVE -->
-    </div>
-
-    <!-- ADMIN PREMIUM SETTINGS -->
-    <div id="adminPremiumSettings"
-      style="margin-top: 40px; border-top: 1px solid rgba(255,215,0,0.5); padding-top: 20px;">
-      <h3 style="color: gold; text-align: left;">💎 Premium Payment Settings</h3>
-
-      <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
-        <select id="premConfigCourse" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
-          onchange="onAdminPremConfigCourseChange()">
-          <option value="" disabled selected>Select Premium Course</option>
-          <option value="BCA">BCA</option>
-          <option value="BTECH">BTECH</option>
-          <option value="BBA">BBA</option>
-        </select>
-        <select id="premConfigOption" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
-          onchange="onAdminPremConfigOptionChange()">
-          <option value="" disabled selected>Select Option</option>
-        </select>
-      </div>
-
-      <div id="premiumConfigEditor" style="display: none;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        <!-- Content Editor (Visible only when a chapter is selected) -->
+        <div id="cmsContentEditor"
+          style="display: none; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+          <h4 id="selectedPathDisplay" style="color: cyan; margin-bottom: 15px;">Selected: ...</h4>
           <div style="display: flex; flex-direction: column; gap: 10px;">
-            <label style="color: #ccc; font-size: 14px;">Upload QR Code Image:</label>
-            <input type="file" id="premiumQRFile" class="login-input" accept="image/*"
-              onchange="previewPremiumQR(event)" style="padding: 5px;">
-            <img id="premiumQRPreview" src="" alt="QR Preview"
-              style="width: 100px; height: 100px; object-fit: contain; border: 1px solid cyan; border-radius: 5px; display: none;">
-          </div>
-          <div>
-            <label style="color: #ccc; font-size: 14px;">UPI ID:</label>
-            <input type="text" id="premiumUPI" class="login-input" placeholder="e.g. 9876543210@ybl">
-          </div>
-          <div>
-            <label style="color: #ccc; font-size: 14px;">Premium Amount ₹:</label>
-            <input type="number" id="premiumAmount" class="login-input" placeholder="e.g. 499">
+            <!-- Existing Editor Fields -->
+            <div style="text-align: left;">
+              <label style="color: #aaa; font-size: 14px;">📹 Video URLs (one per line)</label>
+              <textarea id="cmsVideo" class="login-input" style="height: 80px;"></textarea>
+            </div>
+            <div style="text-align: left;">
+              <label style="color: #aaa; font-size: 14px;">📄 PDF Google Drive Links (one per line)</label>
+              <textarea id="cmsPdf" class="login-input" style="height: 80px;"></textarea>
+            </div>
+            <div style="text-align: left;">
+              <label style="color: #aaa; font-size: 14px;">📝 Explanatory Notes (Multi-line Support)</label>
+              <textarea id="cmsNotes" class="login-input" style="height: 120px;"></textarea>
+            </div>
+            <div style="text-align: left;">
+              <label style="color: #aaa; font-size: 14px;">✏️ Assignment Text (Multi-line Support)</label>
+              <textarea id="cmsAssignment" class="login-input" style="height: 100px;"></textarea>
+            </div>
+            <div style="text-align: left;">
+              <label style="color: #aaa; font-size: 14px;">🏠 Homework Text (Multi-line Support)</label>
+              <textarea id="cmsHomework" class="login-input" style="height: 100px;"></textarea>
+            </div>
+            <button class="login-btn" onclick="saveAdminContent()"
+              style="background: cyan; color: black; margin-top: 10px;">💾 Save Data to Firebase</button>
           </div>
         </div>
-        <button class="login-btn" onclick="savePremiumConfig()"
-          style="background: gold; color: black; box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); margin-top: 15px;">💾 Save
-          Payment
-          Settings</button>
-      </div>
-    </div>
-
-    <!-- ADMIN PREMIUM CONTENT CMS -->
-    <div id="adminPremiumCMS"
-      style="margin-top: 40px; border-top: 1px solid rgba(0, 255, 255, 0.3); padding-top: 20px;">
-      <h3 style="color: cyan; text-align: left;">💎 Manage Premium Content (PDFs)</h3>
-      <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
-        <select id="premCmsCourse" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
-          onchange="onPremCourseChange()">
-          <option value="" disabled selected>Select Premium Course</option>
-          <option value="BCA">BCA</option>
-          <option value="BTECH">BTECH</option>
-          <option value="BBA">BBA</option>
-        </select>
-        <select id="premCmsOption" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
-          onchange="onPremOptionChange()">
-          <option value="" disabled selected>Select Option</option>
-        </select>
       </div>
 
-      <div id="premEditor" style="display: none; text-align: left;">
-        <div style="display: flex; gap: 10px; margin-bottom: 20px; align-items: stretch;">
-          <input type="text" id="newPremOptionName" class="login-input" placeholder="Create New Option (e.g. MBA Agra)"
+      <!-- ADMIN SUBJECT MANAGEMENT -->
+      <div id="adminSubjectManager"
+        style="margin-top: 40px; border-top: 1px solid rgba(0,255,255,0.3); padding-top: 20px;">
+
+        <!-- MANAGE COURSES -->
+        <h3 style="color: cyan; text-align: left;">🏢 Manage Courses</h3>
+        <div style="display: flex; gap: 10px; margin-bottom: 25px;">
+          <input type="text" id="newCourseName" class="login-input" placeholder="New Course Name (e.g. MCA)"
             style="flex: 2; margin-bottom: 0;">
-          <button class="login-btn" onclick="addPremiumOption()"
-            style="flex: 1; margin-top: 0; background: gold; color: black;">➕ Add Option</button>
+          <button class="login-btn" onclick="addAdminCourse()"
+            style="flex: 1; margin-top: 0; background: #00cec9; color: black;">➕ Add Course</button>
         </div>
 
-        <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 10px; margin-bottom: 20px;">
-          <h4 style="color: gold; margin-top: 0;">Add PDF to Selected Option</h4>
-          <input type="text" id="newPremPdfTitle" class="login-input" placeholder="PDF Title (e.g. Chapter 1 Notes)">
-          <input type="text" id="newPremPdfLink" class="login-input" placeholder="Google Drive / PDF Link">
-          <button class="login-btn" onclick="addPremiumPdf()" style="background: cyan; color: black;">Upload PDF
-            Link</button>
-        </div>
-
-        <h4 style="color: #ddd;">Existing PDFs in Option</h4>
-        <ul id="adminPremPdfList" style="list-style: none; padding: 0; max-height: 200px; overflow-y: auto;">
-          <!-- Dynamically populated list of PDFs -->
-        </ul>
+        <!-- MANAGING SUBJECTS INTEGRATED INTO CMS ABOVE -->
       </div>
+
+      <!-- ADMIN WALLET RECHARGE SETTINGS -->
+      <div id="adminWalletSettings"
+        style="margin-top: 40px; border-top: 1px solid rgba(255,215,0,0.5); padding-top: 20px;">
+        <h3 style="color: gold; text-align: left;">🪙 Wallet Recharge Settings</h3>
+        <p style="color: #ccc; font-size: 14px;">Set the global QR code and UPI ID for all Neural Wallet Recharges.</p>
+
+        <div id="walletConfigEditor">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <label style="color: #ccc; font-size: 14px;">Upload QR Code Image:</label>
+              <input type="file" id="walletQRFile" class="login-input" accept="image/*"
+                onchange="previewWalletQR(event)" style="padding: 5px;">
+              <img id="walletQRPreview" src="" alt="QR Preview"
+                style="width: 100px; height: 100px; object-fit: contain; border: 1px solid cyan; border-radius: 5px; display: none;">
+            </div>
+            <div>
+              <label style="color: #ccc; font-size: 14px;">UPI ID:</label>
+              <input type="text" id="walletUPI" class="login-input" placeholder="e.g. 9876543210@ybl">
+            </div>
+          </div>
+          <button class="login-btn" onclick="saveWalletConfig()"
+            style="background: gold; color: black; box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); margin-top: 15px;">💾
+            Save
+            Wallet Settings</button>
+        </div>
+      </div>
+
+      <!-- ADMIN PREMIUM CONTENT CMS -->
+      <div id="adminPremiumCMS"
+        style="margin-top: 40px; border-top: 1px solid rgba(0, 255, 255, 0.3); padding-top: 20px;">
+        <h3 style="color: cyan; text-align: left;">💎 Manage Premium Content (PDFs)</h3>
+        <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+          <select id="premCmsCourse" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
+            onchange="onPremCourseChange()">
+            <option value="" disabled selected>Select Premium Course</option>
+            <option value="BCA">BCA</option>
+            <option value="BTECH">BTECH</option>
+            <option value="BBA">BBA</option>
+          </select>
+          <select id="premCmsOption" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
+            onchange="onPremOptionChange()">
+            <option value="" disabled selected>Select Option</option>
+          </select>
+        </div>
+
+        <div id="premEditor" style="display: none; text-align: left;">
+          <div style="display: flex; gap: 10px; margin-bottom: 20px; align-items: stretch;">
+            <input type="text" id="newPremOptionName" class="login-input"
+              placeholder="Create New Option (e.g. MBA Agra)" style="flex: 2; margin-bottom: 0;">
+            <button class="login-btn" onclick="addPremiumOption()"
+              style="flex: 1; margin-top: 0; background: gold; color: black;">➕ Add Option</button>
+          </div>
+
+          <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+            <h4 style="color: gold; margin-top: 0;">Add PDF to Selected Option</h4>
+            <input type="text" id="newPremPdfTitle" class="login-input" placeholder="PDF Title (e.g. Chapter 1 Notes)">
+            <input type="text" id="newPremPdfLink" class="login-input" placeholder="Google Drive / PDF Link">
+            <button class="login-btn" onclick="addPremiumPdf()" style="background: cyan; color: black;">Upload PDF
+              Link</button>
+          </div>
+
+          <h4 style="color: #ddd;">Existing PDFs in Option</h4>
+          <ul id="adminPremPdfList" style="list-style: none; padding: 0; max-height: 200px; overflow-y: auto;">
+            <!-- Dynamically populated list of PDFs -->
+          </ul>
+        </div>
+      </div>
+
     </div>
 
-    <!-- PENDING PREMIUM APPROVALS -->
-    <div id="adminPendingPayments" style="margin-top: 40px; border-top: 1px solid #ff4757; padding-top: 20px;">
-      <h3 style="color: #ff4757; text-align: left;">⏳ Pending Premium Approvals</h3>
-      <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 10px; overflow-x: auto;">
-        <table style="width: 100%; text-align: left; border-collapse: collapse;">
-          <thead>
-            <tr style="border-bottom: 1px solid #ff4757;">
-              <th style="padding: 10px; color: gold;">Student</th>
-              <th style="padding: 10px; color: gold;">Option</th>
-              <th style="padding: 10px; color: gold;">UTR</th>
-              <th style="padding: 10px; color: gold;">Proof</th>
-              <th style="padding: 10px; color: gold;">Action</th>
-            </tr>
-          </thead>
-          <tbody id="pendingPaymentsTableBody">
-            <!-- Dynamically populated -->
-          </tbody>
-        </table>
+    <!-- PENDING WALLET RECHARGES -->
+    <div id="adminSection_recharges" class="admin-section" style="display:none;">
+      <div id="adminPendingRecharges" style="margin-top: 0; border: none; padding-top: 0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+          <h3 style="color: #ff4757; text-align: left; margin: 0;">⏳ Pending Wallet Recharges</h3>
+          <button onclick="renderAdminRechargeRequests()"
+            style="background: rgba(0,242,254,0.1); border: 1px solid cyan; color: cyan; padding: 6px 15px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; transition: 0.3s;"
+            onmouseover="this.style.background='rgba(0,242,254,0.2)'"
+            onmouseout="this.style.background='rgba(0,242,254,0.1)'">🔄 Refresh List</button>
+        </div>
+        <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 10px; overflow-x: auto;">
+          <table style="width: 100%; text-align: left; border-collapse: collapse;">
+            <thead>
+              <tr style="border-bottom: 1px solid #ff4757;">
+                <th style="padding: 10px; color: gold;">Student</th>
+                <th style="padding: 10px; color: gold;">Amount (₹)</th>
+                <th style="padding: 10px; color: gold;">UTR</th>
+                <th style="padding: 10px; color: gold;">Proof</th>
+                <th style="padding: 10px; color: gold;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="pendingRechargesTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
       </div>
+
     </div>
 
     <!-- ACTIVE PREMIUM MEMBERS -->
-    <div id="adminActivePremium" style="margin-top: 40px; border-top: 1px solid gold; padding-top: 20px;">
-      <h3 style="color: gold; text-align: left;">💎 Active Premium Members</h3>
-      <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 10px; overflow-x: auto;">
-        <table style="width: 100%; text-align: left; border-collapse: collapse;">
-          <thead>
-            <tr style="border-bottom: 1px solid gold;">
-              <th style="padding: 10px; color: gold;">Student</th>
-              <th style="padding: 10px; color: gold;">Mobile</th>
-              <th style="padding: 10px; color: gold;">Detailed Plans</th>
-            </tr>
-          </thead>
-          <tbody id="activePremiumTableBody">
-            <!-- Dynamically populated -->
-          </tbody>
-        </table>
+    <div id="adminSection_premium" class="admin-section" style="display:none;">
+      <div id="adminActivePremium" style="margin-top: 0; border: none; padding-top: 0;">
+        <h3 style="color: gold; text-align: left;">💎 Active Premium Members</h3>
+        <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 10px; overflow-x: auto;">
+          <table style="width: 100%; text-align: left; border-collapse: collapse;">
+            <thead>
+              <tr style="border-bottom: 1px solid gold;">
+                <th style="padding: 10px; color: gold;">Student</th>
+                <th style="padding: 10px; color: gold;">Mobile</th>
+                <th style="padding: 10px; color: gold;">Detailed Plans</th>
+              </tr>
+            </thead>
+            <tbody id="activePremiumTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
       </div>
+
     </div>
 
-    <!-- SITE SETTINGS -->
-    <div id="adminSiteSettings"
-      style="margin-top: 40px; border-top: 1px solid rgba(0, 255, 255, 0.3); padding-top: 20px; margin-bottom: 40px;">
-      <h3 style="color: cyan; text-align: left;">⚙️ Advanced Site Settings</h3>
-      <div style="display: flex; flex-direction: column; gap: 15px;">
-        <div>
-          <label style="color: #ccc; font-size: 14px;">Enable Premium Hub Globally:</label>
-          <select id="sitePremiumToggle" class="login-input" style="margin-bottom: 0;">
-            <option value="true">ON (Users can see Premium Hub)</option>
-            <option value="false">OFF (Hide Premium Hub)</option>
-          </select>
-        </div>
-        <div>
-          <label style="color: #ccc; font-size: 14px;">Live Scrolling Announcement (Top Ticker):</label>
-          <input type="text" id="siteTickerText" class="login-input"
-            placeholder="Type announcement here... Leave blank to hide." style="margin-bottom: 0;">
-        </div>
-        <div>
-          <label style="color: #ccc; font-size: 14px;">Welcome Subtitle (under logo):</label>
-          <input type="text" id="siteWelcomeText" class="login-input" placeholder="e.g. Your Digital Learning Hub"
-            style="margin-bottom: 0;">
-        </div>
-        <div>
-          <label style="color: #ccc; font-size: 14px;">About Us Content:</label>
-          <textarea id="siteAboutText" class="login-input" placeholder="Welcome to NextGen Library..."
-            style="height: 80px; margin-bottom: 0;"></textarea>
-        </div>
-
-        <div style="margin-top: 15px; border-top: 1px dashed cyan; padding-top: 15px;">
-          <label style="color: cyan; font-size: 16px; font-weight: bold;">🖼️ Announcement Banners
-            (Auto-Swiping)</label>
-          <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 8px; margin-top: 10px;">
-            <input type="file" id="siteBannerImageInput" accept="image/*" class="login-input" style="padding: 5px;">
-            <input type="text" id="siteBannerLinkInput" class="login-input"
-              placeholder="Redirect Link (e.g. https://google.com) Optional">
-            <button class="login-btn" onclick="addSiteBanner()"
-              style="background: #00cec9; color: black; margin-top: 0;">➕ Add Banner</button>
+    <!-- 5. SITE SETTINGS & BATTLES -->
+    <div id="adminSection_settings" class="admin-section" style="display:none;">
+      <!-- SITE SETTINGS -->
+      <div id="adminSiteSettings"
+        style="margin-top: 40px; border-top: 1px solid rgba(0, 255, 255, 0.3); padding-top: 20px; margin-bottom: 40px;">
+        <h3 style="color: cyan; text-align: left;">⚙️ Advanced Site Settings</h3>
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+          <div>
+            <label style="color: #ccc; font-size: 14px;">Enable Premium Hub Globally:</label>
+            <select id="sitePremiumToggle" class="login-input" style="margin-bottom: 0;">
+              <option value="true">ON (Users can see Premium Hub)</option>
+              <option value="false">OFF (Hide Premium Hub)</option>
+            </select>
           </div>
-          <ul id="adminBannerList"
-            style="list-style: none; padding: 0; margin-top: 15px; max-height: 250px; overflow-y: auto;">
-            <!-- Banners injected here -->
-          </ul>
-        </div>
-
-        <div style="margin-top: 15px; border-top: 1px dashed cyan; padding-top: 15px;">
-          <label style="color: cyan; font-size: 16px; font-weight: bold;">🔔 Push Notifications (Broadcast)</label>
-          <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 8px; margin-top: 10px;">
-            <p style="color: #ccc; font-size: 14px; margin-top: 0; margin-bottom: 15px;">Send a real-time notification
-              to all active web users.</p>
-            <input type="text" id="notifTitle" class="login-input"
-              placeholder="Notification Title (e.g., New Premium Content!)" style="margin-bottom: 10px;">
-            <textarea id="notifBody" class="login-input" placeholder="Notification Body/Message..."
-              style="height: 60px; margin-bottom: 10px;"></textarea>
-            <button class="login-btn" onclick="sendBroadcastNotification()"
-              style="background: #00cec9; color: black; margin-top: 0;">🚀 Send Notification</button>
+          <div>
+            <label style="color: #ccc; font-size: 14px;">Live Scrolling Announcement (Top Ticker):</label>
+            <input type="text" id="siteTickerText" class="login-input"
+              placeholder="Type announcement here... Leave blank to hide." style="margin-bottom: 0;">
           </div>
+          <div>
+            <label style="color: #ccc; font-size: 14px;">Welcome Subtitle (under logo):</label>
+            <input type="text" id="siteWelcomeText" class="login-input" placeholder="e.g. Your Digital Learning Hub"
+              style="margin-bottom: 0;">
+          </div>
+          <div>
+            <label style="color: #ccc; font-size: 14px;">About Us Content:</label>
+            <textarea id="siteAboutText" class="login-input" placeholder="Welcome to NextGen Library..."
+              style="height: 80px; margin-bottom: 0;"></textarea>
+          </div>
+
+          <div style="margin-top: 15px; border-top: 1px dashed cyan; padding-top: 15px;">
+            <label style="color: cyan; font-size: 16px; font-weight: bold;">🖼️ Announcement Banners
+              (Auto-Swiping)</label>
+            <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 8px; margin-top: 10px;">
+              <input type="file" id="siteBannerImageInput" accept="image/*" class="login-input" style="padding: 5px;">
+              <input type="text" id="siteBannerLinkInput" class="login-input"
+                placeholder="Redirect Link (e.g. https://google.com) Optional">
+              <button class="login-btn" onclick="addSiteBanner()"
+                style="background: #00cec9; color: black; margin-top: 0;">➕ Add Banner</button>
+            </div>
+            <ul id="adminBannerList"
+              style="list-style: none; padding: 0; margin-top: 15px; max-height: 250px; overflow-y: auto;">
+              <!-- Banners injected here -->
+            </ul>
+          </div>
+
         </div>
 
       </div>
-      <button class="login-btn" onclick="saveSiteSettings()"
-        style="background: #28a745; color: white; margin-top: 15px;">💾 Save Site Settings</button>
+
+    </div>
+    <button class="login-btn" onclick="saveSiteSettings()"
+      style="background: #28a745; color: white; margin-top: 15px;">💾 Save Site Settings</button>
+
+    <!-- 6. NEXTGEN BATTLE ARENA MANAGER -->
+    <div id="adminSection_battles" class="admin-section" style="display:none;">
+      <div id="adminBattleManager"
+        style="margin-top: 0; border-top: 2px solid #ff4757; padding-top: 20px; background: rgba(255, 71, 87, 0.05); padding: 20px; border-radius: 15px;">
+        <h3 style="color: #ff4757; text-align: left; margin-top: 0;">⚔️ NextGen Battle Arena Manager</h3>
+        <p style="color: #ccc; font-size: 14px;">Create and manage competitive MCQ battles for students.</p>
+
+        <div style="margin-bottom: 15px;">
+          <input type="text" id="battleTitle" class="login-input" placeholder="Battle Title (e.g. Weekly Math Combat)">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+          <div style="display: flex; gap: 5px; align-items: stretch;">
+            <select id="battleCourse" class="login-input" onchange="updateBattleSubjects()" style="flex: 1; margin: 0;">
+              <option value="" disabled selected>Target Course</option>
+            </select>
+            <button onclick="populateBattleCourses()"
+              style="background: rgba(0,242,254,0.1); border: 1px solid cyan; color: cyan; padding: 0 10px; border-radius: 8px; cursor: pointer; height: 45px;"
+              title="Refresh Courses">🔄</button>
+          </div>
+          <select id="battleSubject" class="login-input" onchange="updateBattleChapters()">
+            <option value="" disabled selected>Target Subject</option>
+          </select>
+          <select id="battleChapter" class="login-input" style="grid-column: span 2;">
+            <option value="ALL">ALL CHAPTERS (Subject-wise Battle)</option>
+          </select>
+          <input type="number" id="battleEntryFee" class="login-input" placeholder="Entry Fee (₹)">
+          <input type="number" id="battleMaxStudents" class="login-input" placeholder="Max Participating Students">
+          <input type="number" id="battlePrizePool" class="login-input" placeholder="Initial Prize Pool (₹)">
+          <input type="datetime-local" id="battleStartTime" class="login-input">
+          <input type="text" id="battleUPI" class="login-input" placeholder="UPI ID for this battle (e.g. user@okaxis)">
+          <div style="grid-column: span 2;">
+            <label style="color: #888; font-size: 12px; display: block; margin-bottom: 5px;">Battle-Specific QR Code
+              (Optional):</label>
+            <input type="file" id="battleQRInput" accept="image/*" class="login-input" style="padding: 5px;">
+          </div>
+        </div>
+
+        <!-- QUESTION BUILDER -->
+        <div
+          style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; border: 1px dashed #ff4757; margin-bottom: 20px;">
+          <h4 style="color: #fff; margin-top: 0;">📝 Question Builder</h4>
+          <textarea id="battleQuestText" class="login-input" placeholder="Enter Question here..."
+            style="height: 60px;"></textarea>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <input type="text" id="battleOpt1" class="login-input" placeholder="Option A">
+            <input type="text" id="battleOpt2" class="login-input" placeholder="Option B">
+            <input type="text" id="battleOpt3" class="login-input" placeholder="Option C">
+            <input type="text" id="battleOpt4" class="login-input" placeholder="Option D">
+          </div>
+          <div style="margin-top: 10px;">
+            <input type="number" id="battleDuration" class="login-input" placeholder="Battle Duration (Minutes)">
+          </div>
+          <select id="battleCorrectOpt" class="login-input">
+            <option value="" disabled selected>Select Correct Option</option>
+            <option value="A">Option A</option>
+            <option value="B">Option B</option>
+            <option value="C">Option C</option>
+            <option value="D">Option D</option>
+          </select>
+          <button class="login-btn" onclick="addBattleQuestion()" style="background: #ff4757; color: white;">➕ Add
+            Question To Battle</button>
+
+          <!-- QUESTION PREVIEW AND STATS -->
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+            <span id="battleQuestCount" style="color: cyan; font-weight: bold; font-size: 14px;">Total Questions:
+              0</span>
+            <span id="battleTotalMarks" style="color: gold; font-weight: bold; font-size: 14px;">Total Marks: 0</span>
+          </div>
+
+          <div id="battleQuestionPreviewList"
+            style="margin-top: 15px; max-height: 300px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px;">
+            <p style="color: #666; font-style: italic; text-align: center;">No questions added yet.</p>
+          </div>
+
+          <div id="battleQuestionList" style="display:none;"></div>
+        </div>
+
+        <button class="login-btn" onclick="publishBattle()"
+          style="background: linear-gradient(90deg, #ff4757, #ff6b81); color: white; font-weight: 900; letter-spacing: 2px; margin-bottom: 30px;">🚀
+          PUBLISH BATTLE ARENA</button>
+
+        <!-- BATTLE MANAGEMENT LIST -->
+        <div style="border-top: 1px solid rgba(255, 71, 87, 0.3); padding-top: 20px;">
+          <h3
+            style="margin: 30px 0 15px 0; color: cyan; display: flex; justify-content: space-between; align-items: center;">
+            Managed Battles ⚔️
+            <button onclick="loadAdminBattles()"
+              style="background: none; border: 1px solid cyan; color: cyan; padding: 5px 15px; border-radius: 8px; cursor: pointer; font-size: 14px;">🔄
+              Refresh List</button>
+          </h3>
+          <div
+            style="overflow-x: auto; background: rgba(0,242,254,0.02); border-radius: 12px; border: 1px solid rgba(0,242,254,0.1);">
+            <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+              <thead>
+                <tr style="background: rgba(0,242,254,0.1); color: cyan; text-align: left;">
+                  <th style="padding: 12px;">Battle Info</th>
+                  <th style="padding: 12px;">Schedule</th>
+                  <th style="padding: 12px;">Stats</th>
+                  <th style="padding: 12px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminBattleTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- BATTLE BOOKING VERIFICATION -->
+        <div style="border-top: 1px solid rgba(255, 71, 87, 0.3); padding-top: 20px; margin-top: 30px;">
+          <h4 style="color: #ff4757; text-align: left;">✅ Battle Booking Approvals</h4>
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 13px; color: #eee;">
+              <thead>
+                <tr style="border-bottom: 1px solid rgba(255, 71, 87, 0.2); text-align: left;">
+                  <th style="padding: 10px;">User</th>
+                  <th style="padding: 10px;">Battle</th>
+                  <th style="padding: 10px;">Proof</th>
+                  <th style="padding: 10px;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="battleBookingTableBody">
+                <!-- Bookings injected here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 15px; border-top: 1px dashed cyan; padding-top: 15px;">
+        <label style="color: cyan; font-size: 16px; font-weight: bold;">🔔 Push Notifications (Broadcast)</label>
+        <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 8px; margin-top: 10px;">
+          <p style="color: #ccc; font-size: 14px; margin-top: 0; margin-bottom: 15px;">Send a real-time notification
+            to all active web users.</p>
+          <input type="text" id="notifTitle" class="login-input"
+            placeholder="Notification Title (e.g., New Premium Content!)" style="margin-bottom: 10px;">
+          <textarea id="notifBody" class="login-input" placeholder="Notification Body/Message..."
+            style="height: 60px; margin-bottom: 10px;"></textarea>
+          <button class="login-btn" onclick="sendBroadcastNotification()"
+            style="background: #00cec9; color: black; margin-top: 0;">🚀 Send Notification</button>
+        </div>
+      </div>
     </div>
 
     <!-- ADMIN SECURITY SETTINGS -->
@@ -2468,6 +3241,47 @@
           transform: translateY(0px) rotate(0deg);
         }
       }
+
+      .admin-tab-btn {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(0, 242, 254, 0.2);
+        color: #aaa;
+        padding: 10px 18px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 13px;
+        white-space: nowrap;
+        transition: 0.3s;
+      }
+
+      .admin-tab-btn:hover {
+        background: rgba(0, 242, 254, 0.1);
+        color: cyan;
+      }
+
+      .admin-tab-btn.active {
+        background: cyan;
+        color: black;
+        border-color: cyan;
+        box-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
+      }
+
+      .admin-section {
+        animation: fadeIn 0.4s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
     </style>
 
     <img src="img1.png" alt="NextGen Library"
@@ -2486,45 +3300,287 @@
       <div class="box premium-box" onclick="openPremiumHub()" id="premiumLinkBox">
         <h1>💎</h1>Premium Notes & Book
       </div>
+      <div class="box" id="battleArenaBox" onclick="openBattleArena()"
+        style="border-color: #ff4757; background: rgba(255, 71, 87, 0.05); box-shadow: 0 0 15px rgba(255, 71, 87, 0.2);">
+        <h1 style="color: #ff4757;">⚔️</h1>NextGen Battle Arena
+      </div>
+    </div>
+  </div>
+
+  <!-- BATTLE ARENA VIEW -->
+  <div id="combatArena" style="display:none; padding: 20px; max-width: 800px; margin: 0 auto;">
+    <button onclick="showPage('programsWrapper')"
+      style="margin-bottom:20px; padding: 10px 20px; background: rgba(255, 71, 87, 0.1); border: 1px solid #ff4757; color: #ff4757; border-radius: 5px; cursor: pointer; font-weight: bold;">⬅
+      Back to Dashboard</button>
+    <div class="wallet-status">
+      <div
+        style="width: 50px; height: 50px; background: gold; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; color: black; box-shadow: 0 0 15px gold;">
+        🪙</div>
+      <div>
+        <p style="margin: 0; color: #aaa; font-size: 12px; letter-spacing: 1px;">NEURAL WALLET BALANCE</p>
+        <span class="wallet-balance">₹<span id="playerWalletBalance">0.00</span></span>
+      </div>
+      <button onclick="topUpWallet()"
+        style="margin-left: auto; padding: 8px 15px; background: transparent; border: 1px solid gold; color: gold; border-radius: 20px; cursor: pointer; font-size: 11px; font-weight: bold;">+
+        RECHARGE</button>
     </div>
 
-    <!-- ABOUT & TERMS SECTION -->
-    <div class="info-section">
-      <div class="info-container">
-        <div class="info-box">
-          <h3>📚 About NextGen Library</h3>
-          <div id="aboutUsContent">
-            <p>Welcome to NextGen Library, your premier digital learning platform designed for modern students. We
-              believe
-              that quality education should be structured, accessible, and interactive.</p>
-            <p>Our platform integrates:</p>
-            <ul>
-              <li>High-quality Video Lectures</li>
-              <li>Meticulously curated Study Notes</li>
-              <li>Rigorous Assignments & Practice</li>
-              <li>Comprehensive Homework Guidance</li>
-              <li>Instant Doubt Resolution Support</li>
-            </ul>
-            <p>Whether you're tackling daily challenges or seeking clarity, we provide the tools necessary for academic
-              excellence and personal growth.</p>
+    <h2 style="color: #ff4757; text-align: left; margin-bottom: 25px;">⚔️ Active Combat Zones</h2>
+    <div id="activeBattlesContainer">
+      <!-- Upcoming Battles injected here -->
+      <p style="color: #666; font-style: italic;">No active battles at the moment. Check back later!</p>
+    </div>
+
+    <div style="display: flex; gap: 10px; margin-top: 20px;">
+      <button onclick="openBattleLeaderboard()"
+        style="flex:1; background: rgba(0,242,254,0.1); border: 1px solid cyan; color: cyan; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: bold;">📊
+        Global Battle Leaderboard</button>
+    </div>
+
+    <div style="margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+      <h3 style="color: #aaa; font-size: 16px;">📜 Battle History</h3>
+      <div id="battleHistoryList" style="color: #555; font-size: 14px;">You haven't participated in any battles yet.
+      </div>
+    </div>
+  </div>
+
+  <!-- BATTLE EXAM ENGINE -->
+  <div id="battleExamEngine"
+    style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0b132b; z-index: 3000; overflow-y: auto; padding-bottom: 50px;">
+    <div style="max-width: 800px; margin: 0 auto; padding: 20px;">
+      <!-- Header -->
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,242,254,0.3); padding-bottom: 15px; margin-bottom: 20px;">
+        <div>
+          <h2 id="engineBattleTitle" style="color: cyan; margin: 0;">Battle Loading...</h2>
+          <p id="engineBattleProgress" style="color: #aaa; font-size: 12px; margin: 5px 0 0 0;">Question 0/0</p>
+        </div>
+        <div style="text-align: right;">
+          <p style="color: #ff4757; font-size: 10px; margin: 0; font-weight: bold;">TIME REMAINING</p>
+          <div id="engineTimer" style="color: white; font-size: 24px; font-weight: 900; font-family: monospace;">00:00
           </div>
         </div>
+      </div>
 
-        <div class="info-box">
-          <h3>⚖️ Terms & Conditions</h3>
-          <ul>
-            <li><strong>Usage Rights:</strong> All content is for educational purposes only</li>
-            <li><strong>Intellectual Property:</strong> Content owned by NextGen Library and respective creators</li>
-            <li><strong>User Responsibility:</strong> Students must use resources ethically and legally</li>
-            <li><strong>Account Security:</strong> Users are responsible for account confidentiality</li>
-            <li><strong>Content Accuracy:</strong> We strive for accuracy but don't guarantee completeness</li>
-            <li><strong>Limitation:</strong> Not liable for indirect damages or service interruptions</li>
-            <li><strong>Updates:</strong> Terms may be updated. Continued use implies acceptance</li>
-            <li><strong>Support:</strong> Contact us for queries or concerns regarding any content</li>
-          </ul>
+      <!-- Instructions (Shown initially) -->
+      <div id="engineInstructions"
+        style="background: rgba(15,32,39,0.8); border: 1px solid cyan; border-radius: 15px; padding: 30px; text-align: center;">
+        <h1 style="color: cyan; margin-bottom: 20px;">⚔️ COMBAT PROTOCOL</h1>
+        <div style="text-align: left; color: #ddd; line-height: 1.8; margin-bottom: 30px;">
+          <p>1. Each correct answer awards <strong>+4 MARKS</strong>.</p>
+          <p>2. Each incorrect answer deducts <strong>-2 MARKS</strong> (Negative Marking).</p>
+          <p>3. Do not refresh or exit the page during the battle.</p>
+          <p>4. The battle will auto-submit when the timer hits zero.</p>
+          <p>5. Your performance will determine your rank in the Global Battle Leaderboard.</p>
+        </div>
+        <button onclick="startActiveBattle()"
+          style="padding: 15px 40px; font-size: 18px; border-radius: 30px; background: linear-gradient(90deg, #00f2fe, #4facfe); box-shadow: 0 0 20px cyan;">INITIATE
+          COMBAT</button>
+      </div>
+
+      <!-- Question View (Hidden initially) -->
+      <div id="engineQuestionView" style="display: none;">
+        <div class="box" id="engineQuestionBox"
+          style="min-height: auto; text-align: left; padding: 25px; margin-bottom: 20px; font-size: 18px; line-height: 1.5; border-color: cyan;">
+          <p id="engineQuestionText">Loading question...</p>
+        </div>
+        <div id="engineOptionsContainer" style="display: grid; grid-template-columns: 1fr; gap: 15px;">
+          <!-- Options injected here -->
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-top: 30px;">
+          <button onclick="prevBattleQuestion()" id="prevQuestBtn"
+            style="background: transparent; border: 1px solid #555; color: #555;">PREVIOUS</button>
+          <button onclick="nextBattleQuestion()" id="nextQuestBtn" style="background: cyan; color: black;">NEXT
+            QUESTION</button>
+          <button onclick="finishBattle()" id="submitBattleBtn"
+            style="display:none; background: #2ecc71; color: white;">SUBMIT BATTLE</button>
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- BATTLE LEADERBOARD SECTION -->
+  <div id="battleLeaderboardSection" style="display:none; background: #050a14; min-height: 100vh; padding: 20px;">
+    <div style="max-width: 800px; margin: 0 auto;">
+      <button onclick="showPage('combatArena')"
+        style="background:rgba(255,255,255,0.05); border:1px solid rgba(0,242,254,0.3); color: cyan; padding: 10px 20px; border-radius: 12px; margin-bottom: 25px; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+        <i class="fas fa-arrow-left"></i> BACK TO ARENA
+      </button>
+
+      <div style="text-align: center; margin-bottom: 30px;">
+        <h1
+          style="color: gold; text-shadow: 0 0 20px rgba(255,215,0,0.5); font-size: 32px; font-weight: 900; margin-bottom: 5px;">
+          📊 GLOBAL LEADERBOARD</h1>
+        <p style="color: #666; font-size: 12px; text-transform: uppercase; letter-spacing: 2px;">NextGen Library |
+          Official Combat Rankings</p>
+      </div>
+
+      <!-- Battle Selector -->
+      <div
+        style="background: rgba(15,32,39,0.8); border: 1px solid rgba(0,242,254,0.3); padding: 20px; border-radius: 20px; margin-bottom: 25px;">
+        <label
+          style="display: block; color: cyan; font-size: 10px; font-weight: 900; margin-bottom: 10px; text-transform: uppercase;">Select
+          Battle Zone:</label>
+        <select id="leaderboardBattleSelect" onchange="loadBattleRankings(this.value)"
+          style="width: 100%; background: #0b132b; border: 2px solid rgba(0,242,254,0.2); color: white; padding: 12px; border-radius: 12px; font-size: 16px; outline: none; transition: 0.3s;"
+          onfocus="this.style.borderColor='cyan'">
+          <option value="" disabled selected>Retrieving zones...</option>
+        </select>
+      </div>
+
+      <!-- Rankings Container -->
+      <div id="battleRankingList" style="display: flex; flex-direction: column; gap: 15px;">
+        <div style="text-align: center; padding: 50px; color: #444;">
+          <i class="fas fa-trophy" style="font-size: 48px; margin-bottom: 15px; opacity: 0.2;"></i>
+          <p>Please select a battle above to view ranks</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </div>
+
+  <!-- VICTORY CARD MODAL -->
+  <div id="victoryCardModal"
+    style="display:none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:99999; justify-content:center; align-items:center;">
+    <div
+      style="background: #0b132b; border: 1px solid rgba(0, 242, 254, 0.3); border-radius: 20px; padding: 25px; position: relative; max-width: 95%; box-shadow: 0 10px 50px rgba(0,0,0,1);">
+      <button onclick="closeVictoryModal()"
+        style="position:absolute; right:15px; top:15px; background:rgba(255,255,255,0.1); border:none; color:white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size:16px; cursor:pointer; transition: 0.3s; z-index: 10;">✖</button>
+
+      <!-- THE PREMIUM CARD -->
+      <div id="victoryCard"
+        style="width: 500px; height: 320px; background: linear-gradient(135deg, #050a14 0%, #0b132b 100%); border: 2px solid gold; border-radius: 16px; position: relative; overflow: hidden; font-family: 'Inter', sans-serif; box-shadow: inset 0 0 50px rgba(255,215,0,0.1);">
+
+        <!-- Background VFX -->
+        <div
+          style="position: absolute; top: -100px; right: -100px; width: 250px; height: 250px; background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%); border-radius: 50%;">
+        </div>
+        <div
+          style="position: absolute; bottom: -50px; left: -50px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(0,242,254,0.1) 0%, transparent 70%); border-radius: 50%;">
+        </div>
+
+        <!-- Header -->
+        <div
+          style="padding: 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,215,0,0.2);">
+          <div
+            style="width: 50px; height: 50px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid gold; box-shadow: 0 0 15px rgba(255,215,0,0.5);">
+            <img src="favicon1.png" style="width: 35px; height: 35px; object-fit: contain;" alt="Logo">
+          </div>
+          <div>
+            <h2
+              style="margin: 0; color: white; font-size: 18px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;">
+              NextGen Library</h2>
+            <p style="margin: 2px 0 0 0; color: #00f2fe; font-size: 10px; font-weight: 700; letter-spacing: 2px;">BATTLE
+              ARENA OFFICIAL RECOGNITION</p>
+          </div>
+          <div style="margin-left: auto; text-align: center;">
+            <span id="vcardMedal" style="font-size: 40px; filter: drop-shadow(0 0 10px gold);">🥇</span>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div style="padding: 20px 30px; display: flex; flex-direction: column; gap: 8px;">
+          <h1
+            style="margin: 0; color: gold; font-size: 20px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; text-align: center; text-shadow: 0 2px 5px rgba(0,0,0,0.5);">
+            CERTIFICATE OF EXCELLENCE</h1>
+
+          <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 10px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+              <div>
+                <p style="margin: 0; font-size: 9px; color: #888; text-transform: uppercase; font-weight: bold;">
+                  Participant Name</p>
+                <p id="vcardName" style="margin: 2px 0 0 0; font-size: 15px; color: white; font-weight: 700;">--</p>
+              </div>
+              <div>
+                <p style="margin: 0; font-size: 9px; color: #888; text-transform: uppercase; font-weight: bold;">Rank
+                  Achieved</p>
+                <p id="vcardRank" style="margin: 2px 0 0 0; font-size: 15px; color: gold; font-weight: 900;">RANK #1</p>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 5px;">
+              <div>
+                <p style="margin: 0; font-size: 8px; color: #888; text-transform: uppercase;">Roll Number</p>
+                <p id="vcardRoll" style="margin: 1px 0 0 0; font-size: 11px; color: #eee; font-weight: 600;">--</p>
+              </div>
+              <div>
+                <p style="margin: 0; font-size: 8px; color: #888; text-transform: uppercase;">University ID</p>
+                <p id="vcardUniv" style="margin: 1px 0 0 0; font-size: 11px; color: #eee; font-weight: 600;">--</p>
+              </div>
+              <div>
+                <p style="margin: 0; font-size: 8px; color: #888; text-transform: uppercase;">Mobile</p>
+                <p id="vcardMobile" style="margin: 1px 0 0 0; font-size: 11px; color: #eee; font-weight: 600;">--</p>
+              </div>
+            </div>
+          </div>
+
+          <p style="margin: 15px 0 0 0; color: #ccc; font-size: 11px; font-style: italic; text-align: center;">
+            "Congratulations on your outstanding performance! The NextGen Library team wishes you continued success in
+            your academic journey."
+          </p>
+        </div>
+
+        <!-- Footer -->
+        <div
+          style="position: absolute; bottom: 0; left: 0; width: 100%; border-top: 1px solid rgba(255,215,0,0.2); background: rgba(0,0,0,0.3); padding: 8px 0; display: flex; justify-content: center; align-items: center; gap: 5px;">
+          <small style="color: #666; font-size: 9px; font-weight: bold;">VERIFY AT:</small>
+          <a href="https://adityakumar12xyz.github.io/NextGen/"
+            style="color: cyan; font-size: 10px; text-decoration: none; font-weight: 900; font-family: monospace;">adityakumar12xyz.github.io/NextGen/</a>
+        </div>
+      </div>
+
+      <div style="margin-top: 25px; display: flex; gap: 15px; justify-content: center;">
+        <button onclick="downloadVictoryCard()"
+          style="background: linear-gradient(135deg, gold, #e67e22); color: black; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(230,126,34,0.3); transition: 0.3s;"
+          onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+          <i class="fas fa-download"></i> Download Card
+        </button>
+        <button onclick="shareVictoryCard()"
+          style="background: linear-gradient(135deg, #00f2fe, #00c6ff); color: black; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,198,255,0.3); transition: 0.3s;"
+          onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+          <i class="fas fa-share-alt"></i> Share
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- INFO SECTION (ABOUT & TERMS) - Managed via showPage -->
+  <div class="info-section">
+    <div class="info-container">
+      <div class="info-box">
+        <h3>📚 About NextGen Library</h3>
+        <div id="aboutUsContent">
+          <p>Welcome to NextGen Library, your premier digital learning platform designed for modern students. We
+            believe
+            that quality education should be structured, accessible, and interactive.</p>
+          <p>Our platform integrates:</p>
+          <ul>
+            <li>High-quality Video Lectures</li>
+            <li>Meticulously curated Study Notes</li>
+            <li>Rigorous Assignments & Practice</li>
+            <li>Comprehensive Homework Guidance</li>
+            <li>Instant Doubt Resolution Support</li>
+          </ul>
+          <p>Whether you're tackling daily challenges or seeking clarity, we provide the tools necessary for academic
+            excellence and personal growth.</p>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <h3>⚖️ Terms & Conditions</h3>
+        <ul>
+          <li><strong>Usage Rights:</strong> All content is for educational purposes only</li>
+          <li><strong>Intellectual Property:</strong> Content owned by NextGen Library and respective creators</li>
+          <li><strong>User Responsibility:</strong> Students must use resources ethically and legally</li>
+          <li><strong>Account Security:</strong> Users are responsible for account confidentiality</li>
+          <li><strong>Content Accuracy:</strong> We strive for accuracy but don't guarantee completeness</li>
+          <li><strong>Limitation:</strong> Not liable for indirect damages or service interruptions</li>
+          <li><strong>Updates:</strong> Terms may be updated. Continued use implies acceptance</li>
+          <li><strong>Support:</strong> Contact us for queries or concerns regarding any content</li>
+        </ul>
+      </div>
+    </div>
+  </div>
   </div>
 
   <!-- DYNAMIC NAVIGATION SECTION -->
@@ -2561,37 +3617,70 @@
     </div>
   </div>
 
-  <!-- PAYMENT MODAL -->
-  <div id="paymentModal">
-    <div class="payment-box">
-      <button class="close-modal" onclick="closePaymentModal()">✖</button>
-      <h2>Unlock Premium Content</h2>
-      <p style="color: #ccc;" id="paymentDesc">Complete payment to access this section indefinitely.</p>
-      <div class="payment-amount" id="paymentAmountDisplay">₹0</div>
+  <!-- Wallet Recharge Modal -->
+  <div id="walletRechargeModal"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 2000; justify-content: center; align-items: center;">
+    <div class="payment-box" style="position: relative; max-height: 85vh; overflow-y: auto;">
+      <button class="close-modal" onclick="closeWalletRechargeModal()"
+        style="position: absolute; right: 10px; top: 10px;">✖</button>
+      <h2>🪙 Recharge Neural Wallet</h2>
+      <p style="color: #ccc;">Pay via QR or UPI to get Gold Coins (₹1 = 1 Coin)</p>
 
       <div class="qr-container">
-        <img id="paymentQRDisplay" src="" alt="Scan QR Code to Pay" style="display: none;">
+        <!-- We will dynamically inject QR via JS when opening modal based on amount, but set default here -->
+        <img id="rechargeQRDisplay" src="" alt="Scan QR Code to Pay"
+          style="display: block; width: 150px; height: 150px; margin: 0 auto; object-fit: contain; border: 2px solid cyan; border-radius: 10px;">
       </div>
-      <div class="upi-id" id="paymentUPIDisplay">UPI ID: Not Set</div>
-
-      <div class="pay-btn-group">
-        <button class="pay-btn gpay-btn" onclick="payWithUpiApp('gpay')">Pay via GPay</button>
-        <button class="pay-btn phonepe-btn" onclick="payWithUpiApp('phonepe')">Pay via PhonePe</button>
-      </div>
+      <div class="upi-id" id="rechargeUPIDisplay">UPI ID: adityakumar84282-1@okaxis</div>
 
       <div style="text-align: left; margin: 15px 0;">
+        <label style="color: #ccc; font-size: 14px;">Recharge Amount ₹:</label>
+        <input type="number" id="rechargeAmountInput" class="login-input" placeholder="e.g. 100"
+          style="margin-bottom: 10px;">
+
+        <div class="pay-btn-group"
+          style="margin-bottom: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <button class="pay-btn gpay-btn" onclick="payRechargeWithUpiApp('gpay')"
+            style="padding: 10px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; background: #fff; color: #5f6368;"><img
+              src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Google_Pay_Logo.svg"
+              style="height: 15px; vertical-align: middle;"> Pay</button>
+          <button class="pay-btn phonepe-btn" onclick="payRechargeWithUpiApp('phonepe')"
+            style="padding: 10px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; background: #5f259f; color: #fff;"><img
+              src="https://upload.wikimedia.org/wikipedia/en/thumb/3/35/PhonePe_Logo.svg/2560px-PhonePe_Logo.svg.png"
+              style="height: 15px; vertical-align: middle; filter: brightness(0) invert(1);"> Pay</button>
+          <button class="pay-btn paytm-btn" onclick="payRechargeWithUpiApp('paytm')"
+            style="padding: 10px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; background: #002970; color: #fff;"><img
+              src="https://upload.wikimedia.org/wikipedia/commons/2/24/Paytm_Logo_%28standalone%29.svg"
+              style="height: 12px; vertical-align: middle; filter: brightness(0) invert(1);"> Pay</button>
+          <button class="pay-btn navi-btn" onclick="payRechargeWithUpiApp('navi')"
+            style="padding: 10px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; background: #00b14f; color: #fff;"><img
+              src="https://play-lh.googleusercontent.com/9nFfWntI5N8g9089KqB-iFjA8bZk8B2mE7B2iO3Fw0QZ-62nKxG_r8d64gV0k-pW4qI=w240-h480-rw"
+              style="height: 15px; vertical-align: middle; border-radius: 3px;"> Navi Pay</button>
+        </div>
+
+        <div
+          style="background: rgba(255, 71, 87, 0.1); border: 1px solid #ff4757; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+          <p style="color: #ff4757; font-size: 13px; font-weight: bold; margin: 0; text-align: center;">⚠️ COMPULSORY:
+            After making the payment, you MUST upload the Payment Screenshot, enter your Mobile Number, and UTR below to
+            get your money credited!</p>
+        </div>
+
+
+
         <label style="color: #ccc; font-size: 14px;">12-Digit UTR / Transaction ID (Mandatory):</label>
-        <input type="number" id="paymentUtrInput" class="login-input" placeholder="Enter exactly 12 digits"
+        <input type="number" id="rechargeUtrInput" class="login-input" placeholder="Enter exactly 12 digits"
           style="margin-bottom: 10px;">
 
         <label style="color: #ccc; font-size: 14px;">Upload Payment Screenshot (Required):</label>
-        <input type="file" id="paymentScreenshotInput" class="login-input" accept="image/*" style="padding: 5px;"
-          onchange="previewPaymentScreenshot(event)">
-        <img id="paymentScreenshotPreview" src="" alt="Screenshot"
+        <input type="file" id="rechargeScreenshotInput" class="login-input" accept="image/*" style="padding: 5px;"
+          onchange="previewWalletRechargeScreenshot(event)">
+        <img id="rechargeScreenshotPreview" src="" alt="Screenshot"
           style="width: 100%; max-height: 150px; object-fit: contain; border: 1px solid cyan; border-radius: 5px; display: none; margin-top: 10px;">
       </div>
 
-      <button class="confirm-pay-btn" onclick="confirmPremiumPayment()">Submit for Verification</button>
+      <button class="confirm-pay-btn" onclick="submitRechargeRequest()"
+        style="background: gold; color: black; box-shadow: 0 0 15px rgba(255,215,0,0.4);">Submit Recharge
+        Request</button>
     </div>
   </div>
 
@@ -2732,13 +3821,13 @@
       }
 
       // List of all main content segments
-      const allPages = ["loginScreen", "welcomeScreen", "adminDashboard", "programsWrapper", "dynamicNavSection", "chapters", "content", "semesterMotivationSection", "premiumNavSection"];
+      const allPages = ["loginScreen", "welcomeScreen", "adminDashboard", "programsWrapper", "dynamicNavSection", "chapters", "content", "semesterMotivationSection", "premiumNavSection", "combatArena", "battleExamEngine", "battleLeaderboardSection"];
 
       allPages.forEach(id => {
         let el = document.getElementById(id);
         if (el) {
           if (id === pageId) {
-            el.style.display = (id === "loginScreen" || id === "welcomeScreen") ? "flex" : "block";
+            el.style.display = (id === "loginScreen" || id === "welcomeScreen" || id === "battleExamEngine") ? "flex" : "block";
           } else {
             el.style.display = "none";
           }
@@ -2758,7 +3847,49 @@
       if (aiTutor) aiTutor.style.display = hideForAuth ? "none" : "block";
       if (ticker) ticker.style.display = hideForAuth ? "none" : (globalSiteConfig.ticker ? "block" : "none");
 
+      // Hide Info Section (About/Terms) for Battle Pages
+      const infoSection = document.querySelector(".info-section");
+      if (infoSection) {
+        const isBattlePage = ["combatArena", "battleExamEngine", "battleLeaderboardSection"].includes(pageId);
+        infoSection.style.display = (hideForAuth || isBattlePage) ? "none" : "block";
+      }
+
       window.scrollTo(0, 0);
+
+      // Trigger cleanup
+      autoCleanupBattles();
+    }
+
+    /* AUTO-CLEANUP BATTLES (24 HOURS) */
+    function autoCleanupBattles() {
+      const dayInMs = 24 * 60 * 60 * 1000;
+      const now = Date.now();
+
+      database.ref('battles/active').once('value').then(snap => {
+        const battles = snap.val();
+        if (!battles) return;
+
+        for (let id in battles) {
+          const b = battles[id];
+          if (b.createdAt && (now - b.createdAt > dayInMs)) {
+            console.log(`Auto-cleaning battle: ${id}`);
+            deleteBattle(id, true); // Silent delete
+          }
+        }
+      });
+    }
+
+    function deleteBattle(id, silent = false) {
+      if (!silent && !confirm("Are you sure you want to permanently delete this battle? This will also remove results.")) return;
+      database.ref('battles/active/' + id).remove().then(() => {
+        return database.ref('battleBookings/approved/' + id).remove();
+      }).then(() => {
+        return database.ref('battleBookings/pending/' + id).remove();
+      }).then(() => {
+        return database.ref('battleResults/' + id).remove();
+      }).then(() => {
+        if (!silent) alert("Battle and all related data removed successfully.");
+      });
     }
 
     // Handle Browser Back/Forward Buttons
@@ -2792,6 +3923,19 @@
       });
       history.replaceState({ pageId: activePage }, "", "#" + activePage);
     });
+
+    function switchAdminTab(tabId) {
+      // Hide all sections
+      document.querySelectorAll('.admin-section').forEach(sec => sec.style.display = 'none');
+      // Show selected
+      const selected = document.getElementById('adminSection_' + tabId);
+      if (selected) selected.style.display = 'block';
+
+      // Update button styles
+      document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.innerText.toLowerCase().includes(tabId.slice(0, 4)));
+      });
+    }
 
     /* DATA */
     let oldData = {
@@ -3111,8 +4255,10 @@
         if (localStorage.getItem("adminSession") === "true") {
           showPage("adminDashboard");
           loadAdminData();
-          renderPendingPayments();
+          initAdminWalletSettings(); // Inject wallet recharge settings initialization
+          renderAdminRechargeRequests();
           renderActivePremiumUsers();
+          loadAdminBattles();
         } else if (activeUser && expTime && Date.now() < parseInt(expTime)) {
           database.ref('users/' + activeUser).once('value').then((snapshot) => {
             let userData = snapshot.val();
@@ -3251,85 +4397,62 @@
 
     // ID CARD GENERATOR
     function downloadIDCard() {
-      if (!currentUserMobile) return;
-
-      // Auto-Sync Data from LocalStorage before generating
-      let ud = JSON.parse(localStorage.getItem(currentUserMobile));
-      if (ud) {
-        let picURL = ud.profilePic || `https://ui-avatars.com/api/?name=${encodeURIComponent(ud.name || 'U')}&background=cyan&color=000`;
-        document.getElementById("idCardPic").src = picURL;
-        document.getElementById("idCardName").innerText = ud.name || "STUDENT NAME";
-        document.getElementById("idCardRoll").innerText = ud.roll || "--";
-        document.getElementById("idCardCourse").innerText = (ud.branch || "--") + (ud.section ? " | " + ud.section : "");
-        document.getElementById("idCardMobile").innerText = ud.mobile ? "+91 " + ud.mobile : "--";
-
-        // ID Card Gamification Injection
-        let pts = ud.timeSpent || 0;
-        let badge = "Beginner 🌱";
-        let badgeColor = "#38ef7d";
-        if (pts >= 300) { badge = "Master Scholar 👑"; badgeColor = "gold"; }
-        else if (pts >= 60) { badge = "Explorer 🚀"; badgeColor = "cyan"; }
-
-        document.getElementById("idCardPoints").innerText = pts;
-        document.getElementById("idCardRankText").innerText = badge.split(' ')[0]; // Just the text part
-        document.getElementById("idCardRankText").style.color = badgeColor;
-        document.getElementById("idCardRankIcon").innerHTML = `<span style="font-size: 14px;">${badge.split(' ')[1] || '🎓'}</span>`;
-        document.getElementById("idCardRankIcon").style.background = badgeColor === 'gold' ? 'linear-gradient(135deg, gold, orange)' : (badgeColor === 'cyan' ? 'linear-gradient(135deg, #00f2fe, #4facfe)' : 'linear-gradient(135deg, #11998e, #38ef7d)');
-      }
-
-      const idCard = document.getElementById('studentIdCard');
-
-      const btn = event.target;
-      const originalText = btn.innerText;
-      btn.innerText = "⏳ Generating...";
-      btn.disabled = true;
-
-      // Ensure images load before snapshotting
-      const imgs = idCard.querySelectorAll('img');
-      let promises = Array.from(imgs).map(img => {
-        if (img.complete) return Promise.resolve();
-        return new Promise((resolve) => {
-          img.onload = resolve;
-          img.onerror = resolve;
-        });
-      });
-
-      Promise.all(promises).then(() => {
-        // Temporarily scroll to top
-        const origScrollY = window.scrollY;
-        window.scrollTo(0, 0);
-
-        html2canvas(idCard, {
-          backgroundColor: null,
-          scale: 3, // High quality
-          useCORS: true, // Allow cross-origin images
-          allowTaint: true,
-          scrollX: 0,
-          scrollY: 0,
-          windowWidth: document.documentElement.offsetWidth,
-          windowHeight: document.documentElement.offsetHeight,
-          x: 0,
-          y: 0
-        }).then(canvas => {
-          window.scrollTo(0, origScrollY); // Restore scroll
+      renderIDCardPreview().then(() => {
+        const idCard = document.getElementById('studentIdCard');
+        html2canvas(idCard, { scale: 3, useCORS: true }).then(canvas => {
           const link = document.createElement('a');
-          link.download = `NextGen_ID_${currentUserMobile}.png`;
+          link.download = `NextGen_Digital_ID_${currentUserMobile}.png`;
           link.href = canvas.toDataURL('image/png', 1.0);
           link.click();
-
-          btn.innerText = "✅ Downloaded!";
-          setTimeout(() => {
-            btn.innerText = originalText;
-            btn.disabled = false;
-          }, 3000);
-        }).catch(err => {
-          window.scrollTo(0, origScrollY);
-          console.error("ID Card generation failed", err);
-          btn.innerText = "❌ Error! Try Again";
-          btn.disabled = false;
-          alert("Could not generate ID card. Please ensure your profile picture is loaded correctly.");
+          triggerNeuralSyncNotification("✅ Identity Card Downloaded!");
         });
       });
+    }
+
+    function shareIDCard() {
+      if (!navigator.share) return alert("Sharing not supported on this browser.");
+      renderIDCardPreview().then(() => {
+        const idCard = document.getElementById('studentIdCard');
+        html2canvas(idCard, { scale: 3, useCORS: true }).then(canvas => {
+          canvas.toBlob(blob => {
+            const file = new File([blob], `NextGen_ID_${currentUserMobile}.png`, { type: 'image/png' });
+            navigator.share({
+              files: [file],
+              title: 'NextGen Digital Identity',
+              text: 'Check out my official NextGen Library Digital Student ID Card!'
+            }).catch(e => console.error("Share failed", e));
+          }, 'image/png');
+        });
+      });
+    }
+
+    function renderIDCardPreview() {
+      if (!currentUserMobile) return Promise.reject();
+      let ud = JSON.parse(localStorage.getItem(currentUserMobile));
+      if (!ud) return Promise.reject();
+
+      let picURL = ud.profilePic || `https://ui-avatars.com/api/?name=${encodeURIComponent(ud.name || 'U')}&background=00f2fe&color=000`;
+      document.getElementById("idCardPic").src = picURL;
+      document.getElementById("idCardName").innerText = ud.name || "STUDENT NAME";
+      document.getElementById("idCardRoll").innerText = ud.roll || "--";
+      document.getElementById("idCardCourse").innerText = (ud.branch || "--") + (ud.section ? " | " + ud.section : "");
+
+      let pts = ud.timeSpent || 0;
+      let badge = "LEVEL: BEGINNER 🌱";
+      let badgeColor = "#38ef7d";
+      if (pts >= 300) { badge = "LEVEL: MASTER SCHOLAR 👑"; badgeColor = "gold"; }
+      else if (pts >= 60) { badge = "LEVEL: EXPLORER 🚀"; badgeColor = "cyan"; }
+
+      document.getElementById("idCardPoints").innerText = pts;
+      document.getElementById("idCardRankText").innerText = badge;
+      document.getElementById("idCardRankText").style.color = badgeColor;
+
+      const idCard = document.getElementById('studentIdCard');
+      const imgs = idCard.querySelectorAll('img');
+      return Promise.all(Array.from(imgs).map(img => {
+        if (img.complete) return Promise.resolve();
+        return new Promise(resolve => { img.onload = resolve; img.onerror = resolve; });
+      }));
     }
 
     // PROFILE MANAGEMENT
@@ -3425,7 +4548,37 @@
       document.getElementById("idCardName").innerText = ud.name;
       document.getElementById("idCardRoll").innerText = ud.roll;
       document.getElementById("idCardCourse").innerText = ud.branch + (ud.section ? " | " + ud.section : "");
-      document.getElementById("idCardMobile").innerText = "+91 " + ud.mobile;
+      if (document.getElementById("idCardMobile")) {
+        document.getElementById("idCardMobile").innerText = "+91 " + ud.mobile;
+      }
+
+      // ═══════════════════════════════════════════════════════
+      // UPDATE LIVE VISIBLE ID CARD (profileLiveCard)
+      // ═══════════════════════════════════════════════════════
+      const plcAvatar = document.getElementById("plcAvatar");
+      if (plcAvatar) plcAvatar.src = picURL;
+
+      const plcName = document.getElementById("plcName");
+      if (plcName) plcName.textContent = ud.name.toUpperCase();
+
+      const plcRoll = document.getElementById("plcRoll");
+      if (plcRoll) plcRoll.textContent = ud.roll || "—";
+
+      const plcCourse = document.getElementById("plcCourse");
+      if (plcCourse) plcCourse.textContent = ud.branch || "—";
+
+      const plcSection = document.getElementById("plcSection");
+      if (plcSection) plcSection.textContent = ud.section || "—";
+
+      const plcPoints = document.getElementById("plcPoints");
+      if (plcPoints) plcPoints.textContent = pts + " ✨";
+
+      const plcRank = document.getElementById("plcRank");
+      if (plcRank) {
+        plcRank.textContent = "⚡ LEVEL: " + badge.replace(/[^\w\s]/gi, '').trim().toUpperCase();
+        plcRank.style.color = badgeColor;
+      }
+      // ═══════════════════════════════════════════════════════
 
       document.querySelector("#editProfileScreen h2").innerText = "✏️ Edit Profile";
       document.getElementById("editProfileScreen").style.display = "flex";
@@ -3572,8 +4725,11 @@
           localStorage.setItem("adminSession", "true");
           showPage("adminDashboard");
           loadAdminData();
-          renderPendingPayments();
+          initAdminWalletSettings(); // Inject wallet recharge settings initialization
+          renderAdminRechargeRequests();
           renderActivePremiumUsers();
+          loadAdminBattles();
+          loadAdminBattleBookings();
         } else {
           alert("Invalid Admin Credentials!");
         }
@@ -3589,44 +4745,68 @@
       document.getElementById("adminPass").value = "";
     }
 
-    /* PENDING PAYMENTS ADMIN LOGIC */
-    function renderPendingPayments() {
-      let tbody = document.getElementById("pendingPaymentsTableBody");
+    function populateBattleCourses() {
+      const sel = document.getElementById("battleCourse");
+      if (!sel) return;
+      sel.innerHTML = '<option value="" disabled selected>Target Course</option>';
+      for (let c in data) {
+        let opt = document.createElement("option");
+        opt.value = c;
+        opt.innerText = c;
+        sel.appendChild(opt);
+      }
+      // Pre-fill UPI from wallet config
+      database.ref('walletConfig').once('value').then(snap => {
+        let config = snap.val();
+        if (config && config.upi && !document.getElementById("battleUPI").value) {
+          document.getElementById("battleUPI").value = config.upi;
+        }
+      });
+    }
+
+    /* PENDING WALLET RECHARGES ADMIN LOGIC */
+    function renderAdminRechargeRequests() {
+      let tbody = document.getElementById("pendingRechargesTableBody");
       tbody.innerHTML = "<tr><td colspan='5' style='padding: 15px; text-align: center; color: cyan;'>Loading...</td></tr>";
 
-      database.ref('pendingPayments').on('value', snap => {
+      database.ref('rechargeRequests/pending').on('value', snap => {
         tbody.innerHTML = "";
         let pendingData = snap.val() || {};
-        let pendingArr = Object.values(pendingData);
-        let pendingOnly = pendingArr.filter(req => req.status === "pending");
+        let pendingArr = Object.keys(pendingData).map(key => ({ id: key, ...pendingData[key] }));
 
-        if (pendingOnly.length === 0) {
-          tbody.innerHTML = "<tr><td colspan='5' style='padding: 15px; text-align: center; color: #aaa;'>No pending Premium approvals.</td></tr>";
+        if (pendingArr.length === 0) {
+          tbody.innerHTML = "<tr><td colspan='5' style='padding: 15px; text-align: center; color: #aaa;'>No pending Wallet Recharges.</td></tr>";
           return;
         }
 
-        pendingOnly.forEach(req => {
-          let tr = document.createElement("tr");
-          tr.style.borderBottom = "1px solid rgba(255,255,255,0.1)";
-          tr.innerHTML = `
-            <td style="padding: 10px;">${req.name}<br><small style="color:cyan;">${req.mobile}</small></td>
-            <td style="padding: 10px;">${req.itemKey.replace('_', ' - ')}</td>
-            <td style="padding: 10px; font-family: monospace;">${req.utr}</td>
-            <td style="padding: 10px;">
-              <button class="login-btn" onclick="viewScreenshot('${req.id}')" style="background: cyan; color: black; padding: 5px 10px; margin: 0; font-size: 12px;">🖼️ View Proof</button>
-            </td>
-            <td style="padding: 10px; display: flex; gap: 5px;">
-              <button class="login-btn" onclick="approvePayment('${req.id}', '${req.mobile}', '${req.itemKey}')" style="background: #28a745; color: white; padding: 5px 10px; margin: 0; font-size: 12px;">✅ Approve</button>
-              <button class="login-btn" onclick="rejectPayment('${req.id}')" style="background: #ff4757; color: white; padding: 5px 10px; margin: 0; font-size: 12px;">❌ Reject</button>
-            </td>
-          `;
-          tbody.appendChild(tr);
+        // Fetch User details for names
+        database.ref('users').once('value').then(uSnap => {
+          let usersData = uSnap.val() || {};
+
+          pendingArr.forEach(req => {
+            let userName = usersData[req.mobile] ? usersData[req.mobile].name : "Student";
+            let tr = document.createElement("tr");
+            tr.style.borderBottom = "1px solid rgba(255,255,255,0.1)";
+            tr.innerHTML = `
+              <td style="padding: 10px;">${userName}<br><small style="color:cyan;">${req.mobile}</small></td>
+              <td style="padding: 10px;">₹${req.amount} / ${req.amount} <i class="fas fa-coins" style="color:gold;"></i></td>
+              <td style="padding: 10px; font-family: monospace;">${req.utr}</td>
+              <td style="padding: 10px;">
+                <button class="login-btn" onclick="viewRechargeScreenshot('${req.id}')" style="background: cyan; color: black; padding: 5px 10px; margin: 0; font-size: 12px;">🖼️ View Proof</button>
+              </td>
+              <td style="padding: 10px; display: flex; gap: 5px;">
+                <button class="login-btn" onclick="approveRecharge('${req.id}', '${req.mobile}', ${req.amount})" style="background: #28a745; color: white; padding: 5px 10px; margin: 0; font-size: 12px;">✅ Approve</button>
+                <button class="login-btn" onclick="rejectRecharge('${req.id}')" style="background: #ff4757; color: white; padding: 5px 10px; margin: 0; font-size: 12px;">❌ Reject</button>
+              </td>
+            `;
+            tbody.appendChild(tr);
+          });
         });
       });
     }
 
-    function viewScreenshot(reqId) {
-      database.ref('pendingPayments/' + reqId).once('value').then(snap => {
+    function viewRechargeScreenshot(reqId) {
+      database.ref('rechargeRequests/pending/' + reqId).once('value').then(snap => {
         let req = snap.val();
         if (req && req.screenshot) {
           let win = window.open("");
@@ -3637,32 +4817,26 @@
       });
     }
 
-    function approvePayment(reqId, mobile, itemKey) {
-      let days = prompt("Approve Payment - Enter number of days for premium access (leave blank for lifetime):");
-      if (days === null) return; // User cancelled prompt
+    function approveRecharge(reqId, mobile, amount) {
+      database.ref('rechargeRequests/pending/' + reqId).once('value').then(snap => {
+        let req = snap.val();
+        let targetMobile = (req && req.userAccountMobile) ? req.userAccountMobile : mobile;
 
-      let expiresAt = null;
-      if (days && !isNaN(days) && parseInt(days) > 0) {
-        expiresAt = Date.now() + (parseInt(days) * 24 * 60 * 60 * 1000);
-      }
+        if (!confirm("Are you sure you want to approve this recharge of ₹" + amount + " for " + targetMobile + "?")) return;
 
-      let payload = {
-        active: true,
-        expiresAt: expiresAt
-      };
-
-      if (confirm("Are you sure you want to approve this payment and grant access?")) {
-        // Set premiumUnlocked inside user's node
-        database.ref(`users/${mobile}/premiumUnlocked/${itemKey}`).set(payload).then(() => {
-          // Remove the pending request entirely
-          return database.ref('pendingPayments/' + reqId).remove();
+        const walletRef = database.ref('users/' + targetMobile + '/profile/wallet');
+        walletRef.transaction(currentBalance => {
+          return (currentBalance || 0) + parseFloat(amount);
         }).then(() => {
-          alert("✅ Payment Approved! User now has access to " + itemKey);
+          // Remove from pending
+          return database.ref('rechargeRequests/pending/' + reqId).remove();
+        }).then(() => {
+          alert("✅ Recharge Approved! " + amount + " Gold Coins credited to user's wallet.");
         }).catch(err => {
           console.error(err);
-          alert("❌ Failed to approve payment due to network error.");
+          alert("❌ Failed to approve recharge due to network error.");
         });
-      }
+      });
     }
 
     /* ADMIN HACK: ONE-CLICK DATA BACKUP */
@@ -3710,12 +4884,16 @@
                 <td style="color: #fff; font-weight: bold; font-family: monospace; font-size: 12px;">+91 ${mobile}</td>
               </tr>
               <tr>
+                <td style="color: gold; font-weight: 600; letter-spacing: 1px;">WALLET</td>
+                <td style="color: gold; font-weight: bold; font-size: 12px;">₹${u.profile && u.profile.wallet ? parseFloat(u.profile.wallet).toFixed(2) : '0.00'} GOLD</td>
+              </tr>
+              <tr>
                 <td style="color: #ff4757; font-weight: 600; letter-spacing: 1px;">KNOWLEDGE</td>
                 <td style="color: cyan; font-weight: bold; font-size: 12px;">${u.timeSpent || 0} XP POINTS</td>
               </tr>
               <tr>
                 <td style="color: #ff4757; font-weight: 600; letter-spacing: 1px;">ACCESS</td>
-                <td style="color: gold; font-weight: bold;">${unlockedItems} UNLOCKED</td>
+                <td style="color: #fff; font-weight: bold;">${unlockedItems} UNLOCKED</td>
               </tr>
               <tr>
                 <td style="color: #ff4757; font-weight: 600; letter-spacing: 1px;">JOINED</td>
@@ -3728,18 +4906,22 @@
       });
     }
 
-    function rejectPayment(reqId) {
-      let reason = prompt("Enter rejection reason (e.g., Fake UTR, Unclear Image):");
+    function rejectRecharge(reqId) {
+      let reason = prompt("Enter rejection reason (e.g., Fake UTR, Unclear Image, Invalid Amount):");
       if (reason === null || reason.trim() === "") return; // cancelled
 
-      // Update the request status to rejected
-      database.ref('pendingPayments/' + reqId).update({
-        status: "rejected",
-        reason: reason.trim()
-      }).then(() => {
-        alert("❌ Request rejected and user notified.");
-      }).catch(err => {
-        alert("❌ Network Error.");
+      // Either move to a rejected collection or delete. It's safer to just delete and alert
+      database.ref('rechargeRequests/pending/' + reqId).once('value').then(snap => {
+        let req = snap.val();
+        if (req) {
+          req.status = "rejected";
+          req.reason = reason.trim();
+          // optionally save to rejected history, but for now we'll just remove from pending
+          database.ref('rechargeRequests/rejected/' + reqId).set(req).then(() => {
+            database.ref('rechargeRequests/pending/' + reqId).remove();
+            alert("❌ Recharge request rejected.");
+          });
+        }
       });
     }
 
@@ -3776,6 +4958,7 @@
                 <td>${userRecord.branch || 'N/A'}</td>
                 <td>${userRecord.section || 'N/A'}</td>
                 <td>${userRecord.mobile}</td>
+                <td style="color: gold; font-weight: bold;">₹${userRecord.profile && userRecord.profile.wallet ? parseFloat(userRecord.profile.wallet).toFixed(2) : '0.00'}</td>
                 <td>
                   <button onclick="viewUserShadow('${userRecord.mobile}')" style="background:#6c5ce7; color:white; padding:5px; border-radius:5px; font-size:12px;">👤 Shadow</button>
                   <button onclick="promptRemoveUser('${userRecord.mobile}')" style="background:#ff4757; color:white; padding:5px; border-radius:5px; font-size:12px; margin-left:5px;">Remove</button>
@@ -3816,43 +4999,18 @@
       document.getElementById("premiumConfigEditor").style.display = "none";
     }
 
-    function onAdminPremConfigCourseChange() {
-      let course = document.getElementById("premConfigCourse").value;
-      if (!course) return;
-
-      let optSelect = document.getElementById("premConfigOption");
-      optSelect.innerHTML = '<option value="" disabled selected>Select Option</option>';
-
-      let options = premiumData[course] || {};
-      for (let opt in options) {
-        let op = document.createElement("option");
-        op.value = opt;
-        op.innerText = opt;
-        optSelect.appendChild(op);
-      }
-      document.getElementById("premiumConfigEditor").style.display = "none";
-    }
-
-    function onAdminPremConfigOptionChange() {
-      let course = document.getElementById("premConfigCourse").value;
-      let option = document.getElementById("premConfigOption").value;
-      if (!course || !option) return;
-
-      let pConf = JSON.parse(localStorage.getItem("premiumCourseConfigs")) || {};
-      let itemKey = course + "_" + option;
-      let config = pConf[itemKey] || { qr: "", upi: "", amount: "" };
-
-      let prPreview = document.getElementById("premiumQRPreview");
-      if (config.qr) {
-        prPreview.src = config.qr;
-        prPreview.style.display = "block";
-      } else {
-        prPreview.style.display = "none";
-      }
-      document.getElementById("premiumUPI").value = config.upi || "";
-      document.getElementById("premiumAmount").value = config.amount || "";
-
-      document.getElementById("premiumConfigEditor").style.display = "block";
+    function initAdminWalletSettings() {
+      database.ref('walletConfig').once('value').then(snap => {
+        let config = snap.val() || { qr: "", upi: "" };
+        let wPreview = document.getElementById("walletQRPreview");
+        if (config.qr) {
+          wPreview.src = config.qr;
+          wPreview.style.display = "block";
+        } else {
+          wPreview.style.display = "none";
+        }
+        document.getElementById("walletUPI").value = config.upi || "";
+      });
     }
 
     // Legacy CMS fields logic removed (migrated to simpler integrated drill-down UI)
@@ -4198,17 +5356,19 @@
 
       if (!container) return;
       const premiumBox = document.getElementById("premiumLinkBox");
+      const battleBox = document.getElementById("battleArenaBox");
 
-      // Clear but keep premium box
+      // Clear but keep premium and battle boxes
       Array.from(container.children).forEach(child => {
-        if (child !== premiumBox) container.removeChild(child);
+        if (child !== premiumBox && child !== battleBox) container.removeChild(child);
       });
 
       for (let course in data) {
         let icon = "🎓";
         if (course.includes("BTECH")) icon = "🏢";
         else if (course.includes("BBA")) icon = "💼";
-        else if (course.includes("LAW")) icon = "⚖️"; // Keep existing LAW icon logic
+        else if (course.includes("LAW")) icon = "⚖️";
+        else if (course.includes("BCA")) icon = "💻"; // Keep existing LAW icon logic
 
         let box = document.createElement("div");
         box.className = "box";
@@ -4373,6 +5533,7 @@
           sel.appendChild(opt);
         }
       });
+      populateBattleCourses();
     }
 
     function onAdminCMSCourseChange() {
@@ -4476,7 +5637,7 @@
         <div style="margin-bottom: 15px;">
            <button onclick="renderCmsSemesters()" style="background: none; border: 1px solid cyan; color: cyan; padding: 5px 10px; border-radius: 5px; cursor: pointer; margin-bottom: 10px;">⬅️ Back to Semesters</button>
            <div style="display: flex; justify-content: space-between; align-items: center;">
-             <h4 style="color: cyan; margin:0;">📘 Subjects in Semester ${sem}</h4>
+             <h4 style="color: cyan; margin:0;'>📘 Subjects in Semester ${sem}</h4>
              <button class="login-btn" onclick="addCMSSubject()" style="width: auto; margin:0; background: #00cec9; color: black; padding: 5px 15px;">➕ Add Subject</button>
            </div>
         </div>
@@ -4513,7 +5674,7 @@
         <div style="margin-bottom: 15px;">
            <button onclick="renderCmsSubjects()" style="background: none; border: 1px solid cyan; color: cyan; padding: 5px 10px; border-radius: 5px; cursor: pointer; margin-bottom: 10px;">⬅️ Back to Subjects</button>
            <div style="display: flex; justify-content: space-between; align-items: center;">
-             <h4 style="color: cyan; margin:0;">📑 Chapters in ${sub}</h4>
+             <h4 style="color: cyan; margin:0;'>📑 Chapters in ${sub}</h4>
              <button class="login-btn" onclick="addCMSChapter()" style="width: auto; margin:0; background: #00cec9; color: black; padding: 5px 15px;">➕ Add Chapter</button>
            </div>
         </div>
@@ -4794,7 +5955,8 @@
       database.ref(`users/${mobile}/premiumUnlocked/${itemKey}`).set(payload).then(() => {
         alert("✅ Premium granted to " + mobile + " for " + itemKey);
         loadAdminData();
-        renderActivePremiumUsers();
+        renderAdminBanners(snap.val()?.banners || []);
+        populateBattleCourses();
       }).catch(err => {
         alert("❌ Error granting premium.");
       });
@@ -5526,7 +6688,7 @@
     }
 
     function closeLeaderboard() {
-      document.getElementById('leaderboardModal').style.display = 'none';
+      document.getElementById('leaderboardModal').style.display = "none";
     }
 
     function enterSite() {
@@ -5584,9 +6746,1041 @@
       }
     }
 
+    /* BATTLE ARENA LOGIC */
+    let currentBattleQuestions = [];
+
+    function openBattleArena() {
+      showPage("combatArena");
+      loadBattleData();
+      updateWalletDisplay();
+    }
+
+    function updateWalletDisplay() {
+      if (!currentUserMobile) return;
+      // Use real-time listener for instant updates
+      database.ref('users/' + currentUserMobile + '/profile/wallet').on('value', snap => {
+        let bal = snap.val() || 0;
+        let el = document.getElementById('playerWalletBalance');
+        if (el) el.innerText = parseFloat(bal).toFixed(2);
+      });
+    }
+
+    function updateRechargeQR() {
+      let amount = document.getElementById("rechargeAmountInput").value.trim() || "0";
+      let baseUpi = "adityakumar84282-1@okaxis";
+      let upiString = `upi://pay?pa=${baseUpi}&pn=NextGenWallet&am=${amount}&cu=INR`;
+      document.getElementById('rechargeQRDisplay').src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(upiString)}`;
+    }
+
+    // Attach event listener so QR updates when amount changes
+    document.getElementById("rechargeAmountInput").addEventListener("input", updateRechargeQR);
+
+    function topUpWallet() {
+      updateRechargeQR(); // initial render
+      document.getElementById("walletRechargeModal").style.display = "flex";
+    }
+
+    function closeWalletRechargeModal() {
+      document.getElementById("walletRechargeModal").style.display = "none";
+    }
+
+    function previewWalletRechargeScreenshot(event) {
+      let file = event.target.files[0];
+      if (file) {
+        let reader = new FileReader();
+        reader.onload = function (e) {
+          let img = new Image();
+          img.onload = function () {
+            let canvas = document.createElement("canvas");
+            let MAX_WIDTH = 600;
+            let MAX_HEIGHT = 800;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height) {
+              if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+            } else {
+              if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+            }
+            canvas.width = width;
+            canvas.height = height;
+            let ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, width, height);
+
+            let preview = document.getElementById("rechargeScreenshotPreview");
+            preview.src = canvas.toDataURL("image/jpeg", 0.6);
+            preview.style.display = "block";
+          };
+          img.src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function payRechargeWithUpiApp(app) {
+      let amount = document.getElementById("rechargeAmountInput").value.trim();
+      if (!amount || amount <= 0) {
+        alert("⚠️ Please enter the Recharge Amount first.");
+        return;
+      }
+
+      let baseUpi = "adityakumar84282-1@okaxis";
+      let upiStr = `upi://pay?pa=${baseUpi}&pn=NextGenWallet&am=${amount}&cu=INR`;
+
+      if (app === 'gpay') {
+        upiStr = `tez://upi/pay?pa=${baseUpi}&pn=NextGenWallet&am=${amount}&cu=INR`;
+      } else if (app === 'phonepe') {
+        upiStr = `phonepe://pay?pa=${baseUpi}&pn=NextGenWallet&am=${amount}&cu=INR`;
+      } else if (app === 'paytm') {
+        upiStr = `paytmmp://pay?pa=${baseUpi}&pn=NextGenWallet&am=${amount}&cu=INR`;
+      } else if (app === 'navi') {
+        // Navi uses standard UPI intents, but sometimes specific scheme
+        upiStr = `upi://pay?pa=${baseUpi}&pn=NextGenWallet&am=${amount}&cu=INR`;
+      }
+      window.location.href = upiStr;
+    }
+
+    function submitRechargeRequest() {
+      if (!currentUserMobile) {
+        alert("Please login first!"); return;
+      }
+      let amount = document.getElementById("rechargeAmountInput").value.trim();
+      let mobileInput = currentUserMobile; // Automated
+      let utr = document.getElementById("rechargeUtrInput").value.trim();
+      let preview = document.getElementById("rechargeScreenshotPreview");
+      let screenshot = preview.src && preview.style.display !== "none" ? preview.src : "";
+
+      if (!amount || amount <= 0) { alert("Enter a valid amount (₹)"); return; }
+      if (!mobileInput) { alert("Please enter your Mobile Number"); return; }
+      if (utr.length !== 12) { alert("Enter exactly 12 digits UTR"); return; }
+      if (!screenshot) { alert("Please upload a payment screenshot"); return; }
+
+      let reqId = currentUserMobile + "_" + Date.now();
+      let payload = {
+        mobile: mobileInput, // Use inputted mobile number 
+        userAccountMobile: currentUserMobile, // Keep track of actual logged int account
+        amount: parseFloat(amount),
+        utr: utr,
+        screenshot: screenshot,
+        timestamp: Date.now(),
+        status: "pending"
+      };
+
+      database.ref('rechargeRequests/pending/' + reqId).set(payload).then(() => {
+        alert("✅ Recharge request submitted successfully! Admin will verify and credit your Gold Coins soon.");
+        closeWalletRechargeModal();
+        // reset form
+        document.getElementById("rechargeAmountInput").value = "";
+        document.getElementById("rechargeUtrInput").value = "";
+        preview.src = "";
+        preview.style.display = "none";
+      });
+    }
+
+    function joinBattle(id) {
+      if (!currentUserMobile) return alert("Please login to join battles!");
+
+      database.ref('battles/active/' + id).once('value').then(snap => {
+        const b = snap.val();
+        if (!b) return alert("Battle not found.");
+
+        const now = Date.now();
+        const startTime = new Date(b.startTime).getTime();
+        const maxSt = parseInt(b.maxStudents || 0);
+        const joined = parseInt(b.joinedCount || 0);
+
+        if (joined >= maxSt) return alert("Sorry, this battle's seats are FULL!");
+
+        let fee = parseInt(b.entryFee || 0);
+
+        if (fee > 0) {
+          database.ref('users/' + currentUserMobile + '/profile/wallet').once('value').then(wSnap => {
+            let balance = parseFloat(wSnap.val() || 0);
+            if (balance >= fee) {
+              if (confirm(`Joining "${b.title}" will deduct ₹${fee} from your Neural Wallet. Confirm?`)) {
+                // Deduct and Join
+                database.ref('users/' + currentUserMobile + '/profile/wallet').set(balance - fee).then(() => {
+                  return database.ref(`battleBookings/approved/${id}/${currentUserMobile}`).set({
+                    mobile: currentUserMobile,
+                    joinedAt: Date.now(),
+                    battleTitle: b.title
+                  });
+                }).then(() => {
+                  return database.ref(`battles/active/${id}/joinedCount`).transaction(c => (c || 0) + 1);
+                }).then(() => {
+                  alert("✅ Joined successfully! Your seat is booked.");
+                  updateWalletDisplay();
+                });
+              }
+            } else {
+              if (confirm(`Insufficient balance! (₹${balance}). You need ₹${fee} to join this battle. Top up your Neural Wallet now?`)) {
+                topUpWallet();
+              }
+            }
+          });
+        } else {
+          // Free Join
+          database.ref(`battleBookings/approved/${id}/${currentUserMobile}`).set({
+            mobile: currentUserMobile,
+            joinedAt: Date.now(),
+            battleTitle: b.title
+          }).then(() => {
+            return database.ref(`battles/active/${id}/joinedCount`).transaction(c => (c || 0) + 1);
+          }).then(() => {
+            alert("✅ Joined successfully! Get ready for combat.");
+          });
+        }
+      });
+    }
+
+    function loadBattleData() {
+      let container = document.getElementById('activeBattlesContainer');
+      database.ref('battles/active').on('value', snap => {
+        let battles = snap.val();
+        if (!battles) {
+          container.innerHTML = '<p style="color: #666; font-style: italic;">No active battles at the moment. Check back later!</p>';
+          return;
+        }
+
+        // Fetch bookings and results for current user to handle Join vs Enter vs View Rankings
+        database.ref(`battleBookings/approved`).once('value').then(bookingSnap => {
+          database.ref(`battleResults`).once('value').then(resultsSnap => {
+            let allBookings = bookingSnap.val() || {};
+            let allResults = resultsSnap.val() || {};
+            let html = "";
+
+            for (let id in battles) {
+              let b = battles[id];
+              const now = Date.now();
+              const startTime = new Date(b.startTime).getTime();
+              const isUpcoming = startTime > now;
+              const totalSeats = parseInt(b.maxStudents || 0);
+              const joinedCount = parseInt(b.joinedCount || 0);
+              const seatsLeft = totalSeats - joinedCount;
+
+              const isJoined = allBookings[id] && allBookings[id][currentUserMobile];
+              const hasSubmitted = allResults[id] && allResults[id][currentUserMobile];
+
+              let buttonHtml = "";
+              if (hasSubmitted) {
+                buttonHtml = `<button class="join-battle-btn" style="background: gold; color: black; font-weight: bold;" onclick="openBattleLeaderboard()">View Rankings</button>`;
+              } else if (isJoined) {
+                if (now >= startTime && joinedCount >= totalSeats) {
+                  buttonHtml = `<button class="join-battle-btn" style="background: #2ecc71; color: white;" onclick="prepActiveBattle('${id}')">Enter Arena</button>`;
+                } else if (now >= startTime && joinedCount < totalSeats) {
+                  buttonHtml = `<button class="join-battle-btn" style="background: #e67e22; color: white; cursor: not-allowed;" disabled>Waiting for Seats (${joinedCount}/${totalSeats})</button>`;
+                } else if (now < startTime && joinedCount >= totalSeats) {
+                  buttonHtml = `<button class="join-battle-btn" style="background: #e67e22; color: white; cursor: not-allowed;" disabled>Waiting for Start Time</button>`;
+                } else {
+                  buttonHtml = `<button class="join-battle-btn" style="background: #7f8c8d; color: white; cursor: not-allowed;" disabled>Combat Pending...</button>`;
+                }
+              } else {
+                if (seatsLeft > 0) {
+                  buttonHtml = `<button class="join-battle-btn" onclick="joinBattle('${id}')">${isUpcoming ? 'Join Battle' : 'Join Now'}</button>`;
+                } else {
+                  buttonHtml = `<button class="join-battle-btn" style="background: #8e44ad; color: white; cursor: not-allowed;" disabled>Seats Full</button>`;
+                }
+              }
+
+              html += `
+                <div class="battle-card ${!isUpcoming ? 'active' : ''}">
+                  <span class="battle-badge" style="background: ${isUpcoming ? '#ff9f43' : '#2ecc71'}">
+                    ${isUpcoming ? 'UPCOMING' : 'LIVE NOW'}
+                  </span>
+                  <p style="font-size: 11px; color: cyan; margin-bottom: 5px; text-transform: uppercase; font-weight: bold; border-bottom: 1px solid rgba(0,242,254,0.2); padding-bottom: 5px;">
+                    ${b.course} > ${b.subject} > ${b.chapter === "ALL" ? "Full Syllabus" : b.chapter}
+                  </p>
+                  <h3>${b.title}</h3>
+                  <p style="font-size: 13px; color: #888;">
+                    <span style="color: #ff4757; font-weight: bold;">Entry fees: ₹${b.entryFee || b.fee || 0}</span>
+                  </p>
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px;">
+                    <div style="display: flex; flex-direction: column;">
+                      <small style="color: #aaa; font-size: 10px;">Winner prize</small>
+                      <span style="color: gold; font-weight: 900; font-size: 16px;">₹${b.prize}</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; text-align: right;">
+                      <small style="color: #aaa; font-size: 10px;">Total seats: ${totalSeats}</small>
+                      <span style="color: ${seatsLeft > 5 ? '#2ecc71' : '#ff4757'}; font-weight: bold; font-size: 14px;">
+                        ${joinedCount}/${totalSeats} Joined (${seatsLeft > 0 ? seatsLeft + ' left' : 'FULL'})
+                      </span>
+                    </div>
+                  </div>
+                  <p style="color: #666; font-size: 11px; margin-top: 10px;">
+                    🕒 Starts: ${new Date(b.startTime).toLocaleString()}
+                  </p>
+                  ${buttonHtml}
+                </div>
+              `;
+            }
+            container.innerHTML = html;
+          });
+        });
+      });
+    }
+
+    /* BATTLE EXAM ENGINE LOGIC */
+    let activeBattleId = null;
+    let battleQuestions = [];
+    let userAnswers = {}; // { index: choice }
+    let currentQuestIdx = 0;
+    let battleTimerInterval = null;
+    let timeLeft = 0;
+
+    let currentBattleMetadata = null;
+
+    function prepActiveBattle(id) {
+      activeBattleId = id;
+      database.ref(`battles/active/${id}`).once('value').then(snap => {
+        const b = snap.val();
+        if (!b) return;
+
+        currentBattleMetadata = b;
+        battleQuestions = b.questions || [];
+        userAnswers = {};
+        currentQuestIdx = 0;
+
+        // Set Titles
+        document.getElementById('engineBattleTitle').innerText = b.title;
+        document.getElementById('engineBattleProgress').innerText = `Instruction Phase | ${battleQuestions.length} Questions`;
+
+        // Toggle view
+        document.getElementById('engineInstructions').style.display = "block";
+        document.getElementById('engineQuestionView').style.display = "none";
+
+        showPage('battleExamEngine');
+      });
+    }
+
+    function startActiveBattle() {
+      const now = Date.now();
+      const startTime = new Date(currentBattleMetadata.startTime).getTime();
+      const totalSeats = parseInt(currentBattleMetadata.maxStudents || 0);
+      const joinedCount = parseInt(currentBattleMetadata.joinedCount || 0);
+
+      if (now < startTime || joinedCount < totalSeats) {
+        alert("🛡️ Combat Protocol Error: Arena requires both Start Time reached AND all participants present!");
+        showPage('combatArena');
+        return;
+      }
+
+      document.getElementById('engineInstructions').style.display = "none";
+      document.getElementById('engineQuestionView').style.display = "block";
+
+      // Start dynamic timer (mins -> secs)
+      let durationMins = parseInt(currentBattleMetadata?.duration || 10);
+      timeLeft = durationMins * 60;
+      updateTimerDisplay();
+
+      if (battleTimerInterval) clearInterval(battleTimerInterval);
+      battleTimerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+          clearInterval(battleTimerInterval);
+          finishBattle(true); // Auto-submit
+        }
+      }, 1000);
+
+      renderBattleQuestion(0);
+    }
+
+    function updateTimerDisplay() {
+      let mins = Math.floor(timeLeft / 60);
+      let secs = timeLeft % 60;
+      document.getElementById('engineTimer').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+      if (timeLeft < 60) document.getElementById('engineTimer').style.color = "#ff4757";
+      else document.getElementById('engineTimer').style.color = "white";
+    }
+
+    function renderBattleQuestion(idx) {
+      currentQuestIdx = idx;
+      const q = battleQuestions[idx];
+      document.getElementById('engineBattleProgress').innerText = `Question ${idx + 1}/${battleQuestions.length}`;
+      document.getElementById('engineQuestionText').innerText = q.text;
+
+      const container = document.getElementById('engineOptionsContainer');
+      container.innerHTML = "";
+
+      const choices = ['a', 'b', 'c', 'd'];
+      choices.forEach((key, optionIdx) => {
+        const btn = document.createElement('div');
+        btn.className = "box";
+        btn.style.cssText = `min-height: auto; text-align: left; padding: 15px; font-size: 16px; margin: 0; border: 1px solid rgba(255,255,255,0.1); transition: 0.2s;`;
+
+        const isSelected = userAnswers[idx] === key;
+        if (isSelected) {
+          btn.style.borderColor = "cyan";
+          btn.style.background = "rgba(0,242,254,0.1)";
+        }
+
+        btn.innerHTML = `<span style="color: cyan; font-weight: bold; margin-right: 15px;">${key.toUpperCase()}</span> ${q.options[optionIdx]}`;
+        btn.onclick = () => selectBattleOption(idx, key);
+        container.appendChild(btn);
+      });
+
+      // Navigation visibility
+      document.getElementById('prevQuestBtn').style.visibility = idx === 0 ? "hidden" : "visible";
+      if (idx === battleQuestions.length - 1) {
+        document.getElementById('nextQuestBtn').style.display = "none";
+        document.getElementById('submitBattleBtn').style.display = "block";
+      } else {
+        document.getElementById('nextQuestBtn').style.display = "block";
+        document.getElementById('submitBattleBtn').style.display = "none";
+      }
+    }
+
+    function selectBattleOption(idx, key) {
+      userAnswers[idx] = key;
+      renderBattleQuestion(idx);
+    }
+
+    function nextBattleQuestion() {
+      if (currentQuestIdx < battleQuestions.length - 1) renderBattleQuestion(currentQuestIdx + 1);
+    }
+
+    function prevBattleQuestion() {
+      if (currentQuestIdx > 0) renderBattleQuestion(currentQuestIdx - 1);
+    }
+
+    function finishBattle(isAuto = false) {
+      if (!isAuto && !confirm("Are you sure you want to submit your battle answers?")) return;
+
+      clearInterval(battleTimerInterval);
+
+      // Calculate Score
+      let correct = 0;
+      let wrong = 0;
+      let skipped = 0;
+
+      battleQuestions.forEach((q, idx) => {
+        if (userAnswers[idx]) {
+          if (userAnswers[idx] === q.correct) correct++;
+          else wrong++;
+        } else {
+          skipped++;
+        }
+      });
+
+      const totalMarks = (correct * 4) - (wrong * 2);
+
+      const resultPayload = {
+        mobile: currentUserMobile,
+        name: JSON.parse(localStorage.getItem(currentUserMobile))?.name || "Unknown Warrior",
+        correct, wrong, skipped,
+        marks: totalMarks,
+        timeUsed: 600 - timeLeft,
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+      };
+
+      database.ref(`battleResults/${activeBattleId}/${currentUserMobile}`).set(resultPayload).then(() => {
+        alert(`COMBAT FINISHED!\n\nCorrect: ${correct}\nWrong: ${wrong}\nTotal Marks: ${totalMarks}`);
+        openBattleLeaderboard();
+        // pre-load relevant battle results
+        if (typeof loadBattleRankings === 'function') {
+          setTimeout(() => {
+            document.getElementById('leaderboardBattleSelect').value = activeBattleId;
+            loadBattleRankings(activeBattleId);
+          }, 500);
+        }
+      });
+    }
+
+    /* LEADERBOARD LOGIC */
+    function openBattleLeaderboard() {
+      showPage('battleLeaderboardSection');
+      const select = document.getElementById('leaderboardBattleSelect');
+      select.innerHTML = '<option value="" disabled selected>Select a Battle</option>';
+
+      database.ref('battles/active').once('value').then(snap => {
+        const battles = snap.val();
+        for (let id in battles) {
+          const opt = document.createElement('option');
+          opt.value = id;
+          opt.innerText = battles[id].title;
+          select.appendChild(opt);
+        }
+      });
+    }
+
+    function loadBattleRankings(id) {
+      const list = document.getElementById('battleRankingList');
+      list.innerHTML = "<p style='color: cyan; text-align:center;'>Fetching ranks...</p>";
+
+      database.ref(`battleResults/${id}`).once('value').then(snap => {
+        const data = snap.val();
+        if (!data) {
+          list.innerHTML = "<p style='color: #666; text-align:center;'>No results for this battle yet.</p>";
+          return;
+        }
+
+        const results = Object.values(data).sort((a, b) => {
+          if (b.marks !== a.marks) return b.marks - a.marks;
+          return a.timeUsed - b.timeUsed; // Tie-breaker: Time taken
+        });
+
+        list.innerHTML = "";
+        results.forEach((r, idx) => {
+          const item = document.createElement('div');
+          const isMe = r.mobile === currentUserMobile;
+          const rank = idx + 1;
+          const isWinner = rank === 1;
+
+          item.style.cssText = `
+            display: flex; align-items: center; gap: 15px; 
+            background: ${isMe ? 'rgba(0,242,254,0.08)' : 'rgba(255,255,255,0.03)'}; 
+            padding: 15px 20px; border-radius: 16px; 
+            border: 1px solid ${isMe ? 'rgba(0,242,254,0.4)' : 'rgba(255,255,255,0.05)'};
+            box-shadow: ${isMe ? '0 0 20px rgba(0,242,254,0.1)' : 'none'};
+            position: relative; overflow: hidden;
+            transition: 0.3s ease;
+          `;
+
+          const rankIco = rank === 1 ? "🥇" : (rank === 2 ? "🥈" : (rank === 3 ? "🥉" : `${rank}.`));
+
+          item.innerHTML = `
+            <!-- Rank Glow -->
+            <div style="font-size: 24px; font-weight: 900; width: 45px; text-align: center; color: ${isWinner ? 'gold' : '#888'}; text-shadow: ${isWinner ? '0 0 10px gold' : 'none'};">
+              ${rankIco}
+            </div>
+            
+            <div style="flex: 1;">
+                <h4 style="margin: 0; color: white; font-size: 16px; font-weight: 700;">${r.name} ${isMe ? '<span style="color:cyan; font-size:10px;">(YOU)</span>' : ''}</h4>
+                <div style="display: flex; gap: 12px; margin-top: 4px;">
+                  <small style="color: #666; font-size: 11px;"><i class="fas fa-clock"></i> ${Math.floor(r.timeUsed / 60)}m ${r.timeUsed % 60}s</small>
+                  <small style="color: #666; font-size: 11px;"><i class="fas fa-check-circle"></i> ${r.correct} Correct</small>
+                </div>
+                <button onclick="openVictoryModal('${id}', ${rank})" 
+                  style="background: ${isMe ? 'linear-gradient(90deg, gold, #e67e22)' : 'rgba(255,255,255,0.05)'}; 
+                  color: ${isMe ? 'black' : 'white'}; 
+                  border: ${isMe ? 'none' : '1px solid rgba(255,255,255,0.1)'}; 
+                  font-size: 10px; padding: 4px 12px; border-radius: 6px; font-weight: 900; margin-top: 8px; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 0.5px;">
+                  🏆 ${isMe ? 'MY VICTORY CARD' : 'VIEW CARD'}
+                </button>
+            </div>
+
+            <div style="text-align: right; background: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.03);">
+                <span style="color: cyan; font-weight: 900; font-size: 22px; display: block; line-height: 1;">${r.marks}</span>
+                <p style="margin:2px 0 0 0; font-size: 9px; color: #555; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;">POINTS</p>
+            </div>
+          `;
+
+          item.onmouseover = () => { item.style.transform = 'translateX(5px)'; item.style.borderColor = 'cyan'; };
+          item.onmouseout = () => { item.style.transform = 'translateX(0)'; item.style.borderColor = isMe ? 'rgba(0,242,254,0.4)' : 'rgba(255,255,255,0.05)'; };
+
+          list.appendChild(item);
+        });
+      });
+    }
+
+    /* VICTORY CARD LOGIC */
+    function openVictoryModal(battleId, rank) {
+      if (!currentUserMobile) return;
+
+      database.ref('users/' + currentUserMobile).once('value').then(snap => {
+        const u = snap.val() || {};
+        document.getElementById('vcardName').innerText = u.name || "Student";
+        document.getElementById('vcardRoll').innerText = u.roll || "--";
+        document.getElementById('vcardUniv').innerText = u.roll || "--"; // Using roll as Univ ID per signup pattern
+        document.getElementById('vcardMobile').innerText = "+91 " + currentUserMobile;
+
+        let rankText = `RANK #${rank}`;
+        let medal = rank === 1 ? "🥇" : (rank === 2 ? "🥈" : (rank === 3 ? "🥉" : "🏅"));
+
+        document.getElementById('vcardRank').innerText = rankText;
+        document.getElementById('vcardMedal').innerText = medal;
+
+        document.getElementById('victoryCardModal').style.display = "flex";
+        triggerNeuralSyncNotification("🏆 Opening your Battle Victory Card!");
+      });
+    }
+
+    function closeVictoryModal() {
+      document.getElementById('victoryCardModal').style.display = "none";
+    }
+
+    function downloadVictoryCard() {
+      const card = document.getElementById('victoryCard');
+      html2canvas(card, { scale: 3, useCORS: true }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `NextGen_Battle_Achievement_${currentUserMobile}.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
+    }
+
+    function shareVictoryCard() {
+      const card = document.getElementById('victoryCard');
+      html2canvas(card, { scale: 2 }).then(canvas => {
+        canvas.toBlob(blob => {
+          const file = new File([blob], 'victory_card.png', { type: 'image/png' });
+          if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+            navigator.share({
+              files: [file],
+              title: 'My Battle Arena Achievement!',
+              text: 'I just participated in the NextGen Library Battle Arena! Check out my performance here: adityakumar12xyz.github.io/NextGen/'
+            });
+          } else {
+            alert("Sharing files is not supported in this browser. Please download the card instead.");
+          }
+        });
+      });
+    }
+
+    function joinBattle(id) {
+      if (!currentUserMobile) {
+        alert("Please login first! 🛡️");
+        return;
+      }
+
+      database.ref(`battles/active/${id}`).once('value').then(snap => {
+        let b = snap.val();
+        if (!b) return;
+
+        const now = Date.now();
+        const startTime = new Date(b.startTime).getTime();
+
+        // Check if already approved/booked
+        database.ref(`battleBookings/approved/${id}/${currentUserMobile}`).once('value').then(bookedSnap => {
+          if (bookedSnap.exists()) {
+            prepActiveBattle(id);
+            return;
+          }
+
+          // Not booked yet
+          if (b.joinedCount >= b.maxStudents) {
+            alert("Sorry, this combat zone is FULL! 🚫");
+            return;
+          }
+
+          let activeAmount = parseFloat(b.entryFee || b.fee || 0);
+
+          if (confirm(`Join "${b.title}" for ${activeAmount} Gold Coins?\n\n(1 Gold Coin = ₹1)`)) {
+            database.ref('users/' + currentUserMobile + '/profile/wallet').once('value').then(snap => {
+              let balance = parseFloat(snap.val() || 0);
+              if (balance >= activeAmount) {
+                // Deduct
+                database.ref('users/' + currentUserMobile + '/profile/wallet').set(balance - activeAmount).then(() => {
+                  let payload = {
+                    mobile: currentUserMobile,
+                    userMobile: currentUserMobile,
+                    battleId: id,
+                    battleTitle: b.title,
+                    timestamp: firebase.database.ServerValue.TIMESTAMP,
+                    status: "approved"
+                  };
+                  return database.ref(`battleBookings/approved/${id}/${currentUserMobile}`).set(payload);
+                }).then(() => {
+                  // Increment joined count safely
+                  return database.ref(`battles/active/${id}/joinedCount`).transaction(current => (current || 0) + 1);
+                }).then(() => {
+                  triggerNeuralSyncNotification("✅ Congratulations! You have successfully joined the battle arena.");
+                  alert(`Congratulations! You have successfully joined the battle arena.\nDeducted ${activeAmount} Gold Coins.`);
+                  loadBattleData(); // Refresh UI to change button to Enter Arena
+                }).catch(err => {
+                  console.error(err);
+                  alert("❌ Failed to book seat due to a network error.");
+                });
+              } else {
+                if (confirm(`Insufficient balance! You have ${balance} Gold Coins, but need ${activeAmount}.\nWould you like to recharge your Neural Wallet now?`)) {
+                  topUpWallet();
+                }
+              }
+            });
+          }
+        });
+      });
+    }
+
+
+    // Admin Battle Functions
+    function updateBattleSubjects() {
+      let course = document.getElementById('battleCourse').value;
+      let subSelect = document.getElementById('battleSubject');
+      subSelect.innerHTML = '<option value="" disabled selected>Target Subject</option>';
+      if (!data[course]) return;
+
+      let subjects = new Set();
+      for (let branch in data[course]) {
+        for (let sem in data[course][branch]) {
+          for (let sub in data[course][branch][sem]) {
+            if (sub !== "_initialized") subjects.add(sub);
+          }
+        }
+      }
+
+      subjects.forEach(sub => {
+        let opt = document.createElement("option");
+        opt.value = sub;
+        opt.innerText = sub;
+        subSelect.appendChild(opt);
+      });
+    }
+
+    function updateBattleChapters() {
+      let course = document.getElementById('battleCourse').value;
+      let sub = document.getElementById('battleSubject').value;
+      let chSelect = document.getElementById('battleChapter');
+      chSelect.innerHTML = '<option value="ALL">ALL CHAPTERS (Subject-wise Battle)</option>';
+      // Find the first occurrence of this subject to get chapters
+      for (let branch in data[course]) {
+        for (let sem in data[course][branch]) {
+          if (data[course][branch][sem][sub]) {
+            let chapters = data[course][branch][sem][sub];
+            for (let ch in chapters) {
+              if (ch === "_initialized") continue;
+              let opt = document.createElement("option");
+              opt.value = ch;
+              opt.innerText = ch;
+              chSelect.appendChild(opt);
+            }
+          }
+        }
+      }
+    }
+
+    function addBattleQuestion() {
+      let questText = document.getElementById('battleQuestText').value.trim();
+      let opt1 = document.getElementById('battleOpt1').value.trim();
+      let opt2 = document.getElementById('battleOpt2').value.trim();
+      let opt3 = document.getElementById('battleOpt3').value.trim();
+      let opt4 = document.getElementById('battleOpt4').value.trim();
+      let correct = document.getElementById('battleCorrectOpt').value;
+
+      if (!questText || !opt1 || !opt2 || !opt3 || !opt4 || !correct) {
+        alert("Fill all question fields!"); return;
+      }
+
+      let q = {
+        text: questText,
+        options: [opt1, opt2, opt3, opt4],
+        correct: correct
+      };
+
+      currentBattleQuestions.push(q);
+      renderBattleQuestionPreview();
+
+      // Clear Question Inputs
+      document.getElementById("battleQuestText").value = "";
+      document.getElementById("battleOpt1").value = "";
+      document.getElementById("battleOpt2").value = "";
+      document.getElementById("battleOpt3").value = "";
+      document.getElementById("battleOpt4").value = "";
+      document.getElementById("battleCorrectOpt").value = "";
+    }
+
+    function renderBattleQuestionPreview() {
+      const list = document.getElementById("battleQuestionPreviewList");
+      const countEl = document.getElementById("battleQuestCount");
+      const marksEl = document.getElementById("battleTotalMarks");
+      if (!list) return;
+
+      list.innerHTML = "";
+      if (currentBattleQuestions.length === 0) {
+        list.innerHTML = '<p style="color: #666; font-style: italic; text-align: center;">No questions added yet.</p>';
+        if (countEl) countEl.innerText = "Total Questions: 0";
+        if (marksEl) marksEl.innerText = "Total Marks: 0";
+        return;
+      }
+
+      currentBattleQuestions.forEach((q, idx) => {
+        let div = document.createElement("div");
+        div.style.cssText = "padding: 10px; background: rgba(255,255,255,0.05); border-radius: 5px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: start; border-left: 3px solid #ff4757;";
+        div.innerHTML = `
+          <div style="flex: 1;">
+            <p style="margin: 0; color: #fff; font-size: 13px;"><b>Q${idx + 1}:</b> ${q.text}</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 5px; font-size: 11px; color: #aaa;">
+              <span>A: ${q.options[0]}</span>
+              <span>B: ${q.options[1]}</span>
+              <span>C: ${q.options[2]}</span>
+              <span>D: ${q.options[3]}</span>
+            </div>
+            <p style="margin: 5px 0 0 0; color: #2ecc71; font-size: 11px;">Correct: ${q.correct}</p>
+          </div>
+          <button onclick="deleteBattleQuestion(${idx})" style="background: none; border: none; color: #ff4757; cursor: pointer; padding: 5px; font-size: 16px;">🗑️</button>
+        `;
+        list.appendChild(div);
+      });
+
+      if (countEl) countEl.innerText = `Total Questions: ${currentBattleQuestions.length}`;
+      if (marksEl) marksEl.innerText = `Total Marks: ${currentBattleQuestions.length * 4}`;
+    }
+
+    function deleteBattleQuestion(idx) {
+      if (!confirm("Remove this question?")) return;
+      currentBattleQuestions.splice(idx, 1);
+      renderBattleQuestionPreview();
+    }
+    function loadAdminBattles() {
+      let tbody = document.getElementById('adminBattleTableBody');
+      if (!tbody) return;
+      database.ref('battles/active').on('value', snap => {
+        tbody.innerHTML = "";
+        let battles = snap.val();
+        if (!battles) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">No battles published.</td></tr>';
+          return;
+        }
+        for (let id in battles) {
+          let b = battles[id];
+          let tr = document.createElement('tr');
+          tr.style.borderBottom = "1px solid rgba(255,255,255,0.05)";
+          tr.innerHTML = `
+            <td style="padding:10px; font-family:monospace; font-size:10px;">${id.split('_')[1]}</td>
+            <td style="padding:10px;">${b.title}</td>
+            <td style="padding:10px;">${new Date(b.startTime).toLocaleString()}</td>
+            <td style="padding:10px;">${b.joinedCount || 0} / ${b.maxStudents || '--'}</td>
+            <td style="padding:10px; display: flex; gap: 5px;">
+              <button onclick="editBattle('${id}')" style="background:cyan; color:black; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-size:11px; font-weight:bold;">EDIT</button>
+              <button onclick="deleteBattle('${id}')" style="background:#ff4757; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-size:11px; font-weight:bold;">DELETE</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        }
+      });
+    }
+
+    let currentlyEditingBattleId = null;
+
+    function editBattle(id) {
+      database.ref('battles/active/' + id).once('value').then(snap => {
+        const b = snap.val();
+        if (!b) return;
+
+        currentlyEditingBattleId = id;
+
+        // Populate Fields
+        document.getElementById('battleTitle').value = b.title || "";
+        document.getElementById('battleCourse').value = b.course || "";
+        updateBattleSubjects();
+        document.getElementById('battleSubject').value = b.subject || "";
+        updateBattleChapters();
+        document.getElementById('battleChapter').value = b.chapter || "ALL";
+
+        document.getElementById('battleEntryFee').value = b.entryFee || b.fee || "";
+        document.getElementById('battlePrizePool').value = b.prize || "";
+        document.getElementById('battleDuration').value = b.duration || "";
+
+        // Format date for datetime-local input
+        if (b.startTime) {
+          const dt = new Date(b.startTime);
+          const tzOffset = dt.getTimezoneOffset() * 60000;
+          const localISOTime = (new Date(dt - tzOffset)).toISOString().slice(0, 16);
+          document.getElementById("battleMaxStudents").value = b.maxStudents || "";
+          document.getElementById("battleDuration").value = b.duration || "";
+          document.getElementById("battleStartTime").value = b.startTime;
+        }
+
+        currentBattleQuestions = b.questions || [];
+        renderBattleQuestionPreview(); // Use the new preview function
+
+        // Change Publish button to "Update Battle"
+        const pubBtn = document.getElementById('publishBattleBtn');
+        if (pubBtn) {
+          pubBtn.innerText = "UPDATE BATTLE";
+          pubBtn.style.background = "cyan";
+          pubBtn.style.color = "black";
+          pubBtn.onclick = () => updateExistingBattle();
+        }
+
+        triggerNeuralSyncNotification("🛠️ Loaded Battle for editing: " + b.title);
+        alert("Battle data loaded! You can now modify the details above.");
+        document.getElementById('adminBattleManager').scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    function updateExistingBattle() {
+      if (!currentlyEditingBattleId) return;
+
+      let title = document.getElementById('battleTitle').value;
+      let course = document.getElementById('battleCourse').value;
+      let subject = document.getElementById('battleSubject').value;
+      let chapter = document.getElementById('battleChapter').value;
+      let entryFee = document.getElementById('battleEntryFee').value;
+      let prize = document.getElementById('battlePrizePool').value;
+      let startTime = document.getElementById('battleStartTime').value;
+      let maxStudents = document.getElementById('battleMaxStudents').value;
+      let duration = document.getElementById('battleDuration').value;
+
+      if (!title || !course || !subject || !entryFee || !prize || !startTime || !maxStudents || !duration || currentBattleQuestions.length === 0) {
+        alert("Complete battle setup first! (Including Duration, questions & max students)"); return;
+      }
+
+      if (parseInt(entryFee) < 0 || parseInt(maxStudents) <= 0 || parseInt(duration) <= 0) {
+        alert("Please enter valid numeric values for Entry Fee, Max Students, and Duration.");
+        return;
+      }
+
+      database.ref('battles/active/' + currentlyEditingBattleId).update({
+        title, course, subject, chapter,
+        entryFee: parseInt(entryFee),
+        prize: parseInt(prize),
+        startTime,
+        maxStudents: parseInt(maxStudents),
+        duration: parseInt(duration),
+        questions: currentBattleQuestions
+      }).then(() => {
+        alert("Battle updated successfully!");
+        currentlyEditingBattleId = null;
+        resetBattleForm();
+      });
+    }
+
+    function resetBattleForm() {
+      document.getElementById('battleTitle').value = "";
+      document.getElementById('battleCourse').value = "";
+      document.getElementById('battleSubject').value = "";
+      document.getElementById('battleChapter').value = "ALL";
+      document.getElementById('battleEntryFee').value = "";
+      document.getElementById('battlePrizePool').value = "";
+      document.getElementById('battleMaxStudents').value = "";
+      document.getElementById('battleStartTime').value = "";
+      document.getElementById('battleDuration').value = "";
+      document.getElementById('battleUPI').value = "";
+      document.getElementById('battleQRInput').value = "";
+      currentBattleQuestions = [];
+      renderBattleQuestionPreview(); // Update preview list
+
+      // Clear question input fields
+      document.getElementById('battleQuestText').value = "";
+      document.getElementById('battleOpt1').value = "";
+      document.getElementById('battleOpt2').value = "";
+      document.getElementById('battleOpt3').value = "";
+      document.getElementById('battleOpt4').value = "";
+      document.getElementById('battleCorrectOpt').value = "";
+
+      const pubBtn = document.getElementById('publishBattleBtn');
+      if (pubBtn) {
+        pubBtn.innerText = "PUBLISH BATTLE";
+        pubBtn.style.background = "#ff4757";
+        pubBtn.style.color = "white";
+        pubBtn.onclick = () => publishBattle();
+      }
+    }
+
+    function deleteBattle(id) {
+      if (!confirm("Are you sure you want to permanently delete this battle? This will also remove results.")) return;
+      database.ref('battles/active/' + id).remove().then(() => {
+        return database.ref('battleBookings/approved/' + id).remove();
+      }).then(() => {
+        return database.ref('battleBookings/pending/' + id).remove();
+      }).then(() => {
+        return database.ref('battleResults/' + id).remove();
+      }).then(() => {
+        alert("Battle and all related data removed successfully.");
+      });
+    }
+
+    function loadAdminBattleBookings() {
+      let tbody = document.getElementById('battleBookingTableBody');
+      if (!tbody) return;
+      database.ref('battleBookings/pending').on('value', snap => {
+        tbody.innerHTML = "";
+        let data = snap.val();
+        if (!data) {
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:15px;">No pending bookings.</td></tr>';
+          return;
+        }
+        for (let battleId in data) {
+          for (let userMob in data[battleId]) {
+            let req = data[battleId][userMob];
+            let tr = document.createElement('tr');
+            tr.style.borderBottom = "1px solid rgba(255,255,255,0.05)";
+            tr.innerHTML = `
+              <td style="padding:10px;">${req.mobile}<br><small>${userMob}</small></td>
+              <td style="padding:10px;">${req.battleTitle}</td>
+              <td style="padding:10px;"><button class="login-btn" onclick="viewBattleProof('${req.proof}')" style="margin:0; padding:4px 8px; font-size:11px;">🖼️ View</button></td>
+              <td style="padding:10px;">
+                <button onclick="approveBattleBooking('${battleId}', '${userMob}')" style="background:#2ecc71; color:white; border:none; padding:4px 8px; border-radius:4px; font-size:11px;">APPROVE</button>
+              </td>
+            `;
+            tbody.appendChild(tr);
+          }
+        }
+      });
+    }
+
+    function viewBattleProof(src) {
+      let w = window.open("");
+      w.document.write(`<img src="${src}" style="max-width:100%;">`);
+    }
+
+    function approveBattleBooking(battleId, userMob) {
+      if (!confirm("Approve this booking?")) return;
+      database.ref(`battleBookings/pending/${battleId}/${userMob}`).once('value').then(snap => {
+        let req = snap.val();
+        database.ref(`battleBookings/approved/${battleId}/${userMob}`).set(req).then(() => {
+          database.ref(`battleBookings/pending/${battleId}/${userMob}`).remove();
+          database.ref(`battles/active/${battleId}/joinedCount`).transaction(c => (c || 0) + 1);
+          alert("Booking Approved! Student is now in the battle.");
+        });
+      });
+    }
+
+    function publishBattle() {
+      let course = document.getElementById('battleCourse').value;
+      let subject = document.getElementById('battleSubject').value;
+      let chapter = document.getElementById('battleChapter').value;
+      let entryFee = document.getElementById('battleEntryFee').value;
+      let prize = document.getElementById('battlePrizePool').value;
+      let startTime = document.getElementById('battleStartTime').value;
+      let maxStudents = document.getElementById('battleMaxStudents').value;
+      let duration = document.getElementById('battleDuration').value;
+      let upi = document.getElementById('battleUPI').value.trim();
+      let qrFile = document.getElementById('battleQRInput').files[0];
+
+      let title = document.getElementById('battleTitle').value.trim();
+      if (!title) title = chapter === "ALL" ? `${subject} Mega Combat` : `${chapter} Tactical Battle`;
+
+      if (!course || !subject || !entryFee || !prize || !startTime || !maxStudents || !duration || currentBattleQuestions.length === 0) {
+        alert("Complete battle setup first! (Don't forget Duration, questions & max students)"); return;
+      }
+
+      if (parseInt(entryFee) < 0 || parseInt(maxStudents) <= 0 || parseInt(duration) <= 0) {
+        alert("Please enter valid numeric values for Entry Fee, Max Students, and Duration.");
+        return;
+      }
+
+      const uploadBattle = (qrBase64 = null) => {
+        let battleId = "BTL_" + Date.now();
+
+        let battleObj = {
+          title,
+          course, subject, chapter,
+          entryFee: parseInt(entryFee),
+          prize: parseInt(prize),
+          startTime,
+          upi,
+          duration: parseInt(duration),
+          qr: qrBase64,
+          maxStudents: parseInt(maxStudents),
+          joinedCount: 0,
+          questions: currentBattleQuestions,
+          type: chapter === "ALL" ? "Subject" : "Chapter",
+          createdAt: firebase.database.ServerValue.TIMESTAMP
+        };
+
+        database.ref('battles/active/' + battleId).set(battleObj).then(() => {
+          alert("BATTLE ARENA LIVE!");
+          resetBattleForm();
+        });
+      };
+
+      if (qrFile) {
+        let reader = new FileReader();
+        reader.onload = (e) => uploadBattle(e.target.result);
+        reader.readAsDataURL(qrFile);
+      } else {
+        uploadBattle();
+      }
+    }
+
     function goBackToPrograms() {
       document.getElementById("programsWrapper").style.display = "block";
       document.getElementById("semesterMotivationSection").style.display = "none";
+      // Show About & Terms section when returning to main programs view
+      var infoSec = document.querySelector(".info-section");
+      if (infoSec) infoSec.style.display = "block";
     }
 
     let studentNavState = { course: "", branch: "", sem: "", subject: "" };
@@ -5594,6 +7788,9 @@
 
     function openStudentLevel(level, selection, pushHistory = true) {
       document.getElementById("programsWrapper").style.display = "none";
+      // Hide About & Terms section when navigating into course content
+      var infoSec = document.querySelector(".info-section");
+      if (infoSec) infoSec.style.display = "none";
       document.getElementById("dynamicNavSection").style.display = "block";
 
       if (pushHistory) {
@@ -5675,6 +7872,9 @@
       if (currentNavLevel === 'branches') {
         document.getElementById("dynamicNavSection").style.display = "none";
         document.getElementById("programsWrapper").style.display = "block";
+        // Show About & Terms section when returning to main dashboard
+        var infoSec = document.querySelector(".info-section");
+        if (infoSec) infoSec.style.display = "block";
         currentNavLevel = 'programs';
       } else if (currentNavLevel === 'semesters') {
         openStudentLevel('course', studentNavState.course);
@@ -5951,7 +8151,7 @@
       chatHistory.scrollTop = chatHistory.scrollHeight;
     }
 
-    function previewPremiumQR(event) {
+    function previewWalletQR(event) {
       let file = event.target.files[0];
       if (file) {
         let reader = new FileReader();
@@ -5981,7 +8181,7 @@
             let ctx = canvas.getContext("2d");
             ctx.drawImage(img, 0, 0, width, height);
 
-            let preview = document.getElementById("premiumQRPreview");
+            let preview = document.getElementById("walletQRPreview");
             preview.src = canvas.toDataURL("image/jpeg", 0.6); // Compress aggressively
             preview.style.display = "block";
           };
@@ -5991,57 +8191,22 @@
       }
     }
 
-    function savePremiumConfig() {
-      let course = document.getElementById("premConfigCourse") ? document.getElementById("premConfigCourse").value : "";
-      let option = document.getElementById("premConfigOption") ? document.getElementById("premConfigOption").value : "";
 
-      if (!course || !option) {
-        // fallback to saving global config if elements missing or not selected 
-        saveGlobalPremiumConfig();
-        return;
-      }
 
-      let preview = document.getElementById("premiumQRPreview");
+    function saveWalletConfig() {
+      let preview = document.getElementById("walletQRPreview");
       let qrBase64 = preview.src && preview.style.display !== "none" ? preview.src : "";
 
-      let upi = document.getElementById("premiumUPI").value.trim();
-      let amount = document.getElementById("premiumAmount").value.trim();
+      let upi = document.getElementById("walletUPI").value.trim();
 
       let payload = {
         qr: qrBase64,
-        upi,
-        amount
+        upi
       };
 
-      let itemKey = course + "_" + option;
-      let pConf = JSON.parse(localStorage.getItem("premiumCourseConfigs")) || {};
-      pConf[itemKey] = payload;
-
-      database.ref('premiumCourseConfigs/' + itemKey).set(payload).then(() => {
-        localStorage.setItem("premiumCourseConfigs", JSON.stringify(pConf));
-        alert("✅ Premium Payment Settings for " + course + " - " + option + " saved successfully!");
-      }).catch(err => {
-        console.error(err);
-        alert("❌ Failed to save! Your QR image might still be too large. Please upload an image under 1MB.");
-      });
-    }
-
-    function saveGlobalPremiumConfig() {
-      let preview = document.getElementById("premiumQRPreview");
-      let qrBase64 = preview.src && preview.style.display !== "none" ? preview.src : "";
-
-      let upi = document.getElementById("premiumUPI").value.trim();
-      let amount = document.getElementById("premiumAmount").value.trim();
-
-      let payload = {
-        qr: qrBase64,
-        upi,
-        amount
-      };
-
-      database.ref('premiumConfig').set(payload).then(() => {
-        localStorage.setItem("premiumConfig", JSON.stringify(payload));
-        alert("✅ Global Premium Payment Settings saved successfully!");
+      database.ref('walletConfig').set(payload).then(() => {
+        localStorage.setItem("walletConfig", JSON.stringify(payload));
+        alert("✅ Wallet Recharge Settings saved successfully!");
       }).catch(err => {
         console.error(err);
         alert("❌ Failed to save! Your QR image might still be too large. Please upload an image under 1MB.");
@@ -6135,35 +8300,38 @@
       if (isUnlocked) {
         showPremiumContent(course, option);
       } else {
-        // Check if there's a pending or rejected payment in Firebase DB
-        database.ref('pendingPayments').once('value').then(snap => {
-          let pendingData = snap.val() || {};
-          let existingReqId = null;
-          let existingReq = null;
+        selectedPremiumItem = itemKey;
 
-          for (let id in pendingData) {
-            let req = pendingData[id];
-            if (req.mobile === currentUserMobile && req.itemKey === itemKey) {
-              existingReqId = id;
-              existingReq = req;
-              break;
+        // Retrieve the cost (default to 49 if not set)
+        let globalConf = JSON.parse(localStorage.getItem("premiumConfig")) || {};
+        let courseConfigs = JSON.parse(localStorage.getItem("premiumCourseConfigs")) || {};
+        let specificConfig = courseConfigs[selectedPremiumItem];
+        let pConf = specificConfig ? specificConfig : globalConf;
+        let activeAmount = parseFloat(pConf.amount && pConf.amount.trim() !== "" ? pConf.amount : "49");
+
+        if (confirm(`Unlock "${option}" for ${activeAmount} Gold Coins?\n\n(1 Gold Coin = ₹1)`)) {
+          database.ref('users/' + currentUserMobile + '/profile/wallet').once('value').then(snap => {
+            let balance = parseFloat(snap.val() || 0);
+            if (balance >= activeAmount) {
+              // Deduct and unlock
+              database.ref('users/' + currentUserMobile + '/profile/wallet').set(balance - activeAmount).then(() => {
+                let payload = { active: true, expiresAt: null }; // lifetime access
+                return database.ref(`users/${currentUserMobile}/premiumUnlocked/${itemKey}`).set(payload);
+              }).then(() => {
+                alert(`✅ ${option} unlocked successfully!\nDeducted ${activeAmount} Gold Coins.`);
+                showPremiumOptions(course); // Refresh UI to show it's unlocked
+                updateWalletDisplay(); // Update wallet UI if visible
+              }).catch(err => {
+                console.error(err);
+                alert("❌ Failed to unlock due to a network error.");
+              });
+            } else {
+              if (confirm(`Insufficient balance! You have ${balance} Gold Coins, but need ${activeAmount}.\nWould you like to recharge your Neural Wallet now?`)) {
+                topUpWallet();
+              }
             }
-          }
-
-          if (existingReq) {
-            if (existingReq.status === "pending") {
-              alert("⏳ Your payment for this item is currently under verification by Admin.");
-              return;
-            } else if (existingReq.status === "rejected") {
-              alert("❌ Admin rejected your previous payment attempt.\nReason: " + existingReq.reason + "\n\nPlease provide real proofs.");
-              // Remove the rejected request so they can try again
-              database.ref('pendingPayments/' + existingReqId).remove();
-            }
-          }
-
-          selectedPremiumItem = itemKey;
-          openPaymentModal();
-        });
+          });
+        }
       }
     }
 
@@ -6196,133 +8364,7 @@
       });
     }
 
-    function openPaymentModal() {
-      let globalConf = JSON.parse(localStorage.getItem("premiumConfig")) || {};
-      let courseConfigs = JSON.parse(localStorage.getItem("premiumCourseConfigs")) || {};
 
-      let specificConfig = courseConfigs[selectedPremiumItem];
-      let pConf = specificConfig ? specificConfig : globalConf;
-
-      let activeAmount = pConf.amount && pConf.amount.trim() !== "" ? pConf.amount : "49";
-      let baseUpi = pConf.upi && pConf.upi.trim() !== "" && pConf.upi !== "admin@upi" ? pConf.upi : "adityakumar84282-1@oksbi";
-
-      document.getElementById("paymentAmountDisplay").innerText = "₹" + activeAmount;
-      document.getElementById("paymentUPIDisplay").innerText = "UPI ID: " + baseUpi;
-      let qrImg = document.getElementById("paymentQRDisplay");
-      if (pConf.qr && pConf.qr.startsWith("data:image")) {
-        qrImg.src = pConf.qr;
-        qrImg.style.display = "inline-block";
-      } else if (pConf.qr && pConf.qr.trim() !== "") {
-        // Fallback for old URL-based configs if any
-        qrImg.src = pConf.qr;
-        qrImg.style.display = "inline-block";
-      } else {
-        // Generate dynamic QR code if not explicitly configured
-        let upiString = `upi://pay?pa=${baseUpi}&pn=NextGenLibrary&am=${activeAmount}&cu=INR`;
-        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(upiString)}`;
-        qrImg.style.display = "inline-block";
-      }
-
-      document.getElementById("paymentModal").style.display = "flex";
-    }
-
-    function closePaymentModal() {
-      document.getElementById("paymentModal").style.display = "none";
-      selectedPremiumItem = "";
-    }
-
-    function payWithUpiApp(app) {
-      let globalConf = JSON.parse(localStorage.getItem("premiumConfig")) || {};
-      let courseConfigs = JSON.parse(localStorage.getItem("premiumCourseConfigs")) || {};
-
-      let specificConfig = courseConfigs[selectedPremiumItem];
-      let pConf = specificConfig ? specificConfig : globalConf;
-
-      let activeAmount = pConf.amount && pConf.amount.trim() !== "" ? pConf.amount : "49";
-      let baseUpi = pConf.upi && pConf.upi.trim() !== "" && pConf.upi !== "admin@upi" ? pConf.upi : "adityakumar84282-1@oksbi";
-
-      let upiStr = `upi://pay?pa=${baseUpi}&pn=NextGenLibrary&am=${activeAmount}&cu=INR`;
-      if (app === 'gpay') {
-        upiStr = `tez://upi/pay?pa=${baseUpi}&pn=NextGenLibrary&am=${activeAmount}&cu=INR`;
-      } else if (app === 'phonepe') {
-        upiStr = `phonepe://pay?pa=${baseUpi}&pn=NextGenLibrary&am=${activeAmount}&cu=INR`;
-      }
-      window.location.href = upiStr;
-    }
-
-    let currentScreenshotBase64 = "";
-
-    function previewPaymentScreenshot(event) {
-      let file = event.target.files[0];
-      if (file) {
-        let reader = new FileReader();
-        reader.onload = function (e) {
-          currentScreenshotBase64 = e.target.result;
-          let preview = document.getElementById("paymentScreenshotPreview");
-          preview.src = currentScreenshotBase64;
-          preview.style.display = "block";
-        }
-        reader.readAsDataURL(file);
-      }
-    }
-
-    function confirmPremiumPayment() {
-      if (!selectedPremiumItem) return;
-
-      let utrInput = document.getElementById("paymentUtrInput").value.trim();
-      if (!utrInput || utrInput.length !== 12) {
-        alert("⚠️ Please enter a valid 12-Digit UTR / Transaction ID.");
-        return;
-      }
-
-      if (!currentScreenshotBase64) {
-        alert("⚠️ Please upload a Payment Screenshot as proof.");
-        return;
-      }
-
-      let btn = document.querySelector(".confirm-pay-btn");
-      btn.innerText = "Submitting...";
-      btn.disabled = true;
-
-      // Make sure we have the latest user name from Firebase
-      database.ref('users/' + currentUserMobile).once('value').then(snap => {
-        let userName = "Student";
-        if (snap.exists() && snap.val().name) {
-          userName = snap.val().name;
-        }
-
-        let newReqId = Date.now().toString();
-        let payload = {
-          id: newReqId,
-          mobile: currentUserMobile,
-          name: userName,
-          itemKey: selectedPremiumItem,
-          utr: utrInput,
-          screenshot: currentScreenshotBase64,
-          status: "pending",
-          timestamp: Date.now()
-        };
-
-        return database.ref('pendingPayments/' + newReqId).set(payload);
-      }).then(() => {
-        alert("⏳ Payment Request Submitted!\nAdmin will verify your UTR and Screenshot. Access will be granted shortly.");
-
-        // Cleanup Modal
-        document.getElementById("paymentUtrInput").value = "";
-        document.getElementById("paymentScreenshotInput").value = "";
-        document.getElementById("paymentScreenshotPreview").style.display = "none";
-        currentScreenshotBase64 = "";
-
-        btn.innerText = "Submit for Verification";
-        btn.disabled = false;
-        closePaymentModal();
-      }).catch(err => {
-        console.error(err);
-        alert("❌ Failed to submit request due to a network error or the screenshot is too large.");
-        btn.innerText = "Submit for Verification";
-        btn.disabled = false;
-      });
-    }
 
     /* MOTIVATION ROTATION */
     /* MOTIVATION ROTATION */
@@ -6708,6 +8750,48 @@
     });
 
   </script>
+
+  <!-- BATTLE PAYMENT MODAL -->
+  <div id="battlePaymentModal" class="modal" style="display: none; background: rgba(0,0,0,0.9); z-index: 20005;">
+    <div class="modal-content"
+      style="max-width: 450px; border: 1px solid #ff4757; background: #0a0a0a; position: relative;">
+      <span class="close-btn" onclick="document.getElementById('battlePaymentModal').style.display='none'"
+        style="position: absolute; right: 15px; top: 10px; color: #ff4757; cursor: pointer; font-size: 24px;">&times;</span>
+      <h2 style="color: #ff4757; margin-top: 0; font-family: 'Outfit';">🛡️ Combat Entry Pre-booking</h2>
+      <p style="color: #ccc; font-size: 14px; font-family: 'Outfit';">Scan QR below or use direct payment links to book
+        your seat.</p>
+
+      <div id="battleQRDisplay"
+        style="text-align: center; margin: 20px 0; background: white; padding: 15px; border-radius: 10px; box-shadow: 0 0 20px rgba(255, 71, 87, 0.2);">
+        <img id="battleQRImg" src="" style="max-width: 100%; height: auto; border: 2px solid #000;">
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+        <a id="linkGPay" href="#" class="login-btn"
+          style="background: white; color: black; font-size: 12px; margin: 0; display: flex; align-items: center; justify-content: center; gap: 5px; height: 45px; text-decoration: none; border-radius: 8px;">
+          <img src="https://www.gstatic.com/pay/pay_with_google_dark.png" height="20">
+        </a>
+        <a id="linkPhonePe" href="#" class="login-btn"
+          style="background: #5f259f; color: white; font-size: 12px; margin: 0; display: flex; align-items: center; justify-content: center; gap: 5px; height: 45px; text-decoration: none; border-radius: 8px;">
+          🟪 PhonePe
+        </a>
+      </div>
+
+      <div
+        style="text-align: left; background: rgba(255, 71, 87, 0.05); padding: 20px; border-radius: 12px; border: 1px dashed #ff4757;">
+        <label
+          style="color: #ff4757; font-size: 13px; font-weight: bold; display: block; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;">Confirm
+          Your Booking Proof:</label>
+        <input type="text" id="battlePayMobile" class="login-input" placeholder="Your WhatsApp / Mobile Number"
+          style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255, 71, 87, 0.3);">
+        <input type="file" id="battlePaySS" accept="image/*" class="login-input"
+          style="padding: 10px; background: rgba(255, 71, 87, 0.1); border: 1px dashed #ff4757;">
+        <button class="login-btn" id="btnSubmitBattlePay"
+          style="background: linear-gradient(90deg, #ff4757, #ff6b81); color: white; margin-top: 15px; box-shadow: 0 5px 15px rgba(255, 71, 87, 0.3);">🚀
+          Submit Booking Proof</button>
+      </div>
+    </div>
+  </div>
 
   <footer id="mainFooter" style="display:none;">
     <div class="footer-text">© 2026 <span class="footer-brand">NextGen Digital Library</span> | Designed & Developed by
