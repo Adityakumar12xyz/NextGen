@@ -1149,7 +1149,7 @@
           style="width: 80px; height: 80px; margin-bottom: 10px; filter: drop-shadow(0 0 10px cyan);">
         <h2>📝 NextGen Library Registration</h2>
         <input type="text" id="regName" class="login-input" placeholder="Name (Letters & Spaces only)">
-        <input type="number" id="regRoll" class="login-input" placeholder="DDU Roll Number (13 Digits)"
+        <input type="number" id="regRoll" class="login-input" placeholder="University Roll Number (13 Digits)"
           style="appearance: none; -moz-appearance: textfield;">
 
         <div style="display: flex; gap: 10px;">
@@ -1236,7 +1236,7 @@
           onchange="previewEditProfilePic(event)" style="padding: 5px;">
       </div>
       <input type="text" id="editName" class="login-input" placeholder="Name (Letters & Spaces only)">
-      <input type="number" id="editRoll" class="login-input" placeholder="DDU Roll Number (13 Digits)"
+      <input type="number" id="editRoll" class="login-input" placeholder="University Roll Number (13 Digits)"
         style="appearance: none; -moz-appearance: textfield;">
 
       <div style="display: flex; gap: 10px;">
@@ -3386,7 +3386,7 @@
     // isRecoveringMode is declared above
 
     function recoverDetails() {
-      let rollSearch = prompt("Enter your registered DDU Roll Number to recover/edit your details:");
+      let rollSearch = prompt("Enter your registered Univerisity Roll Number to recover/edit your details:");
       if (!rollSearch || rollSearch.trim() === "") return;
 
       let foundUser = null;
@@ -3415,7 +3415,7 @@
         document.querySelector("#editProfileScreen h2").innerText = "🛠️ Fix Registration Details";
         document.getElementById("editProfileScreen").style.display = "flex";
       } else {
-        alert("Sorry, no account found matching this DDU Roll Number. You may need to Sign Up first.");
+        alert("Sorry, no account found matching this University Roll Number Roll Number. You may need to Sign Up first.");
       }
     }
 
@@ -3426,7 +3426,7 @@
         return false;
       }
       if (!/^\d{13}$/.test(roll)) {
-        alert("Validation Error: DDU Roll Number must be exactly 13 digits long.");
+        alert("Validation Error: University Roll Number must be exactly 13 digits long.");
         return false;
       }
       if (!/^\d{10}$/.test(mobile)) {
@@ -4802,3 +4802,4 @@
 </body>
 
 </html>
+
