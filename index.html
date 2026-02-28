@@ -1286,71 +1286,53 @@
 
     <!-- ADMIN CONTENT MANAGEMENT SYSTEM -->
     <div id="adminCMS" style="margin-top: 40px; border-top: 1px solid rgba(0,255,255,0.3); padding-top: 20px;">
-      <h3 style="color: cyan; text-align: left;">✏️ Manage Course Content</h3>
+      <h3 style="color: cyan; text-align: left;">📂 Manage Course Content</h3>
       <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
-        <select id="cmsCourse" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
-          onchange="onAdminCourseChange()">
+        <select id="cmsCourse" class="login-input" style="flex: 1; margin: 0; min-width: 150px;"
+          onchange="onAdminCMSCourseChange()">
           <option value="" disabled selected>Course</option>
         </select>
-        <select id="cmsBranch" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
-          onchange="onAdminBranchChange()">
+        <select id="cmsBranch" class="login-input" style="flex: 1; margin: 0; min-width: 150px;"
+          onchange="onAdminCMSBranchChange()">
           <option value="" disabled selected>Branch</option>
         </select>
-        <select id="cmsSemester" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
-          onchange="onAdminSemesterChange()">
-          <option value="" disabled selected>Semester</option>
-        </select>
-        <select id="cmsSubject" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
-          onchange="onAdminSubjectChange()">
-          <option value="" disabled selected>Subject</option>
-        </select>
-        <select id="cmsChapter" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
-          onchange="onAdminChapterChange()">
-          <option value="" disabled selected>Chapter</option>
-        </select>
-        <button class="login-btn" onclick="addCMSChapter()"
-          style="flex: 0; background: #00cec9; color: black; padding: 0 15px; margin: 0; font-size: 14px; white-space: nowrap;">➕
-          Chapter</button>
       </div>
 
-      <div id="cmsEditor" style="display: none; text-align: left;">
-        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-          <button class="login-btn" onclick="renameCMSChapter()"
-            style="background: gold; color: black; padding: 5px 15px; margin: 0; font-size: 14px; flex: unset; width: auto;">✏️
-            Rename Chapter</button>
-          <button class="login-btn" onclick="deleteCMSChapter()"
-            style="background: #ff4757; color: white; padding: 5px 15px; margin: 0; font-size: 14px; flex: unset; width: auto;">🗑️
-            Delete Chapter</button>
+      <!-- NEW INTEGRATED INTERACTION AREA -->
+      <div id="cmsInteractionArea" style="margin-top: 20px;">
+        <p style="color: #888; text-align: center; padding: 20px;">Select Course and Branch to manage Semesters,
+          Subjects,
+          and Chapters.</p>
+      </div>
+
+      <!-- Content Editor (Visible only when a chapter is selected) -->
+      <div id="cmsContentEditor" style="display: none; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+        <h4 id="selectedPathDisplay" style="color: cyan; margin-bottom: 15px;">Selected: ...</h4>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <!-- Existing Editor Fields -->
+          <div style="text-align: left;">
+            <label style="color: #aaa; font-size: 14px;">📹 Video URLs (one per line)</label>
+            <textarea id="cmsVideo" class="login-input" style="height: 80px;"></textarea>
+          </div>
+          <div style="text-align: left;">
+            <label style="color: #aaa; font-size: 14px;">📄 PDF Google Drive Links (one per line)</label>
+            <textarea id="cmsPdf" class="login-input" style="height: 80px;"></textarea>
+          </div>
+          <div style="text-align: left;">
+            <label style="color: #aaa; font-size: 14px;">📝 Explanatory Notes (Multi-line Support)</label>
+            <textarea id="cmsNotes" class="login-input" style="height: 120px;"></textarea>
+          </div>
+          <div style="text-align: left;">
+            <label style="color: #aaa; font-size: 14px;">✏️ Assignment Text (Multi-line Support)</label>
+            <textarea id="cmsAssignment" class="login-input" style="height: 100px;"></textarea>
+          </div>
+          <div style="text-align: left;">
+            <label style="color: #aaa; font-size: 14px;">🏠 Homework Text (Multi-line Support)</label>
+            <textarea id="cmsHomework" class="login-input" style="height: 100px;"></textarea>
+          </div>
+          <button class="login-btn" onclick="saveAdminContent()"
+            style="background: cyan; color: black; margin-top: 10px;">💾 Save Data to Firebase</button>
         </div>
-
-        <label style="color: cyan; font-size: 14px;">📹 Video URLs (YouTube Embed):</label>
-        <div id="cmsVideoContainer"></div>
-        <button class="cms-add-btn" onclick="addCMSField('video')">➕ Add Video</button>
-        <br><br>
-
-        <label style="color: cyan; font-size: 14px;">📝 Study Notes:</label>
-        <div id="cmsNotesContainer"></div>
-        <button class="cms-add-btn" onclick="addCMSField('notes')">➕ Add Note Block</button>
-        <br><br>
-
-        <label style="color: cyan; font-size: 14px;">📄 PDF URLs (Google Drive Link):</label>
-        <div id="cmsPdfContainer"></div>
-        <button class="cms-add-btn" onclick="addCMSField('pdf')">➕ Add PDF</button>
-        <br><br>
-
-        <label style="color: cyan; font-size: 14px;">📄 Assignment:</label>
-        <div id="cmsAssignmentContainer"></div>
-        <button class="cms-add-btn" onclick="addCMSField('assignment')">➕ Add Assignment Block</button>
-        <br><br>
-
-        <label style="color: cyan; font-size: 14px;">🏠 Homework:</label>
-        <div id="cmsHomeworkContainer"></div>
-        <button class="cms-add-btn" onclick="addCMSField('homework')">➕ Add Homework Block</button>
-        <br><br>
-
-        <button class="login-btn" onclick="saveAdminContent()"
-          style="background: #00e676; color: black; box-shadow: 0 0 15px rgba(0, 230, 118, 0.4);">💾 Save
-          Content</button>
       </div>
     </div>
 
@@ -1367,36 +1349,7 @@
           style="flex: 1; margin-top: 0; background: #00cec9; color: black;">➕ Add Course</button>
       </div>
 
-      <!-- MANAGE SUBJECTS -->
-      <h3 style="color: cyan; text-align: left;">📚 Manage Subjects</h3>
-      <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
-        <select id="subCourse" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
-          onchange="onSubCourseChange()">
-          <option value="" disabled selected>Course</option>
-        </select>
-        <select id="subBranch" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
-          onchange="onSubBranchChange()">
-          <option value="" disabled selected>Branch</option>
-        </select>
-        <select id="subSemester" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
-          onchange="onSubSemesterChange()">
-          <option value="" disabled selected>Semester</option>
-        </select>
-      </div>
-
-      <div id="subEditor" style="display: none; text-align: left;">
-        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-          <input type="text" id="newSubjectName" class="login-input" placeholder="New Subject Name"
-            style="flex: 2; margin-bottom: 0;">
-          <button class="login-btn" onclick="addAdminSubject()"
-            style="flex: 1; margin-top: 0; background: #00e676; color: black;">➕ Add Subject</button>
-        </div>
-
-        <h4 style="color: #ddd;">Existing Subjects</h4>
-        <ul id="adminSubjectList" style="list-style: none; padding: 0; max-height: 200px; overflow-y: auto;">
-          <!-- Dynamically populated list of subjects -->
-        </ul>
-      </div>
+      <!-- MANAGING SUBJECTS INTEGRATED INTO CMS ABOVE -->
     </div>
 
     <!-- ADMIN PREMIUM SETTINGS -->
@@ -2147,6 +2100,7 @@
     let globalPremiumConfig = { qr: "", upi: "", amount: "" };
     let globalPremiumCourseConfigs = {};
     let isRecoveringMode = false;
+    let tempRecoverMobile = "";
     let currentUserMobile = "";
 
     // CHECK PERSISTENT LOGIN ON LOAD
@@ -2179,6 +2133,8 @@
               document.getElementById("loginScreen").style.display = "none";
               document.getElementById("welcomeScreen").style.display = "flex";
               document.querySelector("#welcomeScreen p").innerText += `\nWelcome back, ${userData.name}!`;
+              startTimeTracking(); // Resume tracking
+              setTimeout(restoreNavState, 500); // Allow data to populate
             }
           });
         } else {
@@ -2188,6 +2144,31 @@
         }
       }).catch(err => console.error("Firebase init failed:", err));
     };
+
+    // TIME TRACKING ENGINE
+    let timeSpentInterval = null;
+    let isTabVisible = true;
+
+    document.addEventListener("visibilitychange", () => {
+      isTabVisible = !document.hidden;
+    });
+
+    function startTimeTracking() {
+      if (timeSpentInterval) clearInterval(timeSpentInterval);
+
+      timeSpentInterval = setInterval(() => {
+        if (!currentUserMobile || !isTabVisible) return;
+
+        let stObj = JSON.parse(localStorage.getItem(currentUserMobile)) || {};
+        stObj.timeSpent = (stObj.timeSpent || 0) + 1;
+
+        // Sync to Local for instant UI response if needed
+        localStorage.setItem(currentUserMobile, JSON.stringify(stObj));
+
+        // Sync to Firebase directly
+        database.ref('users/' + currentUserMobile + '/timeSpent').set(stObj.timeSpent);
+      }, 60000); // 1 minute intervals
+    }
 
     /* AUTHENTICATION FUNCTIONS */
 
@@ -2203,6 +2184,153 @@
       } else if (mode === 'admin') {
         document.getElementById('adminLoginForm').style.display = 'block';
       }
+    }
+
+    // FORGOT DETAILS RECOVERY
+    function recoverDetails() {
+      let rollSearch = prompt("Enter your registered University Roll Number / Registation Number to recover/edit your details:");
+      if (!rollSearch || rollSearch.trim() === "") return;
+
+      let foundUser = null;
+      // We search both local and Firebase for redundancy if needed, but primarily Firebase
+      database.ref('users').once('value').then(snap => {
+        let users = snap.val() || {};
+        for (let mobile in users) {
+          if (users[mobile].roll && users[mobile].roll === rollSearch.trim()) {
+            foundUser = users[mobile];
+            break;
+          }
+        }
+
+        if (foundUser) {
+          isRecoveringMode = true;
+          tempRecoverMobile = foundUser.mobile;
+
+          document.getElementById("editName").value = foundUser.name;
+          document.getElementById("editRoll").value = foundUser.roll;
+          document.getElementById("editBranch").value = foundUser.branch;
+          document.getElementById("editSection").value = foundUser.section;
+          document.getElementById("editMobile").value = foundUser.mobile;
+
+          document.querySelector("#editProfileScreen h2").innerText = "🛠️ Fix Registration Details";
+          document.getElementById("editProfileScreen").style.display = "flex";
+        } else {
+          alert("Sorry, no account found matching this Roll Number.");
+        }
+      });
+    }
+
+    // VALIDATION HELPERS
+    function validateInput(name, roll, mobile) {
+      if (!/^[A-Za-z\s]+$/.test(name)) {
+        alert("Validation Error: Name must contain only English alphabets and spaces.");
+        return false;
+      }
+      if (!/^\d{13}$/.test(roll)) {
+        alert("Validation Error: Roll Number must be exactly 13 digits long.");
+        return false;
+      }
+      if (!/^\d{10}$/.test(mobile)) {
+        alert("Validation Error: Mobile Number must be exactly 10 digits long.");
+        return false;
+      }
+      return true;
+    }
+
+    function handleSignUp() {
+      let name = document.getElementById("regName").value.trim();
+      let roll = document.getElementById("regRoll").value.trim();
+      let branch = document.getElementById("regBranch").value;
+      let section = document.getElementById("regSection").value;
+      let mobile = document.getElementById("regMobile").value.trim();
+
+      if (!name || !roll || !branch || !section || !mobile) {
+        alert("Please fill in all details to register!");
+        return;
+      }
+
+      if (!validateInput(name, roll, mobile)) return;
+
+      let btn = document.querySelector("#signUpForm .login-btn");
+      btn.innerText = "Registering...";
+      btn.disabled = true;
+
+      database.ref('users/' + mobile).once('value').then((snapshot) => {
+        if (snapshot.exists()) {
+          alert("An account with this mobile number already exists! Please login.");
+          toggleAuthMode('login');
+          btn.innerText = "Sign Up & Enter";
+          btn.disabled = false;
+          return;
+        }
+
+        let userData = {
+          name, roll, branch, section, mobile,
+          registeredAt: Date.now(),
+          timeSpent: 0
+        };
+
+        database.ref('users/' + mobile).set(userData).then(() => {
+          localStorage.setItem(mobile, JSON.stringify(userData));
+          localStorage.setItem("activeSessionMobile", mobile);
+          localStorage.setItem("activeSessionExp", (Date.now() + 5 * 60 * 60 * 1000).toString());
+
+          currentUserMobile = mobile;
+          alert("Registration Successful!");
+          document.getElementById("loginScreen").style.display = "none";
+          document.getElementById("welcomeScreen").style.display = "flex";
+          let wsP = document.querySelector("#welcomeScreen p");
+          wsP.innerText = wsP.innerText.split('\n')[0] + `\nWelcome, ${name}!`;
+
+          btn.innerText = "Sign Up & Enter";
+          btn.disabled = false;
+          startTimeTracking();
+        }).catch(err => {
+          alert("Network error, please try again.");
+          btn.innerText = "Sign Up & Enter";
+          btn.disabled = false;
+        });
+      });
+    }
+
+    function handleLogin() {
+      let name = document.getElementById("loginName").value.trim();
+      let mobile = document.getElementById("loginMobile").value.trim();
+      let section = document.getElementById("loginSection").value;
+
+      if (!name || !mobile || !section) {
+        alert("Please enter Name, Section, and Mobile Number!");
+        return;
+      }
+
+      let btn = document.querySelector("#loginForm .login-btn");
+      btn.innerText = "Logging in...";
+      btn.disabled = true;
+
+      database.ref('users/' + mobile).once('value').then((snapshot) => {
+        let savedData = snapshot.val();
+        if (savedData && savedData.name.toLowerCase() === name.toLowerCase() && savedData.section === section) {
+          localStorage.setItem(mobile, JSON.stringify(savedData));
+          localStorage.setItem("activeSessionMobile", mobile);
+          localStorage.setItem("activeSessionExp", (Date.now() + 5 * 60 * 60 * 1000).toString());
+
+          currentUserMobile = mobile;
+          document.getElementById("loginScreen").style.display = "none";
+          document.getElementById("welcomeScreen").style.display = "flex";
+          let wsP = document.querySelector("#welcomeScreen p");
+          wsP.innerText = wsP.innerText.split('\n')[0] + `\nWelcome back, ${savedData.name}!`;
+
+          startTimeTracking();
+        } else {
+          alert("Incorrect credentials or user not found.");
+        }
+        btn.innerText = "Log In";
+        btn.disabled = false;
+      }).catch(err => {
+        alert("Login failed.");
+        btn.innerText = "Log In";
+        btn.disabled = false;
+      });
     }
 
     // ADMIN FUNCTIONS
@@ -2436,66 +2564,7 @@
       document.getElementById("premiumConfigEditor").style.display = "block";
     }
 
-    function initAdminCMS() {
-      // Content Manager
-      let cSelect = document.getElementById("cmsCourse");
-      cSelect.innerHTML = '<option value="" disabled selected>Course</option>';
-      for (let c in data) {
-        let opt = document.createElement("option"); opt.value = c; opt.innerText = c; cSelect.appendChild(opt);
-      }
-      document.getElementById("cmsEditor").style.display = "none";
-
-      // Subject Manager
-      let subSelect = document.getElementById("subCourse");
-      subSelect.innerHTML = '<option value="" disabled selected>Course</option>';
-      for (let c in data) {
-        let opt = document.createElement("option"); opt.value = c; opt.innerText = c; subSelect.appendChild(opt);
-      }
-      document.getElementById("subEditor").style.display = "none";
-    }
-
-    // CMS DYNAMIC FIELDS SCRIPTING
-    function addCMSField(type, value = "") {
-      let container = document.getElementById(`cms${type.charAt(0).toUpperCase() + type.slice(1)}Container`);
-      let div = document.createElement("div");
-      div.className = "cms-dynamic-field";
-
-      let isTextArea = type === "notes" || type === "assignment" || type === "homework";
-      let input = document.createElement(isTextArea ? "textarea" : "input");
-      input.className = "login-input cms-input-val";
-      input.style.marginTop = "0";
-      input.style.marginBottom = "0";
-      input.style.flex = "1";
-      if (isTextArea) input.style.height = "60px";
-      else input.type = "text";
-      input.value = value;
-      input.dataset.type = type;
-
-      let delBtn = document.createElement("button");
-      delBtn.className = "cms-del-btn";
-      delBtn.innerText = "✖";
-      delBtn.onclick = function () { container.removeChild(div); };
-
-      div.appendChild(input);
-      div.appendChild(delBtn);
-      container.appendChild(div);
-    }
-
-    function clearCMSFields() {
-      ["Video", "Notes", "Pdf", "Assignment", "Homework"].forEach(t => {
-        document.getElementById(`cms${t}Container`).innerHTML = "";
-      });
-    }
-
-    function collectCMSFields(type) {
-      let container = document.getElementById(`cms${type.charAt(0).toUpperCase() + type.slice(1)}Container`);
-      let inputs = container.querySelectorAll(".cms-input-val");
-      let values = [];
-      inputs.forEach(ip => {
-        if (ip.value.trim() !== "") values.push(ip.value.trim());
-      });
-      return values;
-    }
+    // Legacy CMS fields logic removed (migrated to simpler integrated drill-down UI)
 
     function exportToExcel() {
       database.ref('users').once('value').then(snap => {
@@ -2947,7 +3016,25 @@
       });
     }
 
-    function onAdminCourseChange() {
+    let cmsSelection = { course: "", branch: "", sem: "", sub: "", ch: "" };
+
+    function initAdminCMS() {
+      const courseSelect = document.getElementById("cmsCourse");
+      const subCourseSelect = document.getElementById("subCourse");
+
+      [courseSelect, subCourseSelect].forEach(sel => {
+        if (!sel) return;
+        sel.innerHTML = '<option value="" disabled selected>Course</option>';
+        for (let c in data) {
+          let opt = document.createElement("option");
+          opt.value = c;
+          opt.innerText = c;
+          sel.appendChild(opt);
+        }
+      });
+    }
+
+    function onAdminCMSCourseChange() {
       let c = document.getElementById("cmsCourse").value;
       let bSelect = document.getElementById("cmsBranch");
       bSelect.innerHTML = '<option value="" disabled selected>Branch</option>';
@@ -2956,122 +3043,162 @@
           let opt = document.createElement("option"); opt.value = b; opt.innerText = b; bSelect.appendChild(opt);
         }
       }
-      document.getElementById("cmsSemester").innerHTML = '<option value="" disabled selected>Semester</option>';
-      document.getElementById("cmsSubject").innerHTML = '<option value="" disabled selected>Subject</option>';
-      document.getElementById("cmsChapter").innerHTML = '<option value="" disabled selected>Chapter</option>';
-      document.getElementById("cmsEditor").style.display = "none";
+      document.getElementById("cmsInteractionArea").innerHTML = '<p style="color: #888; text-align: center; padding: 20px;">Select Branch to manage Semesters.</p>';
+      document.getElementById("cmsContentEditor").style.display = "none";
+      cmsSelection = { course: c, branch: "", sem: "", sub: "", ch: "" };
     }
 
-    function onAdminBranchChange() {
-      let c = document.getElementById("cmsCourse").value;
-      let b = document.getElementById("cmsBranch").value;
-      let sSelect = document.getElementById("cmsSemester");
-      sSelect.innerHTML = '<option value="" disabled selected>Semester</option>';
-      if (data[c] && data[c][b]) {
-        for (let s in data[c][b]) {
-          let opt = document.createElement("option"); opt.value = s; opt.innerText = "Semester " + s; sSelect.appendChild(opt);
-        }
-      }
-      document.getElementById("cmsSubject").innerHTML = '<option value="" disabled selected>Subject</option>';
-      document.getElementById("cmsChapter").innerHTML = '<option value="" disabled selected>Chapter</option>';
-      document.getElementById("cmsEditor").style.display = "none";
+    function onAdminCMSBranchChange() {
+      cmsSelection.course = document.getElementById("cmsCourse").value;
+      cmsSelection.branch = document.getElementById("cmsBranch").value;
+      renderCmsSemesters();
     }
 
-    function onAdminSemesterChange() {
-      let c = document.getElementById("cmsCourse").value;
-      let b = document.getElementById("cmsBranch").value;
-      let sem = document.getElementById("cmsSemester").value;
-      let subjSelect = document.getElementById("cmsSubject");
-      subjSelect.innerHTML = '<option value="" disabled selected>Subject</option>';
-      if (data[c] && data[c][b] && data[c][b][sem]) {
-        for (let sub in data[c][b][sem]) {
-          let opt = document.createElement("option"); opt.value = sub; opt.innerText = sub; subjSelect.appendChild(opt);
-        }
-      }
-      document.getElementById("cmsChapter").innerHTML = '<option value="" disabled selected>Chapter</option>';
-      document.getElementById("cmsEditor").style.display = "none";
-    }
+    function renderCmsSemesters() {
+      let { course, branch } = cmsSelection;
+      let area = document.getElementById("cmsInteractionArea");
+      area.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+           <h4 style="color: cyan; margin:0;">📅 Semesters in ${branch}</h4>
+           <button class="login-btn" onclick="addCMSSemester()" style="width: auto; margin:0; background: #00cec9; color: black; padding: 5px 15px;">➕ Add Sem</button>
+        </div>
+        <div id="cmsListContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;"></div>
+      `;
+      let list = document.getElementById("cmsListContainer");
 
-    function onAdminSubjectChange() {
-      let c = document.getElementById("cmsCourse").value;
-      let b = document.getElementById("cmsBranch").value;
-      let sem = document.getElementById("cmsSemester").value;
-      let sub = document.getElementById("cmsSubject").value;
-      let chapSelect = document.getElementById("cmsChapter");
-      chapSelect.innerHTML = '<option value="" disabled selected>Chapter</option>';
-      if (data[c] && data[c][b] && data[c][b][sem] && data[c][b][sem][sub]) {
-        for (let chap in data[c][b][sem][sub]) {
-          let opt = document.createElement("option"); opt.value = chap; opt.innerText = chap; chapSelect.appendChild(opt);
-        }
-      }
-      document.getElementById("cmsEditor").style.display = "none";
-    }
+      let sems = data[course] && data[course][branch] ? Object.keys(data[course][branch]).filter(k => k !== "_initialized").sort((a, b) => a - b) : [];
 
-    function onAdminChapterChange() {
-      let c = document.getElementById("cmsCourse").value;
-      let b = document.getElementById("cmsBranch").value;
-      let sem = document.getElementById("cmsSemester").value;
-      let sub = document.getElementById("cmsSubject").value;
-      let chap = document.getElementById("cmsChapter").value;
-
-      clearCMSFields();
-
-      if (c && b && sem && sub && chap && data[c] && data[c][b] && data[c][b][sem] && data[c][b][sem][sub] && data[c][b][sem][sub][chap]) {
-        let content = data[c][b][sem][sub][chap];
-
-        // Handle migration from old string format -> array format seamlessly
-        const populateFields = (type, val) => {
-          if (!val) return;
-          if (Array.isArray(val)) {
-            val.forEach(v => addCMSField(type, v));
-          } else if (typeof val === "string") {
-            // Old format: split by newline if applicable, otherwise just 1
-            let arr = val.split('\n');
-            arr.forEach(v => { if (v.trim()) addCMSField(type, v.trim()); });
-          }
-        };
-
-        populateFields('video', content.video);
-        populateFields('notes', content.notes);
-        populateFields('pdf', content.pdf);
-        populateFields('assignment', content.assignment);
-        populateFields('homework', content.homework);
-
-        // Auto-add 1 empty field if entirely empty
-        ["video", "notes", "pdf", "assignment", "homework"].forEach(type => {
-          let container = document.getElementById(`cms${type.charAt(0).toUpperCase() + type.slice(1)}Container`);
-          if (container.children.length === 0) addCMSField(type, "");
+      if (sems.length === 0) {
+        list.innerHTML = "<p style='grid-column: 1/-1; color: #888; text-align: center;'>No semesters found. Add one above!</p>";
+      } else {
+        sems.forEach(s => {
+          let item = document.createElement("div");
+          item.className = "box";
+          item.style.display = "flex";
+          item.style.justifyContent = "space-between";
+          item.style.alignItems = "center";
+          item.style.padding = "10px 15px";
+          item.innerHTML = `
+            <span onclick="cmsSelection.sem='${s}'; renderCmsSubjects()" style="cursor:pointer; flex: 1;">📅 Semester ${s}</span>
+            <button onclick="deleteCMSSemester('${s}')" style="background: #ff4757; border: none; color: white; border-radius: 4px; padding: 2px 6px; cursor: pointer; font-size: 12px;">Delete</button>
+          `;
+          list.appendChild(item);
         });
-
-        document.getElementById("cmsEditor").style.display = "block";
       }
+      document.getElementById("cmsContentEditor").style.display = "none";
+    }
+
+    function renderCmsSubjects() {
+      let { course, branch, sem } = cmsSelection;
+      let area = document.getElementById("cmsInteractionArea");
+      area.innerHTML = `
+        <div style="margin-bottom: 15px;">
+           <button onclick="renderCmsSemesters()" style="background: none; border: 1px solid cyan; color: cyan; padding: 5px 10px; border-radius: 5px; cursor: pointer; margin-bottom: 10px;">⬅️ Back to Semesters</button>
+           <div style="display: flex; justify-content: space-between; align-items: center;">
+             <h4 style="color: cyan; margin:0;">📘 Subjects in Semester ${sem}</h4>
+             <button class="login-btn" onclick="addCMSSubject()" style="width: auto; margin:0; background: #00cec9; color: black; padding: 5px 15px;">➕ Add Subject</button>
+           </div>
+        </div>
+        <div id="cmsListContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px;"></div>
+      `;
+      let list = document.getElementById("cmsListContainer");
+
+      let subs = data[course][branch][sem] ? Object.keys(data[course][branch][sem]).filter(k => k !== "_initialized") : [];
+
+      if (subs.length === 0) {
+        list.innerHTML = "<p style='grid-column: 1/-1; color: #888; text-align: center;'>No subjects found. Add one above!</p>";
+      } else {
+        subs.forEach(sub => {
+          let item = document.createElement("div");
+          item.className = "box";
+          item.style.display = "flex";
+          item.style.justifyContent = "space-between";
+          item.style.alignItems = "center";
+          item.style.padding = "10px 15px";
+          item.innerHTML = `
+            <span onclick="cmsSelection.sub='${sub}'; renderCmsChapters()" style="cursor:pointer; flex: 1;">📘 ${sub}</span>
+            <button onclick="deleteCMSSubject('${sub}')" style="background: #ff4757; border: none; color: white; border-radius: 4px; padding: 2px 6px; cursor: pointer; font-size: 12px;">Delete</button>
+          `;
+          list.appendChild(item);
+        });
+      }
+      document.getElementById("cmsContentEditor").style.display = "none";
+    }
+
+    function renderCmsChapters() {
+      let { course, branch, sem, sub } = cmsSelection;
+      let area = document.getElementById("cmsInteractionArea");
+      area.innerHTML = `
+        <div style="margin-bottom: 15px;">
+           <button onclick="renderCmsSubjects()" style="background: none; border: 1px solid cyan; color: cyan; padding: 5px 10px; border-radius: 5px; cursor: pointer; margin-bottom: 10px;">⬅️ Back to Subjects</button>
+           <div style="display: flex; justify-content: space-between; align-items: center;">
+             <h4 style="color: cyan; margin:0;">📑 Chapters in ${sub}</h4>
+             <button class="login-btn" onclick="addCMSChapter()" style="width: auto; margin:0; background: #00cec9; color: black; padding: 5px 15px;">➕ Add Chapter</button>
+           </div>
+        </div>
+        <div id="cmsListContainer" style="display: grid; grid-template-columns: 1fr; gap: 8px;"></div>
+      `;
+      let list = document.getElementById("cmsListContainer");
+
+      let chaps = data[course][branch][sem][sub] ? Object.keys(data[course][branch][sem][sub]).filter(k => k !== "_initialized") : [];
+
+      if (chaps.length === 0) {
+        list.innerHTML = "<p style='color: #888; text-align: center;'>No chapters found. Add one above!</p>";
+      } else {
+        chaps.forEach(ch => {
+          let item = document.createElement("div");
+          item.className = "box";
+          item.style.display = "flex";
+          item.style.justifyContent = "space-between";
+          item.style.alignItems = "center";
+          item.style.padding = "10px 15px";
+          item.style.background = "rgba(255,255,255,0.05)";
+          item.innerHTML = `
+            <span onclick="openCmsChapter('${ch}')" style="cursor:pointer; flex: 1;">📑 ${ch}</span>
+            <div style="display: flex; gap: 5px;">
+              <button onclick="renameCMSChapter('${ch}')" style="background: #00e676; border: none; color: black; border-radius: 4px; padding: 2px 6px; cursor: pointer; font-size: 12px;">Rename</button>
+              <button onclick="deleteCMSChapter('${ch}')" style="background: #ff4757; border: none; color: white; border-radius: 4px; padding: 2px 6px; cursor: pointer; font-size: 12px;">Delete</button>
+            </div>
+          `;
+          list.appendChild(item);
+        });
+      }
+      document.getElementById("cmsContentEditor").style.display = "none";
+    }
+
+    function openCmsChapter(ch) {
+      cmsSelection.ch = ch;
+      let { course, branch, sem, sub } = cmsSelection;
+      let content = data[course][branch][sem][sub][ch];
+
+      document.getElementById("selectedPathDisplay").innerText = `Selected: Sem ${sem} > ${sub} > ${ch}`;
+
+      document.getElementById("cmsVideo").value = Array.isArray(content.video) ? content.video.join('\n') : (content.video || "");
+      document.getElementById("cmsPdf").value = Array.isArray(content.pdf) ? content.pdf.join('\n') : (content.pdf || "");
+      document.getElementById("cmsNotes").value = Array.isArray(content.notes) ? content.notes.join('\n') : (content.notes || "");
+      document.getElementById("cmsAssignment").value = Array.isArray(content.assignment) ? content.assignment.join('\n') : (content.assignment || "");
+      document.getElementById("cmsHomework").value = Array.isArray(content.homework) ? content.homework.join('\n') : (content.homework || "");
+
+      document.getElementById("cmsContentEditor").style.display = "block";
+      document.getElementById("cmsContentEditor").scrollIntoView({ behavior: 'smooth' });
     }
 
     function saveAdminContent() {
-      let c = document.getElementById("cmsCourse").value;
-      let b = document.getElementById("cmsBranch").value;
-      let sem = document.getElementById("cmsSemester").value;
-      let sub = document.getElementById("cmsSubject").value;
-      let chap = document.getElementById("cmsChapter").value;
-
-      if (!c || !b || !sem || !sub || !chap) return;
+      let { course, branch, sem, sub, ch } = cmsSelection;
+      if (!ch) return alert("Please select a chapter first.");
 
       let payload = {
-        video: collectCMSFields('video'),
-        notes: collectCMSFields('notes'),
-        pdf: collectCMSFields('pdf'),
-        assignment: collectCMSFields('assignment'),
-        homework: collectCMSFields('homework')
+        video: document.getElementById("cmsVideo").value.split('\n').filter(x => x.trim()),
+        pdf: document.getElementById("cmsPdf").value.split('\n').filter(x => x.trim()),
+        notes: document.getElementById("cmsNotes").value.split('\n').filter(x => x.trim()),
+        assignment: document.getElementById("cmsAssignment").value.split('\n').filter(x => x.trim()),
+        homework: document.getElementById("cmsHomework").value.split('\n').filter(x => x.trim())
       };
 
-      data[c][b][sem][sub][chap] = payload;
-
-      database.ref(`courseData/${c}/${b}/${sem}/${sub}/${chap}`).set(payload).then(() => {
-        /* localStorage save removed to rely on Firebase */
-        alert("✅ Content for '" + chap + "' has been updated successfully!");
-      }).catch(err => {
-        alert("❌ Failed to save content to database.");
-      });
+      data[course][branch][sem][sub][ch] = payload;
+      database.ref(`courseData/${course}/${branch}/${sem}/${sub}/${ch}`).set(payload).then(() => {
+        alert("✅ Content Saved Successfully!");
+      }).catch(err => alert("❌ Save Failed: " + err));
     }
 
     function promptRemoveUser(mobile) {
@@ -3086,99 +3213,120 @@
       }
     }
 
-    function renameCMSChapter() {
-      let c = document.getElementById("cmsCourse").value;
-      let b = document.getElementById("cmsBranch").value;
-      let sem = document.getElementById("cmsSemester").value;
-      let sub = document.getElementById("cmsSubject").value;
-      let chap = document.getElementById("cmsChapter").value;
+    function renameCMSChapter(oldCh) {
+      let { course, branch, sem, sub } = cmsSelection;
+      let newCh = prompt("Enter new name for chapter:", oldCh);
+      if (!newCh || newCh.trim() === "" || newCh === oldCh) return;
+      newCh = newCh.trim();
 
-      if (!c || !b || !sem || !sub || !chap) return;
+      if (data[course][branch][sem][sub][newCh]) return alert("Chapter with this name already exists!");
 
-      let newName = prompt("Enter new name for chapter:", chap);
-      if (!newName || newName.trim() === "" || newName === chap) return;
-      newName = newName.trim();
+      let chData = data[course][branch][sem][sub][oldCh];
+      data[course][branch][sem][sub][newCh] = chData;
+      delete data[course][branch][sem][sub][oldCh];
 
-      if (data[c][b][sem][sub][newName]) {
-        return alert("A chapter with this name already exists in this subject!");
-      }
-
-      let chapData = data[c][b][sem][sub][chap];
-      data[c][b][sem][sub][newName] = chapData;
-      delete data[c][b][sem][sub][chap];
-
-      database.ref(`courseData/${c}/${b}/${sem}/${sub}/${chap}`).remove().then(() => {
-        return database.ref(`courseData/${c}/${b}/${sem}/${sub}/${newName}`).set(chapData);
+      database.ref(`courseData/${course}/${branch}/${sem}/${sub}/${oldCh}`).remove().then(() => {
+        return database.ref(`courseData/${course}/${branch}/${sem}/${sub}/${newCh}`).set(chData);
       }).then(() => {
-        /* localStorage save removed to rely on Firebase */
-        onAdminSubjectChange(); // Refresh chapters dropdown
-        document.getElementById("cmsChapter").value = newName;
-        onAdminChapterChange();
         alert("✅ Chapter renamed successfully!");
-      }).catch(err => alert("❌ Failed to rename chapter: " + err));
+        renderCmsChapters();
+      }).catch(err => alert("❌ Rename failed: " + err));
     }
 
     function addCMSChapter() {
-      let c = document.getElementById("cmsCourse").value;
-      let b = document.getElementById("cmsBranch").value;
-      let sem = document.getElementById("cmsSemester").value;
-      let sub = document.getElementById("cmsSubject").value;
+      let { course, branch, sem, sub } = cmsSelection;
+      if (!sub) return alert("Select Subject first.");
 
-      if (!c || !b || !sem || !sub) return alert("Select Course, Branch, Semester, and Subject first.");
+      let chName = prompt("Enter new Chapter name:");
+      if (!chName || chName.trim() === "") return;
+      chName = chName.trim();
 
-      let newName = prompt("Enter name for NEW chapter:");
-      if (!newName || newName.trim() === "") return;
-      newName = newName.trim();
-
-      if (data[c][b][sem][sub][newName]) {
-        return alert("A chapter with this name already exists!");
-      }
+      if (data[course][branch][sem][sub][chName]) return alert("Chapter already exists!");
 
       let initPayload = { video: "", notes: "", pdf: "", assignment: "", homework: "" };
-      data[c][b][sem][sub][newName] = initPayload;
+      data[course][branch][sem][sub][chName] = initPayload;
 
-      database.ref(`courseData/${c}/${b}/${sem}/${sub}/${newName}`).set(initPayload).then(() => {
-        /* localStorage save removed to rely on Firebase */
-        onAdminSubjectChange(); // Refresh chapters dropdown
-        document.getElementById("cmsChapter").value = newName;
-        onAdminChapterChange();
+      database.ref(`courseData/${course}/${branch}/${sem}/${sub}/${chName}`).set(initPayload).then(() => {
         alert("✅ New chapter added successfully!");
+        renderCmsChapters();
       }).catch(err => alert("❌ Failed to add chapter: " + err));
     }
 
-    function deleteCMSChapter() {
-      let c = document.getElementById("cmsCourse").value;
-      let b = document.getElementById("cmsBranch").value;
-      let sem = document.getElementById("cmsSemester").value;
-      let sub = document.getElementById("cmsSubject").value;
-      let chap = document.getElementById("cmsChapter").value;
+    function addCMSSemester() {
+      let { course, branch } = cmsSelection;
+      if (!course || !branch) return alert("Select Course and Branch first.");
 
-      if (!c || !b || !sem || !sub || !chap) return;
+      let newSem = prompt("Enter NEW semester number:");
+      if (!newSem || newSem.trim() === "") return;
+      newSem = newSem.trim();
 
-      if (!confirm(`Are you sure you want to delete chapter '${chap}' and all its content?`)) return;
+      if (data[course] && data[course][branch] && data[course][branch][newSem]) {
+        return alert("Semester already exists!");
+      }
 
-      delete data[c][b][sem][sub][chap];
+      let initPayload = { _initialized: true };
+      if (!data[course]) data[course] = {};
+      if (!data[course][branch]) data[course][branch] = {};
+      data[course][branch][newSem] = initPayload;
 
-      database.ref(`courseData/${c}/${b}/${sem}/${sub}/${chap}`).remove().then(() => {
-        /* localStorage save removed to rely on Firebase */
-        onAdminSubjectChange();
-        document.getElementById("cmsEditor").style.display = "none";
-        alert("🗑️ Chapter deleted successfully!");
-      }).catch(err => alert("❌ Failed to delete chapter: " + err));
+      database.ref(`courseData/${course}/${branch}/${newSem}`).set(initPayload).then(() => {
+        alert(`✅ Semester '${newSem}' added successfully!`);
+        renderCmsSemesters();
+        initAdminCMS(); // Sync dropdowns
+      }).catch(err => alert("❌ Failed to add semester: " + err));
     }
 
-    function updateAdminCredentials() {
-      let user = document.getElementById("newAdminId").value.trim();
-      let pass = document.getElementById("newAdminPass").value.trim();
-      if (!user || !pass) {
-        alert("Enter both username and password.");
-        return;
+    function deleteCMSSemester(sem) {
+      let { course, branch } = cmsSelection;
+      if (confirm(`Are you sure you want to delete Semester ${sem}? All contents will be lost.`)) {
+        delete data[course][branch][sem];
+        database.ref(`courseData/${course}/${branch}/${sem}`).remove().then(() => {
+          alert(`🗑️ Semester ${sem} deleted successfully!`);
+          renderCmsSemesters();
+          initAdminCMS();
+        }).catch(err => alert("❌ Failed to delete semester: " + err));
       }
-      database.ref('adminCredentials').set({ user, pass }).then(() => {
-        alert("✅ Admin credentials updated! Please remember them.");
-        document.getElementById("newAdminId").value = "";
-        document.getElementById("newAdminPass").value = "";
-      }).catch(err => alert("❌ Update failed."));
+    }
+
+    function addCMSSubject() {
+      let { course, branch, sem } = cmsSelection;
+      if (!sem) return alert("Select Semester first.");
+
+      let subName = prompt("Enter NEW subject name:");
+      if (!subName || subName.trim() === "") return;
+      subName = subName.trim();
+
+      if (data[course][branch][sem][subName]) return alert("Subject already exists!");
+
+      let initPayload = { _initialized: true };
+      data[course][branch][sem][subName] = initPayload;
+
+      database.ref(`courseData/${course}/${branch}/${sem}/${subName}`).set(initPayload).then(() => {
+        alert(`✅ Subject '${subName}' added successfully!`);
+        renderCmsSubjects();
+      }).catch(err => alert("❌ Failed to add subject: " + err));
+    }
+
+    function deleteCMSSubject(sub) {
+      let { course, branch, sem } = cmsSelection;
+      if (confirm(`Are you sure you want to delete Subject '${sub}'?`)) {
+        delete data[course][branch][sem][sub];
+        database.ref(`courseData/${course}/${branch}/${sem}/${sub}`).remove().then(() => {
+          alert(`🗑️ Subject '${sub}' deleted successfully!`);
+          renderCmsSubjects();
+        }).catch(err => alert("❌ Failed to delete subject: " + err));
+      }
+    }
+
+    function deleteCMSChapter(ch) {
+      let { course, branch, sem, sub } = cmsSelection;
+      if (confirm(`Are you sure you want to delete Chapter '${ch}'?`)) {
+        delete data[course][branch][sem][sub][ch];
+        database.ref(`courseData/${course}/${branch}/${sem}/${sub}/${ch}`).remove().then(() => {
+          alert("✅ Chapter deleted successfully!");
+          renderCmsChapters();
+        }).catch(err => alert("❌ Failed to delete chapter: " + err));
+      }
     }
 
     // COURSE & SUBJECT MANAGER FUNCTIONS
@@ -3202,130 +3350,9 @@
       });
     }
 
-    function onSubCourseChange() {
-      let c = document.getElementById("subCourse").value;
-      let bSelect = document.getElementById("subBranch");
-      bSelect.innerHTML = '<option value="" disabled selected>Branch</option>';
-      if (data[c]) {
-        for (let b in data[c]) {
-          let opt = document.createElement("option"); opt.value = b; opt.innerText = b; bSelect.appendChild(opt);
-        }
-      }
-      document.getElementById("subSemester").innerHTML = '<option value="" disabled selected>Semester</option>';
-      document.getElementById("subEditor").style.display = "none";
-    }
+    // Redundant Semester Management functions removed (moved to integrated CMS)
 
-    function onSubBranchChange() {
-      let c = document.getElementById("subCourse").value;
-      let b = document.getElementById("subBranch").value;
-      let sSelect = document.getElementById("subSemester");
-      sSelect.innerHTML = '<option value="" disabled selected>Semester</option>';
-      if (data[c] && data[c][b]) {
-        for (let s in data[c][b]) {
-          let opt = document.createElement("option"); opt.value = s; opt.innerText = "Semester " + s; sSelect.appendChild(opt);
-        }
-      }
-      document.getElementById("subEditor").style.display = "none";
-    }
-
-    function onSubSemesterChange() {
-      renderAdminSubjectList();
-    }
-
-    function renderAdminSubjectList() {
-      let c = document.getElementById("subCourse").value;
-      let b = document.getElementById("subBranch").value;
-      let sem = document.getElementById("subSemester").value;
-      let list = document.getElementById("adminSubjectList");
-      list.innerHTML = "";
-
-      if (c && b && sem && data[c] && data[c][b] && data[c][b][sem]) {
-        let subjects = Object.keys(data[c][b][sem]);
-        if (subjects.length === 0) {
-          list.innerHTML = "<li style='color:#888;'>No subjects found in this semester.</li>";
-        } else {
-          subjects.forEach(sub => {
-            let li = document.createElement("li");
-            li.innerHTML = `
-              <span>📘 ${sub}</span>
-              <div style="display: flex; gap: 5px;">
-                <button class="login-btn" onclick="renameAdminSubject('${c}', '${b}', '${sem}', '${sub}')" style="background: #00e676; color: black; padding: 5px 10px; margin: 0; font-size: 12px; border-radius: 5px;">✏️ Rename</button>
-                <button class="delete-subject-btn" onclick="deleteAdminSubject('${c}', '${b}', '${sem}', '${sub}')">🗑️ Delete</button>
-              </div>
-            `;
-            list.appendChild(li);
-          });
-        }
-        document.getElementById("subEditor").style.display = "block";
-      }
-    }
-
-    function addAdminSubject() {
-      let c = document.getElementById("subCourse").value;
-      let b = document.getElementById("subBranch").value;
-      let sem = document.getElementById("subSemester").value;
-      let subName = document.getElementById("newSubjectName").value.trim();
-
-      if (!c || !b || !sem) return alert("Please select Course, Branch, and Semester first.");
-      if (!subName) return alert("Subject name cannot be empty.");
-
-      if (data[c][b][sem][subName]) {
-        return alert("Subject already exists in this semester!");
-      }
-
-      // Initialize with basic Units 1 to 5 mapping
-      let initPayload = {
-        "UNIT 1: Introduction": { video: "", notes: "", pdf: "", assignment: "", homework: "" },
-        "UNIT 2: Basics": { video: "", notes: "", pdf: "", assignment: "", homework: "" },
-        "UNIT 3: Intermediate": { video: "", notes: "", pdf: "", assignment: "", homework: "" },
-        "UNIT 4: Advanced": { video: "", notes: "", pdf: "", assignment: "", homework: "" },
-        "UNIT 5: Expert": { video: "", notes: "", pdf: "", assignment: "", homework: "" }
-      };
-
-      data[c][b][sem][subName] = initPayload;
-
-      database.ref(`courseData/${c}/${b}/${sem}/${subName}`).set(initPayload).then(() => {
-        /* localStorage save removed to rely on Firebase */
-        document.getElementById("newSubjectName").value = "";
-        alert("✅ Subject '" + subName + "' added successfully!");
-        renderAdminSubjectList();
-        onAdminSemesterChange(); // Update CMS dropdown if affected
-      });
-    }
-
-    function deleteAdminSubject(c, b, sem, sub) {
-      if (confirm(`Are you sure you want to delete the subject '${sub}'? This will remove all its content permanently.`)) {
-        delete data[c][b][sem][sub];
-        database.ref(`courseData/${c}/${b}/${sem}/${sub}`).remove().then(() => {
-          /* localStorage save removed to rely on Firebase */
-          renderAdminSubjectList();
-          onAdminSemesterChange(); // Update CMS dropdown
-        });
-      }
-    }
-
-    function renameAdminSubject(c, b, sem, oldSub) {
-      let newSub = prompt("Enter new name for the subject:", oldSub);
-      if (!newSub || newSub.trim() === "" || newSub === oldSub) return;
-      newSub = newSub.trim();
-
-      if (data[c][b][sem][newSub]) {
-        return alert("A subject with this name already exists in this semester!");
-      }
-
-      let subData = data[c][b][sem][oldSub];
-      data[c][b][sem][newSub] = subData;
-      delete data[c][b][sem][oldSub];
-
-      database.ref(`courseData/${c}/${b}/${sem}/${oldSub}`).remove().then(() => {
-        return database.ref(`courseData/${c}/${b}/${sem}/${newSub}`).set(subData);
-      }).then(() => {
-        /* localStorage save removed to rely on Firebase */
-        renderAdminSubjectList();
-        onAdminSemesterChange();
-        alert("✅ Subject renamed successfully!");
-      }).catch(err => alert("❌ Failed to rename subject."));
-    }
+    // Subject Quick Links logic removed (integrated into CMS)
 
     function grantPremiumManually(mobile) {
       let itemKey = prompt("Enter Premium Option Key (e.g. BCA_Exam point of view):");
@@ -3753,6 +3780,187 @@
       document.querySelector("header").style.display = "none";
       document.getElementById("loginScreen").style.display = "flex";
       toggleAuthMode('login');
+      if (timeSpentInterval) clearInterval(timeSpentInterval);
+    }
+
+    // -------------- PROGRESS TRACKING LOGIC --------------
+    function getStudentTracker() {
+      if (!currentUserMobile) return { progressTracker: {} };
+      let stObj = JSON.parse(localStorage.getItem(currentUserMobile)) || { progressTracker: {} };
+      if (!stObj.progressTracker) {
+        stObj.progressTracker = {};
+        localStorage.setItem(currentUserMobile, JSON.stringify(stObj));
+      }
+      return stObj;
+    }
+
+    function toggleProgress(type, index, isChecked) {
+      if (!currentUserMobile) return;
+
+      let stObj = getStudentTracker();
+      let c = studentNavState.course;
+      let b = studentNavState.branch;
+      let sem = studentNavState.sem;
+      let sub = studentNavState.subject;
+      let ch = studentNavState.chapter;
+
+      if (!c || !b || !sem || !sub || !ch) return;
+
+      if (!stObj.progressTracker[c]) stObj.progressTracker[c] = {};
+      if (!stObj.progressTracker[c][b]) stObj.progressTracker[c][b] = {};
+      if (!stObj.progressTracker[c][b][sem]) stObj.progressTracker[c][b][sem] = {};
+      if (!stObj.progressTracker[c][b][sem][sub]) stObj.progressTracker[c][b][sem][sub] = {};
+      if (!stObj.progressTracker[c][b][sem][sub][ch]) stObj.progressTracker[c][b][sem][sub][ch] = {};
+      if (!stObj.progressTracker[c][b][sem][sub][ch][type]) stObj.progressTracker[c][b][sem][sub][ch][type] = {};
+
+      stObj.progressTracker[c][b][sem][sub][ch][type][index] = isChecked;
+
+      localStorage.setItem(currentUserMobile, JSON.stringify(stObj));
+      database.ref(`users/${currentUserMobile}/progressTracker`).set(stObj.progressTracker);
+    }
+
+    function isProgressCompleted(type, index) {
+      let stObj = getStudentTracker();
+      let c = studentNavState.course;
+      let b = studentNavState.branch;
+      let sem = studentNavState.sem;
+      let sub = studentNavState.subject;
+      let ch = studentNavState.chapter;
+
+      try {
+        return !!stObj.progressTracker[c][b][sem][sub][ch][type][index];
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function renderProgressDashboard() {
+      let dashView = document.getElementById("progressContent");
+      if (!dashView) return;
+      dashView.innerHTML = "";
+
+      let c = studentNavState.course;
+      let b = studentNavState.branch;
+      let sem = studentNavState.sem;
+
+      if (!data[c] || !data[c][b] || !data[c][b][sem]) {
+        dashView.innerHTML = "<p>No data to analyze for this semester.</p>";
+        return;
+      }
+
+      let semesterData = data[c][b][sem];
+      let stObj = getStudentTracker();
+      let overallContentSum = 0;
+      let overallCompletedSum = 0;
+
+      let htmlOutput = "";
+
+      for (let subName in semesterData) {
+        if (subName === "_initialized") continue;
+        let totalItems = 0;
+        let completedItems = 0;
+        let breakdown = { video: { t: 0, c: 0 }, pdf: { t: 0, c: 0 }, assign: { t: 0, c: 0 }, hw: { t: 0, c: 0 } };
+
+        let subChapters = semesterData[subName];
+        if (typeof subChapters !== 'object') continue;
+        for (let chName in subChapters) {
+          if (chName === "_initialized") continue;
+          let content = subChapters[chName];
+
+          const processType = (type, alias) => {
+            let arr = [];
+            if (Array.isArray(content[type])) arr = content[type];
+            else if (typeof content[type] === "string" && content[type].trim()) arr = content[type].split('\n').filter(x => x.trim());
+
+            totalItems += arr.length;
+            breakdown[alias].t += arr.length;
+            overallContentSum += arr.length;
+
+            if (arr.length > 0) {
+              for (let i = 0; i < arr.length; i++) {
+                try {
+                  if (stObj.progressTracker[c][b][sem][subName][chName][type][i]) {
+                    completedItems++;
+                    breakdown[alias].c++;
+                    overallCompletedSum++;
+                  }
+                } catch (e) { }
+              }
+            }
+          };
+
+          processType('video', 'video');
+          processType('pdf', 'pdf');
+          processType('assignment', 'assign');
+          processType('homework', 'hw');
+        }
+
+        if (totalItems > 0) {
+          let percentage = Math.round((completedItems / totalItems) * 100);
+
+          htmlOutput += `
+            <div class="subj-progress">
+              <div class="subj-progress-title">
+                <span>${subName}</span>
+                <span>${percentage}%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: ${percentage}%"></div>
+              </div>
+              <div class="progress-details">
+                ${breakdown.video.t > 0 ? `<span>📹 Videos: ${breakdown.video.c}/${breakdown.video.t}</span>` : ""}
+                ${breakdown.pdf.t > 0 ? `<span>📄 PDFs: ${breakdown.pdf.c}/${breakdown.pdf.t}</span>` : ""}
+                ${breakdown.assign.t > 0 ? `<span>✏️ Assignments: ${breakdown.assign.c}/${breakdown.assign.t}</span>` : ""}
+                ${breakdown.hw.t > 0 ? `<span>🏠 HW: ${breakdown.hw.c}/${breakdown.hw.t}</span>` : ""}
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      if (htmlOutput) {
+        let grandTotal = overallContentSum > 0 ? Math.round((overallCompletedSum / overallContentSum) * 100) : 0;
+        dashView.innerHTML = `
+          <h4 style="color: white; margin-bottom: 20px;">Semester Completion: ${grandTotal}% (${overallCompletedSum}/${overallContentSum} items)</h4>
+          ${htmlOutput}
+        `;
+      } else {
+        dashView.innerHTML = "<p>Ask your Admin to upload Videos/PDFs to start tracking your progress!</p>";
+      }
+    }
+
+    function getProgress(chName) {
+      let stObj = getStudentTracker();
+      let c = studentNavState.course;
+      let b = studentNavState.branch;
+      let sem = studentNavState.sem;
+      let sub = studentNavState.subject;
+
+      if (!data[c] || !data[c][b] || !data[c][b][sem] || !data[c][b][sem][sub] || !data[c][b][sem][sub][chName]) return 0;
+
+      let content = data[c][b][sem][sub][chName];
+      let total = 0;
+      let completed = 0;
+
+      const check = (type) => {
+        let arr = [];
+        if (Array.isArray(content[type])) arr = content[type];
+        else if (typeof content[type] === "string" && content[type].trim()) arr = content[type].split('\n').filter(x => x.trim());
+
+        total += arr.length;
+        for (let i = 0; i < arr.length; i++) {
+          try {
+            if (stObj.progressTracker[c][b][sem][sub][chName][type][i]) completed++;
+          } catch (e) { }
+        }
+      };
+
+      check('video');
+      check('pdf');
+      check('assignment');
+      check('homework');
+
+      return total > 0 ? Math.round((completed / total) * 100) : 0;
     }
 
     // -------------- PROGRESS TRACKING LOGIC --------------
@@ -3825,12 +4033,14 @@
       let htmlOutput = "";
 
       for (let subName in semesterData) {
+        if (subName === "_initialized") continue;
         let totalItems = 0;
         let completedItems = 0;
         let breakdown = { video: { t: 0, c: 0 }, pdf: { t: 0, c: 0 }, assign: { t: 0, c: 0 }, hw: { t: 0, c: 0 } };
 
         let subChapters = semesterData[subName];
         for (let chName in subChapters) {
+          if (chName === "_initialized") continue;
           let content = subChapters[chName];
 
           const processType = (type, alias) => {
@@ -3962,12 +4172,62 @@
       }).catch(err => alert("❌ Failed to broadcast."));
     }
 
+    function openLeaderboard() {
+      document.getElementById('leaderboardModal').style.display = 'flex';
+      let list = document.getElementById('leaderboardList');
+      list.innerHTML = "<p style='color:cyan;'>Loading leaders...</p>";
+
+      database.ref('users').once('value').then(snap => {
+        let usersData = snap.val();
+        if (!usersData) {
+          list.innerHTML = "<p>No users found on platform yet.</p>";
+          return;
+        }
+        let usersArr = [];
+        for (let key in usersData) {
+          let u = usersData[key];
+          if (u.name && u.role !== 'admin') { // assume we only show students
+            usersArr.push({
+              name: u.name,
+              timeSpent: u.timeSpent || 0,
+              pic: u.profilePic || "https://ui-avatars.com/api/?name=" + encodeURIComponent(u.name) + "&background=cyan&color=000"
+            });
+          }
+        }
+        // Ranking by timeSpent highest first
+        usersArr.sort((a, b) => b.timeSpent - a.timeSpent);
+
+        list.innerHTML = "";
+        usersArr.forEach((u, idx) => {
+          let isTop = idx === 0 ? "👑 " : (idx === 1 ? "🥈 " : (idx === 2 ? "🥉 " : ""));
+          let borderCol = idx === 0 ? "gold" : (idx === 1 ? "silver" : (idx === 2 ? "#cd7f32" : "rgba(0,255,255,0.3)"));
+          let bgCol = idx === 0 ? "rgba(255,215,0,0.1)" : "rgba(255,255,255,0.05)";
+          list.innerHTML += `
+            <div style="display: flex; align-items: center; gap: 15px; background: ${bgCol}; padding: 10px; border-radius: 10px; border: 1px solid ${borderCol}; transition: transform 0.2s;">
+              <span style="font-size: 20px; font-weight: bold; width: 25px; color:${borderCol};">${idx + 1}.</span>
+              <img src="${u.pic}" style="width: 45px; height: 45px; border-radius: 50%; border: 2px solid ${borderCol}; object-fit: cover;">
+              <div style="text-align: left; flex: 1;">
+                <h4 style="margin: 0; color: white;">${isTop}${u.name}</h4>
+                <small style="color: #aaa;">Score: ${u.timeSpent} pts</small>
+              </div>
+            </div>
+          `;
+        });
+      }).catch(err => {
+        list.innerHTML = "<p style='color:red;'>Failed to load leaderboard.</p>";
+      });
+    }
+
+    function closeLeaderboard() {
+      document.getElementById('leaderboardModal').style.display = 'none';
+    }
+
     function enterSite() {
       requestNotificationPermission();
       document.getElementById("welcomeScreen").style.display = "none";
       document.querySelector("header").style.display = "flex";
       document.getElementById("programsWrapper").style.display = "block";
-
+      startTimeTracking(); // start time tracking when they enter
       // Setup profile pic in header
       let stObj = JSON.parse(localStorage.getItem(currentUserMobile) || "{}");
       if (stObj.profilePic) {
@@ -3976,6 +4236,47 @@
         document.getElementById('userProfilePicHeader').src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(stObj.name || 'U') + "&background=cyan&color=000";
       }
       document.getElementById('userProfilePicHeader').style.display = 'block';
+      setTimeout(restoreNavState, 100);
+    }
+
+    function saveNavState() {
+      if (!currentUserMobile) return;
+      let state = {
+        studentNavState: studentNavState,
+        currentNavLevel: currentNavLevel,
+        timestamp: Date.now()
+      };
+      localStorage.setItem(currentUserMobile + "_navState", JSON.stringify(state));
+    }
+
+    function restoreNavState() {
+      if (!currentUserMobile) return;
+      let saved = localStorage.getItem(currentUserMobile + "_navState");
+      if (!saved) return;
+
+      let state = JSON.parse(saved);
+      if (Date.now() - state.timestamp > 2 * 60 * 60 * 1000) return; // 2 hour expiry
+
+      studentNavState = state.studentNavState;
+      let targetLevel = state.currentNavLevel;
+
+      if (targetLevel === 'programs') {
+        goBackToPrograms();
+      } else if (targetLevel === 'branches') {
+        openStudentLevel('course', studentNavState.course);
+      } else if (targetLevel === 'semesters') {
+        openStudentLevel('branch', studentNavState.branch);
+      } else if (targetLevel === 'subjects') {
+        openStudentLevel('semester', studentNavState.sem);
+      } else if (targetLevel === 'chapters' || studentNavState.chapter) {
+        openStudentLevel('semester', studentNavState.sem);
+        if (studentNavState.subject) {
+          openStudentLevel('subject', studentNavState.subject);
+          if (studentNavState.chapter) {
+            openStudentChapter(studentNavState.chapter);
+          }
+        }
+      }
     }
 
     function goBackToPrograms() {
@@ -4012,14 +4313,17 @@
         currentNavLevel = 'semesters';
         let sems = data[studentNavState.course][selection];
         for (let s in sems) {
+          if (s === "_initialized") continue;
           html += `<div class="box" onclick="openStudentLevel('semester', '${s}')">📅 Semester ${s}</div>`;
         }
+        renderProgressDashboard(); // Show analytics on semester selection page
       }
       else if (level === 'semester') {
         studentNavState.sem = selection;
         currentNavLevel = 'subjects';
         let subs = data[studentNavState.course][studentNavState.branch][selection];
         for (let su in subs) {
+          if (su === "_initialized") continue;
           html += `<div class="box" onclick="openStudentLevel('subject', '${su}')">📘 ${su}</div>`;
         }
       }
@@ -4034,10 +4338,15 @@
         document.getElementById("subjectTitle").innerText = `📚 ${selection}`;
 
         for (let ch in chapters) {
+          if (ch === "_initialized") continue;
+          let prog = getProgress(ch);
           let li = document.createElement("li");
           li.innerHTML = `
             <div style="flex:1;">
               <strong>${ch}</strong>
+              <div class="progress-bar-small" style="background: rgba(255,255,255,0.1); border-radius: 5px; height: 6px; margin-top: 5px; width: 80%;">
+                <div style="background: #00e676; width: ${prog}%; height: 100%; border-radius: 5px; transition: width 0.3s;"></div>
+              </div>
             </div>
             <button class="login-btn" onclick="openStudentChapter('${ch}')" style="margin:0; padding: 5px 15px; width:auto; font-size: 14px; margin-left:15px;">Open</button>
           `;
@@ -4047,6 +4356,7 @@
       if (level !== 'subject') {
         container.innerHTML = html;
       }
+      saveNavState();
     }
 
     function goBackDynamicNav() {
@@ -4059,11 +4369,13 @@
       } else if (currentNavLevel === 'subjects') {
         openStudentLevel('branch', studentNavState.branch);
       }
+      saveNavState();
     }
 
     function goBackToSubjects() {
       document.getElementById("chapters").style.display = "none";
       openStudentLevel('semester', studentNavState.sem);
+      saveNavState();
     }
 
     function openStudentChapter(ch) {
@@ -4072,6 +4384,7 @@
       document.getElementById("content").style.display = "block";
 
       document.getElementById("chapterTitle").innerText = ch;
+      saveNavState();
 
       let c = studentNavState.course;
       let b = studentNavState.branch;
@@ -4107,6 +4420,10 @@
           iframe.style.maxWidth = "100%";
           iframe.src = v;
           wrapper.appendChild(iframe);
+
+          // Auto-mark as completed
+          toggleProgress('video', idx, true);
+
           vContainer.appendChild(wrapper);
         });
         document.getElementById("videoSection").style.display = "block";
@@ -4118,11 +4435,12 @@
       const renderBlock = (arr, elementId, secId, type) => {
         let wrapper = document.getElementById(elementId);
         wrapper.innerHTML = "";
-
         if (arr.length > 0) {
           arr.forEach((text, idx) => {
             let pDiv = document.createElement("div");
             pDiv.innerHTML = formatTextBlocks([text]);
+            // Auto-mark as completed
+            toggleProgress(type, idx, true);
             pDiv.appendChild(document.createElement("hr"));
             wrapper.appendChild(pDiv);
           });
@@ -4172,6 +4490,9 @@
             securityOverlay.oncontextmenu = () => false; // Prevent right-click options in this zone
             wrapper.appendChild(securityOverlay);
 
+            // Auto-mark as completed
+            toggleProgress('pdf', idx, true);
+
             wrapper.style.marginBottom = "15px";
             pContainer.appendChild(wrapper);
           }
@@ -4190,6 +4511,7 @@
     function goBackChapter() {
       document.getElementById("content").style.display = "none";
       document.getElementById("chapters").style.display = "block";
+      saveNavState();
     }
 
     function toggleTask(checkbox) {
