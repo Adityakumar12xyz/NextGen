@@ -83,8 +83,9 @@
       align-items: center;
       text-align: center;
       background: radial-gradient(circle at center, #001f3f, #000);
-      position: absolute;
+      position: fixed;
       width: 100%;
+      height: 100vh;
       top: 0;
       left: 0;
       z-index: 999;
@@ -322,12 +323,18 @@
 
     /* WELCOME */
     #welcomeScreen {
-      height: 100vh;
-      display: flex;
+      display: none;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       text-align: center;
+      position: fixed;
+      width: 100%;
+      height: 100vh;
+      top: 0;
+      left: 0;
+      background: radial-gradient(circle at center, #001f3f, #000);
+      z-index: 998;
     }
 
     #typingText {
@@ -1141,10 +1148,8 @@
 
         <div style="display: flex; gap: 10px;">
           <select id="regBranch" class="login-input" style="flex: 1;">
-            <option value="" disabled selected>Branch</option>
-            <option value="BCA">BCA</option>
-            <option value="BTECH">BTECH</option>
-            <option value="BBA">BBA</option>
+            <option value="" disabled selected>Course</option>
+            <!-- Courses injected dynamically -->
           </select>
           <select id="regSection" class="login-input" style="flex: 1;">
             <option value="" disabled selected>Section</option>
@@ -1575,10 +1580,8 @@
   <div id="programsWrapper" style="display:none;">
     <div id="homeSliderContainer" style="display:none;"></div>
     <div class="subjects" id="programs">
-      <div class="box" onclick="openStudentLevel('course', 'BCA')">🎓 BCA</div>
-      <div class="box" onclick="openStudentLevel('course', 'BTECH')">🏢 BTECH</div>
-      <div class="box" onclick="openStudentLevel('course', 'BBA')">💼 BBA</div>
-      <div class="box premium-box" onclick="openPremiumHub()">
+      <!-- Courses injected dynamically -->
+      <div class="box premium-box" onclick="openPremiumHub()" id="premiumLinkBox">
         <h1>💎</h1>Premium Notes & Book
       </div>
     </div>
@@ -1636,16 +1639,7 @@
     <h2 style="color: gold; text-shadow: 0 0 10px gold; font-size: 28px;">💎 Premium Notes & Book</h2>
     <p style="color: #ddd;">Unlock exclusive exam-oriented materials!</p>
     <div id="premiumCoursesContainer" class="subjects">
-      <!-- Injected dynamically or statically -->
-      <div class="box" onclick="showPremiumOptions('BCA')">
-        <h1>🎓</h1>Premium BCA
-      </div>
-      <div class="box" onclick="showPremiumOptions('BTECH')">
-        <h1>🏢</h1>Premium BTECH
-      </div>
-      <div class="box" onclick="showPremiumOptions('BBA')">
-        <h1>💼</h1>Premium BBA
-      </div>
+      <!-- Courses injected dynamically -->
     </div>
     <div id="premiumOptionsContainer" class="subjects" style="display:none;">
       <!-- Injected dynamically based on selection -->
@@ -1744,7 +1738,7 @@
   </div>
 
   <!-- CONTENT -->
-  <div class="content" id="content">
+  <div class="content" id="content" style="display:none;">
     <button onclick="goBackChapter()" style="margin-bottom:15px; font-size:16px;">⬅ Back</button>
     <h2 id="chapterTitle"></h2>
 
@@ -1810,8 +1804,8 @@
     </div>
   </div>
 
-  <footer
-    style="text-align: center; padding: 20px; margin-top: auto; border-top: 1px solid rgba(0, 255, 255, 0.3); padding-bottom: 20px; color: #ccc;">
+  <footer id="mainFooter"
+    style="display:none; text-align: center; padding: 20px; margin-top: auto; border-top: 1px solid rgba(0, 255, 255, 0.3); padding-bottom: 20px; color: #ccc;">
     Copyright © 2026 NextGen Library Made by @mr_insaan_kumar
   </footer>
 
@@ -1821,12 +1815,46 @@
     let i = 0;
     function typing() {
       if (i < text.length) {
-        document.getElementById("typingText").innerHTML += text.charAt(i);
+        let el = document.getElementById("typingText");
+        if (el) el.innerHTML += text.charAt(i);
         i++;
         setTimeout(typing, 100);
       }
     }
     typing();
+
+    /* PAGE NAVIGATION MANAGER */
+    function showPage(pageId) {
+      if (!pageId) return;
+      // List of all main content segments
+      const allPages = ["loginScreen", "welcomeScreen", "adminDashboard", "programsWrapper", "dynamicNavSection", "chapters", "content", "semesterMotivationSection", "premiumNavSection"];
+
+      allPages.forEach(id => {
+        let el = document.getElementById(id);
+        if (el) {
+          if (id === pageId) {
+            el.style.display = (id === "loginScreen" || id === "welcomeScreen") ? "flex" : "block";
+          } else {
+            el.style.display = "none";
+          }
+        }
+      });
+
+      // Special handling for shared elements like AI Tutor, Header, Footer, Ticker
+      const header = document.querySelector("header");
+      const footer = document.getElementById("mainFooter");
+      const aiTutor = document.getElementById("aiTutorWidget");
+      const ticker = document.getElementById("globalTicker");
+
+      const hideForAuth = ["loginScreen", "welcomeScreen", "adminDashboard"].includes(pageId);
+
+      if (header) header.style.display = hideForAuth ? "none" : "flex";
+      if (footer) footer.style.display = hideForAuth ? "none" : "block";
+      if (aiTutor) aiTutor.style.display = hideForAuth ? "none" : "block";
+      if (ticker) ticker.style.display = hideForAuth ? "none" : (globalSiteConfig.ticker ? "block" : "none");
+
+      window.scrollTo(0, 0);
+    }
 
     /* DATA */
     let oldData = {
@@ -2081,15 +2109,12 @@
     };
 
     let defaultData = {
-      "BTECH": { "CSE": {}, "ECE": {}, "ME": {}, "CE": {} },
-      "BCA": { "DDU": {}, "AKTU": {} },
-      "BBA": { "DDU": {}, "AKTU": {} }
+      "BCA": { "DDU": {}, "AKTU": {} }
     };
 
     for (let course in defaultData) {
       for (let branch in defaultData[course]) {
-        let maxSem = (course === "BTECH") ? 8 : 6;
-        for (let i = 1; i <= maxSem; i++) {
+        for (let i = 1; i <= 6; i++) {
           defaultData[course][branch][i] = JSON.parse(JSON.stringify(allSubjects));
         }
       }
@@ -2108,20 +2133,24 @@
       Promise.all([
         database.ref('courseData').once('value'),
         database.ref('premiumConfig').once('value'),
-        database.ref('premiumCourseConfigs').once('value')
+        database.ref('premiumCourseConfigs').once('value'),
+        database.ref('premiumData').once('value')
       ]).then(snapshots => {
-        let [courseSnap, pConfSnap, pCourseConfSnap] = snapshots;
+        let [courseSnap, pConfSnap, pCourseConfSnap, pDataSnap] = snapshots;
         if (courseSnap.exists() && courseSnap.val()) data = courseSnap.val();
         if (pConfSnap.exists() && pConfSnap.val()) globalPremiumConfig = pConfSnap.val();
         if (pCourseConfSnap.exists() && pCourseConfSnap.val()) globalPremiumCourseConfigs = pCourseConfSnap.val();
+        if (pDataSnap.exists() && pDataSnap.val()) premiumData = pDataSnap.val();
 
         loadSiteSettings();
+        initAdminCMS(); // Sync all dropdowns
+        renderStudentCourses();
+        renderPremiumHubCourses();
 
         let activeUser = localStorage.getItem("activeSessionMobile");
         let expTime = localStorage.getItem("activeSessionExp");
         if (localStorage.getItem("adminSession") === "true") {
-          document.getElementById("loginScreen").style.display = "none";
-          document.getElementById("adminDashboard").style.display = "block";
+          showPage("adminDashboard");
           loadAdminData();
           renderPendingPayments();
           renderActivePremiumUsers();
@@ -2130,17 +2159,23 @@
             let userData = snapshot.val();
             if (userData) {
               currentUserMobile = activeUser;
-              document.getElementById("loginScreen").style.display = "none";
-              document.getElementById("welcomeScreen").style.display = "flex";
-              document.querySelector("#welcomeScreen p").innerText += `\nWelcome back, ${userData.name}!`;
-              startTimeTracking(); // Resume tracking
-              setTimeout(restoreNavState, 500); // Allow data to populate
+
+              // Sync to LocalStorage for offline and profile access
+              localStorage.setItem(activeUser, JSON.stringify(userData));
+
+              // Show profile picture button in header
+              const picEl = document.getElementById('userProfilePicHeader');
+              if (picEl) {
+                picEl.src = userData.profilePic || `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.name || 'U')}&background=cyan&color=000`;
+                picEl.style.display = 'block';
+              }
+
+              showPage("welcomeScreen");
+              document.querySelector("#welcomeScreen p").innerText = `\nWelcome back, ${userData.name}!`;
+              startTimeTracking();
+              setTimeout(restoreNavState, 800);
             }
           });
-        } else {
-          // Clear expired session if any
-          localStorage.removeItem("activeSessionMobile");
-          localStorage.removeItem("activeSessionExp");
         }
       }).catch(err => console.error("Firebase init failed:", err));
     };
@@ -2277,10 +2312,9 @@
 
           currentUserMobile = mobile;
           alert("Registration Successful!");
-          document.getElementById("loginScreen").style.display = "none";
-          document.getElementById("welcomeScreen").style.display = "flex";
+          showPage("welcomeScreen");
           let wsP = document.querySelector("#welcomeScreen p");
-          wsP.innerText = wsP.innerText.split('\n')[0] + `\nWelcome, ${name}!`;
+          wsP.innerText = `\nWelcome, ${name}!`;
 
           btn.innerText = "Sign Up & Enter";
           btn.disabled = false;
@@ -2315,8 +2349,7 @@
           localStorage.setItem("activeSessionExp", (Date.now() + 5 * 60 * 60 * 1000).toString());
 
           currentUserMobile = mobile;
-          document.getElementById("loginScreen").style.display = "none";
-          document.getElementById("welcomeScreen").style.display = "flex";
+          showPage("welcomeScreen");
           let wsP = document.querySelector("#welcomeScreen p");
           wsP.innerText = wsP.innerText.split('\n')[0] + `\nWelcome back, ${savedData.name}!`;
 
@@ -2342,8 +2375,7 @@
         let creds = snap.val() || { user: "admin", pass: "admin123" };
         if (user === creds.user && pass === creds.pass) {
           localStorage.setItem("adminSession", "true");
-          document.getElementById("loginScreen").style.display = "none";
-          document.getElementById("adminDashboard").style.display = "block";
+          showPage("adminDashboard");
           loadAdminData();
           renderPendingPayments();
           renderActivePremiumUsers();
@@ -2354,9 +2386,9 @@
     }
 
     function adminLogout() {
+      if (!confirm("Are you sure you want to logout?")) return;
       localStorage.removeItem("adminSession");
-      document.getElementById("adminDashboard").style.display = "none";
-      document.getElementById("loginScreen").style.display = "flex";
+      showPage("loginScreen");
       toggleAuthMode('admin');
       document.getElementById("adminUser").value = "";
       document.getElementById("adminPass").value = "";
@@ -2896,16 +2928,60 @@
       "BCA": {
         "Nimcet & MCA": [],
         "Exam point of view": []
-      },
-      "BBA": {
-        "MBA": [],
-        "Exam point of view": []
-      },
-      "BTECH": {
-        "MTech": [],
-        "Semester point of view": []
       }
     };
+
+    function renderStudentCourses() {
+      const container = document.getElementById("programs");
+      const regSelect = document.getElementById("regBranch");
+      if (regSelect) regSelect.innerHTML = '<option value="" disabled selected>Course (e.g. BCA)</option>';
+
+      if (!container) return;
+      const premiumBox = document.getElementById("premiumLinkBox");
+
+      // Clear but keep premium box
+      Array.from(container.children).forEach(child => {
+        if (child !== premiumBox) container.removeChild(child);
+      });
+
+      for (let course in data) {
+        let icon = "🎓";
+        if (course.includes("BTECH")) icon = "🏢";
+        else if (course.includes("BBA")) icon = "💼";
+        else if (course.includes("LAW")) icon = "⚖️"; // Keep existing LAW icon logic
+
+        let box = document.createElement("div");
+        box.className = "box";
+        box.onclick = () => openStudentLevel('course', course);
+        box.innerHTML = `<h1>${icon}</h1>${course}`; // Changed to h1
+        container.insertBefore(box, premiumBox);
+
+        if (regSelect) {
+          let opt = document.createElement("option");
+          opt.value = course;
+          opt.innerText = course;
+          regSelect.appendChild(opt);
+        }
+      }
+    }
+
+    function renderPremiumHubCourses() {
+      const container = document.getElementById("premiumCoursesContainer");
+      if (!container) return;
+      container.innerHTML = "";
+
+      for (let course in premiumData) {
+        let icon = "🎓";
+        if (course.includes("BTECH")) icon = "🏢";
+        else if (course.includes("BBA")) icon = "💼";
+
+        let box = document.createElement("div");
+        box.className = "box";
+        box.onclick = () => showPremiumOptions(course);
+        box.innerHTML = `<h1>${icon}</h1>Premium ${course}`;
+        container.appendChild(box);
+      }
+    }
 
     function savePremiumData() {
       database.ref('premiumData').set(premiumData).then(() => {
@@ -3019,12 +3095,17 @@
     let cmsSelection = { course: "", branch: "", sem: "", sub: "", ch: "" };
 
     function initAdminCMS() {
-      const courseSelect = document.getElementById("cmsCourse");
-      const subCourseSelect = document.getElementById("subCourse");
+      const selectors = [
+        document.getElementById("cmsCourse"),
+        document.getElementById("premConfigCourse"),
+        document.getElementById("premCmsCourse"),
+        document.getElementById("deleteCourseSelect"),
+        document.getElementById("subCourse")
+      ];
 
-      [courseSelect, subCourseSelect].forEach(sel => {
+      selectors.forEach(sel => {
         if (!sel) return;
-        sel.innerHTML = '<option value="" disabled selected>Course</option>';
+        sel.innerHTML = '<option value="" disabled selected>Select Course</option>';
         for (let c in data) {
           let opt = document.createElement("option");
           opt.value = c;
@@ -3035,17 +3116,53 @@
     }
 
     function onAdminCMSCourseChange() {
-      let c = document.getElementById("cmsCourse").value;
+      cmsSelection.course = document.getElementById("cmsCourse").value;
       let bSelect = document.getElementById("cmsBranch");
       bSelect.innerHTML = '<option value="" disabled selected>Branch</option>';
-      if (data[c]) {
-        for (let b in data[c]) {
+      if (data[cmsSelection.course]) {
+        for (let b in data[cmsSelection.course]) {
           let opt = document.createElement("option"); opt.value = b; opt.innerText = b; bSelect.appendChild(opt);
         }
       }
-      document.getElementById("cmsInteractionArea").innerHTML = '<p style="color: #888; text-align: center; padding: 20px;">Select Branch to manage Semesters.</p>';
+      renderCmsBranches();
       document.getElementById("cmsContentEditor").style.display = "none";
-      cmsSelection = { course: c, branch: "", sem: "", sub: "", ch: "" };
+      cmsSelection.branch = "";
+      cmsSelection.sem = "";
+      cmsSelection.sub = "";
+      cmsSelection.ch = "";
+    }
+
+    function renderCmsBranches() {
+      let { course } = cmsSelection;
+      if (!course) return;
+      let area = document.getElementById("cmsInteractionArea");
+      area.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+           <h4 style="color: cyan; margin:0;">🏢 Branches in ${course}</h4>
+           <button class="login-btn" onclick="addCMSBranch()" style="width: auto; margin:0; background: #00cec9; color: black; padding: 5px 15px;">➕ Add Branch</button>
+        </div>
+        <div id="cmsListContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;"></div>
+      `;
+      let list = document.getElementById("cmsListContainer");
+      let branches = data[course] ? Object.keys(data[course]) : [];
+      if (branches.length === 0) {
+        list.innerHTML = "<p style='grid-column: 1/-1; color: #888; text-align: center;'>No branches found. Add one above! (e.g. DDU, AKTU, CSE)</p>";
+      } else {
+        branches.forEach(b => {
+          let item = document.createElement("div");
+          item.className = "box";
+          item.style.display = "flex";
+          item.style.justifyContent = "space-between";
+          item.style.alignItems = "center";
+          item.style.padding = "10px 15px";
+          item.innerHTML = `
+            <span onclick="cmsSelection.branch='${b}'; document.getElementById('cmsBranch').value='${b}'; renderCmsSemesters()" style="cursor:pointer; flex: 1;">🏢 ${b}</span>
+            <button onclick="deleteCMSBranch('${b}')" style="background: #ff4757; border: none; color: white; border-radius: 4px; padding: 2px 6px; cursor: pointer; font-size: 12px;">Delete</button>
+          `;
+          list.appendChild(item);
+        });
+      }
+      document.getElementById("cmsContentEditor").style.display = "none";
     }
 
     function onAdminCMSBranchChange() {
@@ -3056,11 +3173,15 @@
 
     function renderCmsSemesters() {
       let { course, branch } = cmsSelection;
+      if (!course || !branch) return;
       let area = document.getElementById("cmsInteractionArea");
       area.innerHTML = `
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-           <h4 style="color: cyan; margin:0;">📅 Semesters in ${branch}</h4>
-           <button class="login-btn" onclick="addCMSSemester()" style="width: auto; margin:0; background: #00cec9; color: black; padding: 5px 15px;">➕ Add Sem</button>
+        <div style="margin-bottom: 15px;">
+           <button onclick="renderCmsBranches()" style="background: none; border: 1px solid cyan; color: cyan; padding: 5px 10px; border-radius: 5px; cursor: pointer; margin-bottom: 10px;">⬅️ Back to Branches</button>
+           <div style="display: flex; justify-content: space-between; align-items: center;">
+             <h4 style="color: cyan; margin:0;">📅 Semesters in ${branch}</h4>
+             <button class="login-btn" onclick="addCMSSemester()" style="width: auto; margin:0; background: #00cec9; color: black; padding: 5px 15px;">➕ Add Sem</button>
+           </div>
         </div>
         <div id="cmsListContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;"></div>
       `;
@@ -3272,7 +3393,6 @@
       database.ref(`courseData/${course}/${branch}/${newSem}`).set(initPayload).then(() => {
         alert(`✅ Semester '${newSem}' added successfully!`);
         renderCmsSemesters();
-        initAdminCMS(); // Sync dropdowns
       }).catch(err => alert("❌ Failed to add semester: " + err));
     }
 
@@ -3286,6 +3406,31 @@
           initAdminCMS();
         }).catch(err => alert("❌ Failed to delete semester: " + err));
       }
+    }
+
+    function addCMSBranch() {
+      let { course } = cmsSelection;
+      if (!course) return alert("Select Course first.");
+      let bName = prompt("Enter NEW branch name (e.g. CSE, DDU, AKTU):");
+      if (!bName || bName.trim() === "") return;
+      bName = bName.trim();
+      if (data[course][bName]) return alert("Branch already exists!");
+
+      data[course][bName] = { _initialized: true };
+      database.ref(`courseData/${course}/${bName}`).set({ _initialized: true }).then(() => {
+        alert(`✅ Branch '${bName}' added!`);
+        onAdminCMSCourseChange(); // Refresh branches and dropdown
+      });
+    }
+
+    function deleteCMSBranch(branch) {
+      if (!confirm(`Are you sure you want to delete branch '${branch}' and all its content?`)) return;
+      let { course } = cmsSelection;
+      delete data[course][branch];
+      database.ref(`courseData/${course}/${branch}`).remove().then(() => {
+        alert(`🗑️ Branch '${branch}' deleted.`);
+        onAdminCMSCourseChange();
+      });
     }
 
     function addCMSSubject() {
@@ -3343,11 +3488,27 @@
       };
 
       database.ref(`courseData/${newCourse}`).set(data[newCourse]).then(() => {
-        /* localStorage save removed to rely on Firebase */
         document.getElementById("newCourseName").value = "";
-        alert(`✅ Course '${newCourse}' added successfully! Branches 'General' and Semesters 1-6 created by default.`);
+        alert(`✅ Course '${newCourse}' added successfully!`);
         initAdminCMS(); // Reload dropdowns
       });
+    }
+
+    function deleteAdminCourse() {
+      let course = document.getElementById("deleteCourseSelect").value;
+      if (!course) return alert("Select a course to delete.");
+      if (!confirm(`CRITICAL: Are you sure you want to delete the ENTIRE course '${course}'? This cannot be undone.`)) return;
+
+      delete data[course];
+      if (premiumData[course]) delete premiumData[course];
+
+      Promise.all([
+        database.ref(`courseData/${course}`).remove(),
+        database.ref(`premiumData/${course}`).remove()
+      ]).then(() => {
+        alert(`🗑️ Course '${course}' deleted successfully!`);
+        initAdminCMS();
+      }).catch(err => alert("❌ Failed to delete course: " + err));
     }
 
     // Redundant Semester Management functions removed (moved to integrated CMS)
@@ -3469,7 +3630,7 @@
         document.getElementById("editMobile").value = foundUser.mobile;
 
         document.querySelector("#editProfileScreen h2").innerText = "🛠️ Fix Registration Details";
-        document.getElementById("editProfileScreen").style.display = "flex";
+        showPage("editProfileScreen");
       } else {
         alert("Sorry, no account found matching this University Roll Number / Registation Number. You may need to Sign Up first.");
       }
@@ -3492,138 +3653,8 @@
       return true;
     }
 
-    function handleSignUp() {
-      let name = document.getElementById("regName").value.trim();
-      let roll = document.getElementById("regRoll").value.trim();
-      let branch = document.getElementById("regBranch").value;
-      let section = document.getElementById("regSection").value;
-      let mobile = document.getElementById("regMobile").value.trim();
+    /* Duplicated Auth Functions Removed - Consolidated at top of script */
 
-      if (!name || !roll || !branch || !section || !mobile) {
-        alert("Please fill in all details to register!");
-        return;
-      }
-
-      if (!validateInput(name, roll, mobile)) return;
-
-      // Disable button to prevent double clicks
-      let btn = document.querySelector("#signUpForm .login-btn");
-      btn.innerText = "Registering...";
-      btn.disabled = true;
-
-      // Check if user already exists
-      database.ref('users/' + mobile).once('value').then((snapshot) => {
-        if (snapshot.exists()) {
-          alert("An account with this mobile number already exists! Please login.");
-          toggleAuthMode('login');
-          btn.innerText = "Sign Up & Enter";
-          btn.disabled = false;
-          return;
-        }
-
-        let userData = {
-          name,
-          roll,
-          branch,
-          section,
-          mobile,
-          registeredAt: Date.now()
-        };
-
-        database.ref('users/' + mobile).set(userData).then(() => {
-          // Sync to local for offline backwards compatibility for progress trackers
-          localStorage.setItem(mobile, JSON.stringify(userData));
-
-          // Save Persistent Session (5 hours = 5 * 60 * 60 * 1000 ms)
-          localStorage.setItem("activeSessionMobile", mobile);
-          localStorage.setItem("activeSessionExp", (Date.now() + 5 * 60 * 60 * 1000).toString());
-
-          currentUserMobile = mobile;
-
-          alert("Registration Successful! Welcome to NextGen Library.");
-          document.getElementById("loginScreen").style.display = "none";
-          document.getElementById("welcomeScreen").style.display = "flex";
-
-          // Update welcome text with Name
-          let wsP = document.querySelector("#welcomeScreen p");
-          wsP.innerText = wsP.innerText.split('\n')[0] + `\nWelcome, ${name}!`;
-
-          btn.innerText = "Sign Up & Enter";
-          btn.disabled = false;
-
-          // Start Active Time Tracker
-          startTimeTracking();
-        }).catch(err => {
-          console.error(err);
-          alert("Network error, please try again.");
-          btn.innerText = "Sign Up & Enter";
-          btn.disabled = false;
-        });
-      });
-    }
-
-    function handleLogin() {
-      let name = document.getElementById("loginName").value.trim();
-      let mobile = document.getElementById("loginMobile").value.trim();
-      let section = document.getElementById("loginSection").value;
-
-      if (!name || !mobile || !section) {
-        alert("Please enter Name, Section, and Mobile Number!");
-        return;
-      }
-
-      let btn = document.querySelector("#loginForm .login-btn");
-      btn.innerText = "Logging in...";
-      btn.disabled = true;
-
-      database.ref('users/' + mobile).once('value').then((snapshot) => {
-        let savedData = snapshot.val();
-
-        if (savedData) {
-          if (savedData.name.toLowerCase() === name.toLowerCase() && savedData.section === section) {
-
-            // Backwards compatibility sync
-            let stObj = JSON.parse(localStorage.getItem(mobile)) || {};
-            let merged = { ...savedData, progressTracker: stObj.progressTracker || {} };
-            localStorage.setItem(mobile, JSON.stringify(merged));
-
-            // Save Persistent Session
-            localStorage.setItem("activeSessionMobile", mobile);
-            localStorage.setItem("activeSessionExp", (Date.now() + 5 * 60 * 60 * 1000).toString());
-
-            currentUserMobile = mobile;
-            document.getElementById("loginScreen").style.display = "none";
-            document.getElementById("welcomeScreen").style.display = "flex";
-            let wsP = document.querySelector("#welcomeScreen p");
-            wsP.innerText = wsP.innerText.split('\n')[0] + `\nWelcome back, ${savedData.name}!`;
-            let localCache = JSON.parse(localStorage.getItem(mobile)) || {};
-            localCache.timeSpent = savedData.timeSpent || 0;
-            localStorage.setItem(mobile, JSON.stringify(localCache));
-
-            // Start tracking active platform usage
-            startTimeTracking();
-
-            // Restore theme preference
-            if (savedData.theme === "light") {
-              document.body.classList.add("light");
-              let themeBtn = document.getElementById("themeToggleBtn");
-              if (themeBtn) themeBtn.innerText = "🌙";
-            }
-          } else {
-            alert("Incorrect Name or Section for this Mobile Number.");
-          }
-        } else {
-          alert("Mobile number not found! Please sign up first.");
-          toggleAuthMode('signup');
-        }
-        btn.innerText = "Log In";
-        btn.disabled = false;
-      }).catch(err => {
-        alert("Network Error, please try again.");
-        btn.innerText = "Log In";
-        btn.disabled = false;
-      });
-    }
 
     // EDIT PROFILE FUNCTIONS
     let editProfilePicBase64 = null;
@@ -3656,9 +3687,7 @@
       isRecoveringMode = false;
       document.querySelector("#editProfileScreen h2").innerText = "✏️ Edit Profile";
 
-      let savedData = localStorage.getItem(currentUserMobile);
-      if (savedData) {
-        let user = JSON.parse(savedData);
+      const showModal = (user) => {
         document.getElementById("editName").value = user.name || "";
         document.getElementById("editRoll").value = user.roll || "";
         document.getElementById("editBranch").value = user.branch || "BCA";
@@ -3674,6 +3703,22 @@
 
         document.getElementById('editProfilePicInput').value = ""; // Reset the file input
         document.getElementById("editProfileScreen").style.display = "flex";
+      };
+
+      let savedData = localStorage.getItem(currentUserMobile);
+      if (savedData) {
+        showModal(JSON.parse(savedData));
+      } else {
+        // Fallback: Fetch from Firebase if localStorage is empty
+        database.ref('users/' + currentUserMobile).once('value').then(snap => {
+          if (snap.exists()) {
+            const user = snap.val();
+            localStorage.setItem(currentUserMobile, JSON.stringify(user));
+            showModal(user);
+          } else {
+            alert("User data not found. Please log in again.");
+          }
+        });
       }
     }
 
@@ -3775,10 +3820,7 @@
       localStorage.removeItem("activeSessionExp");
       currentUserMobile = "";
       closeEditProfile();
-      document.getElementById("welcomeScreen").style.display = "none";
-      document.getElementById("programsWrapper").style.display = "none";
-      document.querySelector("header").style.display = "none";
-      document.getElementById("loginScreen").style.display = "flex";
+      showPage("loginScreen");
       toggleAuthMode('login');
       if (timeSpentInterval) clearInterval(timeSpentInterval);
     }
@@ -4224,9 +4266,7 @@
 
     function enterSite() {
       requestNotificationPermission();
-      document.getElementById("welcomeScreen").style.display = "none";
-      document.querySelector("header").style.display = "flex";
-      document.getElementById("programsWrapper").style.display = "block";
+      showPage("programsWrapper");
       startTimeTracking(); // start time tracking when they enter
       // Setup profile pic in header
       let stObj = JSON.parse(localStorage.getItem(currentUserMobile) || "{}");
