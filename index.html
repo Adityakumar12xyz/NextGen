@@ -1135,7 +1135,8 @@
           style="width: 80px; height: 80px; margin-bottom: 10px; filter: drop-shadow(0 0 10px cyan);">
         <h2>📝 NextGen Library Registration</h2>
         <input type="text" id="regName" class="login-input" placeholder="Name (Letters & Spaces only)">
-        <input type="number" id="regRoll" class="login-input" placeholder="University Roll Number / Registation Number (13 Digits)"
+        <input type="number" id="regRoll" class="login-input"
+          placeholder="University Roll Number / Registation Number (13 Digits)"
           style="appearance: none; -moz-appearance: textfield;">
 
         <div style="display: flex; gap: 10px;">
@@ -1222,7 +1223,8 @@
           onchange="previewEditProfilePic(event)" style="padding: 5px;">
       </div>
       <input type="text" id="editName" class="login-input" placeholder="Name (Letters & Spaces only)">
-      <input type="number" id="editRoll" class="login-input" placeholder="University Roll Number / Registation Number (13 Digits)"
+      <input type="number" id="editRoll" class="login-input"
+        placeholder="University Roll Number / Registation Number (13 Digits)"
         style="appearance: none; -moz-appearance: textfield;">
 
       <div style="display: flex; gap: 10px;">
@@ -1260,22 +1262,6 @@
       <div style="display: flex; gap: 10px; margin-top: 10px;">
         <button onclick="exportToExcel()" style="background: #28a745; color: white;">📊 Export to Excel</button>
         <button onclick="adminLogout()" style="background: #ff4757; color: white;">Logout Admin</button>
-      </div>
-    </div>
-
-    <!-- Analytics Snapshot Feature -->
-    <div id="adminAnalyticsSnapshot" style="display: flex; gap: 15px; margin: 20px 0; flex-wrap: wrap;">
-      <div class="box" style="flex: 1; min-width: 150px; background: rgba(0,255,255,0.1); border-color: cyan;">
-        <h3 style="margin:0; font-size: 14px; color: #aaa;">Total Users</h3>
-        <p id="statTotalUsers" style="font-size: 24px; font-weight: bold; color: white; margin: 5px 0 0 0;">0</p>
-      </div>
-      <div class="box" style="flex: 1; min-width: 150px; background: rgba(255,215,0,0.1); border-color: gold;">
-        <h3 style="margin:0; font-size: 14px; color: #aaa;">Premium Users</h3>
-        <p id="statPremiumUsers" style="font-size: 24px; font-weight: bold; color: gold; margin: 5px 0 0 0;">0</p>
-      </div>
-      <div class="box" style="flex: 1; min-width: 150px; background: rgba(255,100,100,0.1); border-color: #ff6b6b;">
-        <h3 style="margin:0; font-size: 14px; color: #aaa;">Total Content</h3>
-        <p id="statTotalContent" style="font-size: 24px; font-weight: bold; color: #ff6b6b; margin: 5px 0 0 0;">0</p>
       </div>
     </div>
 
@@ -1685,8 +1671,7 @@
 
   <!-- DYNAMIC NAVIGATION SECTION -->
   <div id="dynamicNavSection" style="display:none; text-align:center;">
-    <button id="dynamicNavBackBtn" onclick="goBackDynamicNav()"
-      style="margin-bottom:20px; padding: 12px 20px; font-size:16px;">⬅ Back</button>
+    <button onclick="goBackDynamicNav()" style="margin-bottom:20px; padding: 10px 20px; font-size:16px;">⬅ Back</button>
     <div id="branchSliderContainer" style="display:none;"></div>
     <div id="dynamicNavContainer" class="subjects"></div>
   </div>
@@ -2157,135 +2142,51 @@
       }
     }
 
-    let data = JSON.parse(localStorage.getItem("courseData")) || defaultData;
+    let data = defaultData;
+    let globalSiteConfig = { ticker: "", welcome: "", about: "", premiumEnabled: true, banners: [] };
+    let globalPremiumConfig = { qr: "", upi: "", amount: "" };
+    let globalPremiumCourseConfigs = {};
     let isRecoveringMode = false;
     let currentUserMobile = "";
 
-    // STATE MAINTENANCE
-    function saveNavState() {
-      if (typeof Storage !== "undefined") {
-        let state = {
-          studentNavState: typeof studentNavState !== 'undefined' ? studentNavState : { course: "", branch: "", sem: "", subject: "", chapter: "" },
-          currentNavLevel: typeof currentNavLevel !== 'undefined' ? currentNavLevel : 'course',
-          visibleSections: {
-            loginScreen: document.getElementById("loginScreen").style.display,
-            welcomeScreen: document.getElementById("welcomeScreen").style.display,
-            adminDashboard: document.getElementById("adminDashboard").style.display,
-            dynamicNavSection: document.getElementById("dynamicNavSection").style.display,
-            programsWrapper: document.getElementById("programsWrapper").style.display,
-            semesterMotivationSection: document.getElementById("semesterMotivationSection").style.display,
-            chapters: document.getElementById("chapters").style.display,
-            content: document.getElementById("content").style.display
-          }
-        };
-        sessionStorage.setItem("nextgenNavState", JSON.stringify(state));
-      }
-    }
-
-    function restoreNavState() {
-      if (typeof Storage !== "undefined") {
-        let savedState = sessionStorage.getItem("nextgenNavState");
-        if (savedState) {
-          try {
-            let state = JSON.parse(savedState);
-
-            // Restore visibility if the user was not on the login screen
-            if (state.visibleSections.loginScreen === "none") {
-              if (typeof studentNavState !== 'undefined') {
-                studentNavState = state.studentNavState;
-              }
-              if (typeof currentNavLevel !== 'undefined') {
-                currentNavLevel = state.currentNavLevel;
-              }
-
-              // Restore UI views
-              if (document.getElementById("loginScreen")) document.getElementById("loginScreen").style.display = state.visibleSections.loginScreen;
-              if (document.getElementById("welcomeScreen")) document.getElementById("welcomeScreen").style.display = state.visibleSections.welcomeScreen;
-              if (document.getElementById("adminDashboard")) document.getElementById("adminDashboard").style.display = state.visibleSections.adminDashboard;
-              if (document.getElementById("dynamicNavSection")) document.getElementById("dynamicNavSection").style.display = state.visibleSections.dynamicNavSection;
-              if (document.getElementById("programsWrapper")) document.getElementById("programsWrapper").style.display = state.visibleSections.programsWrapper;
-              if (document.getElementById("semesterMotivationSection")) document.getElementById("semesterMotivationSection").style.display = state.visibleSections.semesterMotivationSection;
-              if (document.getElementById("chapters")) document.getElementById("chapters").style.display = state.visibleSections.chapters;
-              if (document.getElementById("content")) document.getElementById("content").style.display = state.visibleSections.content;
-
-              return true; // State was restored
-            }
-          } catch (e) {
-            console.error("Error restoring navigation state", e);
-          }
-        }
-      }
-      return false; // No valid state restored
-    }
-
     // CHECK PERSISTENT LOGIN ON LOAD
     window.onload = function () {
-      loadSiteSettings();
+      Promise.all([
+        database.ref('courseData').once('value'),
+        database.ref('premiumConfig').once('value'),
+        database.ref('premiumCourseConfigs').once('value')
+      ]).then(snapshots => {
+        let [courseSnap, pConfSnap, pCourseConfSnap] = snapshots;
+        if (courseSnap.exists() && courseSnap.val()) data = courseSnap.val();
+        if (pConfSnap.exists() && pConfSnap.val()) globalPremiumConfig = pConfSnap.val();
+        if (pCourseConfSnap.exists() && pCourseConfSnap.val()) globalPremiumCourseConfigs = pCourseConfSnap.val();
 
-      // Fetch latest courseData from Firebase on every page load to ensure sync
-      database.ref('courseData').once('value').then(snapshot => {
-        let fbData = snapshot.val();
-        if (fbData) {
-          data = fbData;
-          localStorage.setItem("courseData", JSON.stringify(data));
+        loadSiteSettings();
 
-          // Re-initialize admin CMS if admin dashboard is open
-          if (document.getElementById("adminDashboard").style.display === "block") {
-            initAdminCMS();
-          }
-        }
-      }).catch(err => console.error("Could not fetch courseData from Firebase", err));
-
-      let activeUser = localStorage.getItem("activeSessionMobile");
-      let expTime = localStorage.getItem("activeSessionExp");
-      if (localStorage.getItem("adminSession") === "true") {
-        document.getElementById("loginScreen").style.display = "none";
-
-        // Restore state if available, otherwise default to admin dashboard
-        if (!restoreNavState()) {
+        let activeUser = localStorage.getItem("activeSessionMobile");
+        let expTime = localStorage.getItem("activeSessionExp");
+        if (localStorage.getItem("adminSession") === "true") {
+          document.getElementById("loginScreen").style.display = "none";
           document.getElementById("adminDashboard").style.display = "block";
-        }
-
-        loadAdminData();
-        renderPendingPayments();
-        renderActivePremiumUsers();
-      } else if (activeUser && expTime && Date.now() < parseInt(expTime)) {
-        database.ref('users/' + activeUser).once('value').then((snapshot) => {
-          let userData = snapshot.val();
-          if (userData) {
-            currentUserMobile = activeUser;
-            document.getElementById("loginScreen").style.display = "none";
-
-            // Restore state if available, otherwise default to welcome screen
-            if (!restoreNavState()) {
+          loadAdminData();
+          renderPendingPayments();
+          renderActivePremiumUsers();
+        } else if (activeUser && expTime && Date.now() < parseInt(expTime)) {
+          database.ref('users/' + activeUser).once('value').then((snapshot) => {
+            let userData = snapshot.val();
+            if (userData) {
+              currentUserMobile = activeUser;
+              document.getElementById("loginScreen").style.display = "none";
               document.getElementById("welcomeScreen").style.display = "flex";
+              document.querySelector("#welcomeScreen p").innerText += `\nWelcome back, ${userData.name}!`;
             }
-            document.querySelector("#welcomeScreen p").innerText += `\nWelcome back, ${userData.name}!`;
-
-            // Backwards compatibility sync if needed
-            localStorage.setItem(activeUser, JSON.stringify(userData));
-
-            // Start Active Time Tracker
-            startTimeTracking();
-            // Restore Time Spent memory to local if fetched
-            let localCache = JSON.parse(localStorage.getItem(activeUser)) || {};
-            localCache.timeSpent = userData.timeSpent || 0;
-            localStorage.setItem(activeUser, JSON.stringify(localCache));
-
-            // Restore theme preference
-            if (userData.theme === "light") {
-              document.body.classList.add("light");
-              let themeBtn = document.getElementById("themeToggleBtn");
-              if (themeBtn) themeBtn.innerText = "🌙";
-            }
-          }
-        });
-      } else {
-        // Clear expired session if any
-        localStorage.removeItem("activeSessionMobile");
-        localStorage.removeItem("activeSessionExp");
-        sessionStorage.removeItem("nextgenNavState");
-      }
+          });
+        } else {
+          // Clear expired session if any
+          localStorage.removeItem("activeSessionMobile");
+          localStorage.removeItem("activeSessionExp");
+        }
+      }).catch(err => console.error("Firebase init failed:", err));
     };
 
     /* AUTHENTICATION FUNCTIONS */
@@ -2315,7 +2216,6 @@
           localStorage.setItem("adminSession", "true");
           document.getElementById("loginScreen").style.display = "none";
           document.getElementById("adminDashboard").style.display = "block";
-          saveNavState();
           loadAdminData();
           renderPendingPayments();
           renderActivePremiumUsers();
@@ -2434,16 +2334,11 @@
         let hasData = false;
         let usersData = snap.val();
 
-        let totalUsersCount = 0;
-        let totalPremiumCount = 0;
-
         if (usersData) {
           for (let key in usersData) {
             let userRecord = usersData[key];
             if (userRecord && userRecord.name && userRecord.mobile && userRecord.mobile === key && userRecord.role !== "admin") {
               hasData = true;
-              totalUsersCount++;
-
               let isPremium = userRecord.premiumUnlocked && Object.keys(userRecord.premiumUnlocked).some(k => {
                 let pu = userRecord.premiumUnlocked[k];
                 if (typeof pu === 'object' && pu.active) {
@@ -2451,8 +2346,6 @@
                 }
                 return pu === true;
               });
-
-              if (isPremium) totalPremiumCount++;
 
               let rowStyle = isPremium ? "background: rgba(255, 215, 0, 0.1);" : "";
               let nameDisplay = isPremium ? `👑 <span style="color: gold;">${userRecord.name}</span>` : userRecord.name;
@@ -2474,30 +2367,6 @@
             }
           }
         }
-
-        // Update Snapshot UI
-        if (document.getElementById("statTotalUsers")) {
-          document.getElementById("statTotalUsers").innerText = totalUsersCount.toLocaleString();
-          document.getElementById("statPremiumUsers").innerText = totalPremiumCount.toLocaleString();
-
-          // Calculate total content chunks recursively
-          let contentCount = 0;
-          for (let c in data) {
-            if (c !== 'version') {
-              for (let b in data[c]) {
-                for (let sem in data[c][b]) {
-                  for (let sub in data[c][b][sem]) {
-                    for (let ch in data[c][b][sem][sub]) {
-                      contentCount++;
-                    }
-                  }
-                }
-              }
-            }
-          }
-          document.getElementById("statTotalContent").innerText = contentCount.toLocaleString();
-        }
-
         if (!hasData) {
           tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>No registered students yet.</td></tr>";
         }
@@ -2665,17 +2534,14 @@
 
     /* ADVANCED SITE SETTINGS */
     function loadSiteSettings() {
-      // First load from local storage for instant feedback
-      let localConfig = JSON.parse(localStorage.getItem("siteConfig")) || { ticker: "", welcome: "", about: "", premiumEnabled: true, banners: [] };
-      applySiteSettings(localConfig);
-
-      // Then fetch latest from Firebase
       database.ref('siteConfig').once('value').then(snapshot => {
         let fbConfig = snapshot.val();
         if (fbConfig) {
           if (!fbConfig.banners) fbConfig.banners = [];
-          localStorage.setItem("siteConfig", JSON.stringify(fbConfig));
+          globalSiteConfig = fbConfig;
           applySiteSettings(fbConfig);
+        } else {
+          applySiteSettings(globalSiteConfig);
         }
       });
     }
@@ -2741,7 +2607,7 @@
     }
 
     function saveSiteSettings() {
-      let config = JSON.parse(localStorage.getItem("siteConfig")) || { banners: [] };
+      let config = globalSiteConfig;
       let ticker = document.getElementById("siteTickerText").value.trim();
       let welcome = document.getElementById("siteWelcomeText").value.trim();
       let about = document.getElementById("siteAboutText").value.trim();
@@ -2751,7 +2617,7 @@
       let payload = { ticker, welcome, about, premiumEnabled, banners };
 
       database.ref('siteConfig').set(payload).then(() => {
-        localStorage.setItem("siteConfig", JSON.stringify(payload));
+        globalSiteConfig = payload;
         loadSiteSettings();
         alert("✅ Site settings updated!");
       }).catch(err => {
@@ -2825,7 +2691,7 @@
       if (!config.banners) return;
 
       config.banners.splice(index, 1);
-      localStorage.setItem("siteConfig", JSON.stringify(config));
+      globalSiteConfig = config;
 
       database.ref('siteConfig/banners').set(config.banners).then(() => {
         renderAdminBanners(config.banners);
@@ -3201,7 +3067,7 @@
       data[c][b][sem][sub][chap] = payload;
 
       database.ref(`courseData/${c}/${b}/${sem}/${sub}/${chap}`).set(payload).then(() => {
-        localStorage.setItem("courseData", JSON.stringify(data));
+        /* localStorage save removed to rely on Firebase */
         alert("✅ Content for '" + chap + "' has been updated successfully!");
       }).catch(err => {
         alert("❌ Failed to save content to database.");
@@ -3244,7 +3110,7 @@
       database.ref(`courseData/${c}/${b}/${sem}/${sub}/${chap}`).remove().then(() => {
         return database.ref(`courseData/${c}/${b}/${sem}/${sub}/${newName}`).set(chapData);
       }).then(() => {
-        localStorage.setItem("courseData", JSON.stringify(data));
+        /* localStorage save removed to rely on Firebase */
         onAdminSubjectChange(); // Refresh chapters dropdown
         document.getElementById("cmsChapter").value = newName;
         onAdminChapterChange();
@@ -3272,7 +3138,7 @@
       data[c][b][sem][sub][newName] = initPayload;
 
       database.ref(`courseData/${c}/${b}/${sem}/${sub}/${newName}`).set(initPayload).then(() => {
-        localStorage.setItem("courseData", JSON.stringify(data));
+        /* localStorage save removed to rely on Firebase */
         onAdminSubjectChange(); // Refresh chapters dropdown
         document.getElementById("cmsChapter").value = newName;
         onAdminChapterChange();
@@ -3294,7 +3160,7 @@
       delete data[c][b][sem][sub][chap];
 
       database.ref(`courseData/${c}/${b}/${sem}/${sub}/${chap}`).remove().then(() => {
-        localStorage.setItem("courseData", JSON.stringify(data));
+        /* localStorage save removed to rely on Firebase */
         onAdminSubjectChange();
         document.getElementById("cmsEditor").style.display = "none";
         alert("🗑️ Chapter deleted successfully!");
@@ -3329,7 +3195,7 @@
       };
 
       database.ref(`courseData/${newCourse}`).set(data[newCourse]).then(() => {
-        localStorage.setItem("courseData", JSON.stringify(data));
+        /* localStorage save removed to rely on Firebase */
         document.getElementById("newCourseName").value = "";
         alert(`✅ Course '${newCourse}' added successfully! Branches 'General' and Semesters 1-6 created by default.`);
         initAdminCMS(); // Reload dropdowns
@@ -3419,7 +3285,7 @@
       data[c][b][sem][subName] = initPayload;
 
       database.ref(`courseData/${c}/${b}/${sem}/${subName}`).set(initPayload).then(() => {
-        localStorage.setItem("courseData", JSON.stringify(data));
+        /* localStorage save removed to rely on Firebase */
         document.getElementById("newSubjectName").value = "";
         alert("✅ Subject '" + subName + "' added successfully!");
         renderAdminSubjectList();
@@ -3431,7 +3297,7 @@
       if (confirm(`Are you sure you want to delete the subject '${sub}'? This will remove all its content permanently.`)) {
         delete data[c][b][sem][sub];
         database.ref(`courseData/${c}/${b}/${sem}/${sub}`).remove().then(() => {
-          localStorage.setItem("courseData", JSON.stringify(data));
+          /* localStorage save removed to rely on Firebase */
           renderAdminSubjectList();
           onAdminSemesterChange(); // Update CMS dropdown
         });
@@ -3454,7 +3320,7 @@
       database.ref(`courseData/${c}/${b}/${sem}/${oldSub}`).remove().then(() => {
         return database.ref(`courseData/${c}/${b}/${sem}/${newSub}`).set(subData);
       }).then(() => {
-        localStorage.setItem("courseData", JSON.stringify(data));
+        /* localStorage save removed to rely on Firebase */
         renderAdminSubjectList();
         onAdminSemesterChange();
         alert("✅ Subject renamed successfully!");
@@ -3589,7 +3455,7 @@
         return false;
       }
       if (!/^\d{13}$/.test(roll)) {
-        alert("Validation Error: University Roll Number / Registation Number must be exactly 13 digits long.");
+        alert("Validation Error: DDU Roll Number must be exactly 13 digits long.");
         return false;
       }
       if (!/^\d{10}$/.test(mobile)) {
@@ -3887,7 +3753,6 @@
       document.querySelector("header").style.display = "none";
       document.getElementById("loginScreen").style.display = "flex";
       toggleAuthMode('login');
-      if (timeSpentInterval) clearInterval(timeSpentInterval);
     }
 
     // -------------- PROGRESS TRACKING LOGIC --------------
@@ -3900,30 +3765,6 @@
       return stObj;
     }
 
-    // TIME TRACKING ENGINE
-    let timeSpentInterval = null;
-    let isTabVisible = true;
-
-    document.addEventListener("visibilitychange", () => {
-      isTabVisible = !document.hidden;
-    });
-
-    function startTimeTracking() {
-      if (timeSpentInterval) clearInterval(timeSpentInterval);
-
-      timeSpentInterval = setInterval(() => {
-        if (!currentUserMobile || !isTabVisible) return;
-
-        let stObj = JSON.parse(localStorage.getItem(currentUserMobile)) || {};
-        stObj.timeSpent = (stObj.timeSpent || 0) + 1;
-
-        // Sync to Local for instant UI response if needed
-        localStorage.setItem(currentUserMobile, JSON.stringify(stObj));
-
-        // Sync to Firebase directly
-        database.ref('users/' + currentUserMobile + '/timeSpent').set(stObj.timeSpent);
-      }, 60000); // 1 minute intervals
-    }
 
     function toggleProgress(type, index, isChecked) {
       if (!currentUserMobile) return;
@@ -3944,13 +3785,7 @@
 
       stObj.progressTracker[c][b][sem][sub][ch][type][index] = isChecked;
 
-      // Keep local copy so UI feels instant
       localStorage.setItem(currentUserMobile, JSON.stringify(stObj));
-
-      // Force sync absolute source of truth to Firebase
-      database.ref(`users/${currentUserMobile}/progressTracker`).set(stObj.progressTracker).catch(err => {
-        console.error("Failed to sync progress to server:", err);
-      });
     }
 
     function isProgressCompleted(type, index) {
@@ -4132,7 +3967,6 @@
       document.getElementById("welcomeScreen").style.display = "none";
       document.querySelector("header").style.display = "flex";
       document.getElementById("programsWrapper").style.display = "block";
-      startTimeTracking(); // start time tracking when they enter
 
       // Setup profile pic in header
       let stObj = JSON.parse(localStorage.getItem(currentUserMobile) || "{}");
@@ -4144,58 +3978,9 @@
       document.getElementById('userProfilePicHeader').style.display = 'block';
     }
 
-    function openLeaderboard() {
-      document.getElementById('leaderboardModal').style.display = 'flex';
-      let list = document.getElementById('leaderboardList');
-      list.innerHTML = "<p style='color:cyan;'>Loading leaders...</p>";
-
-      database.ref('users').once('value').then(snap => {
-        let usersData = snap.val();
-        if (!usersData) {
-          list.innerHTML = "<p>No users found on platform yet.</p>";
-          return;
-        }
-        let usersArr = [];
-        for (let key in usersData) {
-          let u = usersData[key];
-          if (u.name && u.role !== 'admin') { // assume we only show students
-            usersArr.push({
-              name: u.name,
-              timeSpent: u.timeSpent || 0,
-              pic: u.profilePic || "https://ui-avatars.com/api/?name=" + encodeURIComponent(u.name) + "&background=cyan&color=000"
-            });
-          }
-        }
-        // Ranking by timeSpent highest first
-        usersArr.sort((a, b) => b.timeSpent - a.timeSpent);
-
-        list.innerHTML = "";
-        usersArr.forEach((u, idx) => {
-          let isTop = idx === 0 ? "👑 " : (idx === 1 ? "🥈 " : (idx === 2 ? "🥉 " : ""));
-          let borderCol = idx === 0 ? "gold" : (idx === 1 ? "silver" : (idx === 2 ? "#cd7f32" : "rgba(0,255,255,0.3)"));
-          let bgCol = idx === 0 ? "rgba(255,215,0,0.1)" : "rgba(255,255,255,0.05)";
-          list.innerHTML += `
-            <div style="display: flex; align-items: center; gap: 15px; background: ${bgCol}; padding: 10px; border-radius: 10px; border: 1px solid ${borderCol}; transition: transform 0.2s;">
-              <span style="font-size: 20px; font-weight: bold; width: 25px; color:${borderCol};">${idx + 1}.</span>
-              <img src="${u.pic}" style="width: 45px; height: 45px; border-radius: 50%; border: 2px solid ${borderCol}; object-fit: cover;">
-              <div style="text-align: left; flex: 1;">
-                <h4 style="margin: 0; color: white;">${isTop}${u.name}</h4>
-                <small style="color: #aaa;">Score: ${u.timeSpent} pts</small>
-              </div>
-            </div>
-          `;
-        });
-      }).catch(err => {
-        list.innerHTML = "<p style='color:red;'>Failed to load leaderboard.</p>";
-      });
-    }
-
-    function closeLeaderboard() {
-      document.getElementById('leaderboardModal').style.display = 'none';
-    }
-
     function goBackToPrograms() {
       document.getElementById("programsWrapper").style.display = "block";
+      document.getElementById("semesterMotivationSection").style.display = "none";
     }
 
     let studentNavState = { course: "", branch: "", sem: "", subject: "" };
@@ -4203,8 +3988,13 @@
 
     function openStudentLevel(level, selection) {
       document.getElementById("programsWrapper").style.display = "none";
-      document.getElementById("semesterMotivationSection").style.display = "none";
       document.getElementById("dynamicNavSection").style.display = "block";
+
+      if (level === 'semester') {
+        document.getElementById("semesterMotivationSection").style.display = "block";
+      } else {
+        document.getElementById("semesterMotivationSection").style.display = "none";
+      }
 
       let container = document.getElementById("dynamicNavContainer");
       let html = "";
@@ -4224,8 +4014,6 @@
         for (let s in sems) {
           html += `<div class="box" onclick="openStudentLevel('semester', '${s}')">📅 Semester ${s}</div>`;
         }
-        document.getElementById("semesterMotivationSection").style.display = "block";
-        renderProgressDashboard();
       }
       else if (level === 'semester') {
         studentNavState.sem = selection;
@@ -4234,12 +4022,10 @@
         for (let su in subs) {
           html += `<div class="box" onclick="openStudentLevel('subject', '${su}')">📘 ${su}</div>`;
         }
-        setupSemesterMotivation();
       }
       else if (level === 'subject') {
         studentNavState.subject = selection;
         document.getElementById("dynamicNavSection").style.display = "none";
-        document.getElementById("semesterMotivationSection").style.display = "none";
         document.getElementById("chapters").style.display = "block";
 
         let chapters = data[studentNavState.course][studentNavState.branch][studentNavState.sem][selection];
@@ -4248,43 +4034,36 @@
         document.getElementById("subjectTitle").innerText = `📚 ${selection}`;
 
         for (let ch in chapters) {
-          // Calculate Progress Dynamically
-          let prog = getProgress(ch);
-
           let li = document.createElement("li");
           li.innerHTML = `
             <div style="flex:1;">
               <strong>${ch}</strong>
-              <div class="progress-bar-small"><div class="progress-fill" style="width: ${prog}%"></div></div>
             </div>
             <button class="login-btn" onclick="openStudentChapter('${ch}')" style="margin:0; padding: 5px 15px; width:auto; font-size: 14px; margin-left:15px;">Open</button>
           `;
           chList.appendChild(li);
         }
       }
-
       if (level !== 'subject') {
         container.innerHTML = html;
-        if (level !== 'course') {
-          let btn = document.createElement("button");
-          btn.innerText = "⬅ Back";
-          btn.style.cssText = "display:block; margin: 20px auto; padding: 10px 20px; font-size:16px;";
-          btn.onclick = function () {
-            if (level === 'branch') openStudentLevel('course', studentNavState.course);
-            else if (level === 'semester') openStudentLevel('branch', studentNavState.branch);
-            else if (level === 'subject') openStudentLevel('semester', studentNavState.sem);
-          };
-          container.appendChild(btn);
-        }
       }
+    }
 
-      saveNavState();
+    function goBackDynamicNav() {
+      if (currentNavLevel === 'branches') {
+        document.getElementById("dynamicNavSection").style.display = "none";
+        document.getElementById("programsWrapper").style.display = "block";
+        currentNavLevel = 'programs';
+      } else if (currentNavLevel === 'semesters') {
+        openStudentLevel('course', studentNavState.course);
+      } else if (currentNavLevel === 'subjects') {
+        openStudentLevel('branch', studentNavState.branch);
+      }
     }
 
     function goBackToSubjects() {
       document.getElementById("chapters").style.display = "none";
       openStudentLevel('semester', studentNavState.sem);
-      saveNavState();
     }
 
     function openStudentChapter(ch) {
@@ -4293,7 +4072,6 @@
       document.getElementById("content").style.display = "block";
 
       document.getElementById("chapterTitle").innerText = ch;
-      saveNavState();
 
       let c = studentNavState.course;
       let b = studentNavState.branch;
@@ -4329,13 +4107,6 @@
           iframe.style.maxWidth = "100%";
           iframe.src = v;
           wrapper.appendChild(iframe);
-
-          // Auto-mark as completed when rendered
-          let isDone = isProgressCompleted("video", idx);
-          if (!isDone) {
-            toggleProgress('video', idx, true);
-          }
-
           vContainer.appendChild(wrapper);
         });
         document.getElementById("videoSection").style.display = "block";
@@ -4352,13 +4123,6 @@
           arr.forEach((text, idx) => {
             let pDiv = document.createElement("div");
             pDiv.innerHTML = formatTextBlocks([text]);
-
-            // Auto-mark as completed when rendered
-            let isDone = isProgressCompleted(type, idx);
-            if (!isDone) {
-              toggleProgress(type, idx, true);
-            }
-
             pDiv.appendChild(document.createElement("hr"));
             wrapper.appendChild(pDiv);
           });
@@ -4409,13 +4173,6 @@
             wrapper.appendChild(securityOverlay);
 
             wrapper.style.marginBottom = "15px";
-
-            // Auto-mark as completed when rendered
-            let isDone = isProgressCompleted("pdf", idx);
-            if (!isDone) {
-              toggleProgress('pdf', idx, true);
-            }
-
             pContainer.appendChild(wrapper);
           }
         });
@@ -4428,13 +4185,11 @@
     function goBack() {
       document.getElementById("chapters").style.display = "none";
       document.getElementById("subjects").style.display = "grid";
-      saveNavState();
     }
 
     function goBackChapter() {
       document.getElementById("content").style.display = "none";
       document.getElementById("chapters").style.display = "block";
-      saveNavState();
     }
 
     function toggleTask(checkbox) {
@@ -4448,17 +4203,11 @@
 
     function toggleMode() {
       document.body.classList.toggle("light");
-      let isLight = document.body.classList.contains("light");
       let btn = document.getElementById("themeToggleBtn");
-      if (isLight) {
+      if (document.body.classList.contains("light")) {
         btn.innerText = "🌙";
       } else {
         btn.innerText = "☀️";
-      }
-
-      // Sync Theme Preference to Firebase
-      if (currentUserMobile) {
-        database.ref(`users/${currentUserMobile}/theme`).set(isLight ? "light" : "dark");
       }
     }
 
@@ -4657,7 +4406,7 @@
     let selectedPremiumItem = "";
 
     function openPremiumHub() {
-      let config = JSON.parse(localStorage.getItem("siteConfig")) || {};
+      let config = globalSiteConfig;
       if (config.premiumEnabled === false) {
         alert("Premium features are currently disabled by Admin.");
         return;
@@ -4680,13 +4429,11 @@
         document.getElementById("premiumNavSection").style.display = "none";
         document.getElementById("programsWrapper").style.display = "block";
       }
-      saveNavState();
     }
 
     function goBackToPremiumOptions() {
       document.getElementById("premiumContentContainer").style.display = "none";
       document.getElementById("premiumOptionsContainer").style.display = "grid";
-      saveNavState();
     }
 
     function showPremiumOptions(course) {
