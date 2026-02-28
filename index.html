@@ -1358,6 +1358,43 @@
       }
     }
 
+    /* MODAL SYSTEM (REFINED) */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 20000;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(10px);
+      animation: modalFadeIn 0.3s ease;
+    }
+
+    @keyframes modalFadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .modal-content {
+      background: rgba(15, 32, 39, 0.95);
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      padding: 30px;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 500px;
+      position: relative;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 242, 254, 0.1);
+    }
+
     /* BANNER SLIDER */
     .slider-main {
       width: 100%;
@@ -2305,15 +2342,27 @@
     </div>
     <div style="display: flex; gap: 10px; align-items: center;">
       <!-- Global Search Bar -->
-      <div style="position: relative;">
-        <input type="text" id="globalSearchInput" placeholder="🔍 Search Library..." oninput="searchLibrary()"
-          style="padding: 8px 15px; border-radius: 20px; border: 1px solid rgba(0, 242, 254, 0.4); background: rgba(0,0,0,0.5); color: white; outline: none; box-shadow: 0 0 10px rgba(0,242,254,0.2); width: 200px; transition: width 0.3s;">
-        <!-- Search Results Dropdown Modal -->
-        <div id="searchResultsModal"
-          style="display: none; position: absolute; top: 45px; right: 0; width: 300px; max-height: 400px; overflow-y: auto; background: rgba(11, 19, 43, 0.95); backdrop-filter: blur(15px); border: 1px solid rgba(0,242,254,0.4); border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 10000; padding: 10px; box-sizing: border-box;">
-        </div>
+      <div class="search-wrapper">
+        <input type="text" id="globalSearchInput" placeholder="Search courses, library..." oninput="searchLibrary()">
+        <div id="searchResultsModal" class="search-dropdown"></div>
       </div>
-
+      <div id="headerWalletDisplay" style="margin-left: 15px; display: flex; align-items: center; gap: 10px;">
+        <!-- NEW NEURAL WALLET BALANCE SQUARE -->
+        <div
+          style="background: rgba(11, 19, 43, 0.8); padding: 5px 15px; border: 2px solid cyan; border-radius: 10px; font-weight: 900; box-shadow: 0 0 15px rgba(0,242,254,0.4); text-align: center; min-width: 140px;">
+          <span
+            style="color: #00f2fe; font-size: 10px; display: block; text-transform: uppercase; letter-spacing: 1px;">Neural
+            Wallet Balance</span>
+          <span style="color: gold; font-size: 18px; text-shadow: 0 0 10px gold;">🪙 <span
+              id="headerWalletBalance">0.00</span></span>
+        </div>
+        <button onclick="topUpWallet()"
+          style="background: #00cec9; border: none; color: black; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; box-shadow: 0 0 10px rgba(0, 206, 201, 0.3);">➕
+          RECHARGE</button>
+        <button onclick="openWithdrawalModal()"
+          style="background: rgba(255, 71, 87, 0.2); border: 1px solid #ff4757; color: #ff4757; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s;">💸
+          WITHDRAW</button>
+      </div>
       <button onclick="openLeaderboard()"
         style="font-size: 14px; padding: 6px 12px; background: gold; color: black; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; box-shadow: 0 0 10px gold;">🏆
         Leadership</button>
@@ -2561,6 +2610,7 @@
       </div>
       <!-- /ID CARD PREVIEW SECTION -->
 
+      <!-- Withdrawal Modal moved to bottom of body for better visibility -->
       <button class="login-btn" onclick="logoutUser()"
         style="background: linear-gradient(90deg, #ff416c, #ff4b2b); color: white; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(255,75,43,0.4); border-radius: 10px;">🚪
         Logout Identity</button>
@@ -2705,8 +2755,9 @@
       <button onclick="switchAdminTab('students')" class="admin-tab-btn active">👥 Student Database</button>
       <button onclick="switchAdminTab('cms')" class="admin-tab-btn">📝 CMS Editor</button>
       <button onclick="switchAdminTab('recharges')" class="admin-tab-btn">💰 Recharge Requests</button>
+      <button onclick="switchAdminTab('withdrawals')" class="admin-tab-btn">💸 Withdrawal Requests</button>
       <button onclick="switchAdminTab('battles')" class="admin-tab-btn">⚔️ Battle Manager</button>
-      <button onclick="switchAdminTab('premium')" class="admin-tab-btn">💎 Premium Users</button>
+      <button onclick="switchAdminTab('premium')" class="admin-tab-btn">💎 Premium MGMT</button>
       <button onclick="switchAdminTab('settings')" class="admin-tab-btn">⚙️ Site Settings</button>
     </div>
 
@@ -2728,6 +2779,51 @@
           </thead>
           <tbody id="adminTableBody">
             <!-- Rows injected via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- RECHARGE REQUESTS SECTION -->
+    <div id="adminSection_recharges" class="admin-section" style="display:none;">
+      <h3 style="color: #00cec9;">💰 Pending Wallet Recharges</h3>
+      <p style="color: #888; font-size: 13px;">Approve users who have sent money and uploaded UTR screenshot.</p>
+      <div style="overflow-x: auto;">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Type</th>
+              <th>Amount</th>
+              <th>Verification (UTR)</th>
+              <th>Proof</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="pendingRechargesTableBody">
+            <!-- Filtered for Recharges only -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PENDING WITHDRAWALS SECTION -->
+    <div id="adminSection_withdrawals" class="admin-section" style="display:none;">
+      <h3 style="color: #ff4757;">💸 Pending Withdrawal Requests</h3>
+      <p style="color: #888; font-size: 13px;">Transfer money to the user's UPI ID and mark as paid here.</p>
+      <div style="overflow-x: auto;">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Amount</th>
+              <th>UPI ID</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="pendingWithdrawalsTableBody">
+            <!-- Rows for Withdrawals only -->
           </tbody>
         </table>
       </div>
@@ -2803,7 +2899,6 @@
       </div>
     </div>
 
-    <!-- 2. ADMIN CONTENT MANAGEMENT SYSTEM -->
     <div id="adminSection_cms" class="admin-section" style="display:none;">
       <div id="adminCMS" style="margin-top: 0; border: none; padding-top: 0;">
         <h3 style="color: cyan; text-align: left;">📂 Manage Course Content</h3>
@@ -2900,10 +2995,20 @@
         </div>
       </div>
 
-      <!-- ADMIN PREMIUM CONTENT CMS -->
+      <!-- ADMIN PREMIUM CONTENT CMS MOVED TO PREMIUM SECTION -->
+
+    </div>
+
+    <!-- /DUPLICATE RECHARGES REMOVED -->
+
+    <!-- ACTIVE PREMIUM MEMBERS & MGMT -->
+    <div id="adminSection_premium" class="admin-section" style="display:none;">
+      <!-- PREMIUM MGMT EDITOR (Price/Duration/PDFs) -->
       <div id="adminPremiumCMS"
-        style="margin-top: 40px; border-top: 1px solid rgba(0, 255, 255, 0.3); padding-top: 20px;">
-        <h3 style="color: cyan; text-align: left;">💎 Manage Premium Content (PDFs)</h3>
+        style="margin-bottom: 40px; border-bottom: 2px solid rgba(255, 215, 0, 0.3); padding-bottom: 30px;">
+        <h3 style="color: gold; text-align: left;">💎 Premium Content Management</h3>
+        <p style="color: #aaa; font-size: 13px;">Set prices, durations, and manage premium PDFs for each course.</p>
+
         <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
           <select id="premCmsCourse" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
             onchange="onPremCourseChange()">
@@ -2919,6 +3024,25 @@
         </div>
 
         <div id="premEditor" style="display: none; text-align: left;">
+          <div
+            style="display:grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 10px; align-items: flex-end; margin-bottom:15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;">
+            <div>
+              <h4 id="activePremOptionTitle" style="color:cyan; margin:0; font-size:14px;">Editing: ...</h4>
+            </div>
+            <div>
+              <label style="color:#aaa; font-size:10px; display:block;">Price (Coins):</label>
+              <input type="number" id="premOptionPrice" placeholder="49" class="login-input"
+                style="width:100%; margin:0; padding:8px;">
+            </div>
+            <div>
+              <label style="color:#aaa; font-size:10px; display:block;">Duration (Days):</label>
+              <input type="number" id="premOptionDuration" placeholder="365" class="login-input"
+                style="width:100%; margin:0; padding:8px;">
+            </div>
+            <button onclick="saveOptionPrice()"
+              style="background:gold; color: black; border:none; padding:10px 15px; border-radius:4px; font-weight:bold; cursor:pointer; height:fit-content;">SET
+              PRICE</button>
+          </div>
           <div style="display: flex; gap: 10px; margin-bottom: 20px; align-items: stretch;">
             <input type="text" id="newPremOptionName" class="login-input"
               placeholder="Create New Option (e.g. MBA Agra)" style="flex: 2; margin-bottom: 0;">
@@ -2941,40 +3065,6 @@
         </div>
       </div>
 
-    </div>
-
-    <!-- PENDING WALLET RECHARGES -->
-    <div id="adminSection_recharges" class="admin-section" style="display:none;">
-      <div id="adminPendingRecharges" style="margin-top: 0; border: none; padding-top: 0;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-          <h3 style="color: #ff4757; text-align: left; margin: 0;">⏳ Pending Wallet Recharges</h3>
-          <button onclick="renderAdminRechargeRequests()"
-            style="background: rgba(0,242,254,0.1); border: 1px solid cyan; color: cyan; padding: 6px 15px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; transition: 0.3s;"
-            onmouseover="this.style.background='rgba(0,242,254,0.2)'"
-            onmouseout="this.style.background='rgba(0,242,254,0.1)'">🔄 Refresh List</button>
-        </div>
-        <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 10px; overflow-x: auto;">
-          <table style="width: 100%; text-align: left; border-collapse: collapse;">
-            <thead>
-              <tr style="border-bottom: 1px solid #ff4757;">
-                <th style="padding: 10px; color: gold;">Student</th>
-                <th style="padding: 10px; color: gold;">Amount (₹)</th>
-                <th style="padding: 10px; color: gold;">UTR</th>
-                <th style="padding: 10px; color: gold;">Proof</th>
-                <th style="padding: 10px; color: gold;">Action</th>
-              </tr>
-            </thead>
-            <tbody id="pendingRechargesTableBody">
-              <!-- Dynamically populated -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ACTIVE PREMIUM MEMBERS -->
-    <div id="adminSection_premium" class="admin-section" style="display:none;">
       <div id="adminActivePremium" style="margin-top: 0; border: none; padding-top: 0;">
         <h3 style="color: gold; text-align: left;">💎 Active Premium Members</h3>
         <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 10px; overflow-x: auto;">
@@ -2992,7 +3082,6 @@
           </table>
         </div>
       </div>
-
     </div>
 
     <!-- 5. SITE SETTINGS & BATTLES -->
@@ -3047,7 +3136,8 @@
 
     </div>
     <button class="login-btn" onclick="saveSiteSettings()"
-      style="background: #28a745; color: white; margin-top: 15px;">💾 Save Site Settings</button>
+      style="background: #28a745; color: white; margin-top: 15px;">💾
+      Save Site Settings</button>
 
     <!-- 6. NEXTGEN BATTLE ARENA MANAGER -->
     <div id="adminSection_battles" class="admin-section" style="display:none;">
@@ -3634,10 +3724,11 @@
       <div class="upi-id" id="rechargeUPIDisplay">UPI ID: adityakumar84282-1@okaxis</div>
 
       <div style="text-align: left; margin: 15px 0;">
-        <label style="color: #ccc; font-size: 14px;">Recharge Amount ₹:</label>
-        <input type="number" id="rechargeAmountInput" class="login-input" placeholder="e.g. 100"
-          style="margin-bottom: 10px;">
-
+        <div style="margin-bottom: 15px;">
+          <label style="display: block; color: #aaa; font-size: 12px; margin-bottom: 5px;">Recharge Amount (INR)</label>
+          <input type="number" id="rechargeAmountInput" class="login-input" placeholder="Enter Amount (e.g. 500)"
+            style="margin-bottom: 0;">
+        </div>
         <div class="pay-btn-group"
           style="margin-bottom: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
           <button class="pay-btn gpay-btn" onclick="payRechargeWithUpiApp('gpay')"
@@ -3933,8 +4024,54 @@
 
       // Update button styles
       document.querySelectorAll('.admin-tab-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.innerText.toLowerCase().includes(tabId.slice(0, 4)));
+        btn.classList.remove('active');
+        // Match by tabId or keywords in text
+        if (btn.onclick.toString().includes(`'${tabId}'`)) {
+          btn.classList.add('active');
+        }
       });
+
+      // Specific renders if needed
+      if (tabId === 'recharges') renderAdminRechargeRequests();
+      if (tabId === 'withdrawals') renderAdminWithdrawalRequests();
+    }
+
+    /* GLOBAL DATA FETCH */
+    let data = {};
+    let premiumPrices = JSON.parse(localStorage.getItem("premiumPrices")) || {};
+
+    database.ref('premiumPrices').on('value', snap => {
+      if (snap.exists()) {
+        premiumPrices = snap.val();
+        localStorage.setItem("premiumPrices", JSON.stringify(premiumPrices));
+      }
+    });
+
+    function saveOptionPrice(courseId, optionId, price) {
+      if (!courseId || !optionId || price === undefined) {
+        console.error("Invalid input for saveOptionPrice");
+        return;
+      }
+      database.ref(`premiumPrices/${courseId}/${optionId}`).set(price)
+        .then(() => {
+          console.log(`Price for ${courseId} - ${optionId} updated to ${price}`);
+          // Optionally update local storage and premiumPrices object immediately
+          premiumPrices[courseId] = premiumPrices[courseId] || {};
+          premiumPrices[courseId][optionId] = price;
+          localStorage.setItem("premiumPrices", JSON.stringify(premiumPrices));
+        })
+        .catch(error => {
+          console.error("Error updating price:", error);
+        });
+    }
+
+    function onPremOptionChange(courseId, optionId) {
+      const priceInput = document.getElementById('premiumOptionPriceInput');
+      if (priceInput && premiumPrices[courseId] && premiumPrices[courseId][optionId]) {
+        priceInput.value = premiumPrices[courseId][optionId];
+      } else if (priceInput) {
+        priceInput.value = ''; // Clear if no price found
+      }
     }
 
     /* DATA */
@@ -4201,9 +4338,9 @@
       }
     }
 
-    let data = defaultData;
+    data = defaultData;
     let globalSiteConfig = { ticker: "", welcome: "", about: "", premiumEnabled: true, banners: [] };
-    let globalPremiumConfig = { qr: "", upi: "", amount: "" };
+    let globalPremiumConfig = { amount: "" };
     let globalPremiumCourseConfigs = {};
     let isRecoveringMode = false;
     let tempRecoverMobile = "";
@@ -4727,6 +4864,7 @@
           loadAdminData();
           initAdminWalletSettings(); // Inject wallet recharge settings initialization
           renderAdminRechargeRequests();
+          renderAdminWithdrawalRequests();
           renderActivePremiumUsers();
           loadAdminBattles();
           loadAdminBattleBookings();
@@ -4767,36 +4905,79 @@
     /* PENDING WALLET RECHARGES ADMIN LOGIC */
     function renderAdminRechargeRequests() {
       let tbody = document.getElementById("pendingRechargesTableBody");
-      tbody.innerHTML = "<tr><td colspan='5' style='padding: 15px; text-align: center; color: cyan;'>Loading...</td></tr>";
+      if (!tbody) return;
+      tbody.innerHTML = "<tr><td colspan='6' style='padding: 15px; text-align: center; color: cyan;'>Loading...</td></tr>";
 
       database.ref('rechargeRequests/pending').on('value', snap => {
-        tbody.innerHTML = "";
         let pendingData = snap.val() || {};
-        let pendingArr = Object.keys(pendingData).map(key => ({ id: key, ...pendingData[key] }));
+        let pendingArr = Object.keys(pendingData)
+          .map(key => ({ id: key, ...pendingData[key] }))
+          .filter(req => req.type !== "withdrawal") // Show only recharges
+          .sort((a, b) => b.timestamp - a.timestamp);
 
+        tbody.innerHTML = "";
         if (pendingArr.length === 0) {
-          tbody.innerHTML = "<tr><td colspan='5' style='padding: 15px; text-align: center; color: #aaa;'>No pending Wallet Recharges.</td></tr>";
+          tbody.innerHTML = "<tr><td colspan='6' style='padding: 15px; text-align: center; color: #aaa;'>No pending recharges.</td></tr>";
           return;
         }
 
-        // Fetch User details for names
         database.ref('users').once('value').then(uSnap => {
           let usersData = uSnap.val() || {};
-
           pendingArr.forEach(req => {
             let userName = usersData[req.mobile] ? usersData[req.mobile].name : "Student";
             let tr = document.createElement("tr");
             tr.style.borderBottom = "1px solid rgba(255,255,255,0.1)";
             tr.innerHTML = `
               <td style="padding: 10px;">${userName}<br><small style="color:cyan;">${req.mobile}</small></td>
-              <td style="padding: 10px;">₹${req.amount} / ${req.amount} <i class="fas fa-coins" style="color:gold;"></i></td>
-              <td style="padding: 10px; font-family: monospace;">${req.utr}</td>
+              <td style="padding: 10px;"><span style="color:#00cec9; font-weight:bold; font-size:10px; border:1px solid #00cec9; padding:2px 4px; border-radius:4px;">RECHARGE</span></td>
+              <td style="padding: 10px; font-weight:bold; color: gold;">₹${req.amount}</td>
+              <td style="padding: 10px; font-family: monospace; font-size:12px;"><b>UTR:</b> ${req.utr || 'N/A'}</td>
               <td style="padding: 10px;">
-                <button class="login-btn" onclick="viewRechargeScreenshot('${req.id}')" style="background: cyan; color: black; padding: 5px 10px; margin: 0; font-size: 12px;">🖼️ View Proof</button>
+                <button class="login-btn" onclick="viewRechargeScreenshot('${req.id}')" style="background: rgba(0,255,255,0.1); border:1px solid cyan; color: cyan; padding: 5px 10px; margin: 0; font-size: 10px;">🖼️ View Proof</button>
               </td>
               <td style="padding: 10px; display: flex; gap: 5px;">
-                <button class="login-btn" onclick="approveRecharge('${req.id}', '${req.mobile}', ${req.amount})" style="background: #28a745; color: white; padding: 5px 10px; margin: 0; font-size: 12px;">✅ Approve</button>
-                <button class="login-btn" onclick="rejectRecharge('${req.id}')" style="background: #ff4757; color: white; padding: 5px 10px; margin: 0; font-size: 12px;">❌ Reject</button>
+                <button class="login-btn" onclick="approveRecharge('${req.id}', '${req.mobile}', ${req.amount}, 'recharge')" style="background: #28a745; color: white; padding: 5px 10px; margin: 0; font-size: 10px;">✅ Approve</button>
+                <button class="login-btn" onclick="rejectRecharge('${req.id}', 'recharge')" style="background: #ff4757; color: white; padding: 5px 10px; margin: 0; font-size: 10px;">❌ Reject</button>
+              </td>
+            `;
+            tbody.appendChild(tr);
+          });
+        });
+      });
+    }
+
+    function renderAdminWithdrawalRequests() {
+      let tbody = document.getElementById("pendingWithdrawalsTableBody");
+      if (!tbody) return;
+      tbody.innerHTML = "<tr><td colspan='5' style='padding: 15px; text-align: center; color: #ff4757;'>Loading...</td></tr>";
+
+      database.ref('rechargeRequests/pending').on('value', snap => {
+        let pendingData = snap.val() || {};
+        let pendingArr = Object.keys(pendingData)
+          .map(key => ({ id: key, ...pendingData[key] }))
+          .filter(req => req.type === "withdrawal") // Show only withdrawals
+          .sort((a, b) => b.timestamp - a.timestamp);
+
+        tbody.innerHTML = "";
+        if (pendingArr.length === 0) {
+          tbody.innerHTML = "<tr><td colspan='5' style='padding: 15px; text-align: center; color: #aaa;'>No pending withdrawals.</td></tr>";
+          return;
+        }
+
+        database.ref('users').once('value').then(uSnap => {
+          let usersData = uSnap.val() || {};
+          pendingArr.forEach(req => {
+            let userName = usersData[req.mobile] ? usersData[req.mobile].name : "Student";
+            let tr = document.createElement("tr");
+            tr.style.borderBottom = "1px solid rgba(255,255,255,0.1)";
+            tr.innerHTML = `
+              <td style="padding: 10px;">${userName}<br><small style="color:cyan;">${req.mobile}</small></td>
+              <td style="padding: 10px; font-weight:bold; color: #ff4757;">₹${req.amount}</td>
+              <td style="padding: 10px; font-family: monospace; font-size:12px;"><b>UPI:</b> ${req.upiId || 'N/A'}</td>
+              <td style="padding: 10px;"><span style="color:#ffcc00; font-size:11px;">PENDING APPROVAL</span></td>
+              <td style="padding: 10px; display: flex; gap: 5px;">
+                <button class="login-btn" onclick="approveRecharge('${req.id}', '${req.mobile}', ${req.amount}, 'withdrawal')" style="background: #28a745; color: white; padding: 5px 10px; margin: 0; font-size: 10px;">✅ Mark Paid</button>
+                <button class="login-btn" onclick="rejectRecharge('${req.id}', 'withdrawal')" style="background: #ff4757; color: white; padding: 5px 10px; margin: 0; font-size: 10px;">❌ Reject</button>
               </td>
             `;
             tbody.appendChild(tr);
@@ -4817,25 +4998,47 @@
       });
     }
 
-    function approveRecharge(reqId, mobile, amount) {
-      database.ref('rechargeRequests/pending/' + reqId).once('value').then(snap => {
-        let req = snap.val();
-        let targetMobile = (req && req.userAccountMobile) ? req.userAccountMobile : mobile;
+    function approveRecharge(reqId, mobile, amount, type) {
+      if (!confirm(`Are you sure you want to approve this ${type === 'withdrawal' ? 'WITHDRAWAL' : 'RECHARGE'} of ₹${amount} for ${mobile}?`)) return;
 
-        if (!confirm("Are you sure you want to approve this recharge of ₹" + amount + " for " + targetMobile + "?")) return;
-
-        const walletRef = database.ref('users/' + targetMobile + '/profile/wallet');
+      if (type === "withdrawal") {
+        // For withdrawals, coins were already deducted on submission (OR they should be now).
+        // Let's ensure they are deducted now if not done already.
+        // Actually, I'll update the submission logic to deduct immediately and the rejection logic to refund.
+        // So for approval, just remove the request.
+        database.ref('rechargeRequests/pending/' + reqId).remove().then(() => {
+          alert("✅ Withdrawal request marked as PAID.");
+        });
+      } else {
+        // For recharge, credit the user
+        const walletRef = database.ref('users/' + mobile + '/profile/wallet');
         walletRef.transaction(currentBalance => {
           return (currentBalance || 0) + parseFloat(amount);
         }).then(() => {
-          // Remove from pending
           return database.ref('rechargeRequests/pending/' + reqId).remove();
         }).then(() => {
-          alert("✅ Recharge Approved! " + amount + " Gold Coins credited to user's wallet.");
+          alert("✅ Recharge Approved! " + amount + " Gold Coins credited.");
         }).catch(err => {
           console.error(err);
-          alert("❌ Failed to approve recharge due to network error.");
+          alert("❌ Failed to approve recharge.");
         });
+      }
+    }
+
+    function rejectRecharge(reqId, type) {
+      let reason = prompt("Enter rejection reason:");
+      if (reason === null) return;
+
+      database.ref('rechargeRequests/pending/' + reqId).once('value').then(snap => {
+        let req = snap.val();
+        if (req && req.type === "withdrawal") {
+          // Refund coins for rejected withdrawal
+          const walletRef = database.ref('users/' + req.mobile + '/profile/wallet');
+          walletRef.transaction(currentBalance => (currentBalance || 0) + parseFloat(req.amount));
+        }
+        return database.ref('rechargeRequests/pending/' + reqId).remove();
+      }).then(() => {
+        alert("❌ Request rejected and removed.");
       });
     }
 
@@ -4979,24 +5182,21 @@
 
       initAdminCMS(); // Initialize the Content Management dropdowns
 
-      let prPreview = document.getElementById("premiumQRPreview");
-      let pConf = JSON.parse(localStorage.getItem("premiumConfig")) || { qr: "", upi: "", amount: "" };
-      if (pConf.qr) {
-        prPreview.src = pConf.qr;
-        prPreview.style.display = "block";
-      } else {
-        prPreview.style.display = "none";
+      // Initialize Premium Config Dropdowns (QR/UPI removed - payment via wallet recharge only)
+      let pConf = JSON.parse(localStorage.getItem("premiumConfig")) || { amount: "" };
+      if (document.getElementById("premiumAmount")) {
+        document.getElementById("premiumAmount").value = pConf.amount || "";
       }
-      document.getElementById("premiumUPI").value = pConf.upi || "";
-      document.getElementById("premiumAmount").value = pConf.amount || "";
-
-      // Initialize Premium Config Dropdowns
       let pCmsCourse = document.getElementById("premConfigCourse");
-      pCmsCourse.innerHTML = '<option value="" disabled selected>Select Premium Course</option>';
-      for (let c in premiumData) {
-        let opt = document.createElement("option"); opt.value = c; opt.innerText = c; pCmsCourse.appendChild(opt);
+      if (pCmsCourse) {
+        pCmsCourse.innerHTML = '<option value="" disabled selected>Select Premium Course</option>';
+        for (let c in premiumData) {
+          let opt = document.createElement("option"); opt.value = c; opt.innerText = c; pCmsCourse.appendChild(opt);
+        }
       }
-      document.getElementById("premiumConfigEditor").style.display = "none";
+      if (document.getElementById("premiumConfigEditor")) {
+        document.getElementById("premiumConfigEditor").style.display = "none";
+      }
     }
 
     function initAdminWalletSettings() {
@@ -5433,6 +5633,41 @@
 
     function onPremOptionChange() {
       renderPremPdfList();
+      let course = document.getElementById("premCmsCourse").value;
+      let option = document.getElementById("premCmsOption").value;
+      if (course && option) {
+        let itemKey = course + "_" + option;
+        document.getElementById("activePremOptionTitle").innerText = `Editing: ${course} > ${option}`;
+        let conf = (premiumPrices && premiumPrices[itemKey]) ? premiumPrices[itemKey] : { price: 49, duration: 365 };
+        document.getElementById("premOptionPrice").value = conf.price || 49;
+        document.getElementById("premOptionDuration").value = conf.duration || 365;
+      }
+    }
+
+    function saveOptionPrice() {
+      let course = document.getElementById("premCmsCourse").value;
+      let option = document.getElementById("premCmsOption").value;
+      let price = document.getElementById("premOptionPrice").value.trim();
+      let duration = document.getElementById("premOptionDuration").value.trim();
+
+      if (!course || !option || !price) {
+        alert("Please select an option and enter a price.");
+        return;
+      }
+
+      let itemKey = course + "_" + option;
+      if (!premiumPrices) premiumPrices = {};
+      premiumPrices[itemKey] = {
+        price: parseFloat(price),
+        duration: parseInt(duration) || 365
+      };
+
+      database.ref('premiumPrices').set(premiumPrices).then(() => {
+        localStorage.setItem("premiumPrices", JSON.stringify(premiumPrices));
+        alert("✅ Settings for " + option + " saved. Price: " + price + " Coins, Duration: " + duration + " Days.");
+      }).catch(err => {
+        alert("❌ Failed to save settings: " + err);
+      });
     }
 
     function addPremiumOption() {
@@ -5600,7 +5835,7 @@
         <div style="margin-bottom: 15px;">
            <button onclick="renderCmsBranches()" style="background: none; border: 1px solid cyan; color: cyan; padding: 5px 10px; border-radius: 5px; cursor: pointer; margin-bottom: 10px;">⬅️ Back to Branches</button>
            <div style="display: flex; justify-content: space-between; align-items: center;">
-             <h4 style="color: cyan; margin:0;">📅 Semesters in ${branch}</h4>
+             <h4 style="color: cyan; margin:0;'>📅 Semesters in ${branch}</h4>
              <button class="login-btn" onclick="addCMSSemester()" style="width: auto; margin:0; background: #00cec9; color: black; padding: 5px 15px;">➕ Add Sem</button>
            </div>
         </div>
@@ -6760,8 +6995,13 @@
       // Use real-time listener for instant updates
       database.ref('users/' + currentUserMobile + '/profile/wallet').on('value', snap => {
         let bal = snap.val() || 0;
+        let balText = parseFloat(bal).toFixed(2);
+
         let el = document.getElementById('playerWalletBalance');
-        if (el) el.innerText = parseFloat(bal).toFixed(2);
+        if (el) el.innerText = balText;
+
+        let headerEl = document.getElementById('headerWalletBalance');
+        if (headerEl) headerEl.innerText = balText;
       });
     }
 
@@ -6857,13 +7097,14 @@
 
       let reqId = currentUserMobile + "_" + Date.now();
       let payload = {
-        mobile: mobileInput, // Use inputted mobile number 
-        userAccountMobile: currentUserMobile, // Keep track of actual logged int account
+        mobile: mobileInput,
+        userAccountMobile: currentUserMobile,
         amount: parseFloat(amount),
         utr: utr,
         screenshot: screenshot,
         timestamp: Date.now(),
-        status: "pending"
+        status: "pending",
+        type: "recharge"
       };
 
       database.ref('rechargeRequests/pending/' + reqId).set(payload).then(() => {
@@ -6874,6 +7115,51 @@
         document.getElementById("rechargeUtrInput").value = "";
         preview.src = "";
         preview.style.display = "none";
+      });
+    }
+
+    function openWithdrawalModal() { document.getElementById("withdrawalModal").style.display = "flex"; }
+    function closeWithdrawalModal() { document.getElementById("withdrawalModal").style.display = "none"; }
+
+    function submitWithdrawalRequest() {
+      if (!currentUserMobile) return alert("Please login first!");
+
+      let amount = parseFloat(document.getElementById("withdrawalAmountInput").value.trim());
+      let upiId = document.getElementById("withdrawalUpiIdInput").value.trim();
+
+      if (!amount || amount < 100) return alert("⚠️ Minimum Withdrawal Amount is ₹100.");
+      if (!upiId) return alert("⚠️ Please enter your UPI ID.");
+
+      const walletRef = database.ref('users/' + currentUserMobile + '/profile/wallet');
+      walletRef.once('value').then(snap => {
+        let balance = parseFloat(snap.val() || 0);
+        if (balance < amount) return alert("❌ INSUFFICIENT BALANCE!\n\nYou cannot withdraw more than your current Neural Wallet balance. Please enter a valid amount.");
+
+        if (confirm(`Confirm Withdrawal of ₹${amount} to UPI: ${upiId}?\n\n${amount} Gold Coins will be deducted from your wallet immediately.`)) {
+          // Deduct coins first
+          walletRef.transaction(current => (current || 0) - amount).then(() => {
+            let reqId = "WD_" + currentUserMobile + "_" + Date.now();
+            let payload = {
+              mobile: currentUserMobile,
+              amount: amount,
+              upiId: upiId,
+              timestamp: Date.now(),
+              status: "pending",
+              type: "withdrawal"
+            };
+
+            return database.ref('rechargeRequests/pending/' + reqId).set(payload);
+          }).then(() => {
+            alert("✅ Withdrawal request submitted! Admin will transfer ₹" + amount + " to " + upiId + " after verification.");
+            closeWithdrawalModal();
+            document.getElementById("withdrawalAmountInput").value = "";
+            document.getElementById("withdrawalUpiIdInput").value = "";
+            updateWalletDisplay();
+          }).catch(err => {
+            console.error(err);
+            alert("❌ Submission failed. Please try again.");
+          });
+        }
       });
     }
 
@@ -6913,7 +7199,7 @@
                 });
               }
             } else {
-              if (confirm(`Insufficient balance! (₹${balance}). You need ₹${fee} to join this battle. Top up your Neural Wallet now?`)) {
+              if (confirm(`❌ INSUFFICIENT BALANCE!\n\nYou have ${balance} Gold Coins, but you need ${fee} Gold Coins to join this battle.\n\nWould you like to recharge your Neural Wallet now?`)) {
                 topUpWallet();
               }
             }
@@ -7382,7 +7668,7 @@
                   alert("❌ Failed to book seat due to a network error.");
                 });
               } else {
-                if (confirm(`Insufficient balance! You have ${balance} Gold Coins, but need ${activeAmount}.\nWould you like to recharge your Neural Wallet now?`)) {
+                if (confirm(`❌ INSUFFICIENT BALANCE!\n\nYou currently have ${balance} Gold Coins, but this costs ${activeAmount} Gold Coins.\n\nTo proceed, please recharge your Neural Wallet. Would you like to do it now?`)) {
                   topUpWallet();
                 }
               }
@@ -7525,18 +7811,65 @@
           let b = battles[id];
           let tr = document.createElement('tr');
           tr.style.borderBottom = "1px solid rgba(255,255,255,0.05)";
+          let transferred = b.prizeTransferred ? true : false;
           tr.innerHTML = `
             <td style="padding:10px; font-family:monospace; font-size:10px;">${id.split('_')[1]}</td>
-            <td style="padding:10px;">${b.title}</td>
+            <td style="padding:10px;">${b.title}<br><small style="color:gold;">🪙 Prize: ${b.prize || 0} Coins</small></td>
             <td style="padding:10px;">${new Date(b.startTime).toLocaleString()}</td>
             <td style="padding:10px;">${b.joinedCount || 0} / ${b.maxStudents || '--'}</td>
-            <td style="padding:10px; display: flex; gap: 5px;">
+            <td style="padding:10px; display: flex; gap: 5px; flex-wrap: wrap;">
               <button onclick="editBattle('${id}')" style="background:cyan; color:black; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-size:11px; font-weight:bold;">EDIT</button>
               <button onclick="deleteBattle('${id}')" style="background:#ff4757; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-size:11px; font-weight:bold;">DELETE</button>
+              <button onclick="transferBattleWinnerPrize('${id}', ${b.prize || 0})" 
+                style="background:${transferred ? '#555' : 'gold'}; color:${transferred ? '#aaa' : 'black'}; border:none; padding:4px 8px; border-radius:4px; font-size:11px; font-weight:bold; cursor:${transferred ? 'not-allowed' : 'pointer'};"
+                ${transferred ? 'disabled' : ''}>
+                ${transferred ? '✅ SENT' : '🏆 TRANSFER'}
+              </button>
             </td>
           `;
           tbody.appendChild(tr);
         }
+      });
+    }
+
+    // Transfer battle winner prize coins to winner's wallet
+    function transferBattleWinnerPrize(battleId, prizeCoins) {
+      if (!prizeCoins || prizeCoins <= 0) {
+        alert("❌ Prize amount is 0 or not set for this battle.");
+        return;
+      }
+      if (!confirm(`🏆 Winner ko ${prizeCoins} Gold Coins transfer karna chahte ho?\n\nYeh action winner ke wallet mein coins add kar dega.`)) return;
+
+      database.ref(`battleResults/${battleId}`).once('value').then(snap => {
+        const data = snap.val();
+        if (!data) {
+          alert("❌ Is battle ke results nahi mile. Koi participate nahi kiya.");
+          return;
+        }
+        // Sort to find rank 1 winner: highest marks, then lowest timeUsed
+        const results = Object.values(data).sort((a, b) => {
+          if (b.marks !== a.marks) return b.marks - a.marks;
+          return a.timeUsed - b.timeUsed;
+        });
+        const winner = results[0];
+        if (!winner || !winner.mobile) {
+          alert("❌ Winner determine nahi ho saka. Results check karo.");
+          return;
+        }
+        // Add coins to winner's wallet
+        database.ref(`users/${winner.mobile}/profile/wallet`).once('value').then(wSnap => {
+          let currentBal = parseFloat(wSnap.val() || 0);
+          let newBal = currentBal + parseFloat(prizeCoins);
+          database.ref(`users/${winner.mobile}/profile/wallet`).set(newBal).then(() => {
+            // Mark battle as prize transferred
+            database.ref(`battles/active/${battleId}/prizeTransferred`).set(true).then(() => {
+              alert(`✅ ${prizeCoins} Gold Coins successfully transfer ho gaye!\n\n🏆 Winner: ${winner.name || winner.mobile}\n📱 Mobile: ${winner.mobile}\n💰 Naya Balance: ${newBal} Coins`);
+            });
+          });
+        });
+      }).catch(err => {
+        console.error(err);
+        alert("❌ Transfer fail ho gaya. Network error.");
       });
     }
 
@@ -8224,6 +8557,9 @@
       }
       document.getElementById("programsWrapper").style.display = "none";
       document.getElementById("semesterMotivationSection").style.display = "none";
+      // Hide info-section (About & Terms) when premium hub opens
+      var infoSec = document.querySelector(".info-section");
+      if (infoSec) infoSec.style.display = "none";
       document.getElementById("premiumNavSection").style.display = "block";
       document.getElementById("premiumCoursesContainer").style.display = "grid";
       document.getElementById("premiumOptionsContainer").style.display = "none";
@@ -8239,6 +8575,9 @@
       } else {
         document.getElementById("premiumNavSection").style.display = "none";
         document.getElementById("programsWrapper").style.display = "block";
+        // Show info-section (About & Terms) when returning to main dashboard
+        var infoSec = document.querySelector(".info-section");
+        if (infoSec) infoSec.style.display = "block";
       }
     }
 
@@ -8302,23 +8641,22 @@
       } else {
         selectedPremiumItem = itemKey;
 
-        // Retrieve the cost (default to 49 if not set)
-        let globalConf = JSON.parse(localStorage.getItem("premiumConfig")) || {};
-        let courseConfigs = JSON.parse(localStorage.getItem("premiumCourseConfigs")) || {};
-        let specificConfig = courseConfigs[selectedPremiumItem];
-        let pConf = specificConfig ? specificConfig : globalConf;
-        let activeAmount = parseFloat(pConf.amount && pConf.amount.trim() !== "" ? pConf.amount : "49");
+        // Retrieve the configuration from premiumPrices
+        let conf = (premiumPrices && premiumPrices[itemKey]) ? premiumPrices[itemKey] : { price: 49, duration: 365 };
+        let activeAmount = parseFloat(conf.price || 49);
+        let activeDuration = parseInt(conf.duration || 365);
 
-        if (confirm(`Unlock "${option}" for ${activeAmount} Gold Coins?\n\n(1 Gold Coin = ₹1)`)) {
+        if (confirm(`Unlock "${option}" for ${activeAmount} Gold Coins?\n\nValidity: ${activeDuration} Days\n(1 Gold Coin = ₹1)`)) {
           database.ref('users/' + currentUserMobile + '/profile/wallet').once('value').then(snap => {
             let balance = parseFloat(snap.val() || 0);
             if (balance >= activeAmount) {
               // Deduct and unlock
               database.ref('users/' + currentUserMobile + '/profile/wallet').set(balance - activeAmount).then(() => {
-                let payload = { active: true, expiresAt: null }; // lifetime access
+                let expiry = Date.now() + (activeDuration * 24 * 60 * 60 * 1000);
+                let payload = { active: true, expiresAt: expiry };
                 return database.ref(`users/${currentUserMobile}/premiumUnlocked/${itemKey}`).set(payload);
               }).then(() => {
-                alert(`✅ ${option} unlocked successfully!\nDeducted ${activeAmount} Gold Coins.`);
+                alert(`✅ ${option} unlocked successfully!\nValid for ${activeDuration} days.\nDeducted ${activeAmount} Gold Coins.`);
                 showPremiumOptions(course); // Refresh UI to show it's unlocked
                 updateWalletDisplay(); // Update wallet UI if visible
               }).catch(err => {
@@ -8326,9 +8664,8 @@
                 alert("❌ Failed to unlock due to a network error.");
               });
             } else {
-              if (confirm(`Insufficient balance! You have ${balance} Gold Coins, but need ${activeAmount}.\nWould you like to recharge your Neural Wallet now?`)) {
-                topUpWallet();
-              }
+              alert(`❌ INSUFFICIENT BALANCE!\n\nYou currently have ${balance} Gold Coins, but "${option}" costs ${activeAmount} Gold Coins.\n\nTo continue, please recharge your NEURAL WALLET by clicking '➕ RECHARGE' in the header.`);
+              topUpWallet();
             }
           });
         }
@@ -8813,6 +9150,32 @@
       </a>
     </div>
   </footer>
+  <!-- Withdrawal Modal [FIXED POSITION] -->
+  <div id="withdrawalModal" class="modal" style="z-index: 20002;">
+    <div class="modal-content" style="max-width: 400px; text-align: center;">
+      <span class="close-modal" onclick="closeWithdrawalModal()">&times;</span>
+      <h2 style="color: #ff4757; text-transform: uppercase; letter-spacing: 2px;">💸 Withdrawal Request</h2>
+      <p style="color: #ccc; font-size: 0.9em;">Withdraw your Gold Coins to your UPI ID (1 Coin = ₹1)</p>
+
+      <div style="margin-top: 20px; text-align: left;">
+        <label style="display: block; color: #aaa; font-size: 12px; margin-bottom: 5px;">Withdrawal Amount (Min
+          ₹100)</label>
+        <input type="number" id="withdrawalAmountInput" class="login-input" placeholder="Enter Amount (e.g. 200)"
+          style="margin-bottom: 15px;">
+
+        <label style="display: block; color: #aaa; font-size: 12px; margin-bottom: 5px;">Your UPI ID (Verify
+          carefully)</label>
+        <input type="text" id="withdrawalUpiIdInput" class="login-input" placeholder="your-name@upi"
+          style="margin-bottom: 20px;">
+
+        <button class="login-btn" onclick="submitWithdrawalRequest()" style="background: #ff4757; color: white;">🚀
+          SUBMIT WITHDRAWAL</button>
+      </div>
+
+      <p style="margin-top: 15px; font-size: 11px; color: #888;">Payments are usually processed within 24-48 hours after
+        admin verification.</p>
+    </div>
+  </div>
 </body>
 
 </html>
