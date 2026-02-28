@@ -16,21 +16,57 @@
   <meta name="google-site-verification" content="9uLHaP53sHpPBy6U9jzpeNOmJIbCl11ZRMo8hN7dyaw" />
 
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=1200">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>NextGen Library</title>
   <link rel="icon" type="image/png" href="favicon1.png">
+
+  <!-- Cropper.js CSS for circular photo cropping -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" />
+  <!-- Google Fonts: Outfit for Premium Branding -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
 
   <style>
     /* Add external dependencies here */
     body {
       margin: 0;
-      font-family: "Segoe UI", sans-serif;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      /* Animated Gradient Background */
+      background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #0b132b, #1c2541);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
       color: white;
       transition: 0.4s;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Interactive VFX Canvas */
+    #vfx-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    /* Background Animation Keyframes */
+    @keyframes gradientBG {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
     }
 
     /* HEADER */
@@ -82,34 +118,44 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      background: radial-gradient(circle at center, #001f3f, #000);
+      /* Transparent background to show body animated gradient */
+      background: transparent;
+      backdrop-filter: blur(5px);
       position: fixed;
       width: 100%;
-      height: 100vh;
       top: 0;
       left: 0;
       z-index: 999;
     }
 
     .light #loginScreen {
-      background: #f0f4f8;
+      background: rgba(240, 244, 248, 0.8);
     }
 
     .login-box {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(0, 255, 255, 0.3);
+      /* Advanced Glassmorphism */
+      background: rgba(15, 32, 39, 0.45);
+      border: 1px solid rgba(0, 255, 255, 0.2);
       padding: 40px;
-      border-radius: 15px;
-      box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      width: 90%;
-      max-width: 400px;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(0, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      width: 95%;
+      max-width: 420px;
+      margin: 10px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .login-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 255, 255, 0.15), inset 0 0 20px rgba(0, 255, 255, 0.2);
     }
 
     .light .login-box {
-      background: #ffffff;
-      border: 1px solid #d1d5db;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     }
 
     .login-box h2 {
@@ -126,22 +172,23 @@
 
     .login-input {
       width: 100%;
-      padding: 12px;
+      padding: 14px;
       margin-bottom: 20px;
-      border-radius: 8px;
-      background: rgba(0, 0, 0, 0.5);
-      border: 1px solid cyan;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0, 255, 255, 0.3);
       color: white;
       font-size: 16px;
       outline: none;
       box-sizing: border-box;
-      transition: 0.3s;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
     }
 
     .light .login-input {
-      background: #f9fafb;
+      background: rgba(255, 255, 255, 0.7);
       color: #333;
-      border: 1px solid #ccc;
+      border: 1px solid rgba(0, 86, 179, 0.3);
     }
 
     .login-input:focus {
@@ -155,34 +202,37 @@
 
     .login-btn {
       width: 100%;
-      padding: 12px;
+      padding: 14px;
       margin-top: 10px;
       font-size: 18px;
-      background: cyan;
-      color: black;
+      background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
+      color: white;
       font-weight: bold;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
-      transition: 0.3s;
-      box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     .light .login-btn {
-      background: #0056b3;
+      background: linear-gradient(90deg, #0056b3 0%, #007bff 100%);
       color: white;
-      box-shadow: none;
+      box-shadow: 0 4px 10px rgba(0, 86, 179, 0.3);
     }
 
     .login-btn:hover {
-      background: #00ffff;
-      box-shadow: 0 0 25px cyan;
-      transform: translateY(-2px);
+      background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+      box-shadow: 0 8px 25px rgba(79, 172, 254, 0.6);
+      transform: translateY(-3px) scale(1.02);
     }
 
     .light .login-btn:hover {
-      background: #004494;
-      box-shadow: 0 4px 10px rgba(0, 86, 179, 0.3);
+      background: linear-gradient(90deg, #007bff 0%, #0056b3 100%);
+      box-shadow: 0 6px 15px rgba(0, 86, 179, 0.4);
+      transform: translateY(-2px);
     }
 
     .auth-toggle {
@@ -222,45 +272,64 @@
     /* ADMIN DASHBOARD */
     #adminDashboard {
       display: none;
-      padding: 30px;
+      padding: 40px;
       max-width: 1200px;
       margin: 40px auto;
-      background: rgba(0, 0, 0, 0.7);
-      border: 1px solid cyan;
-      border-radius: 15px;
+      background: rgba(15, 32, 39, 0.85);
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      border-radius: 20px;
       color: white;
-      box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(0, 242, 254, 0.05);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
     }
 
     .light #adminDashboard {
-      background: #fff;
-      border-color: #ddd;
-      color: black;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(0, 86, 179, 0.3);
+      color: #333;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     }
 
     .admin-table {
       width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-top: 25px;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     }
 
     .admin-table th,
     .admin-table td {
-      border: 1px solid #444;
-      padding: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 16px;
       text-align: left;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .admin-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .admin-table tr:hover td {
+      background: rgba(0, 242, 254, 0.05);
     }
 
     .light .admin-table th,
     .light .admin-table td {
-      border: 1px solid #ccc;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 0.5);
     }
 
     .admin-table th {
-      background: #002233;
-      color: cyan;
+      background: linear-gradient(90deg, #0f2027 0%, #203a43 100%);
+      color: #00f2fe;
       font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 700;
     }
 
     .light .admin-table th {
@@ -271,30 +340,46 @@
     /* CMS DYNAMIC FIELDS */
     .cms-dynamic-field {
       display: flex;
-      gap: 10px;
-      margin-top: 5px;
-      margin-bottom: 5px;
+      gap: 15px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      align-items: center;
     }
 
     .cms-add-btn {
-      background: #00cec9;
-      color: black;
+      background: linear-gradient(90deg, #00cec9 0%, #81ecec 100%);
+      color: #2d3436;
       border: none;
-      padding: 5px 10px;
-      border-radius: 5px;
+      padding: 8px 16px;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: bold;
       margin-top: 5px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 206, 201, 0.3);
+    }
+
+    .cms-add-btn:hover {
+      box-shadow: 0 6px 15px rgba(0, 206, 201, 0.5);
+      transform: translateY(-2px);
     }
 
     .cms-del-btn {
-      background: #ff4757;
+      background: linear-gradient(90deg, #ff4757 0%, #ff6b81 100%);
       color: white;
       border: none;
-      padding: 5px 10px;
-      border-radius: 5px;
+      padding: 8px 16px;
+      border-radius: 8px;
       cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3);
+      font-weight: 600;
+    }
+
+    .cms-del-btn:hover {
+      box-shadow: 0 6px 15px rgba(255, 71, 87, 0.5);
+      transform: translateY(-2px);
     }
 
     /* SELECT DROPDOWN FOR SIGN UP */
@@ -333,15 +418,78 @@
       height: 100vh;
       top: 0;
       left: 0;
-      background: radial-gradient(circle at center, #001f3f, #000);
+      background: transparent;
+      backdrop-filter: blur(10px);
       z-index: 998;
     }
 
     #typingText {
-      font-size: 42px;
-      font-weight: bold;
-      color: cyan;
-      text-shadow: 0 0 20px cyan;
+      font-size: 48px;
+      font-weight: 800;
+      background: linear-gradient(90deg, #00f2fe, #4facfe, #00f2fe);
+      background-size: 200% auto;
+      color: transparent;
+      -webkit-background-clip: text;
+      background-clip: text;
+      animation: shine 3s linear infinite;
+      margin-bottom: 10px;
+      text-shadow: 0 0 30px rgba(0, 242, 254, 0.3);
+    }
+
+    @keyframes shine {
+      to {
+        background-position: 200% center;
+      }
+    }
+
+    /* PREMIUM BRANDING */
+    @keyframes brandShimmer {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      100% {
+        background-position: 200% 50%;
+      }
+    }
+
+    .premium-brand {
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(90deg, #00f2fe, #4facfe, #706fd3, #00f2fe);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: brandShimmer 5s linear infinite;
+      text-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.3s ease;
+    }
+
+    .premium-brand:hover {
+      transform: scale(1.02);
+      text-shadow: 0 0 25px rgba(0, 242, 254, 0.7);
+    }
+
+    .brand-emoji {
+      filter: drop-shadow(0 0 8px cyan);
+      animation: floatEmoji 3s ease-in-out infinite;
+    }
+
+    @keyframes floatEmoji {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(0);
+      }
+
+      50% {
+        transform: translateY(-5px) rotate(10deg);
+      }
     }
 
     @media (max-width: 768px) {
@@ -383,26 +531,52 @@
     }
 
     .box {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 20px 30px;
-      border-radius: 15px;
+      /* Deep space glassmorphic */
+      background: rgba(15, 32, 39, 0.6);
+      padding: 30px;
+      border-radius: 20px;
       cursor: pointer;
-      box-shadow: 0 0 15px cyan;
-      transition: 0.3s;
+      border: 1px solid rgba(0, 242, 254, 0.2);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 0 10px rgba(0, 242, 254, 0.05);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       text-align: center;
-      font-size: 18px;
-      min-height: 120px;
+      font-size: 20px;
+      font-weight: 600;
+      min-height: 140px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 10px;
+      gap: 15px;
+      position: relative;
+      overflow: hidden;
+      /* 3D TILT FOUNDATION */
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
+
+    /* Glow effect on hover */
+    .box::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      z-index: -1;
     }
 
     .box h1 {
       margin: 0;
-      font-size: 40px;
-      filter: drop-shadow(0 0 10px cyan) contrast(1.2) brightness(1.2);
+      font-size: 48px;
+      filter: drop-shadow(0 0 15px rgba(0, 242, 254, 0.6));
+      transition: transform 0.3s ease;
     }
 
     @media (max-width: 768px) {
@@ -420,8 +594,16 @@
     }
 
     .box:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 30px cyan;
+      transform: translateY(-10px) scale(1.02);
+      border-color: rgba(0, 242, 254, 0.6);
+    }
+
+    .box:hover::after {
+      opacity: 1;
+    }
+
+    .box:hover h1 {
+      transform: scale(1.1);
     }
 
     /* CHAPTERS */
@@ -457,47 +639,69 @@
 
     /* CONTENT */
     .section {
-      background: #ffffff22;
-      padding: 15px;
-      border-radius: 10px;
-      margin: 15px 0;
+      background: rgba(15, 32, 39, 0.6);
+      padding: 20px;
+      border-radius: 15px;
+      margin: 20px 0;
+      border: 1px solid rgba(0, 242, 254, 0.2);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .section:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 242, 254, 0.15);
+      border-color: rgba(0, 242, 254, 0.4);
     }
 
     /* PROGRESS TRACKING STYLES */
     .progress-box {
-      background: linear-gradient(135deg, rgba(46, 204, 113, 0.2) 0%, rgba(39, 174, 96, 0.2) 100%);
-      padding: 25px;
-      border-radius: 12px;
-      border: 2px solid cyan;
-      box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+      background: rgba(15, 32, 39, 0.7);
+      padding: 30px;
+      border-radius: 20px;
+      border: 1px solid rgba(46, 204, 113, 0.4);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(46, 204, 113, 0.05);
+      backdrop-filter: blur(15px);
+      transition: transform 0.3s ease;
+    }
+
+    .progress-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 15px rgba(46, 204, 113, 0.2);
     }
 
     .subj-progress {
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
 
     .subj-progress-title {
       display: flex;
       justify-content: space-between;
-      color: cyan;
-      font-weight: bold;
-      margin-bottom: 5px;
+      color: #00f2fe;
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
     }
 
     .progress-bar {
       width: 100%;
-      height: 12px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 6px;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
       overflow: hidden;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .progress-fill {
       height: 100%;
-      background: linear-gradient(90deg, #00cec9, #74b9ff);
-      border-radius: 6px;
-      transition: width 0.5s ease-in-out;
+      background: linear-gradient(90deg, #00f2fe, #4facfe, #00f2fe);
+      background-size: 200% auto;
+      border-radius: 10px;
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: shine 3s linear infinite;
     }
 
     .progress-details {
@@ -518,20 +722,22 @@
 
     /* BUTTON */
     button {
-      padding: 12px 20px;
+      padding: 12px 24px;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       cursor: pointer;
-      background: cyan;
-      color: black;
-      font-weight: bold;
+      background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
+      color: white;
+      font-weight: 600;
       font-size: 16px;
-      transition: 0.3s;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
     }
 
     button:hover {
-      background: #00ffff;
-      transform: scale(1.05);
+      background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 242, 254, 0.5);
     }
 
     @media (max-width: 480px) {
@@ -657,26 +863,29 @@
     }
 
     .info-box {
-      background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(102, 126, 234, 0.1) 100%);
-      border: 2px solid cyan;
-      border-radius: 15px;
-      padding: 25px;
-      box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
-      transition: 0.3s;
+      background: rgba(15, 32, 39, 0.6);
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(15px);
+      transition: all 0.4s ease;
     }
 
     .info-box:hover {
-      box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
-      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 242, 254, 0.15);
+      transform: translateY(-8px);
+      border-color: rgba(0, 242, 254, 0.6);
     }
 
     .info-box h3 {
-      color: cyan;
-      font-size: 24px;
+      color: #00f2fe;
+      font-size: 26px;
       margin-top: 0;
-      margin-bottom: 15px;
-      border-bottom: 2px solid cyan;
-      padding-bottom: 10px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid rgba(0, 242, 254, 0.3);
+      padding-bottom: 12px;
+      text-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
     }
 
     .info-box p {
@@ -734,11 +943,18 @@
 
     .motivation-box,
     .tasks-box {
-      background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(102, 126, 234, 0.1) 100%);
-      border: 2px solid cyan;
-      border-radius: 15px;
-      padding: 25px;
-      box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+      background: rgba(15, 32, 39, 0.6);
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(15px);
+      transition: transform 0.3s ease;
+    }
+
+    .motivation-box:hover,
+    .tasks-box:hover {
+      transform: translateY(-5px);
     }
 
     .motivation-box h3,
@@ -801,17 +1017,21 @@
 
     /* PREMIUM NOTES & BOOK */
     .premium-box {
-      background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 165, 0, 0.2) 100%);
-      border: 2px solid gold;
-      box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+      background: rgba(30, 25, 10, 0.7);
+      border: 1px solid rgba(255, 215, 0, 0.5);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(255, 215, 0, 0.05);
+    }
+
+    .premium-box::after {
+      box-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
     }
 
     .premium-box:hover {
-      box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+      border-color: rgba(255, 215, 0, 0.8);
     }
 
     .premium-box h1 {
-      filter: drop-shadow(0 0 10px gold) contrast(1.2) brightness(1.2);
+      filter: drop-shadow(0 0 15px gold) contrast(1.2) brightness(1.2);
     }
 
     .locked-option {
@@ -1075,10 +1295,265 @@
       background: cyan;
       box-shadow: 0 0 10px cyan;
     }
+
+    /* PREMIUM FOOTER */
+    footer {
+      padding: 40px 20px;
+      margin-top: auto;
+      background: rgba(15, 32, 39, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(0, 242, 254, 0.2);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 25px;
+      margin-top: 5px;
+    }
+
+    .social-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: pointer;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .social-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, transparent, rgba(0, 242, 254, 0.2), transparent);
+      transform: translateX(-100%);
+      transition: 0.5s;
+    }
+
+    .social-btn:hover::before {
+      transform: translateX(100%);
+    }
+
+    .social-btn:hover {
+      transform: translateY(-8px) scale(1.1);
+      border-color: cyan;
+      box-shadow: 0 0 25px rgba(0, 242, 254, 0.5), inset 0 0 10px rgba(0, 242, 254, 0.2);
+      background: rgba(0, 242, 254, 0.1);
+    }
+
+    .social-btn svg {
+      width: 24px;
+      height: 24px;
+      fill: #aaa;
+      transition: all 0.3s ease;
+    }
+
+    .social-btn:hover svg {
+      fill: cyan;
+      filter: drop-shadow(0 0 5px cyan);
+    }
+
+    .footer-text {
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      color: #888;
+      letter-spacing: 1px;
+    }
+
+    .footer-brand {
+      font-weight: bold;
+      color: cyan;
+      text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+    }
+
+    /* NEURAL HUD OVERLAY */
+    #neuralHUD {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      z-index: 900;
+      pointer-events: none;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .hud-panel {
+      background: rgba(15, 32, 39, 0.6);
+      border: 1px solid rgba(0, 242, 254, 0.4);
+      padding: 12px 20px;
+      border-radius: 12px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.1), inset 0 0 10px rgba(0, 242, 254, 0.1);
+      display: flex;
+      flex-direction: column;
+      animation: hudSlide 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes hudSlide {
+      from {
+        transform: translateX(100%) skewX(-10deg);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0) skewX(0);
+        opacity: 1;
+      }
+    }
+
+    .hud-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      color: #00f2fe;
+      letter-spacing: 1px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .hud-value {
+      font-size: 18px;
+      color: white;
+      font-weight: 800;
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+    }
+
+    /* FACE-SCAN AUTH SIMULATION */
+    #faceScanOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 20, 20, 0.9);
+      display: none;
+      z-index: 2000;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(10px);
+    }
+
+    .scan-line {
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, #00f2fe, transparent);
+      box-shadow: 0 0 30px #00f2fe, 0 0 60px #00f2fe;
+      position: absolute;
+      top: 0;
+      z-index: 2;
+      animation: scanAnim 2s ease-in-out infinite;
+    }
+
+    @keyframes scanAnim {
+      0% {
+        top: 0%;
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      90% {
+        opacity: 1;
+      }
+
+      100% {
+        top: 100%;
+        opacity: 0;
+      }
+    }
+
+    .scan-mask {
+      width: 300px;
+      height: 300px;
+      border: 2px solid rgba(0, 242, 254, 0.3);
+      border-radius: 50%;
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(circle, rgba(0, 242, 254, 0.1) 0%, transparent 70%);
+    }
+
+    .scan-mask::after {
+      content: 'IDENTIFYING...';
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      text-align: center;
+      color: #00f2fe;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 900;
+      letter-spacing: 5px;
+      text-shadow: 0 0 10px #00f2fe;
+      animation: blink 0.5s infinite;
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0.3;
+      }
+    }
+
+    /* 3D FLIP-BOOK VIEWER */
+    .book-opening {
+      animation: bookFlip 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform-origin: left center;
+      perspective: 2000px;
+    }
+
+    @keyframes bookFlip {
+      from {
+        transform: rotateY(-90deg);
+        opacity: 0;
+      }
+
+      to {
+        transform: rotateY(0deg);
+        opacity: 1;
+      }
+    }
   </style>
 </head>
 
 <body>
+  <canvas id="vfx-canvas"></canvas>
+  <div id="faceScanOverlay">
+    <div class="scan-line"></div>
+    <div class="scan-mask"></div>
+    <h3 style="color: white; margin-top: 40px; font-family: 'Outfit'; letter-spacing: 2px;">NEURAL INTERFACE: ACTIVATED
+    </h3>
+  </div>
+
+  <div id="neuralHUD">
+    <div class="hud-panel">
+      <span class="hud-label">User Rank</span>
+      <span id="hudRank" class="hud-value">--</span>
+    </div>
+    <div class="hud-panel">
+      <span class="hud-label">Knowledge Points</span>
+      <span id="hudPoints" class="hud-value">--</span>
+    </div>
+  </div>
+
   <div id="globalTicker"
     style="background:#ff4757; color:white; padding:8px; font-weight:bold; text-align:center; font-size:14px; display:none;">
     <marquee id="tickerText" scrollamount="5"></marquee>
@@ -1090,6 +1565,8 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
   <!-- Firebase Analytics -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+  <!-- html2canvas for ID Card Download -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <script>
     // Initialize Firebase
@@ -1111,18 +1588,92 @@
 
   <!-- SheetJS for Excel Export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <!-- Cropper.js for Photo Cropping -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+  <style>
+    @keyframes neuralPulse {
+      0% {
+        box-shadow: 0 0 5px rgba(0, 242, 254, 0.5);
+        border-color: rgba(0, 242, 254, 0.5);
+      }
+
+      50% {
+        box-shadow: 0 0 20px rgba(0, 242, 254, 0.8), 0 0 40px rgba(0, 242, 254, 0.4);
+        border-color: cyan;
+      }
+
+      100% {
+        box-shadow: 0 0 5px rgba(0, 242, 254, 0.5);
+        border-color: rgba(0, 242, 254, 0.5);
+      }
+    }
+
+    @keyframes slideInUp {
+      from {
+        transform: translateY(100%) translateX(-50%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0) translateX(-50%);
+        opacity: 1;
+      }
+    }
+
+    #neuralSyncHUD {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(11, 19, 43, 0.9);
+      backdrop-filter: blur(10px);
+      border: 1px solid cyan;
+      color: cyan;
+      padding: 12px 25px;
+      border-radius: 30px;
+      font-family: monospace;
+      font-size: 14px;
+      font-weight: bold;
+      z-index: 20002;
+      display: none;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  </style>
+
+  <div id="neuralSyncHUD">📡 Incoming Data Stream...</div>
+
 
   <header style="display:none;">
     <div style="display:flex; align-items:center; gap:10px; flex-grow:1;">
-      <div style="position: relative; cursor: pointer;" onclick="openEditProfile()" title="Edit Profile">
+      <div style="position: relative; cursor: pointer; display: flex; align-items: center; gap: 8px;"
+        onclick="openEditProfile()" title="Edit Profile">
         <img id="userProfilePicHeader" src="https://ui-avatars.com/api/?name=U&background=cyan&color=000" alt="Profile"
           style="width: 45px; height: 45px; border-radius: 50%; border: 2px solid cyan; object-fit: cover; display: none;">
+        <!-- Header Badge -->
+        <div id="headerGamificationBadge"
+          style="display: none; background: rgba(0,242,254,0.1); border: 1px solid rgba(0,242,254,0.3); padding: 4px 10px; border-radius: 15px; font-size: 11px; font-weight: bold; color: gold; box-shadow: 0 0 10px rgba(0,242,254,0.2);">
+          --
+        </div>
       </div>
       <img src="img1.png" alt="Logo" style="width: 40px; height: 40px; filter: drop-shadow(0 0 5px cyan);">
-      <h2 style="font-size: 28px; letter-spacing: 1px; margin: 0; text-align: left; text-shadow: 0 0 10px cyan;">📚
-        NextGen Library</h2>
+      <h2 class="premium-brand">
+        <span class="brand-emoji">🛡️</span>
+        NextGen Library
+      </h2>
     </div>
     <div style="display: flex; gap: 10px; align-items: center;">
+      <!-- Global Search Bar -->
+      <div style="position: relative;">
+        <input type="text" id="globalSearchInput" placeholder="🔍 Search Library..." oninput="searchLibrary()"
+          style="padding: 8px 15px; border-radius: 20px; border: 1px solid rgba(0, 242, 254, 0.4); background: rgba(0,0,0,0.5); color: white; outline: none; box-shadow: 0 0 10px rgba(0,242,254,0.2); width: 200px; transition: width 0.3s;">
+        <!-- Search Results Dropdown Modal -->
+        <div id="searchResultsModal"
+          style="display: none; position: absolute; top: 45px; right: 0; width: 300px; max-height: 400px; overflow-y: auto; background: rgba(11, 19, 43, 0.95); backdrop-filter: blur(15px); border: 1px solid rgba(0,242,254,0.4); border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 10000; padding: 10px; box-sizing: border-box;">
+        </div>
+      </div>
+
       <button onclick="openLeaderboard()"
         style="font-size: 14px; padding: 6px 12px; background: gold; color: black; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; box-shadow: 0 0 10px gold;">🏆
         Leadership</button>
@@ -1140,7 +1691,9 @@
       <div id="signUpForm">
         <img src="img1.png" alt="Logo"
           style="width: 80px; height: 80px; margin-bottom: 10px; filter: drop-shadow(0 0 10px cyan);">
-        <h2>📝 NextGen Library Registration</h2>
+        <h2 class="premium-brand" style="margin-bottom: 25px; font-size: 24px;">
+          <span class="brand-emoji">📝</span> NextGen Library Registration
+        </h2>
         <input type="text" id="regName" class="login-input" placeholder="Name (Letters & Spaces only)">
         <input type="number" id="regRoll" class="login-input"
           placeholder="University Roll Number / Registation Number (13 Digits)"
@@ -1178,7 +1731,9 @@
       <div id="loginForm" style="display: none;">
         <img src="img1.png" alt="Logo"
           style="width: 80px; height: 80px; margin-bottom: 10px; filter: drop-shadow(0 0 10px cyan);">
-        <h2>🔑 NextGen Login</h2>
+        <h2 class="premium-brand" style="margin-bottom: 25px; font-size: 24px;">
+          <span class="brand-emoji">🔑</span> NextGen Library Login
+        </h2>
         <input type="text" id="loginName" class="login-input" placeholder="Name">
         <select id="loginSection" class="login-input">
           <option value="" disabled selected>Section</option>
@@ -1218,18 +1773,38 @@
 
   <!-- EDIT PROFILE SCREEN -->
   <div id="editProfileScreen"
-    style="display: none; height: 100vh; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: radial-gradient(circle at center, #001f3f, #000); position: fixed; width: 100%; top: 0; left: 0; z-index: 1000;">
-    <div class="login-box" style="position: relative;">
-      <h2>✏️ Edit Profile</h2>
+    style="display: none; height: 100vh; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); position: fixed; width: 100%; top: 0; left: 0; z-index: 10000;">
+
+    <!-- Floating Close Button Outside the Layout -->
+    <button onclick="closeEditProfile()"
+      style="position: absolute; top: 30px; right: 30px; background: #ff4757; border: 2px solid #fff; border-radius: 50%; color: white; width: 45px; height: 45px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; box-shadow: 0 0 20px rgba(255,71,87,0.8); transition: transform 0.2s; z-index: 10001;"
+      onmouseover="this.style.transform='scale(1.1) rotate(90deg)'"
+      onmouseout="this.style.transform='scale(1) rotate(0deg)'">✕</button>
+
+    <div class="login-box" style="position: relative; max-height: 85vh; overflow-y: auto;">
+      <h2
+        style="background: linear-gradient(90deg, #00f2fe, #4facfe); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 20px;">
+        ✏️ Edit Profile</h2>
       <div style="margin-bottom: 20px;">
         <img id="editProfilePicPreview" src="https://ui-avatars.com/api/?name=U"
-          style="width: 100px; height: 100px; border-radius: 50%; border: 2px solid cyan; object-fit: cover; margin-bottom: 15px;">
+          style="width: 110px; height: 110px; border-radius: 50%; border: 3px solid cyan; object-fit: cover; margin-bottom: 10px; box-shadow: 0 0 20px rgba(0,255,255,0.6);">
+      </div>
+      <div style="margin-bottom: 15px;">
         <input type="file" id="editProfilePicInput" accept="image/*" class="login-input"
-          onchange="previewEditProfilePic(event)" style="padding: 5px;">
+          onchange="previewEditProfilePic(event)" style="padding: 5px; max-width: 250px; margin: 0 auto;">
+        <p style="font-size: 11px; color: #00f2fe; margin-top: 5px; letter-spacing: 0.5px;">*Picture auto-crops to
+          circle</p>
       </div>
       <input type="text" id="editName" class="login-input" placeholder="Name (Letters & Spaces only)">
-      <input type="number" id="editRoll" class="login-input"
-        placeholder="University Roll Number / Registation Number (13 Digits)"
+
+      <!-- Gamification Badge Display -->
+      <div id="gamificationBadge"
+        style="margin-bottom: 20px; font-weight: bold; font-size: 14px; text-shadow: 0 0 5px rgba(0,255,255,0.5); padding: 10px; border-radius: 8px; background: rgba(0, 242, 254, 0.1); border: 1px solid rgba(0, 242, 254, 0.3);">
+        🏆 Points: <span id="userPoints" style="color: cyan;">0</span> | Rank: <span id="userRank"
+          style="color: gold;">Beginner 🌱</span>
+      </div>
+
+      <input type="number" id="editRoll" class="login-input" placeholder="University Roll Number (13 Digits)"
         style="appearance: none; -moz-appearance: textfield;">
 
       <div style="display: flex; gap: 10px;">
@@ -1253,20 +1828,143 @@
       <input type="tel" id="editMobile" class="login-input" placeholder="Mobile Number">
 
       <button class="login-btn" onclick="saveProfileChanges()" style="margin-bottom: 15px;">💾 Save Changes</button>
+      <button class="login-btn" onclick="downloadIDCard()"
+        style="background: linear-gradient(90deg, #11998e 0%, #38ef7d 100%); color: white; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(56,239,125,0.4);">⬇️
+        Download ID Card</button>
       <button class="login-btn" onclick="logoutUser()"
-        style="background: #ff4757; color: white; margin-bottom: 15px;">🚪 Logout</button>
+        style="background: linear-gradient(90deg, #ff416c, #ff4b2b); color: white; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(255,75,43,0.4);">🚪
+        Logout</button>
       <button class="login-btn" onclick="closeEditProfile()"
-        style="background: transparent; border: 1px solid cyan; color: cyan; box-shadow: none;">❌ Cancel</button>
+        style="background: transparent; border: 1px solid rgba(0,242,254,0.5); color: #00f2fe; box-shadow: none;">❌
+        Cancel</button>
+    </div>
+
+    <!-- DIGITAL ID CARD UI (Hidden but used for rendering/downloading) -->
+    <div id="studentIdCard"
+      style="width: 486px; height: 306px; background: #000; position: fixed; left: 0; top: 0; overflow: hidden; border-radius: 16px; border: 1px solid rgba(0,242,254,0.3); font-family: 'Segoe UI', sans-serif; box-shadow: 0 10px 30px rgba(0,0,0,0.8); text-align: left; box-sizing: border-box; z-index: -9999; pointer-events: none;">
+
+      <!-- Premium Tech/AI Background -->
+      <img src="https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=600&auto=format&fit=crop"
+        crossorigin="anonymous"
+        style="position: absolute; width:100%; height:100%; object-fit:cover; opacity: 0.6; z-index: 1; filter: contrast(1.2) saturate(1.5);">
+      <div
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; background: linear-gradient(135deg, #0b132b, #1c2541);">
+      </div>
+      <div
+        style="position: absolute; top: -50px; left: -50px; width: 250px; height: 250px; background: rgba(0,242,254,0.3); border-radius: 50%; filter: blur(50px); z-index: 2;">
+      </div>
+      <div
+        style="position: absolute; bottom: -50px; right: -50px; width: 200px; height: 200px; background: rgba(255,0,150,0.2); border-radius: 50%; filter: blur(60px); z-index: 2;">
+      </div>
+
+      <!-- Content -->
+      <div style="position: relative; z-index: 3; display: flex; flex-direction: column; height: 100%;">
+
+        <!-- Header -->
+        <div
+          style="display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0,242,254,0.2);">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="img1.png" style="width: 30px; height: 30px; filter: drop-shadow(0 0 5px cyan);">
+            <div>
+              <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #fff; letter-spacing: 1px;">NEXTGEN <span
+                  style="color: #00f2fe;">LIBRARY</span></h3>
+              <p style="margin: 0; font-size: 9px; color: #aaa; letter-spacing: 2px;">VIRTUAL STUDENT IDENTITY</p>
+            </div>
+          </div>
+          <!-- Gamification Top Icon -->
+          <div id="idCardRankIcon"
+            style="width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #00f2fe, #4facfe); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px rgba(0,242,254,0.5);">
+            <span style="font-size: 14px;">🎓</span>
+          </div>
+        </div>
+
+        <!-- Body -->
+        <div style="display: flex; padding: 15px 20px; gap: 20px; align-items: center; flex-grow: 1;">
+          <!-- Photo -->
+          <div style="position: relative; flex-shrink: 0; width: 100px; height: 100px;">
+            <div
+              style="position: absolute; inset: -3px; border-radius: 50%; background: linear-gradient(135deg, #00f2fe, #ff007a); z-index: 0; box-shadow: 0 0 15px rgba(0,242,254,0.5);">
+            </div>
+            <img id="idCardPic" src="" crossorigin="anonymous"
+              style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; position: relative; z-index: 1; border: 2px solid #000;">
+          </div>
+
+          <!-- Details -->
+          <div style="flex-grow: 1; color: white;">
+            <h2 id="idCardName"
+              style="margin: 0 0 2px 0; font-size: 22px; font-weight: 900; text-transform: uppercase; color: #fff; text-shadow: 0 0 10px rgba(0,242,254,0.5);">
+              --</h2>
+
+            <!-- Rank / Congratulations Text -->
+            <p id="idCardCongrats"
+              style="margin: 0 0 10px 0; font-size: 10px; color: gold; font-weight: bold; text-transform: uppercase;">
+              CONGRATULATIONS ON ACHIEVING <span id="idCardRankText" style="color: #fff;">RANK</span> LEVEL ✨</p>
+
+            <table style="width: 100%; font-size: 11px; border-collapse: separate; border-spacing: 0 4px;">
+              <tr>
+                <td style="color: #00f2fe; font-weight: 600; width: 80px; letter-spacing: 1px;">REG/ROLL NO</td>
+                <td style="color: #fff; font-weight: bold; font-family: monospace; font-size: 12px;" id="idCardRoll">--
+                </td>
+              </tr>
+              <tr>
+                <td style="color: #00f2fe; font-weight: 600; letter-spacing: 1px;">COURSE</td>
+                <td style="color: #fff; font-weight: bold;" id="idCardCourse">--</td>
+              </tr>
+              <tr>
+                <td style="color: #00f2fe; font-weight: 600; letter-spacing: 1px;">LIBRARY PTS</td>
+                <td style="color: #fff; font-weight: bold; font-size: 12px; color: cyan;" id="idCardPoints">--</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div
+          style="padding: 10px 20px; background: rgba(0,0,0,0.8); border-top: 1px solid rgba(0,242,254,0.3); display: flex; justify-content: space-between; align-items: center;">
+          <div
+            style="font-family: monospace; font-size: 14px; color: rgba(255,255,255,0.7); letter-spacing: -1px; transform: scaleY(1.5);">
+            || | ||| || || | | ||||</div>
+          <div style="font-size: 9px; color: #00f2fe; font-weight: bold; letter-spacing: 1px;">
+            adityakumar12xyz.github.io/NextGen/
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
+  <!-- CROPPER UI MODAL (For Profile Photos) -->
+  <div id="cropModal"
+    style="display: none; position: fixed; z-index: 10005; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.9); flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;">
+    <h3 style="color: #00f2fe; margin-bottom: 20px; font-family: sans-serif;">✂️ Adjust Your Profile Photo</h3>
+    <div style="max-width: 90%; max-height: 60vh; overflow: hidden; border: 2px solid cyan; border-radius: 10px;">
+      <img id="imageToCrop" src="" style="max-width: 100%; display: block;">
+    </div>
+    <div style="display: flex; gap: 15px; margin-top: 25px;">
+      <button class="login-btn" onclick="cancelCrop()"
+        style="background: transparent; border: 1px solid #ff4757; color: #ff4757; width: auto; padding: 10px 25px;">Cancel</button>
+      <button class="login-btn" onclick="applyCrop()"
+        style="background: linear-gradient(90deg, #11998e, #38ef7d); color: white; border: none; width: auto; padding: 10px 25px;">Crop
+        & Save</button>
+    </div>
+  </div>
   <!-- ADMIN DASHBOARD -->
   <div id="adminDashboard">
-    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
-      <h2 style="color: cyan; text-shadow: 0 0 10px cyan;">🛡️ Secure Admin Dashboard</h2>
-      <div style="display: flex; gap: 10px; margin-top: 10px;">
-        <button onclick="exportToExcel()" style="background: #28a745; color: white;">📊 Export to Excel</button>
-        <button onclick="adminLogout()" style="background: #ff4757; color: white;">Logout Admin</button>
+    <div
+      style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 20px;">
+      <h2
+        style="background: linear-gradient(90deg, #00f2fe, #4facfe); -webkit-background-clip: text; background-clip: text; color: transparent; margin: 0;">
+        🛡️ Secure Admin Dashboard</h2>
+      <div style="display: flex; gap: 15px; margin-top: 10px;">
+        <!-- ADMIN HACK: ONE-CLICK DATA BACKUP -->
+        <button onclick="backupFullData()"
+          style="background: linear-gradient(90deg, #6c5ce7 0%, #a29bfe 100%); color: white; padding: 10px 20px; font-size: 14px; box-shadow: 0 4px 15px rgba(108, 92, 231, 0.4);">💾
+          JSON Backup</button>
+        <button onclick="exportToExcel()"
+          style="background: linear-gradient(90deg, #11998e 0%, #38ef7d 100%); color: white; padding: 10px 20px; font-size: 14px; box-shadow: 0 4px 15px rgba(56, 239, 125, 0.4);">📊
+          Export to Excel</button>
+        <button onclick="adminLogout()"
+          style="background: linear-gradient(90deg, #ff416c 0%, #ff4b2b 100%); color: white; padding: 10px 20px; font-size: 14px; box-shadow: 0 4px 15px rgba(255, 65, 108, 0.4);">🚪
+          Logout Admin</button>
       </div>
     </div>
 
@@ -1287,6 +1985,76 @@
           <!-- Rows injected via JS -->
         </tbody>
       </table>
+    </div>
+
+    <!-- ADMIN HACK: USER SHADOW MODAL (Activity Logs - ID Card Style) -->
+    <div id="userShadowModal"
+      style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 20000; justify-content: center; align-items: center; backdrop-filter: blur(15px);">
+      <div style="position: relative;">
+        <!-- Close Button Overlaid -->
+        <button onclick="document.getElementById('userShadowModal').style.display='none'"
+          style="position: absolute; top: -20px; right: -20px; background: #ff4757; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; z-index: 20001; font-weight: bold; box-shadow: 0 0 10px rgba(0,0,0,0.5);">✕</button>
+
+        <div id="shadowIdCard"
+          style="width: 486px; height: 306px; background: #000; position: relative; overflow: hidden; border-radius: 16px; border: 1px solid rgba(0,242,254,0.5); font-family: 'Segoe UI', sans-serif; box-shadow: 0 0 50px rgba(0,242,254,0.3); text-align: left; box-sizing: border-box;">
+
+          <!-- Premium Tech/AI Background (Replicated from ID Card) -->
+          <img src="https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=600&auto=format&fit=crop"
+            style="position: absolute; width:100%; height:100%; object-fit:cover; opacity: 0.5; z-index: 1; filter: contrast(1.2) hue-rotate(180deg);">
+          <div
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; background: linear-gradient(135deg, #0b132b, #1c2541);">
+          </div>
+
+          <!-- Content -->
+          <div style="position: relative; z-index: 3; display: flex; flex-direction: column; height: 100%;">
+            <!-- Header -->
+            <div
+              style="display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0,242,254,0.3);">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="img1.png" style="width: 30px; height: 30px; filter: drop-shadow(0 0 5px cyan);">
+                <div>
+                  <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #fff; letter-spacing: 1px;">SHADOW
+                    <span style="color: #ff4757;">SYSTEM</span>
+                  </h3>
+                  <p style="margin: 0; font-size: 9px; color: #aaa; letter-spacing: 2px;">NEURAL ACTIVITY OVERRIDE</p>
+                </div>
+              </div>
+              <div
+                style="width: 30px; height: 30px; border-radius: 50%; background: rgba(255,71,87,0.2); border: 1px solid #ff4757; display: flex; align-items: center; justify-content: center;">
+                <span id="shadowStatusIcon" style="font-size: 14px; color: #ff4757;">👁️</span>
+              </div>
+            </div>
+
+            <!-- Body -->
+            <div style="display: flex; padding: 15px 20px; gap: 20px; align-items: center; flex-grow: 1;">
+              <!-- Photo Container -->
+              <div style="position: relative; flex-shrink: 0; width: 100px; height: 100px;">
+                <div
+                  style="position: absolute; inset: -3px; border-radius: 50%; background: linear-gradient(135deg, #ff4757, #00f2fe); z-index: 0; box-shadow: 0 0 15px rgba(255,71,87,0.5);">
+                </div>
+                <img id="shadowPic" src=""
+                  style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; position: relative; z-index: 1; border: 2px solid #000;">
+              </div>
+
+              <!-- Details -->
+              <div id="shadowDetails" style="flex-grow: 1; color: white;">
+                <!-- Injected via JS -->
+              </div>
+            </div>
+
+            <!-- Footer -->
+            <div
+              style="padding: 10px 20px; background: rgba(255,71,87,0.1); border-top: 1px solid rgba(255,71,87,0.3); display: flex; justify-content: space-between; align-items: center;">
+              <div
+                style="font-family: monospace; font-size: 14px; color: rgba(255,71,87,0.7); letter-spacing: -1px; transform: scaleY(1.5);">
+                || | ||| || || | | ||||</div>
+              <div id="shadowTimestamp" style="font-size: 9px; color: #ff4757; font-weight: bold; letter-spacing: 1px;">
+                SECURE_LINK_ENCRYPTED
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- ADMIN CONTENT MANAGEMENT SYSTEM -->
@@ -1566,14 +2334,43 @@
   <div id="welcomeScreen" style="display:none;">
     <div style="position: absolute; top: 20px; right: 20px;">
       <button onclick="openEditProfile()"
-        style="font-size: 14px; padding: 8px 15px; background: rgba(0, 255, 255, 0.2); border: 1px solid cyan; border-radius: 5px; color: cyan; cursor: pointer;">✏️
+        style="font-size: 14px; padding: 10px 20px; background: rgba(0, 242, 254, 0.1); border: 1px solid rgba(0, 242, 254, 0.5); border-radius: 8px; color: #00f2fe; cursor: pointer; backdrop-filter: blur(5px); box-shadow: 0 4px 15px rgba(0,0,0,0.2);">✏️
         Edit Profile</button>
     </div>
+
+    <!-- CSS Floating shapes for VFX -->
+    <div style="position: absolute; width: 100%; height: 100%; overflow: hidden; z-index: -1;">
+      <div
+        style="position: absolute; top: 10%; left: 15%; width: 100px; height: 100px; background: radial-gradient(circle, rgba(0,242,254,0.4), transparent); filter: blur(20px); animation: float 6s ease-in-out infinite;">
+      </div>
+      <div
+        style="position: absolute; bottom: 20%; right: 10%; width: 150px; height: 150px; background: radial-gradient(circle, rgba(79,172,254,0.3), transparent); filter: blur(30px); animation: float 8s ease-in-out infinite reverse;">
+      </div>
+    </div>
+    <style>
+      @keyframes float {
+        0% {
+          transform: translateY(0px) rotate(0deg);
+        }
+
+        50% {
+          transform: translateY(-20px) rotate(10deg);
+        }
+
+        100% {
+          transform: translateY(0px) rotate(0deg);
+        }
+      }
+    </style>
+
     <img src="img1.png" alt="NextGen Library"
-      style="width:250px; height:250px; margin-bottom:20px; filter:drop-shadow(0 0 20px cyan);">
+      style="width:220px; height:220px; margin-bottom:20px; filter:drop-shadow(0 0 25px rgba(0, 242, 254, 0.6)); animation: float 4s ease-in-out infinite;">
     <h1 id="typingText"></h1>
-    <p id="welcomeSubtitle">Your Digital Learning Hub</p>
-    <button onclick="enterSite()">Enter Library</button>
+    <p id="welcomeSubtitle"
+      style="font-size: 20px; color: #ddd; letter-spacing: 1px; font-weight: 300; margin-bottom: 30px;">Your Digital
+      Learning Hub</p>
+    <button onclick="enterSite()" style="padding: 15px 40px; font-size: 18px; border-radius: 30px;">Enter
+      Library</button>
   </div>
 
   <!-- PROGRAMS VIEW WITH INFO -->
@@ -1804,10 +2601,7 @@
     </div>
   </div>
 
-  <footer id="mainFooter"
-    style="display:none; text-align: center; padding: 20px; margin-top: auto; border-top: 1px solid rgba(0, 255, 255, 0.3); padding-bottom: 20px; color: #ccc;">
-    Copyright © 2026 NextGen Library Made by @mr_insaan_kumar
-  </footer>
+
 
   <script>
     /* AUTO TYPING */
@@ -1824,8 +2618,14 @@
     typing();
 
     /* PAGE NAVIGATION MANAGER */
-    function showPage(pageId) {
+    function showPage(pageId, pushToHistory = true) {
       if (!pageId) return;
+
+      // Update Browser History if requested
+      if (pushToHistory) {
+        history.pushState({ pageId: pageId }, "", "#" + pageId);
+      }
+
       // List of all main content segments
       const allPages = ["loginScreen", "welcomeScreen", "adminDashboard", "programsWrapper", "dynamicNavSection", "chapters", "content", "semesterMotivationSection", "premiumNavSection"];
 
@@ -1855,6 +2655,28 @@
 
       window.scrollTo(0, 0);
     }
+
+    // Handle Browser Back/Forward Buttons
+    window.onpopstate = function (event) {
+      if (event.state && event.state.pageId) {
+        showPage(event.state.pageId, false);
+      } else {
+        // Default to login or previous if no state
+        showPage("loginScreen", false);
+      }
+    };
+
+    // Initial State Push
+    window.addEventListener('load', () => {
+      // Find what page is currently active (visible)
+      const allPages = ["loginScreen", "welcomeScreen", "adminDashboard", "programsWrapper", "dynamicNavSection", "chapters", "content", "semesterMotivationSection", "premiumNavSection"];
+      let activePage = "loginScreen";
+      allPages.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.style.display !== 'none') activePage = id;
+      });
+      history.replaceState({ pageId: activePage }, "", "#" + activePage);
+    });
 
     /* DATA */
     let oldData = {
@@ -2128,6 +2950,17 @@
     let tempRecoverMobile = "";
     let currentUserMobile = "";
 
+    function triggerNeuralSyncNotification(msg) {
+      const hud = document.getElementById("neuralSyncHUD");
+      if (!hud) return;
+      hud.innerText = msg;
+      hud.style.display = "block";
+      hud.style.animation = "neuralPulse 2s infinite, slideInUp 0.5s ease-out";
+      setTimeout(() => {
+        hud.style.display = "none";
+      }, 5000);
+    }
+
     // CHECK PERSISTENT LOGIN ON LOAD
     window.onload = function () {
       Promise.all([
@@ -2141,6 +2974,17 @@
         if (pConfSnap.exists() && pConfSnap.val()) globalPremiumConfig = pConfSnap.val();
         if (pCourseConfSnap.exists() && pCourseConfSnap.val()) globalPremiumCourseConfigs = pCourseConfSnap.val();
         if (pDataSnap.exists() && pDataSnap.val()) premiumData = pDataSnap.val();
+
+        // ENABLE REAL-TIME NEURAL SYNC
+        database.ref('courseData').on('value', snap => {
+          const newData = snap.val();
+          if (newData && JSON.stringify(newData) !== JSON.stringify(data)) {
+            data = newData;
+            triggerNeuralSyncNotification("📡 Incoming Data Stream: Course Library Updated.");
+            renderStudentCourses();
+            if (currentUserMobile) restoreNavState(); // Gently refresh current view
+          }
+        });
 
         loadSiteSettings();
         initAdminCMS(); // Sync all dropdowns
@@ -2170,6 +3014,23 @@
                 picEl.style.display = 'block';
               }
 
+              // Show Header Badge
+              const badgeEl = document.getElementById("headerGamificationBadge");
+              if (badgeEl) {
+                let pts = userData.timeSpent || 0;
+                let badge = "Beginner 🌱";
+                let badgeColor = "#38ef7d";
+                if (pts >= 300) { badge = "Master Scholar 👑"; badgeColor = "gold"; }
+                else if (pts >= 60) { badge = "Explorer 🚀"; badgeColor = "cyan"; }
+
+                badgeEl.innerText = badge;
+                badgeEl.style.color = badgeColor;
+                badgeEl.style.borderColor = badgeColor;
+                badgeEl.style.display = "block";
+              }
+
+              updateNeuralHUD(userData);
+
               showPage("welcomeScreen");
               document.querySelector("#welcomeScreen p").innerText = `\nWelcome back, ${userData.name}!`;
               startTimeTracking();
@@ -2179,6 +3040,21 @@
         }
       }).catch(err => console.error("Firebase init failed:", err));
     };
+
+    function updateNeuralHUD(userData) {
+      if (!userData) return;
+      document.getElementById('neuralHUD').style.display = 'flex';
+
+      let pts = userData.timeSpent || 0;
+      let badge = "Beginner 🌱";
+      let badgeColor = "#38ef7d";
+      if (pts >= 300) { badge = "Master 👑"; badgeColor = "gold"; }
+      else if (pts >= 60) { badge = "Explorer 🚀"; badgeColor = "cyan"; }
+
+      document.getElementById('hudRank').innerText = badge;
+      document.getElementById('hudRank').style.color = badgeColor;
+      document.getElementById('hudPoints').innerText = pts + " XP";
+    }
 
     // TIME TRACKING ENGINE
     let timeSpentInterval = null;
@@ -2202,6 +3078,9 @@
 
         // Sync to Firebase directly
         database.ref('users/' + currentUserMobile + '/timeSpent').set(stObj.timeSpent);
+
+        // Update HUD real-time
+        updateNeuralHUD(stObj);
       }, 60000); // 1 minute intervals
     }
 
@@ -2255,6 +3134,189 @@
       });
     }
 
+    // ID CARD GENERATOR
+    function downloadIDCard() {
+      if (!currentUserMobile) return;
+
+      // Auto-Sync Data from LocalStorage before generating
+      let ud = JSON.parse(localStorage.getItem(currentUserMobile));
+      if (ud) {
+        let picURL = ud.profilePic || `https://ui-avatars.com/api/?name=${encodeURIComponent(ud.name || 'U')}&background=cyan&color=000`;
+        document.getElementById("idCardPic").src = picURL;
+        document.getElementById("idCardName").innerText = ud.name || "STUDENT NAME";
+        document.getElementById("idCardRoll").innerText = ud.roll || "--";
+        document.getElementById("idCardCourse").innerText = (ud.branch || "--") + (ud.section ? " | " + ud.section : "");
+        document.getElementById("idCardMobile").innerText = ud.mobile ? "+91 " + ud.mobile : "--";
+
+        // ID Card Gamification Injection
+        let pts = ud.timeSpent || 0;
+        let badge = "Beginner 🌱";
+        let badgeColor = "#38ef7d";
+        if (pts >= 300) { badge = "Master Scholar 👑"; badgeColor = "gold"; }
+        else if (pts >= 60) { badge = "Explorer 🚀"; badgeColor = "cyan"; }
+
+        document.getElementById("idCardPoints").innerText = pts;
+        document.getElementById("idCardRankText").innerText = badge.split(' ')[0]; // Just the text part
+        document.getElementById("idCardRankText").style.color = badgeColor;
+        document.getElementById("idCardRankIcon").innerHTML = `<span style="font-size: 14px;">${badge.split(' ')[1] || '🎓'}</span>`;
+        document.getElementById("idCardRankIcon").style.background = badgeColor === 'gold' ? 'linear-gradient(135deg, gold, orange)' : (badgeColor === 'cyan' ? 'linear-gradient(135deg, #00f2fe, #4facfe)' : 'linear-gradient(135deg, #11998e, #38ef7d)');
+      }
+
+      const idCard = document.getElementById('studentIdCard');
+
+      const btn = event.target;
+      const originalText = btn.innerText;
+      btn.innerText = "⏳ Generating...";
+      btn.disabled = true;
+
+      // Ensure images load before snapshotting
+      const imgs = idCard.querySelectorAll('img');
+      let promises = Array.from(imgs).map(img => {
+        if (img.complete) return Promise.resolve();
+        return new Promise((resolve) => {
+          img.onload = resolve;
+          img.onerror = resolve;
+        });
+      });
+
+      Promise.all(promises).then(() => {
+        // Temporarily scroll to top
+        const origScrollY = window.scrollY;
+        window.scrollTo(0, 0);
+
+        html2canvas(idCard, {
+          backgroundColor: null,
+          scale: 3, // High quality
+          useCORS: true, // Allow cross-origin images
+          allowTaint: true,
+          scrollX: 0,
+          scrollY: 0,
+          windowWidth: document.documentElement.offsetWidth,
+          windowHeight: document.documentElement.offsetHeight,
+          x: 0,
+          y: 0
+        }).then(canvas => {
+          window.scrollTo(0, origScrollY); // Restore scroll
+          const link = document.createElement('a');
+          link.download = `NextGen_ID_${currentUserMobile}.png`;
+          link.href = canvas.toDataURL('image/png', 1.0);
+          link.click();
+
+          btn.innerText = "✅ Downloaded!";
+          setTimeout(() => {
+            btn.innerText = originalText;
+            btn.disabled = false;
+          }, 3000);
+        }).catch(err => {
+          window.scrollTo(0, origScrollY);
+          console.error("ID Card generation failed", err);
+          btn.innerText = "❌ Error! Try Again";
+          btn.disabled = false;
+          alert("Could not generate ID card. Please ensure your profile picture is loaded correctly.");
+        });
+      });
+    }
+
+    // PROFILE MANAGEMENT
+    let cropperInstance = null;
+
+    function previewEditProfilePic(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const image = document.getElementById('imageToCrop');
+          image.src = e.target.result;
+          document.getElementById('cropModal').style.display = 'flex';
+
+          if (cropperInstance) {
+            cropperInstance.destroy();
+          }
+
+          cropperInstance = new Cropper(image, {
+            aspectRatio: 1, // enforced square for circle
+            viewMode: 1,
+            autoCropArea: 0.8,
+            dragMode: 'move',
+            background: false,
+            minContainerHeight: 300,
+            ready: function () {
+              // Circle styling mask
+              document.querySelector('.cropper-view-box').style.borderRadius = '50%';
+              document.querySelector('.cropper-face').style.borderRadius = '50%';
+            }
+          });
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function cancelCrop() {
+      document.getElementById('cropModal').style.display = 'none';
+      document.getElementById('editProfilePicInput').value = ""; // Reset file input
+      if (cropperInstance) cropperInstance.destroy();
+    }
+
+    function applyCrop() {
+      if (!cropperInstance) return;
+
+      // Output perfectly as circular PNG format if supported, or standard base64 square that our CSS rounds
+      const canvas = cropperInstance.getCroppedCanvas({
+        width: 300,
+        height: 300
+      });
+
+      const base64Pic = canvas.toDataURL('image/png');
+
+      document.getElementById('editProfilePicPreview').src = base64Pic;
+      document.getElementById('idCardPic').src = base64Pic; // Sync to ID Card preview instantly
+
+      // Clean up
+      document.getElementById('cropModal').style.display = 'none';
+      cropperInstance.destroy();
+      cropperInstance = null;
+    }
+    function openEditProfile() {
+      if (!currentUserMobile) return;
+      let ud = JSON.parse(localStorage.getItem(currentUserMobile));
+      if (!ud) return;
+
+      document.getElementById("editName").value = ud.name;
+      document.getElementById("editRoll").value = ud.roll;
+      document.getElementById("editBranch").value = ud.branch;
+      document.getElementById("editSection").value = ud.section;
+      document.getElementById("editMobile").value = ud.mobile;
+      document.getElementById("editMobile").disabled = true; // Cannot edit main key
+
+      let picURL = ud.profilePic || `https://ui-avatars.com/api/?name=${encodeURIComponent(ud.name)}&background=cyan&color=000`;
+      document.getElementById("editProfilePicPreview").src = picURL;
+
+      // Calculate Gamification Badge
+      let pts = ud.timeSpent || 0;
+      let badge = "Beginner 🌱";
+      let badgeColor = "#38ef7d";
+      if (pts >= 300) { badge = "Master Scholar 👑"; badgeColor = "gold"; }
+      else if (pts >= 60) { badge = "Explorer 🚀"; badgeColor = "cyan"; }
+
+      document.getElementById("userPoints").innerText = pts;
+      let rankEl = document.getElementById("userRank");
+      if (rankEl) {
+        rankEl.innerText = badge;
+        rankEl.style.color = badgeColor;
+      }
+
+      // Update ID Card Data Behind the scenes
+      document.getElementById("idCardPic").src = picURL;
+      document.getElementById("idCardName").innerText = ud.name;
+      document.getElementById("idCardRoll").innerText = ud.roll;
+      document.getElementById("idCardCourse").innerText = ud.branch + (ud.section ? " | " + ud.section : "");
+      document.getElementById("idCardMobile").innerText = "+91 " + ud.mobile;
+
+      document.querySelector("#editProfileScreen h2").innerText = "✏️ Edit Profile";
+      document.getElementById("editProfileScreen").style.display = "flex";
+      isRecoveringMode = false;
+    }
+
     // VALIDATION HELPERS
     function validateInput(name, roll, mobile) {
       if (!/^[A-Za-z\s]+$/.test(name)) {
@@ -2305,25 +3367,33 @@
           timeSpent: 0
         };
 
-        database.ref('users/' + mobile).set(userData).then(() => {
-          localStorage.setItem(mobile, JSON.stringify(userData));
-          localStorage.setItem("activeSessionMobile", mobile);
-          localStorage.setItem("activeSessionExp", (Date.now() + 5 * 60 * 60 * 1000).toString());
+        // FACE SCAN SIMULATION
+        document.getElementById('faceScanOverlay').style.display = 'flex';
 
-          currentUserMobile = mobile;
-          alert("Registration Successful!");
-          showPage("welcomeScreen");
-          let wsP = document.querySelector("#welcomeScreen p");
-          wsP.innerText = `\nWelcome, ${name}!`;
+        setTimeout(() => {
+          database.ref('users/' + mobile).set(userData).then(() => {
+            document.getElementById('faceScanOverlay').style.display = 'none';
+            localStorage.setItem(mobile, JSON.stringify(userData));
+            localStorage.setItem("activeSessionMobile", mobile);
+            localStorage.setItem("activeSessionExp", (Date.now() + 5 * 60 * 60 * 1000).toString());
 
-          btn.innerText = "Sign Up & Enter";
-          btn.disabled = false;
-          startTimeTracking();
-        }).catch(err => {
-          alert("Network error, please try again.");
-          btn.innerText = "Sign Up & Enter";
-          btn.disabled = false;
-        });
+            currentUserMobile = mobile;
+            alert("Registration Successful!");
+            showPage("welcomeScreen");
+            let wsP = document.querySelector("#welcomeScreen p");
+            wsP.innerText = `\nWelcome, ${name}!`;
+
+            btn.innerText = "Sign Up & Enter";
+            btn.disabled = false;
+            startTimeTracking();
+            updateNeuralHUD(userData);
+          }).catch(err => {
+            document.getElementById('faceScanOverlay').style.display = 'none';
+            alert("Network error, please try again.");
+            btn.innerText = "Sign Up & Enter";
+            btn.disabled = false;
+          });
+        }, 2500);
       });
     }
 
@@ -2344,21 +3414,31 @@
       database.ref('users/' + mobile).once('value').then((snapshot) => {
         let savedData = snapshot.val();
         if (savedData && savedData.name.toLowerCase() === name.toLowerCase() && savedData.section === section) {
-          localStorage.setItem(mobile, JSON.stringify(savedData));
-          localStorage.setItem("activeSessionMobile", mobile);
-          localStorage.setItem("activeSessionExp", (Date.now() + 5 * 60 * 60 * 1000).toString());
 
-          currentUserMobile = mobile;
-          showPage("welcomeScreen");
-          let wsP = document.querySelector("#welcomeScreen p");
-          wsP.innerText = wsP.innerText.split('\n')[0] + `\nWelcome back, ${savedData.name}!`;
+          // FACE SCAN SIMULATION
+          document.getElementById('faceScanOverlay').style.display = 'flex';
 
-          startTimeTracking();
+          setTimeout(() => {
+            document.getElementById('faceScanOverlay').style.display = 'none';
+            localStorage.setItem(mobile, JSON.stringify(savedData));
+            localStorage.setItem("activeSessionMobile", mobile);
+            localStorage.setItem("activeSessionExp", (Date.now() + 5 * 60 * 60 * 1000).toString());
+
+            currentUserMobile = mobile;
+            showPage("welcomeScreen");
+            let wsP = document.querySelector("#welcomeScreen p");
+            wsP.innerText = wsP.innerText.split('\n')[0] + `\nWelcome back, ${savedData.name}!`;
+
+            startTimeTracking();
+            updateNeuralHUD(savedData);
+            btn.innerText = "Log In";
+            btn.disabled = false;
+          }, 2500);
         } else {
           alert("Incorrect credentials or user not found.");
+          btn.innerText = "Log In";
+          btn.disabled = false;
         }
-        btn.innerText = "Log In";
-        btn.disabled = false;
       }).catch(err => {
         alert("Login failed.");
         btn.innerText = "Log In";
@@ -2470,6 +3550,69 @@
       }
     }
 
+    /* ADMIN HACK: ONE-CLICK DATA BACKUP */
+    function backupFullData() {
+      database.ref('/').once('value').then(snap => {
+        const data = snap.val();
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `NextGen_Backup_${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        alert("✅ Full Database Backup Downloaded!");
+      });
+    }
+
+    /* ADMIN HACK: USER SHADOW MODE */
+    function viewUserShadow(mobile) {
+      database.ref(`users/${mobile}`).once('value').then(snap => {
+        const u = snap.val();
+        if (!u) return alert("User not found.");
+
+        const shadowModal = document.getElementById('userShadowModal');
+        const shadowDetails = document.getElementById('shadowDetails');
+        const shadowPic = document.getElementById('shadowPic');
+        const shadowTimestamp = document.getElementById('shadowTimestamp');
+
+        shadowPic.src = u.profilePic || `https://ui-avatars.com/api/?name=${encodeURIComponent(u.name)}&background=ff4757&color=fff`;
+        shadowTimestamp.innerText = `LAST_ACCESS: ${new Date().toLocaleTimeString()}`;
+
+        let unlockedItems = "None";
+        if (u.premiumUnlocked) {
+          unlockedItems = Object.keys(u.premiumUnlocked).filter(k => u.premiumUnlocked[k] === true || (u.premiumUnlocked[k] && u.premiumUnlocked[k].active)).length + " SECTORS";
+        }
+
+        shadowDetails.innerHTML = `
+            <h2 style="margin: 0 0 2px 0; font-size: 22px; font-weight: 900; text-transform: uppercase; color: #fff; text-shadow: 0 0 10px rgba(255,71,87,0.5);">${u.name}</h2>
+            <p style="margin: 0 0 10px 0; font-size: 10px; color: #ff4757; font-weight: bold; text-transform: uppercase;">TARGET IDENTIFIED: SECURE NODE ACTIVE ✨</p>
+            <table style="width: 100%; font-size: 11px; border-collapse: separate; border-spacing: 0 4px;">
+              <tr>
+                <td style="color: #ff4757; font-weight: 600; width: 80px; letter-spacing: 1px;">MOBILE NUM</td>
+                <td style="color: #fff; font-weight: bold; font-family: monospace; font-size: 12px;">+91 ${mobile}</td>
+              </tr>
+              <tr>
+                <td style="color: #ff4757; font-weight: 600; letter-spacing: 1px;">KNOWLEDGE</td>
+                <td style="color: cyan; font-weight: bold; font-size: 12px;">${u.timeSpent || 0} XP POINTS</td>
+              </tr>
+              <tr>
+                <td style="color: #ff4757; font-weight: 600; letter-spacing: 1px;">ACCESS</td>
+                <td style="color: gold; font-weight: bold;">${unlockedItems} UNLOCKED</td>
+              </tr>
+              <tr>
+                <td style="color: #ff4757; font-weight: 600; letter-spacing: 1px;">JOINED</td>
+                <td style="color: #ccc; font-size: 10px;">${u.registeredAt ? new Date(u.registeredAt).toLocaleDateString() : '--'}</td>
+              </tr>
+            </table>
+        `;
+
+        if (shadowModal) shadowModal.style.display = 'flex';
+      });
+    }
+
     function rejectPayment(reqId) {
       let reason = prompt("Enter rejection reason (e.g., Fake UTR, Unclear Image):");
       if (reason === null || reason.trim() === "") return; // cancelled
@@ -2519,8 +3662,9 @@
                 <td>${userRecord.section || 'N/A'}</td>
                 <td>${userRecord.mobile}</td>
                 <td>
-                  <button onclick="promptRemoveUser('${userRecord.mobile}')" style="background:#ff4757; color:white; padding:5px; border-radius:5px;">Remove</button>
-                  <button onclick="grantPremiumManually('${userRecord.mobile}')" style="background:gold; color:black; padding:5px; border-radius:5px; margin-left:5px;">+ Premium</button>
+                  <button onclick="viewUserShadow('${userRecord.mobile}')" style="background:#6c5ce7; color:white; padding:5px; border-radius:5px; font-size:12px;">👤 Shadow</button>
+                  <button onclick="promptRemoveUser('${userRecord.mobile}')" style="background:#ff4757; color:white; padding:5px; border-radius:5px; font-size:12px; margin-left:5px;">Remove</button>
+                  <button onclick="grantPremiumManually('${userRecord.mobile}')" style="background:gold; color:black; padding:5px; border-radius:5px; margin-left:5px; font-size:12px;">+ Prem</button>
                 </td>
               `;
               tbody.appendChild(tr);
@@ -3822,6 +4966,7 @@
       closeEditProfile();
       showPage("loginScreen");
       toggleAuthMode('login');
+      document.getElementById("neuralHUD").style.display = "none";
       if (timeSpentInterval) clearInterval(timeSpentInterval);
     }
 
@@ -4161,6 +5306,10 @@
         let data = snap.val();
         if (data && data.timestamp > fallbackNotifTime) {
           fallbackNotifTime = data.timestamp;
+
+          // COOL HOLOGRAPHIC HUD ALERT
+          triggerNeuralSyncNotification(`💬 ADMIN: ${data.title} - ${data.body}`);
+
           if (Notification.permission === 'granted') {
             navigator.serviceWorker.ready.then(reg => {
               try {
@@ -4502,6 +5651,7 @@
       let pdfArr = getArray(chapterData.pdf);
 
       if (pdfArr.length > 0) {
+        document.getElementById("pdfSection").classList.add('book-opening');
         pdfArr.forEach((pUrl, idx) => {
           let fileId = pUrl.match(/\/d\/(.*?)\//)?.[1];
           if (fileId) {
@@ -4538,6 +5688,11 @@
           }
         });
         document.getElementById("pdfSection").style.display = pContainer.children.length > 0 ? "block" : "none";
+
+        // Remove animation after play to avoid issues on re-renders
+        setTimeout(() => {
+          document.getElementById("pdfSection").classList.remove('book-opening');
+        }, 1500);
       } else {
         document.getElementById("pdfSection").style.display = "none";
       }
@@ -5127,10 +6282,324 @@
     }, 60000); // 60,000 ms = 1 minute
 
 
+    /* ADVANCED VFX: INTERACTIVE PARTICLE ENGINE */
+    const canvas = document.getElementById('vfx-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let mouse = { x: null, y: null, radius: 150 };
 
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.x;
+      mouse.y = e.y;
+    });
+
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 0) {
+        mouse.x = e.touches[0].clientX;
+        mouse.y = e.touches[0].clientY;
+      }
+    });
+
+    window.addEventListener('touchstart', (e) => {
+      if (e.touches.length > 0) {
+        mouse.x = e.touches[0].clientX;
+        mouse.y = e.touches[0].clientY;
+      }
+    });
+
+    window.addEventListener('touchend', () => {
+      mouse.x = null;
+      mouse.y = null;
+    });
+
+    function initParticles() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      particles = [];
+      let numberOfParticles = (canvas.width * canvas.height) / 9000;
+      for (let i = 0; i < numberOfParticles; i++) {
+        let size = Math.random() * 2 + 1;
+        let x = Math.random() * canvas.width;
+        let y = Math.random() * canvas.height;
+        let directionX = (Math.random() * 0.4) - 0.2;
+        let directionY = (Math.random() * 0.4) - 0.2;
+        let color = 'rgba(0, 242, 254, 1)';
+        particles.push(new Particle(x, y, directionX, directionY, size, color));
+      }
+    }
+
+    class Particle {
+      constructor(x, y, dx, dy, size, color) {
+        this.x = x;
+        this.y = y;
+        this.dx = dx;
+        this.dy = dy;
+        this.size = size;
+        this.color = color;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+        ctx.fillStyle = 'rgba(0, 242, 254, 0.8)';
+        ctx.fill();
+      }
+      update() {
+        if (this.x > canvas.width || this.x < 0) this.dx = -this.dx;
+        if (this.y > canvas.height || this.y < 0) this.dy = -this.dy;
+
+        // Mouse collision
+        let dx = mouse.x - this.x;
+        let dy = mouse.y - this.y;
+        let distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance < mouse.radius) {
+          if (mouse.x < this.x && this.x < canvas.width - this.size * 10) this.x += 3;
+          if (mouse.x > this.x && this.x > this.size * 10) this.x -= 3;
+          if (mouse.y < this.y && this.y < canvas.height - this.size * 10) this.y += 3;
+          if (mouse.y > this.y && this.y > this.size * 10) this.y -= 3;
+        }
+
+        this.x += this.dx;
+        this.y += this.dy;
+        this.draw();
+      }
+    }
+
+    function connect() {
+      let opacityValue = 1;
+      for (let a = 0; a < particles.length; a++) {
+        for (let b = a; b < particles.length; b++) {
+          let distance = ((particles[a].x - particles[b].x) * (particles[a].x - particles[b].x)) +
+            ((particles[a].y - particles[b].y) * (particles[a].y - particles[b].y));
+          if (distance < (canvas.width / 7) * (canvas.height / 7)) {
+            opacityValue = 1 - (distance / 20000);
+            ctx.strokeStyle = `rgba(0, 242, 254, ${opacityValue})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(particles[a].x, particles[a].y);
+            ctx.lineTo(particles[b].x, particles[b].y);
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    function animateParticles() {
+      requestAnimationFrame(animateParticles);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+      }
+      connect();
+    }
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      initParticles();
+    });
+
+    initParticles();
+    animateParticles();
+
+
+    /* 3D TILT EFFECT LOGIC (Mouse & Touch) */
+    function handleTilt(e, isTouch = false) {
+      const target = isTouch ? e.touches[0].target : e.target;
+      const box = target.closest('.box');
+      if (!box) return;
+
+      const clientX = isTouch ? e.touches[0].clientX : e.clientX;
+      const clientY = isTouch ? e.touches[0].clientY : e.clientY;
+
+      const rect = box.getBoundingClientRect();
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      const percentX = (x - centerX) / centerX;
+      const percentY = (y - centerY) / centerY;
+
+      const rotateX = percentY * -15;
+      const rotateY = percentX * 15;
+
+      box.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px) scale(1.02)`;
+      box.style.transition = 'none';
+    }
+
+    function resetTilt(e) {
+      const box = e.target.closest('.box') || (e.target && e.target.style && e.target.style.transform ? e.target : null);
+      if (!box || !box.classList.contains('box')) return;
+
+      box.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1)`;
+      box.style.transition = 'transform 0.5s ease';
+    }
+
+    document.addEventListener('mousemove', (e) => handleTilt(e));
+    document.addEventListener('touchmove', (e) => handleTilt(e, true), { passive: true });
+
+    document.addEventListener('mouseout', (e) => {
+      const box = e.target.closest('.box');
+      if (!box) return;
+      if (e.relatedTarget && box.contains(e.relatedTarget)) return;
+      resetTilt(e);
+    });
+
+    document.addEventListener('touchend', (e) => {
+      // Small delay to let the eye catch the final tilt
+      setTimeout(() => {
+        const boxes = document.querySelectorAll('.box');
+        boxes.forEach(b => {
+          b.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1)`;
+          b.style.transition = 'transform 0.5s ease';
+        });
+      }, 150);
+    });
+
+
+    /* GLOBAL SEARCH ALGORITHM */
+    function searchLibrary() {
+      const q = document.getElementById('globalSearchInput').value.toLowerCase().trim();
+      const resBox = document.getElementById('searchResultsModal');
+
+      if (!q) {
+        resBox.style.display = 'none';
+        resBox.innerHTML = '';
+        return;
+      }
+
+      let matches = [];
+      let maxResults = 15;
+
+      // Deep scan the data object
+      for (let course in data) {
+        for (let branch in data[course]) {
+          let sems = data[course][branch];
+          for (let semNum in sems) {
+            let subjects = sems[semNum];
+            for (let subName in subjects) {
+
+              // Keyword match in Subject Name
+              if (subName.toLowerCase().includes(q)) {
+                matches.push({ type: 'Subject', name: subName, course, branch, semNum, icon: '📖' });
+              }
+
+              let chapters = subjects[subName].chapters || [];
+              chapters.forEach(ch => {
+                // Keyword match in Chapter Content
+                if (ch.name.toLowerCase().includes(q) || (ch.description && ch.description.toLowerCase().includes(q))) {
+                  matches.push({
+                    type: 'Chapter',
+                    name: ch.name + ` <span style="font-size:10px;color:#aaa;">(${subName})</span>`,
+                    cleanName: ch.name,
+                    course, branch, semNum, subName,
+                    icon: '📝'
+                  });
+                }
+              });
+            }
+          }
+        }
+      }
+
+      if (matches.length === 0) {
+        resBox.innerHTML = '<div style="padding:10px; text-align:center; color:#ff4757; font-size:13px;">No results found for "' + q + '"</div>';
+      } else {
+        let html = '';
+        matches.slice(0, maxResults).forEach(m => {
+          if (m.type === 'Chapter') {
+            html += `<div style="padding: 10px; border-bottom: 1px solid rgba(0,255,255,0.1); cursor: pointer; transition: 0.3s; color: white; display:flex; align-items:center; gap:8px;" 
+                        onmouseover="this.style.background='rgba(0,242,254,0.2)'" onmouseout="this.style.background='transparent'"
+                        onclick="jumpToChapter('${m.course}', '${m.branch}', '${m.semNum}', '${m.subName}', \`${m.cleanName}\`)">
+                        <span>${m.icon}</span> <div><div style="font-size:13px; font-weight:bold; color: cyan;">${m.name}</div><div style="font-size:10px; color:#aaa;">${m.course} > ${m.branch} > Sem ${m.semNum}</div></div>
+                     </div>`;
+          } else {
+            html += `<div style="padding: 10px; border-bottom: 1px solid rgba(0,255,255,0.1); cursor: pointer; transition: 0.3s; color: white; display:flex; align-items:center; gap:8px;" 
+                        onmouseover="this.style.background='rgba(0,242,254,0.2)'" onmouseout="this.style.background='transparent'"
+                        onclick="jumpToSubject('${m.course}', '${m.branch}', '${m.semNum}', '${m.name}')">
+                        <span>${m.icon}</span> <div><div style="font-size:13px; font-weight:bold; color: #38ef7d;">${m.name}</div><div style="font-size:10px; color:#aaa;">${m.course} > ${m.branch} > Sem ${m.semNum}</div></div>
+                     </div>`;
+          }
+        });
+        resBox.innerHTML = html;
+      }
+      resBox.style.display = 'block';
+    }
+
+    // Direct Navigation Helpers from Search
+    function jumpToSubject(course, branch, semNum, subName) {
+      document.getElementById('globalSearchInput').value = '';
+      document.getElementById('searchResultsModal').style.display = 'none';
+
+      // Re-hydrate the native state to let UI handle the jump
+      studentNavState.course = course;
+      studentNavState.branch = branch;
+      studentNavState.sem = semNum;
+
+      // Navigate to the semester view where subjects are listed
+      openStudentLevel('semester', semNum);
+
+      // Auto-trigger the subject selection
+      setTimeout(() => {
+        openStudentLevel('subject', subName);
+        window.scrollTo(0, 0);
+      }, 50);
+    }
+
+    function jumpToChapter(course, branch, semNum, subName, chapterName) {
+      document.getElementById('globalSearchInput').value = '';
+      document.getElementById('searchResultsModal').style.display = 'none';
+
+      studentNavState.course = course;
+      studentNavState.branch = branch;
+      studentNavState.sem = semNum;
+      studentNavState.subject = subName;
+
+      // Open the Subject to see Chapter lists natively
+      openStudentLevel('semester', semNum);
+      setTimeout(() => {
+        openStudentLevel('subject', subName);
+        // Delay to allow UI mount, then hit actual chapter 
+        setTimeout(() => {
+          if (chapterName) {
+            openStudentChapter(chapterName);
+          }
+        }, 50);
+      }, 50);
+    }
+
+    // Hide Search on Outside Click
+    document.addEventListener("click", function (evt) {
+      let searchBox = document.getElementById("searchResultsModal");
+      let searchInput = document.getElementById("globalSearchInput");
+      if (searchBox && searchInput && !searchBox.contains(evt.target) && evt.target !== searchInput) {
+        searchBox.style.display = "none";
+      }
+    });
 
   </script>
 
+  <footer id="mainFooter" style="display:none;">
+    <div class="footer-text">© 2026 <span class="footer-brand">NextGen Digital Library</span> | Designed & Developed by
+      <span style="color: white; font-weight: bold;">Aditya Kumar</span>
+    </div>
+    <div class="social-links">
+      <a href="https://www.linkedin.com/in/aditya-kumar-878b3b289" target="_blank" class="social-btn" title="LinkedIn">
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+        </svg>
+      </a>
+      <a href="https://www.instagram.com/mr_insaan_kumar?igsh=MTh1MDVoOGpnZ2lneg==" target="_blank" class="social-btn"
+        title="Instagram">
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849s-.011 3.585-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.849-.07c-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849s.012-3.584.07-4.849c.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.337 2.615 6.76 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.337-2.617-6.761-6.98-6.98-1.28-.058-1.689-.072-4.948-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+        </svg>
+      </a>
+    </div>
+  </footer>
 </body>
 
 </html>
