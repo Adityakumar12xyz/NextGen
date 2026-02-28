@@ -1126,20 +1126,6 @@
 
 
   <!-- LEADERBOARD MODAL -->
-  <div id="leaderboardModal"
-    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 2000; justify-content: center; align-items: center;">
-    <div class="login-box"
-      style="text-align: center; max-height: 80vh; overflow-y: auto; width: 90%; max-width: 500px; position: relative;">
-      <button class="close-modal" onclick="closeLeaderboard()">✖</button>
-      <h2 style="color: gold; text-shadow: 0 0 10px gold; margin-top: 10px;">🏆 Leadership</h2>
-      <p style="color: #ccc; font-size: 14px; margin-bottom: 20px;">Top explorers of NextGen Library</p>
-      <div id="leaderboardList" style="display: flex; flex-direction: column; gap: 10px;">
-        <!-- Injected via JS -->
-      </div>
-    </div>
-  </div>
-
-  <!-- AUTHENTICATION SCREEN -->
   <div id="loginScreen">
     <div class="login-box">
 
@@ -1149,7 +1135,7 @@
           style="width: 80px; height: 80px; margin-bottom: 10px; filter: drop-shadow(0 0 10px cyan);">
         <h2>📝 NextGen Library Registration</h2>
         <input type="text" id="regName" class="login-input" placeholder="Name (Letters & Spaces only)">
-        <input type="number" id="regRoll" class="login-input" placeholder="University Roll Number (13 Digits)"
+        <input type="number" id="regRoll" class="login-input" placeholder="University Roll Number / Registation Number (13 Digits)"
           style="appearance: none; -moz-appearance: textfield;">
 
         <div style="display: flex; gap: 10px;">
@@ -1236,7 +1222,7 @@
           onchange="previewEditProfilePic(event)" style="padding: 5px;">
       </div>
       <input type="text" id="editName" class="login-input" placeholder="Name (Letters & Spaces only)">
-      <input type="number" id="editRoll" class="login-input" placeholder="University Roll Number (13 Digits)"
+      <input type="number" id="editRoll" class="login-input" placeholder="University Roll Number / Registation Number (13 Digits)"
         style="appearance: none; -moz-appearance: textfield;">
 
       <div style="display: flex; gap: 10px;">
@@ -1269,13 +1255,30 @@
 
   <!-- ADMIN DASHBOARD -->
   <div id="adminDashboard">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
       <h2 style="color: cyan; text-shadow: 0 0 10px cyan;">🛡️ Secure Admin Dashboard</h2>
-      <div style="display: flex; gap: 10px;">
+      <div style="display: flex; gap: 10px; margin-top: 10px;">
         <button onclick="exportToExcel()" style="background: #28a745; color: white;">📊 Export to Excel</button>
         <button onclick="adminLogout()" style="background: #ff4757; color: white;">Logout Admin</button>
       </div>
     </div>
+
+    <!-- Analytics Snapshot Feature -->
+    <div id="adminAnalyticsSnapshot" style="display: flex; gap: 15px; margin: 20px 0; flex-wrap: wrap;">
+      <div class="box" style="flex: 1; min-width: 150px; background: rgba(0,255,255,0.1); border-color: cyan;">
+        <h3 style="margin:0; font-size: 14px; color: #aaa;">Total Users</h3>
+        <p id="statTotalUsers" style="font-size: 24px; font-weight: bold; color: white; margin: 5px 0 0 0;">0</p>
+      </div>
+      <div class="box" style="flex: 1; min-width: 150px; background: rgba(255,215,0,0.1); border-color: gold;">
+        <h3 style="margin:0; font-size: 14px; color: #aaa;">Premium Users</h3>
+        <p id="statPremiumUsers" style="font-size: 24px; font-weight: bold; color: gold; margin: 5px 0 0 0;">0</p>
+      </div>
+      <div class="box" style="flex: 1; min-width: 150px; background: rgba(255,100,100,0.1); border-color: #ff6b6b;">
+        <h3 style="margin:0; font-size: 14px; color: #aaa;">Total Content</h3>
+        <p id="statTotalContent" style="font-size: 24px; font-weight: bold; color: #ff6b6b; margin: 5px 0 0 0;">0</p>
+      </div>
+    </div>
+
     <p>View all registered student data below. This info is protected.</p>
     <div style="overflow-x: auto;">
       <table class="admin-table">
@@ -1758,6 +1761,20 @@
     </div>
   </div>
 
+  <!-- Leaderboard Modal -->
+  <div id="leaderboardModal"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 2000; justify-content: center; align-items: center;">
+    <div class="login-box"
+      style="text-align: center; max-height: 80vh; overflow-y: auto; width: 90%; max-width: 500px; position: relative;">
+      <button class="close-modal" onclick="closeLeaderboard()">✖</button>
+      <h2 style="color: gold; text-shadow: 0 0 10px gold; margin-top: 10px;">🏆 Leadership</h2>
+      <p style="color: #ccc; font-size: 14px; margin-bottom: 20px;">Top explorers of NextGen</p>
+      <div id="leaderboardList" style="display: flex; flex-direction: column; gap: 10px;">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </div>
+
   <!-- MOTIVATION SECTION -->
   <div id="semesterMotivationSection" style="display:none;">
     <div class="semester-section">
@@ -1937,7 +1954,7 @@
           homework: "Verify trial balance."
         },
         "UNIT 4: Raising Funds:": {
-          video: "https://www.youtube.com/embed/82u1qyHBMQ4?si=oygKhomi2yJ7BYjq",
+          video: "https://www.youtube.com/embed/82u1qyHBMQ4?si=oygKhom2yJ7BYjq",
           notes: "Sources of Raising Funds, Simple Treatment to Issue of Shares, Forfeiture of Shares and Reissue of Forfeited Shares.",
           pdf: "",
           assignment: "Calculate depreciation and adjustments.",
@@ -1954,7 +1971,7 @@
 
       Dcld: {
         "DCLD - UNIT 1: Number Systems": {
-          video: "https://www.youtube.com/embed/MxjJqq3B6JU?si=6rhZmrISZh_PnFVu",
+          video: "https://www.youtube.com/embed/MxjJqq3BJU?si=6rhZmrISZh_PnFVu",
           notes: "Decimal, Binary, Octal, Hexadecimal number system, inter conversion between different number systems, different codes, gray code, ASCII code, Floating point numbers.",
           pdf: "",
           assignment: "Convert numbers between different bases.",
@@ -2144,14 +2161,91 @@
     let isRecoveringMode = false;
     let currentUserMobile = "";
 
+    // STATE MAINTENANCE
+    function saveNavState() {
+      if (typeof Storage !== "undefined") {
+        let state = {
+          studentNavState: typeof studentNavState !== 'undefined' ? studentNavState : { course: "", branch: "", sem: "", subject: "", chapter: "" },
+          currentNavLevel: typeof currentNavLevel !== 'undefined' ? currentNavLevel : 'course',
+          visibleSections: {
+            loginScreen: document.getElementById("loginScreen").style.display,
+            welcomeScreen: document.getElementById("welcomeScreen").style.display,
+            adminDashboard: document.getElementById("adminDashboard").style.display,
+            dynamicNavSection: document.getElementById("dynamicNavSection").style.display,
+            programsWrapper: document.getElementById("programsWrapper").style.display,
+            semesterMotivationSection: document.getElementById("semesterMotivationSection").style.display,
+            chapters: document.getElementById("chapters").style.display,
+            content: document.getElementById("content").style.display
+          }
+        };
+        sessionStorage.setItem("nextgenNavState", JSON.stringify(state));
+      }
+    }
+
+    function restoreNavState() {
+      if (typeof Storage !== "undefined") {
+        let savedState = sessionStorage.getItem("nextgenNavState");
+        if (savedState) {
+          try {
+            let state = JSON.parse(savedState);
+
+            // Restore visibility if the user was not on the login screen
+            if (state.visibleSections.loginScreen === "none") {
+              if (typeof studentNavState !== 'undefined') {
+                studentNavState = state.studentNavState;
+              }
+              if (typeof currentNavLevel !== 'undefined') {
+                currentNavLevel = state.currentNavLevel;
+              }
+
+              // Restore UI views
+              if (document.getElementById("loginScreen")) document.getElementById("loginScreen").style.display = state.visibleSections.loginScreen;
+              if (document.getElementById("welcomeScreen")) document.getElementById("welcomeScreen").style.display = state.visibleSections.welcomeScreen;
+              if (document.getElementById("adminDashboard")) document.getElementById("adminDashboard").style.display = state.visibleSections.adminDashboard;
+              if (document.getElementById("dynamicNavSection")) document.getElementById("dynamicNavSection").style.display = state.visibleSections.dynamicNavSection;
+              if (document.getElementById("programsWrapper")) document.getElementById("programsWrapper").style.display = state.visibleSections.programsWrapper;
+              if (document.getElementById("semesterMotivationSection")) document.getElementById("semesterMotivationSection").style.display = state.visibleSections.semesterMotivationSection;
+              if (document.getElementById("chapters")) document.getElementById("chapters").style.display = state.visibleSections.chapters;
+              if (document.getElementById("content")) document.getElementById("content").style.display = state.visibleSections.content;
+
+              return true; // State was restored
+            }
+          } catch (e) {
+            console.error("Error restoring navigation state", e);
+          }
+        }
+      }
+      return false; // No valid state restored
+    }
+
     // CHECK PERSISTENT LOGIN ON LOAD
     window.onload = function () {
       loadSiteSettings();
+
+      // Fetch latest courseData from Firebase on every page load to ensure sync
+      database.ref('courseData').once('value').then(snapshot => {
+        let fbData = snapshot.val();
+        if (fbData) {
+          data = fbData;
+          localStorage.setItem("courseData", JSON.stringify(data));
+
+          // Re-initialize admin CMS if admin dashboard is open
+          if (document.getElementById("adminDashboard").style.display === "block") {
+            initAdminCMS();
+          }
+        }
+      }).catch(err => console.error("Could not fetch courseData from Firebase", err));
+
       let activeUser = localStorage.getItem("activeSessionMobile");
       let expTime = localStorage.getItem("activeSessionExp");
       if (localStorage.getItem("adminSession") === "true") {
         document.getElementById("loginScreen").style.display = "none";
-        document.getElementById("adminDashboard").style.display = "block";
+
+        // Restore state if available, otherwise default to admin dashboard
+        if (!restoreNavState()) {
+          document.getElementById("adminDashboard").style.display = "block";
+        }
+
         loadAdminData();
         renderPendingPayments();
         renderActivePremiumUsers();
@@ -2161,17 +2255,36 @@
           if (userData) {
             currentUserMobile = activeUser;
             document.getElementById("loginScreen").style.display = "none";
-            document.getElementById("welcomeScreen").style.display = "flex";
+
+            // Restore state if available, otherwise default to welcome screen
+            if (!restoreNavState()) {
+              document.getElementById("welcomeScreen").style.display = "flex";
+            }
             document.querySelector("#welcomeScreen p").innerText += `\nWelcome back, ${userData.name}!`;
 
             // Backwards compatibility sync if needed
             localStorage.setItem(activeUser, JSON.stringify(userData));
+
+            // Start Active Time Tracker
+            startTimeTracking();
+            // Restore Time Spent memory to local if fetched
+            let localCache = JSON.parse(localStorage.getItem(activeUser)) || {};
+            localCache.timeSpent = userData.timeSpent || 0;
+            localStorage.setItem(activeUser, JSON.stringify(localCache));
+
+            // Restore theme preference
+            if (userData.theme === "light") {
+              document.body.classList.add("light");
+              let themeBtn = document.getElementById("themeToggleBtn");
+              if (themeBtn) themeBtn.innerText = "🌙";
+            }
           }
         });
       } else {
         // Clear expired session if any
         localStorage.removeItem("activeSessionMobile");
         localStorage.removeItem("activeSessionExp");
+        sessionStorage.removeItem("nextgenNavState");
       }
     };
 
@@ -2202,6 +2315,7 @@
           localStorage.setItem("adminSession", "true");
           document.getElementById("loginScreen").style.display = "none";
           document.getElementById("adminDashboard").style.display = "block";
+          saveNavState();
           loadAdminData();
           renderPendingPayments();
           renderActivePremiumUsers();
@@ -2319,43 +2433,77 @@
         tbody.innerHTML = "";
         let hasData = false;
         let usersData = snap.val();
+
+        let totalUsersCount = 0;
+        let totalPremiumCount = 0;
+
         if (usersData) {
           for (let key in usersData) {
-            let data = usersData[key];
-            if (data && data.name && data.mobile && data.mobile === key && data.role !== "admin") {
+            let userRecord = usersData[key];
+            if (userRecord && userRecord.name && userRecord.mobile && userRecord.mobile === key && userRecord.role !== "admin") {
               hasData = true;
+              totalUsersCount++;
 
-              let isPremium = data.premiumUnlocked && Object.keys(data.premiumUnlocked).some(k => {
-                let pu = data.premiumUnlocked[k];
+              let isPremium = userRecord.premiumUnlocked && Object.keys(userRecord.premiumUnlocked).some(k => {
+                let pu = userRecord.premiumUnlocked[k];
                 if (typeof pu === 'object' && pu.active) {
                   if (!pu.expiresAt || Date.now() <= pu.expiresAt) return true;
                 }
                 return pu === true;
               });
 
+              if (isPremium) totalPremiumCount++;
+
               let rowStyle = isPremium ? "background: rgba(255, 215, 0, 0.1);" : "";
-              let nameDisplay = isPremium ? `👑 <span style="color: gold;">${data.name}</span>` : data.name;
+              let nameDisplay = isPremium ? `👑 <span style="color: gold;">${userRecord.name}</span>` : userRecord.name;
 
               let tr = document.createElement("tr");
               tr.style.cssText = rowStyle;
               tr.innerHTML = `
                 <td>${nameDisplay}</td>
-                <td>${data.roll || 'N/A'}</td>
-                <td>${data.branch || 'N/A'}</td>
-                <td>${data.section || 'N/A'}</td>
-                <td>${data.mobile}</td>
-                <td><button class="login-btn" style="background: gold; color: black; padding: 5px 10px; margin: 0; font-size: 12px; border-radius: 5px;" onclick="grantPremiumManually('${data.mobile}')">💎 Grant Premium</button></td>
+                <td>${userRecord.roll || 'N/A'}</td>
+                <td>${userRecord.branch || 'N/A'}</td>
+                <td>${userRecord.section || 'N/A'}</td>
+                <td>${userRecord.mobile}</td>
+                <td>
+                  <button onclick="promptRemoveUser('${userRecord.mobile}')" style="background:#ff4757; color:white; padding:5px; border-radius:5px;">Remove</button>
+                  <button onclick="grantPremiumManually('${userRecord.mobile}')" style="background:gold; color:black; padding:5px; border-radius:5px; margin-left:5px;">+ Premium</button>
+                </td>
               `;
               tbody.appendChild(tr);
             }
           }
         }
 
+        // Update Snapshot UI
+        if (document.getElementById("statTotalUsers")) {
+          document.getElementById("statTotalUsers").innerText = totalUsersCount.toLocaleString();
+          document.getElementById("statPremiumUsers").innerText = totalPremiumCount.toLocaleString();
+
+          // Calculate total content chunks recursively
+          let contentCount = 0;
+          for (let c in data) {
+            if (c !== 'version') {
+              for (let b in data[c]) {
+                for (let sem in data[c][b]) {
+                  for (let sub in data[c][b][sem]) {
+                    for (let ch in data[c][b][sem][sub]) {
+                      contentCount++;
+                    }
+                  }
+                }
+              }
+            }
+          }
+          document.getElementById("statTotalContent").innerText = contentCount.toLocaleString();
+        }
+
         if (!hasData) {
-          tbody.innerHTML = "<tr><td colspan='6' style='text-align:center;'>No registered students yet.</td></tr>";
+          tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>No registered students yet.</td></tr>";
         }
       }).catch(err => {
-        tbody.innerHTML = "<tr><td colspan='6' style='text-align:center;color:red;'>Failed to load student data.</td></tr>";
+        tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;color:red;'>Error loading data!</td></tr>";
+        console.error(err);
       });
 
       initAdminCMS(); // Initialize the Content Management dropdowns
@@ -3060,6 +3208,18 @@
       });
     }
 
+    function promptRemoveUser(mobile) {
+      if (confirm(`Are you sure you want to permanently delete user with mobile ${mobile}? This action cannot be undone.`)) {
+        database.ref('users/' + mobile).remove().then(() => {
+          alert('User deleted successfully.');
+          loadAdminData(); // Refresh the table and counts
+        }).catch(err => {
+          console.error(err);
+          alert('Failed to delete user.');
+        });
+      }
+    }
+
     function renameCMSChapter() {
       let c = document.getElementById("cmsCourse").value;
       let b = document.getElementById("cmsBranch").value;
@@ -3332,13 +3492,16 @@
       tbody.innerHTML = "<tr><td colspan='3' style='padding: 15px; text-align: center; color: cyan;'>Loading...</td></tr>";
 
       database.ref('users').once('value').then(snap => {
-        tbody.innerHTML = "";
         let usersData = snap.val() || {};
         let count = 0;
 
-        for (let key in usersData) {
-          let u = usersData[key];
-          if (u.role === 'admin' || !u.premiumUnlocked) continue;
+        // Sort users by total time spent in descending order
+        let sortedUsers = Object.values(usersData).filter(u => u.role !== 'admin' && u.name).sort((a, b) => (b.timeSpent || 0) - (a.timeSpent || 0));
+
+        tbody.innerHTML = ""; // Clear loading message
+
+        sortedUsers.forEach(u => {
+          if (u.role === 'admin' || !u.premiumUnlocked) return;
 
           let activePlans = [];
           for (let itemKey in u.premiumUnlocked) {
@@ -3374,7 +3537,7 @@
              `;
             tbody.appendChild(tr);
           }
-        }
+        });
 
         if (count === 0) {
           tbody.innerHTML = "<tr><td colspan='3' style='padding: 15px; text-align: center; color: #aaa;'>No active premium members.</td></tr>";
@@ -3386,7 +3549,7 @@
     // isRecoveringMode is declared above
 
     function recoverDetails() {
-      let rollSearch = prompt("Enter your registered Univerisity Roll Number to recover/edit your details:");
+      let rollSearch = prompt("Enter your registered University Roll Number / Registation Number to recover/edit your details:");
       if (!rollSearch || rollSearch.trim() === "") return;
 
       let foundUser = null;
@@ -3415,7 +3578,7 @@
         document.querySelector("#editProfileScreen h2").innerText = "🛠️ Fix Registration Details";
         document.getElementById("editProfileScreen").style.display = "flex";
       } else {
-        alert("Sorry, no account found matching this University Roll Number Roll Number. You may need to Sign Up first.");
+        alert("Sorry, no account found matching this University Roll Number / Registation Number. You may need to Sign Up first.");
       }
     }
 
@@ -3426,7 +3589,7 @@
         return false;
       }
       if (!/^\d{13}$/.test(roll)) {
-        alert("Validation Error: University Roll Number must be exactly 13 digits long.");
+        alert("Validation Error: University Roll Number / Registation Number must be exactly 13 digits long.");
         return false;
       }
       if (!/^\d{10}$/.test(mobile)) {
@@ -3494,6 +3657,9 @@
 
           btn.innerText = "Sign Up & Enter";
           btn.disabled = false;
+
+          // Start Active Time Tracker
+          startTimeTracking();
         }).catch(err => {
           console.error(err);
           alert("Network error, please try again.");
@@ -3537,7 +3703,19 @@
             document.getElementById("welcomeScreen").style.display = "flex";
             let wsP = document.querySelector("#welcomeScreen p");
             wsP.innerText = wsP.innerText.split('\n')[0] + `\nWelcome back, ${savedData.name}!`;
+            let localCache = JSON.parse(localStorage.getItem(mobile)) || {};
+            localCache.timeSpent = savedData.timeSpent || 0;
+            localStorage.setItem(mobile, JSON.stringify(localCache));
 
+            // Start tracking active platform usage
+            startTimeTracking();
+
+            // Restore theme preference
+            if (savedData.theme === "light") {
+              document.body.classList.add("light");
+              let themeBtn = document.getElementById("themeToggleBtn");
+              if (themeBtn) themeBtn.innerText = "🌙";
+            }
           } else {
             alert("Incorrect Name or Section for this Mobile Number.");
           }
@@ -3722,7 +3900,34 @@
       return stObj;
     }
 
+    // TIME TRACKING ENGINE
+    let timeSpentInterval = null;
+    let isTabVisible = true;
+
+    document.addEventListener("visibilitychange", () => {
+      isTabVisible = !document.hidden;
+    });
+
+    function startTimeTracking() {
+      if (timeSpentInterval) clearInterval(timeSpentInterval);
+
+      timeSpentInterval = setInterval(() => {
+        if (!currentUserMobile || !isTabVisible) return;
+
+        let stObj = JSON.parse(localStorage.getItem(currentUserMobile)) || {};
+        stObj.timeSpent = (stObj.timeSpent || 0) + 1;
+
+        // Sync to Local for instant UI response if needed
+        localStorage.setItem(currentUserMobile, JSON.stringify(stObj));
+
+        // Sync to Firebase directly
+        database.ref('users/' + currentUserMobile + '/timeSpent').set(stObj.timeSpent);
+      }, 60000); // 1 minute intervals
+    }
+
     function toggleProgress(type, index, isChecked) {
+      if (!currentUserMobile) return;
+
       let stObj = getStudentTracker();
       let c = studentNavState.course;
       let b = studentNavState.branch;
@@ -3738,7 +3943,14 @@
       if (!stObj.progressTracker[c][b][sem][sub][ch][type]) stObj.progressTracker[c][b][sem][sub][ch][type] = {};
 
       stObj.progressTracker[c][b][sem][sub][ch][type][index] = isChecked;
+
+      // Keep local copy so UI feels instant
       localStorage.setItem(currentUserMobile, JSON.stringify(stObj));
+
+      // Force sync absolute source of truth to Firebase
+      database.ref(`users/${currentUserMobile}/progressTracker`).set(stObj.progressTracker).catch(err => {
+        console.error("Failed to sync progress to server:", err);
+      });
     }
 
     function isProgressCompleted(type, index) {
@@ -3932,20 +4144,6 @@
       document.getElementById('userProfilePicHeader').style.display = 'block';
     }
 
-
-
-    let timeSpentInterval;
-    function startTimeTracking() {
-      if (timeSpentInterval) clearInterval(timeSpentInterval);
-      timeSpentInterval = setInterval(() => {
-        if (currentUserMobile) {
-          database.ref('users/' + currentUserMobile + '/timeSpent').transaction((currentVal) => {
-            return (currentVal || 0) + 1; // 1 unit per minute
-          });
-        }
-      }, 60000); // Every 1 minute
-    }
-
     function openLeaderboard() {
       document.getElementById('leaderboardModal').style.display = 'flex';
       let list = document.getElementById('leaderboardList');
@@ -4016,7 +4214,7 @@
         currentNavLevel = 'branches';
         let branches = data[selection];
         for (let br in branches) {
-          html += `<div class="box" onclick="openStudentLevel('branch', '${br}')">🏢 ${br}</div>`;
+          html += `<div class="box" onclick="openStudentLevel('branch', '${br}')">🏛️ ${br}</div>`;
         }
       }
       else if (level === 'branch') {
@@ -4024,7 +4222,7 @@
         currentNavLevel = 'semesters';
         let sems = data[studentNavState.course][selection];
         for (let s in sems) {
-          html += `<div class="box" onclick="openStudentLevel('semester', '${s}')">📚 Semester ${s}</div>`;
+          html += `<div class="box" onclick="openStudentLevel('semester', '${s}')">📅 Semester ${s}</div>`;
         }
         document.getElementById("semesterMotivationSection").style.display = "block";
         renderProgressDashboard();
@@ -4033,46 +4231,60 @@
         studentNavState.sem = selection;
         currentNavLevel = 'subjects';
         let subs = data[studentNavState.course][studentNavState.branch][selection];
-        for (let sub in subs) {
-          html += `<div class="box" onclick="openStudentLevel('subject', '${sub}')">📘 ${sub}</div>`;
+        for (let su in subs) {
+          html += `<div class="box" onclick="openStudentLevel('subject', '${su}')">📘 ${su}</div>`;
         }
+        setupSemesterMotivation();
       }
       else if (level === 'subject') {
         studentNavState.subject = selection;
-        currentNavLevel = 'chapters';
-        // Hide dynamicNavSection, show original #chapters UI
         document.getElementById("dynamicNavSection").style.display = "none";
+        document.getElementById("semesterMotivationSection").style.display = "none";
         document.getElementById("chapters").style.display = "block";
-        document.getElementById("subjectTitle").innerText = selection + " Chapters";
 
         let chapters = data[studentNavState.course][studentNavState.branch][studentNavState.sem][selection];
-        let chList = "";
+        let chList = document.getElementById("chapterList");
+        chList.innerHTML = "";
+        document.getElementById("subjectTitle").innerText = `📚 ${selection}`;
+
         for (let ch in chapters) {
-          chList += `<li onclick="openStudentChapter('${ch}')">${ch}</li>`;
+          // Calculate Progress Dynamically
+          let prog = getProgress(ch);
+
+          let li = document.createElement("li");
+          li.innerHTML = `
+            <div style="flex:1;">
+              <strong>${ch}</strong>
+              <div class="progress-bar-small"><div class="progress-fill" style="width: ${prog}%"></div></div>
+            </div>
+            <button class="login-btn" onclick="openStudentChapter('${ch}')" style="margin:0; padding: 5px 15px; width:auto; font-size: 14px; margin-left:15px;">Open</button>
+          `;
+          chList.appendChild(li);
         }
-        document.getElementById("chapterList").innerHTML = chList;
-        return;
       }
 
-      container.innerHTML = html;
-    }
-
-    function goBackDynamicNav() {
-      if (currentNavLevel === 'branches') {
-        document.getElementById("dynamicNavSection").style.display = "none";
-        document.getElementById("programsWrapper").style.display = "block";
-        currentNavLevel = 'programs';
-      } else if (currentNavLevel === 'semesters') {
-        openStudentLevel('course', studentNavState.course);
-      } else if (currentNavLevel === 'subjects') {
-        openStudentLevel('branch', studentNavState.branch);
-        renderProgressDashboard();
+      if (level !== 'subject') {
+        container.innerHTML = html;
+        if (level !== 'course') {
+          let btn = document.createElement("button");
+          btn.innerText = "⬅ Back";
+          btn.style.cssText = "display:block; margin: 20px auto; padding: 10px 20px; font-size:16px;";
+          btn.onclick = function () {
+            if (level === 'branch') openStudentLevel('course', studentNavState.course);
+            else if (level === 'semester') openStudentLevel('branch', studentNavState.branch);
+            else if (level === 'subject') openStudentLevel('semester', studentNavState.sem);
+          };
+          container.appendChild(btn);
+        }
       }
+
+      saveNavState();
     }
 
     function goBackToSubjects() {
       document.getElementById("chapters").style.display = "none";
       openStudentLevel('semester', studentNavState.sem);
+      saveNavState();
     }
 
     function openStudentChapter(ch) {
@@ -4081,6 +4293,7 @@
       document.getElementById("content").style.display = "block";
 
       document.getElementById("chapterTitle").innerText = ch;
+      saveNavState();
 
       let c = studentNavState.course;
       let b = studentNavState.branch;
@@ -4215,11 +4428,13 @@
     function goBack() {
       document.getElementById("chapters").style.display = "none";
       document.getElementById("subjects").style.display = "grid";
+      saveNavState();
     }
 
     function goBackChapter() {
       document.getElementById("content").style.display = "none";
       document.getElementById("chapters").style.display = "block";
+      saveNavState();
     }
 
     function toggleTask(checkbox) {
@@ -4233,11 +4448,17 @@
 
     function toggleMode() {
       document.body.classList.toggle("light");
+      let isLight = document.body.classList.contains("light");
       let btn = document.getElementById("themeToggleBtn");
-      if (document.body.classList.contains("light")) {
+      if (isLight) {
         btn.innerText = "🌙";
       } else {
-        btn.innerText = "🌞";
+        btn.innerText = "☀️";
+      }
+
+      // Sync Theme Preference to Firebase
+      if (currentUserMobile) {
+        database.ref(`users/${currentUserMobile}/theme`).set(isLight ? "light" : "dark");
       }
     }
 
@@ -4459,11 +4680,13 @@
         document.getElementById("premiumNavSection").style.display = "none";
         document.getElementById("programsWrapper").style.display = "block";
       }
+      saveNavState();
     }
 
     function goBackToPremiumOptions() {
       document.getElementById("premiumContentContainer").style.display = "none";
       document.getElementById("premiumOptionsContainer").style.display = "grid";
+      saveNavState();
     }
 
     function showPremiumOptions(course) {
@@ -4802,4 +5025,3 @@
 </body>
 
 </html>
-
