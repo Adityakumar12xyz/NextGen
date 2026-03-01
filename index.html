@@ -1298,6 +1298,159 @@
       color: white;
     }
 
+    /* CERTIFICATE STORE STYLES */
+    #certificateStoreScreen {
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .cert-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    .cert-card {
+      background: rgba(15, 32, 39, 0.7);
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      backdrop-filter: blur(10px);
+    }
+
+    .cert-card:hover {
+      transform: translateY(-10px);
+      border-color: cyan;
+      box-shadow: 0 15px 40px rgba(0, 242, 254, 0.2);
+    }
+
+    .cert-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-bottom: 1px solid rgba(0, 242, 254, 0.2);
+    }
+
+    .cert-info {
+      padding: 20px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .cert-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: white;
+      text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+    }
+
+    .cert-price {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: gold;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .cert-actions {
+      margin-top: auto;
+      padding-top: 15px;
+    }
+
+    .cert-unlock-btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(90deg, #00f2fe, #4facfe);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .cert-unlock-btn:hover {
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.5);
+      transform: scale(1.02);
+    }
+
+    .cert-unlocked-btn {
+      background: linear-gradient(90deg, #00b09b, #96c93d);
+    }
+
+    .cert-locked-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(3px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 5;
+      pointer-events: none;
+      opacity: 0;
+      transition: 0.3s;
+    }
+
+    .cert-card.is-locked .cert-locked-overlay {
+      opacity: 1;
+    }
+
+    /* ADMIN CERTIFICATE SECTION */
+    .cert-admin-form {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 25px;
+      border-radius: 15px;
+      border: 1px solid rgba(0, 242, 254, 0.2);
+      margin-bottom: 30px;
+    }
+
+    .cert-admin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .cert-admin-card {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cert-admin-info h4 {
+      margin: 0;
+      color: cyan;
+    }
+
+    .cert-admin-info p {
+      margin: 5px 0 0;
+      font-size: 12px;
+      color: #aaa;
+    }
+
     .confirm-pay-btn {
       background: gold;
       color: black;
@@ -1799,6 +1952,111 @@
     <div class="hud-panel">
       <span class="hud-label">Knowledge Points</span>
       <span id="hudPoints" class="hud-value">--</span>
+    </div>
+  </div>
+
+  <!-- CERTIFICATE STORE SCREEN -->
+  <div id="certificateStoreScreen"
+    style="display: none; flex-direction: column; padding: 20px; max-width: 1200px; margin: 0 auto; min-height: 80vh;">
+    <!-- Back Button -->
+    <div style="margin-bottom: 20px;">
+      <button onclick="showPage('programsWrapper')" class="login-btn"
+        style="width: auto; padding: 10px 25px; background: rgba(255,255,255,0.1); color: cyan; border: 1px solid cyan;">⬅
+        BACK TO DASHBOARD</button>
+    </div>
+
+    <div style="text-align: center; margin-bottom: 40px;">
+      <h1 class="premium-brand" style="font-size: 36px;">📜 PREMIUM <span style="color: cyan;">CERTIFICATIONS</span>
+      </h1>
+      <p style="color: #aaa; letter-spacing: 2px; font-weight: 700; font-size: 12px;">UNLOCK YOUR CAREER WITH NEURAL
+        CREDENTIALS</p>
+    </div>
+
+    <div class="wallet-status" style="justify-content: center; margin-bottom: 40px; background: rgba(0,242,254,0.05);">
+      <div style="text-align: center;">
+        <small style="color: #888; text-transform: uppercase; letter-spacing: 1px;">Neural Wallet Balance</small>
+        <div class="wallet-balance" id="certStoreBalance">🪙 0</div>
+      </div>
+    </div>
+
+    <div id="certificateGrid"
+      style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px;">
+      <!-- Certificates injected here -->
+    </div>
+
+    <!-- Link to My Collection -->
+    <div style="text-align: center; margin-top: 40px;">
+      <button onclick="openMyCollection()" class="login-btn"
+        style="width: auto; padding: 12px 30px; background: rgba(0,242,254,0.1); color: #00f2fe; border: 1px solid #00f2fe; font-size: 14px;">📂
+        VIEW MY PERSONAL COLLECTION</button>
+    </div>
+  </div>
+
+  <!-- MY COLLECTION SCREEN -->
+  <div id="myCollectionScreen"
+    style="display: none; flex-direction: column; padding: 20px; max-width: 1200px; margin: 0 auto; min-height: 80vh;">
+    <!-- Back Button -->
+    <div style="margin-bottom: 20px;">
+      <button onclick="showPage('programsWrapper')" class="login-btn"
+        style="width: auto; padding: 10px 25px; background: rgba(255,255,255,0.1); color: #00f2fe; border: 1px solid #00f2fe;">⬅
+        BACK TO DASHBOARD</button>
+    </div>
+
+    <div style="text-align: center; margin-bottom: 40px;">
+      <h1 class="premium-brand" style="font-size: 36px;">📂 MY <span style="color: #00f2fe;">COLLECTION</span></h1>
+      <p style="color: #aaa; letter-spacing: 2px; font-weight: 700; font-size: 12px;">YOUR PRIVATE VAULT FOR
+        CERTIFICATES & DOCUMENTS</p>
+      <button onclick="openCertificateStore()" class="login-btn"
+        style="width: auto; margin-top: 15px; background: rgba(255,255,255,0.05); color: cyan; border: 1px solid cyan; font-size: 12px;">📜
+        GO TO CERTIFICATE STORE</button>
+    </div>
+
+    <div class="box"
+      style="margin-bottom: 30px; padding: 30px; text-align: center; border: 2px dashed #00f2fe; background: rgba(0,242,254,0.05);">
+      <h3 style="color: #fff; margin-top: 0;">➕ Add New Document</h3>
+      <p style="color: #888; font-size: 13px;">Upload your Certificates, Marksheets, or IDs (Images & PDFs supported)
+      </p>
+
+      <div
+        style="display: flex; flex-direction: column; align-items: center; gap: 15px; max-width: 400px; margin: 20px auto;">
+        <input type="text" id="myCollFileName" class="login-input" placeholder="Document Name (e.g. 10th Marksheet)">
+        <input type="file" id="myCollFileUpload" class="login-input" accept="image/*,application/pdf"
+          style="padding: 10px;">
+        <button onclick="uploadToMyCollection()" class="login-btn"
+          style="background: #00f2fe; color: black; font-weight: 900; width: 100%;">🚀 UPLOAD & SAVE</button>
+      </div>
+    </div>
+
+    <div id="myCollectionGrid"
+      style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px;">
+      <!-- Personal documents injected here -->
+    </div>
+  </div>
+
+  <!-- CLAIM MODAL (GUIDELINES) -->
+  <div id="claimModal"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10006; justify-content: center; align-items: center; backdrop-filter: blur(15px); padding: 20px; box-sizing: border-box;">
+    <div
+      style="background: rgba(15, 32, 39, 0.95); border: 1px solid cyan; border-radius: 20px; width: 100%; max-width: 500px; padding: 30px; position: relative; box-shadow: 0 0 50px rgba(0,242,254,0.3);">
+      <button onclick="closeClaimModal()"
+        style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #ff4757; font-size: 24px; cursor: pointer;">✕</button>
+
+      <div style="text-align: center; margin-bottom: 25px;">
+        <h2 style="color: cyan; margin-bottom: 5px;">📜 CLAIM GUIDELINES</h2>
+        <h4 id="claimModalTitle" style="color: #fff; margin-top: 0;"></h4>
+      </div>
+
+      <div
+        style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; margin-bottom: 25px; border-left: 4px solid cyan;">
+        <h4 style="color: cyan; margin-top: 0; font-size: 14px; text-transform: uppercase;">Instructions:</h4>
+        <p id="claimModalInstructions" style="color: #ddd; font-size: 14px; line-height: 1.6; white-space: pre-line;">
+        </p>
+      </div>
+
+      <button id="claimRedirectBtn" class="login-btn" style="background: cyan; color: black; font-weight: 900;">🚀
+        PROCEED TO PARTNER WEBSITE</button>
+      <p style="text-align: center; color: #666; font-size: 11px; margin-top: 15px;">Registration and further steps will
+        be handled by our partner.</p>
     </div>
   </div>
 
@@ -2778,8 +3036,10 @@
       <button onclick="switchAdminTab('withdrawals')" class="admin-tab-btn">💸 Withdrawal Requests</button>
       <button onclick="switchAdminTab('battles')" class="admin-tab-btn">⚔️ Battle Manager</button>
       <button onclick="switchAdminTab('premium')" class="admin-tab-btn">💎 Premium MGMT</button>
+      <button onclick="switchAdminTab('certificates')" class="admin-tab-btn">📜 Certificates</button>
       <button onclick="switchAdminTab('settings')" class="admin-tab-btn">⚙️ Site Settings</button>
       <button onclick="switchAdminTab('codeStudio')" class="admin-tab-btn">💻 Code Studio</button>
+      <button onclick="switchAdminTab('security')" class="admin-tab-btn">🔐 Security</button>
     </div>
 
     <!-- STUDENT DATABASE SECTION -->
@@ -3200,6 +3460,50 @@
       </div>
     </div>
 
+    <!-- 8. CERTIFICATE BROKERAGE MANAGER -->
+    <div id="adminSection_certificates" class="admin-section" style="display:none;">
+      <div
+        style="padding:20px; background:rgba(0,242,254,0.05); border:1px solid rgba(0,242,254,0.3); border-radius:12px;">
+        <h3 style="color:cyan; margin-top:0;">📜 Certificate Brokerage Manager</h3>
+        <p style="color:#aaa; font-size:13px;">Add and manage external certificates that students can unlock with coins.
+        </p>
+
+        <div class="cert-admin-form">
+          <h4 style="color:#fff; margin-top:0;">➕ Add New Certificate</h4>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <input type="text" id="adminCertTitle" class="login-input"
+              placeholder="Certificate Title (e.g. AI Mastery)">
+            <input type="number" id="adminCertPrice" class="login-input" placeholder="Price (Coins)">
+
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+              <label style="color: #aaa; font-size: 11px;">📂 Upload Image (Recommended 16:9):</label>
+              <input type="file" id="adminCertFileUpload" class="login-input" accept="image/*" style="padding: 5px;">
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+              <label style="color: #aaa; font-size: 11px;">🔗 OR Paste Image/Drive URL:</label>
+              <input type="text" id="adminCertImage" class="login-input" placeholder="https://drive.google.com/...">
+            </div>
+
+            <input type="text" id="adminCertLink" class="login-input" placeholder="Partner/Redirection Link"
+              style="grid-column: span 2;">
+          </div>
+          <div style="margin-top: 15px;">
+            <textarea id="adminCertInstructions" class="login-input"
+              placeholder="Claim Instructions / Guidelines (e.g. Step 1: Visit link, Step 2: Use code...)"
+              style="height: 80px;"></textarea>
+          </div>
+          <button class="login-btn" onclick="addAdminCertificate()"
+            style="background: cyan; color: black; margin-top: 15px;">🚀 Publish Certificate</button>
+        </div>
+
+        <h4 style="color:cyan;">📦 Existing Certificates</h4>
+        <div id="adminCertList" class="cert-admin-grid">
+          <p style="color:#666;">No certificates added yet.</p>
+        </div>
+      </div>
+    </div>
+
     <!-- 5. SITE SETTINGS & BATTLES -->
     <div id="adminSection_settings" class="admin-section" style="display:none;">
       <!-- SITE SETTINGS -->
@@ -3248,26 +3552,43 @@
 
         </div>
 
-      </div>
-
-      <!-- Admin Credentials (inside Site Settings) -->
-      <div id="adminSecuritySettings"
-        style="margin-top: 40px; border-top: 1px solid rgba(0, 255, 255, 0.3); padding-top: 20px; margin-bottom: 20px;">
-        <h3 style="color: cyan; text-align: left;">🔐 Admin Credentials</h3>
-        <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
-          <input type="text" id="newAdminId" class="login-input" placeholder="New Admin Username"
-            style="flex: 1; margin: 0;">
-          <input type="password" id="newAdminPass" class="login-input" placeholder="New Admin Password"
-            style="flex: 1; margin: 0;">
-          <button class="login-btn" onclick="updateAdminCredentials()"
-            style="flex: 1; margin-top: 0; background: #00cec9; color: black; min-width: 150px;">Update
-            Credentials</button>
+        <div style="margin-top: 20px;">
+          <button onclick="saveSiteSettings()" class="login-btn" style="background: cyan; color: black;">💾 SAVE SITE
+            CONFIGURATION</button>
         </div>
       </div>
+    </div>
 
-      <button class="login-btn" onclick="saveSiteSettings()"
-        style="background: #28a745; color: white; margin-top: 5px;">💾 Save Site Settings</button>
+    <!-- ====== SECTION: SECURITY SETTINGS ====== -->
+    <div id="adminSection_security" class="admin-section" style="display:none;">
+      <h3 style="color: gold; text-align: left;">🔐 Admin Security Settings</h3>
+      <p style="color: #aaa; font-size: 14px;">Update your Admin Login credentials below. <b>WARNING:</b> Your new
+        password will be your login from now on.</p>
 
+      <div class="box"
+        style="border: 1px solid gold; background: rgba(255,215,0,0.05); padding: 25px; max-width: 500px; margin: 20px 0;">
+        <div style="margin-bottom: 15px;">
+          <label style="color: #ccc; font-size: 14px; display: block; margin-bottom: 5px;">New Username:</label>
+          <input type="text" id="newAdminUser" class="login-input" placeholder="Enter new username" style="margin:0;">
+        </div>
+
+        <div style="margin-bottom: 15px;">
+          <label style="color: #ccc; font-size: 14px; display: block; margin-bottom: 5px;">New Password:</label>
+          <input type="password" id="newAdminPass" class="login-input" placeholder="Enter new password"
+            style="margin:0;">
+        </div>
+
+        <div style="margin-bottom: 15px;">
+          <label style="color: #ccc; font-size: 14px; display: block; margin-bottom: 5px;">Confirm New
+            Password:</label>
+          <input type="password" id="confirmAdminPass" class="login-input" placeholder="Confirm new password"
+            style="margin:0;">
+        </div>
+
+        <button onclick="updateAdminCredentials()" class="login-btn"
+          style="background: gold; color: black; font-weight: 900; margin-top: 15px; width: 100%;">💾 SAVE & UPDATE
+          CREDENTIALS</button>
+      </div>
     </div>
 
     <!-- 6. NEXTGEN BATTLE ARENA MANAGER -->
@@ -3338,7 +3659,8 @@
             style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px;">
             <span id="battleQuestCount" style="color: cyan; font-weight: bold; font-size: 14px;">Total Questions:
               0</span>
-            <span id="battleTotalMarks" style="color: gold; font-weight: bold; font-size: 14px;">Total Marks: 0</span>
+            <span id="battleTotalMarks" style="color: gold; font-weight: bold; font-size: 14px;">Total Marks:
+              0</span>
           </div>
 
           <div id="battleQuestionPreviewList"
@@ -3586,6 +3908,14 @@
       <div class="box" id="battleArenaBox" onclick="openBattleArena()"
         style="border-color: #ff4757; background: rgba(255, 71, 87, 0.05); box-shadow: 0 0 15px rgba(255, 71, 87, 0.2);">
         <h1 style="color: #ff4757;">⚔️</h1>NextGen Battle Arena
+      </div>
+      <div class="box" id="certStoreBox" onclick="openCertificateStore()"
+        style="border-color: cyan; background: rgba(0,242,254,0.05); box-shadow: 0 0 15px rgba(0,242,254,0.2);">
+        <h1 style="color: cyan;">📜</h1>Premium Certifications
+      </div>
+      <div class="box" id="myCollBox" onclick="openMyCollection()"
+        style="border-color: #00f2fe; background: rgba(0,242,254,0.05); box-shadow: 0 0 15px rgba(0,242,254,0.2);">
+        <h1 style="color: #00f2fe;">📂</h1>My Collection
       </div>
     </div>
   </div>
@@ -3841,7 +4171,8 @@
         </div>
         <div style="text-align: right;">
           <p style="color: #ff4757; font-size: 10px; margin: 0; font-weight: bold;">TIME REMAINING</p>
-          <div id="engineTimer" style="color: white; font-size: 24px; font-weight: 900; font-family: monospace;">00:00
+          <div id="engineTimer" style="color: white; font-size: 24px; font-weight: 900; font-family: monospace;">
+            00:00
           </div>
         </div>
       </div>
@@ -3955,7 +4286,8 @@
             <h2
               style="margin: 0; color: white; font-size: 18px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;">
               NextGen Library</h2>
-            <p style="margin: 2px 0 0 0; color: #00f2fe; font-size: 10px; font-weight: 700; letter-spacing: 2px;">BATTLE
+            <p style="margin: 2px 0 0 0; color: #00f2fe; font-size: 10px; font-weight: 700; letter-spacing: 2px;">
+              BATTLE
               ARENA OFFICIAL RECOGNITION</p>
           </div>
           <div style="margin-left: auto; text-align: center;">
@@ -3979,7 +4311,8 @@
               <div>
                 <p style="margin: 0; font-size: 9px; color: #888; text-transform: uppercase; font-weight: bold;">Rank
                   Achieved</p>
-                <p id="vcardRank" style="margin: 2px 0 0 0; font-size: 15px; color: gold; font-weight: 900;">RANK #1</p>
+                <p id="vcardRank" style="margin: 2px 0 0 0; font-size: 15px; color: gold; font-weight: 900;">RANK #1
+                </p>
               </div>
             </div>
 
@@ -4333,7 +4666,7 @@
       }
 
       // List of all main content segments
-      const allPages = ["loginScreen", "welcomeScreen", "adminDashboard", "programsWrapper", "dynamicNavSection", "chapters", "content", "semesterMotivationSection", "premiumNavSection", "combatArena", "battleExamEngine", "battleLeaderboardSection", "codeStudioScreen"];
+      const allPages = ["loginScreen", "welcomeScreen", "adminDashboard", "programsWrapper", "dynamicNavSection", "chapters", "content", "semesterMotivationSection", "premiumNavSection", "combatArena", "battleExamEngine", "battleLeaderboardSection", "codeStudioScreen", "certificateStoreScreen", "myCollectionScreen"];
 
       allPages.forEach(id => {
         let el = document.getElementById(id);
@@ -4353,17 +4686,24 @@
       const ticker = document.getElementById("globalTicker");
 
       const hideForAuth = ["loginScreen", "welcomeScreen", "adminDashboard"].includes(pageId);
+      const isCertStore = (pageId === "certificateStoreScreen" || pageId === "myCollectionScreen");
 
-      if (header) header.style.display = hideForAuth ? "none" : "flex";
+      if (header) header.style.display = (hideForAuth || isCertStore) ? "none" : "flex";
       if (footer) footer.style.display = hideForAuth ? "none" : "block";
-      if (aiTutor) aiTutor.style.display = hideForAuth ? "none" : "block";
-      if (ticker) ticker.style.display = hideForAuth ? "none" : (globalSiteConfig.ticker ? "block" : "none");
+      if (aiTutor) aiTutor.style.display = (hideForAuth || isCertStore) ? "none" : "block";
+      if (ticker) ticker.style.display = (hideForAuth || isCertStore) ? "none" : (globalSiteConfig.ticker ? "block" : "none");
 
-      // Hide Info Section (About/Terms) for Battle Pages
+      // Hide Info Section (About/Terms) for Battle & Certificate Pages
       const infoSection = document.querySelector(".info-section");
       if (infoSection) {
-        const isBattlePage = ["combatArena", "battleExamEngine", "battleLeaderboardSection"].includes(pageId);
+        const isBattlePage = ["combatArena", "battleExamEngine", "battleLeaderboardSection", "certificateStoreScreen"].includes(pageId);
         infoSection.style.display = (hideForAuth || isBattlePage) ? "none" : "block";
+      }
+
+      // Explicitly hide programsWrapper if we are in certificateStoreScreen or myCollectionScreen
+      const progWrap = document.getElementById("programsWrapper");
+      if (progWrap && (pageId === "certificateStoreScreen" || pageId === "myCollectionScreen")) {
+        progWrap.style.display = "none";
       }
 
       // Show neuralHUD only on welcomeScreen; hide on all other pages
@@ -4431,7 +4771,7 @@
     // Initial State Push
     window.addEventListener('load', () => {
       // Find what page is currently active (visible)
-      const allPages = ["loginScreen", "welcomeScreen", "adminDashboard", "programsWrapper", "dynamicNavSection", "chapters", "content", "semesterMotivationSection", "premiumNavSection", "codeStudioScreen"];
+      const allPages = ["loginScreen", "welcomeScreen", "adminDashboard", "programsWrapper", "dynamicNavSection", "chapters", "content", "semesterMotivationSection", "premiumNavSection", "codeStudioScreen", "certificateStoreScreen", "myCollectionScreen"];
       let activePage = "loginScreen";
       allPages.forEach(id => {
         const el = document.getElementById(id);
@@ -4462,7 +4802,9 @@
           (tabId === 'battles' && btnText.includes('battle')) ||
           (tabId === 'premium' && btnText.includes('premium')) ||
           (tabId === 'settings' && btnText.includes('site settings')) ||
-          (tabId === 'codeStudio' && btnText.includes('code studio'))
+          (tabId === 'codeStudio' && btnText.includes('code studio')) ||
+          (tabId === 'security' && btnText.includes('security')) ||
+          (tabId === 'certificates' && btnText.includes('certificate'))
         ) {
           btn.classList.add('active');
         }
@@ -4475,6 +4817,7 @@
       if (tabId === 'settings' && typeof loadSiteSettings === 'function') loadSiteSettings();
       if (tabId === 'premium' && typeof renderActivePremiumUsers === 'function') renderActivePremiumUsers();
       if (tabId === 'codeStudio' && typeof initAdminCodeStudio === 'function') initAdminCodeStudio();
+      if (tabId === 'certificates' && typeof renderAdminCertificates === 'function') renderAdminCertificates();
     }
 
     /* GLOBAL DATA FETCH */
@@ -5363,6 +5706,36 @@
       });
     }
 
+    function updateAdminCredentials() {
+      const newUser = document.getElementById("newAdminUser").value.trim();
+      const newPass = document.getElementById("newAdminPass").value.trim();
+      const confPass = document.getElementById("confirmAdminPass").value.trim();
+
+      if (!newUser || !newPass) {
+        alert("❌ Error: Username and Password cannot be empty.");
+        return;
+      }
+
+      if (newPass !== confPass) {
+        alert("❌ Error: Passwords do not match!");
+        return;
+      }
+
+      if (!confirm("Are you sure you want to change Admin credentials? You will be logged out instantly.")) return;
+
+      database.ref('adminCredentials').set({
+        user: newUser,
+        pass: newPass,
+        updatedAt: Date.now()
+      }).then(() => {
+        alert("✅ Credentials Updated Successfully! Logging out...");
+        // Clear session and logout
+        localStorage.removeItem("adminSession");
+        localStorage.removeItem("nx_admin_token");
+        location.reload();
+      }).catch(err => alert("Update Error: " + err));
+    }
+
     /* PENDING WALLET RECHARGES ADMIN LOGIC */
     function renderAdminRechargeRequests() {
       let tbody = document.getElementById("pendingRechargesTableBody");
@@ -5806,6 +6179,370 @@
       });
     }
 
+    // --- CERTIFICATE BROKERAGE SYSTEM (ADMIN) ---
+    function addAdminCertificate() {
+      const title = document.getElementById("adminCertTitle").value.trim();
+      const price = parseFloat(document.getElementById("adminCertPrice").value);
+      let imageUrl = document.getElementById("adminCertImage").value.trim();
+      const fileInput = document.getElementById("adminCertFileUpload");
+      const link = document.getElementById("adminCertLink").value.trim();
+      const instructions = document.getElementById("adminCertInstructions").value.trim();
+
+      if (!title || isNaN(price) || !link) {
+        alert("Please fill Title, Price, and Redirection Link.");
+        return;
+      }
+
+      const proceedWithData = (finalImage) => {
+        const certId = "cert_" + Date.now();
+        const certData = { id: certId, title, price, image: finalImage, link, instructions, createdAt: Date.now() };
+
+        database.ref('certificates/' + certId).set(certData).then(() => {
+          alert("📜 Certificate published successfully!");
+          document.getElementById("adminCertTitle").value = "";
+          document.getElementById("adminCertPrice").value = "";
+          document.getElementById("adminCertImage").value = "";
+          document.getElementById("adminCertFileUpload").value = "";
+          document.getElementById("adminCertLink").value = "";
+          document.getElementById("adminCertInstructions").value = "";
+          renderAdminCertificates();
+        }).catch(err => alert("Error: " + err));
+      };
+
+      // Handle File Upload first
+      if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          proceedWithData(e.target.result);
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      } else if (imageUrl) {
+        // AUTO-CONVERT GOOGLE DRIVE LINKS
+        if (imageUrl.includes("drive.google.com") || imageUrl.includes("googledrive.com")) {
+          try {
+            const driveRegex = /(?:\/d\/|id=)([\w-]+)/;
+            const match = imageUrl.match(driveRegex);
+            if (match && match[1]) {
+              imageUrl = `https://lh3.googleusercontent.com/d/${match[1]}`;
+            }
+          } catch (e) { console.error("Drive link conversion failed", e); }
+        }
+        proceedWithData(imageUrl);
+      } else {
+        alert("Please either upload an image or provide an Image URL.");
+      }
+    }
+
+    function deleteAdminCertificate(id) {
+      if (!confirm("Are you sure you want to delete this certificate?")) return;
+      database.ref('certificates/' + id).remove().then(() => {
+        alert("🗑️ Certificate deleted.");
+        renderAdminCertificates();
+      });
+    }
+
+    function renderAdminCertificates() {
+      const list = document.getElementById("adminCertList");
+      if (!list) return;
+
+      database.ref('certificates').once('value').then(snap => {
+        const certs = snap.val() || {};
+        list.innerHTML = "";
+
+        const certArray = Object.values(certs).sort((a, b) => b.createdAt - a.createdAt);
+
+        if (certArray.length === 0) {
+          list.innerHTML = "<p style='color:#777; text-align:center;'>No certificates added yet.</p>";
+          return;
+        }
+
+        certArray.forEach(cert => {
+          const card = document.createElement("div");
+          card.style.cssText = "background: rgba(255,255,255,0.05); border: 1px solid cyan; border-radius: 12px; padding: 15px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;";
+          card.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 15px;">
+              <div style="width: 100px; height: 60px; border-radius: 8px; overflow: hidden; border: 1px solid cyan; background: #000; flex-shrink: 0;">
+                <img src="${cert.image}" style="width: 100%; height: 100%; object-fit: contain;">
+              </div>
+              <div>
+                <h4 style="margin: 0; color: white;">${cert.title}</h4>
+                <div style="font-size: 12px; color: cyan;">🪙 ${cert.price} Coins</div>
+              </div>
+            </div>
+            <button onclick="deleteAdminCertificate('${cert.id}')" style="background: #ff4757; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">🗑️ Delete</button>
+          `;
+          list.appendChild(card);
+        });
+      });
+    }
+
+    // --- CERTIFICATE BROKERAGE SYSTEM (STUDENT STORE) ---
+    function openCertificateStore() {
+      showPage('certificateStoreScreen');
+      renderCertificateStore();
+    }
+
+    function renderCertificateStore() {
+      const grid = document.getElementById("certificateGrid");
+      const balanceEl = document.getElementById("certStoreBalance");
+      if (!grid) return;
+
+      // Update balance display
+      database.ref('users/' + currentUserMobile + '/profile/wallet').on('value', snap => {
+        const balance = snap.val() || 0;
+        if (balanceEl) balanceEl.innerHTML = `🪙 ${balance}`;
+      });
+
+      // Get unlocked certs for this user
+      database.ref('users/' + currentUserMobile + '/unlockedCertificates').on('value', userSnap => {
+        const unlocked = userSnap.val() || {};
+
+        database.ref('certificates').once('value').then(snap => {
+          const certs = snap.val() || {};
+          grid.innerHTML = "";
+
+          Object.values(certs).forEach(cert => {
+            const isUnlocked = !!unlocked[cert.id];
+            const card = document.createElement("div");
+            card.className = "box";
+            card.style.padding = "20px";
+            card.style.position = "relative";
+
+            card.innerHTML = `
+              <div style="text-align: center;">
+                <div style="width: 100%; height: 140px; border-radius: 15px; overflow: hidden; border: 2px solid cyan; margin-bottom: 20px; background: #000; box-shadow: 0 0 20px rgba(0,242,254,0.3); ${!isUnlocked ? 'filter: grayscale(1) blur(2px); opacity: 0.6;' : ''}">
+                  <img src="${cert.image}" style="width: 100%; height: 100%; object-fit: contain;">
+                </div>
+                <h3 style="color: white; margin: 0 0 10px 0; font-size: 20px;">${cert.title}</h3>
+                ${!isUnlocked ?
+                `<div style="color: cyan; font-weight: 800; font-size: 18px; margin-bottom: 15px;">🪙 ${cert.price}</div>
+                   <button onclick="buyCertificate('${cert.id}', ${cert.price}, '${cert.title.replace(/'/g, "\\'")}')" class="login-btn" style="background: cyan; color: black; font-weight: 900;">🔓 UNLOCK NOW</button>`
+                :
+                `<div style="color: #38ef7d; font-weight: 800; font-size: 13px; margin-bottom: 15px;">✅ UNLOCKED</div>
+                   <button onclick="showClaimModal('${cert.id}')" class="login-btn" style="background: #38ef7d; color: black; font-weight: 900;">📜 CLAIM NOW</button>`
+              }
+              </div>
+            `;
+            grid.appendChild(card);
+          });
+        });
+      });
+    }
+
+    // --- MY COLLECTION SYSTEM ---
+    function openMyCollection() {
+      showPage('myCollectionScreen');
+      renderMyCollection();
+    }
+
+    function uploadToMyCollection() {
+      const name = document.getElementById("myCollFileName").value.trim();
+      const fileInput = document.getElementById("myCollFileUpload");
+
+      if (!name) {
+        alert("Please enter a name for the document.");
+        return;
+      }
+      if (!fileInput.files || !fileInput.files[0]) {
+        alert("Please select a file to upload.");
+        return;
+      }
+
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        const fileData = e.target.result;
+        const fileType = file.type.includes("pdf") ? "pdf" : "image";
+        const fileId = "file_" + Date.now();
+
+        const payload = {
+          id: fileId,
+          name: name,
+          data: fileData,
+          type: fileType,
+          uploadedAt: Date.now()
+        };
+
+        database.ref('users/' + currentUserMobile + '/myCollection/' + fileId).set(payload).then(() => {
+          alert("✅ Document saved to your collection!");
+          document.getElementById("myCollFileName").value = "";
+          document.getElementById("myCollFileUpload").value = "";
+          renderMyCollection();
+        }).catch(err => alert("Upload Error: " + err));
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    function renderMyCollection() {
+      const grid = document.getElementById("myCollectionGrid");
+      if (!grid) return;
+
+      // Combine uploaded files and purchased certificates
+      Promise.all([
+        database.ref('users/' + currentUserMobile + '/myCollection').once('value'),
+        database.ref('users/' + currentUserMobile + '/unlockedCertificates').once('value'),
+        database.ref('certificates').once('value')
+      ]).then(results => {
+        const [uploadSnap, unlockedSnap, allCertsSnap] = results;
+        const uploadedDocs = uploadSnap.val() || {};
+        const unlockedCertIds = unlockedSnap.val() || {};
+        const allCertData = allCertsSnap.val() || {};
+
+        grid.innerHTML = "";
+        let items = [];
+
+        // Add uploaded items
+        Object.values(uploadedDocs).forEach(doc => {
+          items.push({
+            ...doc,
+            isCert: false,
+            sortKey: doc.uploadedAt || 0
+          });
+        });
+
+        // Add purchased certificates
+        Object.keys(unlockedCertIds).forEach(certId => {
+          const cert = allCertData[certId];
+          if (cert) {
+            items.push({
+              id: certId,
+              name: cert.title,
+              data: cert.image,
+              link: cert.link,
+              type: 'certificate',
+              isCert: true,
+              sortKey: Date.now()
+            });
+          }
+        });
+
+        items.sort((a, b) => b.sortKey - a.sortKey);
+
+        if (items.length === 0) {
+          grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #666;">
+            <div style="font-size: 50px; margin-bottom: 10px;">📭</div>
+            <p>Your collection is empty. Upload documents or purchase certificates!</p>
+          </div>`;
+          return;
+        }
+
+        items.forEach(item => {
+          const card = document.createElement("div");
+          card.className = "box";
+          card.style.cssText = "padding: 20px; position: relative; border: 1px solid rgba(0,242,254,0.3); background: rgba(0,242,254,0.02);";
+
+          const isPdf = item.type === "pdf";
+          const isPurchasedCert = item.isCert;
+
+          card.innerHTML = `
+            <div style="text-align: center;">
+              <div style="width: 100%; height: 140px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(0,242,254,0.5); margin-bottom: 15px; background: #000; display: flex; align-items: center; justify-content: center;">
+                ${isPdf ?
+              `<div style="text-align: center;">
+                    <div style="font-size: 50px;">📄</div>
+                    <div style="color: #ff4757; font-weight: bold; font-size: 14px;">PDF DOCUMENT</div>
+                   </div>` :
+              `<img src="${item.data}" style="width: 100%; height: 100%; object-fit: contain;">`
+            }
+              </div>
+              <h3 style="color: white; margin: 0 0 5px 0; font-size: 18px; word-break: break-all;">${item.name}</h3>
+              <p style="color: #666; font-size: 11px; margin-bottom: 20px;">
+                ${isPurchasedCert ? '<span style="color: #38ef7d; font-weight:bold;">🏆 PURCHASED CERTIFICATE</span>' : `Uploaded: ${new Date(item.uploadedAt).toLocaleDateString()}`}
+              </p>
+              
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                ${isPurchasedCert ?
+              `<button onclick="showClaimModal('${item.id}')" class="login-btn" style="padding: 8px; font-size: 12px; background: #38ef7d; color: black; border: none;">🚀 CLAIM</button>
+                   <button onclick="viewImageFull('${item.data}')" class="login-btn" style="padding: 8px; font-size: 12px; background: rgba(255,255,255,0.1); color: white; border: 1px solid white;">👁️ VIEW</button>`
+              :
+              `<button onclick="viewCollectionDoc('${item.id}')" class="login-btn" style="padding: 8px; font-size: 12px; background: rgba(0,242,254,0.1); color: #00f2fe; border: 1px solid #00f2fe;">👁️ VIEW</button>
+                   <a href="${item.data}" download="${item.name}" class="login-btn" style="padding: 8px; font-size: 12px; background: #00f2fe; color: black; text-decoration: none; display: flex; align-items: center; justify-content: center;">📥 DOWNLOAD</a>`
+            }
+              </div>
+              ${!isPurchasedCert ? `<button onclick="deleteFromCollection('${item.id}')" style="position: absolute; top: 10px; right: 10px; background: none; border: none; color: #ff4757; cursor: pointer; font-size: 18px;" title="Delete">🗑️</button>` : ''}
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      });
+    }
+
+    function viewImageFull(src) {
+      const win = window.open();
+      win.document.write(`<img src="${src}" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">`);
+    }
+
+    function viewCollectionDoc(id) {
+      database.ref('users/' + currentUserMobile + '/myCollection/' + id).once('value').then(snap => {
+        const doc = snap.val();
+        if (!doc) return;
+
+        const win = window.open();
+        if (doc.type === "pdf") {
+          win.document.write(`<iframe src="${doc.data}" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>`);
+        } else {
+          win.document.write(`<img src="${doc.data}" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">`);
+        }
+        win.document.title = doc.name;
+      });
+    }
+
+    function deleteFromCollection(id) {
+      if (!confirm("Are you sure you want to delete this document from your collection?")) return;
+      database.ref('users/' + currentUserMobile + '/myCollection/' + id).remove().then(() => {
+        alert("🗑️ Document removed.");
+      });
+    }
+
+    function buyCertificate(id, price, title) {
+      if (!confirm(`Unlock "${title}" for ${price} Gold Coins?`)) return;
+
+      database.ref('users/' + currentUserMobile + '/profile/wallet').once('value').then(snap => {
+        const balance = parseFloat(snap.val() || 0);
+        if (balance < price) {
+          alert(`❌ INSUFFICIENT BALANCE!\n\nYou need ${price} Coins but only have ${balance}.`);
+          return;
+        }
+
+        // Transaction
+        database.ref('users/' + currentUserMobile + '/profile/wallet').set(balance - price).then(() => {
+          return database.ref(`users/${currentUserMobile}/unlockedCertificates/${id}`).set(true);
+        }).then(() => {
+          showCongratulations(
+            'CERTIFICATE UNLOCKED!',
+            `<b>${title}</b> is now in your collection!`,
+            `You can now claim your actual certificate via our partner website.`,
+            'VIEW IN STORE'
+          );
+          renderCertificateStore();
+        }).catch(err => alert("Error: " + err));
+      });
+    }
+
+    function showClaimModal(id) {
+      database.ref('certificates/' + id).once('value').then(snap => {
+        const cert = snap.val();
+        if (!cert) return;
+
+        document.getElementById("claimModalTitle").innerText = cert.title;
+        document.getElementById("claimModalInstructions").innerText = cert.instructions || "No specific instructions provided. Please proceed to the partner website to claim your certificate.";
+
+        const btn = document.getElementById("claimRedirectBtn");
+        btn.onclick = () => {
+          window.open(cert.link, "_blank");
+          closeClaimModal();
+        };
+
+        document.getElementById("claimModal").style.display = "flex";
+      });
+    }
+
+    function closeClaimModal() {
+      document.getElementById("claimModal").style.display = "none";
+    }
+
     function addSiteBanner() {
       let fileInput = document.getElementById("siteBannerImageInput");
       let linkInput = document.getElementById("siteBannerLinkInput");
@@ -6019,10 +6756,12 @@
       const premiumBox = document.getElementById("premiumLinkBox");
       const battleBox = document.getElementById("battleArenaBox");
       const codeBox = document.getElementById("codeStudioBox");
+      const certBox = document.getElementById("certStoreBox");
+      const myCollBox = document.getElementById("myCollBox");
 
-      // Clear but keep premium, code studio, and battle boxes
+      // Clear but keep premium, code studio, battle, cert, and collection boxes
       Array.from(container.children).forEach(child => {
-        if (child !== premiumBox && child !== battleBox && child !== codeBox)
+        if (child !== premiumBox && child !== battleBox && child !== codeBox && child !== certBox && child !== myCollBox)
           container.removeChild(child);
       });
 
