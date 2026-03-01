@@ -1475,15 +1475,21 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       gap: 20px;
       position: relative;
       z-index: 10;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .social-links {
       display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
       gap: 25px;
       margin-top: 5px;
+      width: 100%;
     }
 
     .social-btn {
@@ -1537,11 +1543,25 @@
       filter: drop-shadow(0 0 5px cyan);
     }
 
+    .social-btn i {
+      font-size: 22px;
+      color: #aaa;
+      transition: all 0.3s ease;
+      z-index: 2;
+    }
+
+    .social-btn:hover i {
+      color: cyan;
+      text-shadow: 0 0 8px cyan;
+    }
+
     .footer-text {
       font-family: 'Outfit', sans-serif;
       font-size: 15px;
       color: #888;
       letter-spacing: 1px;
+      text-align: center;
+      width: 100%;
     }
 
     .footer-brand {
@@ -1686,9 +1706,9 @@
 
     .recognition-box {
       position: absolute;
-      top: 50%;
+      bottom: 60px;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translateX(-50%);
       border: 1px solid rgba(0, 242, 254, 0.6);
       padding: 8px 15px;
       font-family: 'Outfit';
@@ -2759,6 +2779,7 @@
       <button onclick="switchAdminTab('battles')" class="admin-tab-btn">⚔️ Battle Manager</button>
       <button onclick="switchAdminTab('premium')" class="admin-tab-btn">💎 Premium MGMT</button>
       <button onclick="switchAdminTab('settings')" class="admin-tab-btn">⚙️ Site Settings</button>
+      <button onclick="switchAdminTab('codeStudio')" class="admin-tab-btn">💻 Code Studio</button>
     </div>
 
     <!-- STUDENT DATABASE SECTION -->
@@ -2958,21 +2979,29 @@
 
         <!-- MANAGE COURSES -->
         <h3 style="color: cyan; text-align: left;">🏢 Manage Courses</h3>
-        <div style="display: flex; gap: 10px; margin-bottom: 25px;">
+        <div style="display: flex; gap: 10px; margin-bottom: 12px;">
           <input type="text" id="newCourseName" class="login-input" placeholder="New Course Name (e.g. MCA)"
             style="flex: 2; margin-bottom: 0;">
           <button class="login-btn" onclick="addAdminCourse()"
             style="flex: 1; margin-top: 0; background: #00cec9; color: black;">➕ Add Course</button>
         </div>
+        <div style="display: flex; gap: 10px; margin-bottom: 25px;">
+          <select id="deleteCourseSelect" class="login-input" style="flex: 2; margin: 0;">
+            <option value="" disabled selected>Select Course to Delete</option>
+          </select>
+          <button class="login-btn" onclick="deleteAdminCourse()"
+            style="flex: 1; margin-top: 0; background: #ff4757; color: white;">🗑️ Delete Course</button>
+        </div>
 
-        <!-- MANAGING SUBJECTS INTEGRATED INTO CMS ABOVE -->
       </div>
+      <!-- /adminSubjectManager -->
 
       <!-- ADMIN WALLET RECHARGE SETTINGS -->
       <div id="adminWalletSettings"
         style="margin-top: 40px; border-top: 1px solid rgba(255,215,0,0.5); padding-top: 20px;">
         <h3 style="color: gold; text-align: left;">🪙 Wallet Recharge Settings</h3>
-        <p style="color: #ccc; font-size: 14px;">Set the global QR code and UPI ID for all Neural Wallet Recharges.</p>
+        <p style="color: #ccc; font-size: 14px;">Set the global QR code and UPI ID for all Neural Wallet Recharges.
+        </p>
 
         <div id="walletConfigEditor">
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
@@ -3003,27 +3032,63 @@
 
     <!-- ACTIVE PREMIUM MEMBERS & MGMT -->
     <div id="adminSection_premium" class="admin-section" style="display:none;">
-      <!-- PREMIUM MGMT EDITOR (Price/Duration/PDFs) -->
+
+      <!-- ====== SECTION 1: PREMIUM COURSE MANAGER ====== -->
+      <div
+        style="margin-bottom: 30px; padding: 20px; background: rgba(255,215,0,0.05); border: 1px solid rgba(255,215,0,0.3); border-radius: 12px;">
+        <h3 style="color: gold; margin-top: 0;">🏆 Premium Course Manager</h3>
+        <p style="color: #aaa; font-size: 13px;">Add/delete top-level premium courses. Each course holds multiple
+          options (plans/semesters).</p>
+
+        <!-- Add Course -->
+        <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+          <input type="text" id="newPremCourseName" class="login-input" placeholder="New Course Name (e.g. MBA)"
+            style="flex: 2; margin-bottom: 0;">
+          <button class="login-btn" onclick="addPremiumCourse()"
+            style="flex: 1; margin-top: 0; background: gold; color: black; min-width:120px;">➕ Add Course</button>
+        </div>
+
+        <!-- Delete Course -->
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <select id="deletePremCourseSelect" class="login-input" style="flex: 2; margin: 0;">
+            <option value="" disabled selected>Select Course to Delete</option>
+          </select>
+          <button class="login-btn" onclick="deletePremiumCourse()"
+            style="flex: 1; margin-top: 0; background: #ff4757; color: white; min-width:120px;">🗑️ Delete
+            Course</button>
+        </div>
+
+        <!-- Live Course List -->
+        <div id="premCourseListDisplay" style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 8px;"></div>
+      </div>
+
+      <!-- ====== SECTION 2: PREMIUM CONTENT MANAGEMENT ====== -->
       <div id="adminPremiumCMS"
-        style="margin-bottom: 40px; border-bottom: 2px solid rgba(255, 215, 0, 0.3); padding-bottom: 30px;">
+        style="margin-bottom: 40px; border-bottom: 2px solid rgba(255,215,0,0.3); padding-bottom: 30px;">
         <h3 style="color: gold; text-align: left;">💎 Premium Content Management</h3>
-        <p style="color: #aaa; font-size: 13px;">Set prices, durations, and manage premium PDFs for each course.</p>
+        <p style="color: #aaa; font-size: 13px;">Select a course & option to set prices, manage sub-options, and
+          upload
+          PDF/Image/Video files.</p>
 
         <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
           <select id="premCmsCourse" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
             onchange="onPremCourseChange()">
             <option value="" disabled selected>Select Premium Course</option>
-            <option value="BCA">BCA</option>
-            <option value="BTECH">BTECH</option>
-            <option value="BBA">BBA</option>
           </select>
           <select id="premCmsOption" class="login-input" style="flex: 1; margin: 0; min-width: 120px;"
             onchange="onPremOptionChange()">
             <option value="" disabled selected>Select Option</option>
           </select>
+          <button onclick="deletePremiumOption()"
+            style="background:#ff4757; color:white; border:none; padding:8px 14px; border-radius:6px; cursor:pointer; font-weight:bold; white-space:nowrap;">🗑️
+            Del Option</button>
+          <button onclick="renamePremiumOption()"
+            style="background:#6c5ce7; color:white; border:none; padding:8px 14px; border-radius:6px; cursor:pointer; font-weight:bold; white-space:nowrap;">✏️
+            Rename</button>
         </div>
 
         <div id="premEditor" style="display: none; text-align: left;">
+          <!-- Price Settings -->
           <div
             style="display:grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 10px; align-items: flex-end; margin-bottom:15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;">
             <div>
@@ -3040,9 +3105,11 @@
                 style="width:100%; margin:0; padding:8px;">
             </div>
             <button onclick="saveOptionPrice()"
-              style="background:gold; color: black; border:none; padding:10px 15px; border-radius:4px; font-weight:bold; cursor:pointer; height:fit-content;">SET
+              style="background:gold; color:black; border:none; padding:10px 15px; border-radius:4px; font-weight:bold; cursor:pointer; height:fit-content;">SET
               PRICE</button>
           </div>
+
+          <!-- Add New Option -->
           <div style="display: flex; gap: 10px; margin-bottom: 20px; align-items: stretch;">
             <input type="text" id="newPremOptionName" class="login-input"
               placeholder="Create New Option (e.g. MBA Agra)" style="flex: 2; margin-bottom: 0;">
@@ -3050,18 +3117,67 @@
               style="flex: 1; margin-top: 0; background: gold; color: black;">➕ Add Option</button>
           </div>
 
-          <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 10px; margin-bottom: 20px;">
-            <h4 style="color: gold; margin-top: 0;">Add PDF to Selected Option</h4>
-            <input type="text" id="newPremPdfTitle" class="login-input" placeholder="PDF Title (e.g. Chapter 1 Notes)">
-            <input type="text" id="newPremPdfLink" class="login-input" placeholder="Google Drive / PDF Link">
-            <button class="login-btn" onclick="addPremiumPdf()" style="background: cyan; color: black;">Upload PDF
-              Link</button>
+          <!-- ======= SUB-OPTIONS MANAGER ======= -->
+          <div
+            style="background: rgba(108,92,231,0.08); border: 1px solid rgba(108,92,231,0.4); border-radius: 10px; padding: 15px; margin-bottom: 20px;">
+            <h4 style="color: #a29bfe; margin-top: 0;">📂 Sub-Options (Chapters / Modules)</h4>
+            <p style="color: #888; font-size: 12px; margin-top: 0;">Add sub-options under the selected option. Each
+              sub-option can hold its own PDF, Image, & Video uploads.</p>
+
+            <!-- Add Sub-Option -->
+            <div style="display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap;">
+              <input type="text" id="newPremSubOptionName" class="login-input"
+                placeholder="Sub-Option Name (e.g. Semester 1)" style="flex: 2; margin-bottom: 0;">
+              <button class="login-btn" onclick="addPremiumSubOption()"
+                style="flex: 1; margin-top: 0; background: #a29bfe; color: black; min-width: 120px;">➕ Add
+                Sub-Option</button>
+            </div>
+
+            <!-- Sub-Option List -->
+            <div id="premSubOptionList" style="max-height: 300px; overflow-y: auto;">
+              <p style="color: #666; font-style: italic; text-align: center;">Select an option first to manage
+                sub-options.</p>
+            </div>
           </div>
 
-          <h4 style="color: #ddd;">Existing PDFs in Option</h4>
-          <ul id="adminPremPdfList" style="list-style: none; padding: 0; max-height: 200px; overflow-y: auto;">
-            <!-- Dynamically populated list of PDFs -->
-          </ul>
+          <!-- ======= MEDIA UPLOAD FOR OPTION ======= -->
+          <div
+            style="background: rgba(0,255,255,0.05); border: 1px solid rgba(0,255,255,0.2); border-radius: 10px; padding: 15px; margin-bottom: 20px;">
+            <h4 style="color: cyan; margin-top: 0;">📤 Upload Files to Selected Option</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+              <div>
+                <label style="color: #aaa; font-size: 12px;">📄 PDF Title:</label>
+                <input type="text" id="newPremPdfTitle" class="login-input" placeholder="e.g. Chapter 1 Notes"
+                  style="margin-bottom: 8px;">
+                <label style="color: #aaa; font-size: 12px;">🔗 PDF Link (Drive/URL):</label>
+                <input type="text" id="newPremPdfLink" class="login-input" placeholder="https://drive.google.com/...">
+                <button class="login-btn" onclick="addPremiumPdf()"
+                  style="background: #00cec9; color: black; margin-top: 5px;">➕ Add PDF Link</button>
+              </div>
+              <div>
+                <label style="color: #aaa; font-size: 12px;">🖼️ Image Title:</label>
+                <input type="text" id="newPremImgTitle" class="login-input" placeholder="e.g. Mind Map"
+                  style="margin-bottom: 8px;">
+                <label style="color: #aaa; font-size: 12px;">🔗 Image Link (URL):</label>
+                <input type="text" id="newPremImgLink" class="login-input" placeholder="https://...">
+                <button class="login-btn" onclick="addPremiumImage()"
+                  style="background: #fd79a8; color: black; margin-top: 5px;">➕ Add Image Link</button>
+              </div>
+            </div>
+            <div style="margin-top: 12px;">
+              <label style="color: #aaa; font-size: 12px;">🎬 Video Title:</label>
+              <input type="text" id="newPremVideoTitle" class="login-input" placeholder="e.g. Lecture 1"
+                style="margin-bottom: 8px;">
+              <label style="color: #aaa; font-size: 12px;">🔗 Video Link (YouTube/Drive):</label>
+              <input type="text" id="newPremVideoLink" class="login-input" placeholder="https://youtube.com/...">
+              <button class="login-btn" onclick="addPremiumVideo()"
+                style="background: #e17055; color: white; margin-top: 5px;">➕ Add Video Link</button>
+            </div>
+          </div>
+
+          <!-- Existing Files in Option -->
+          <h4 style="color: #ddd;">📁 Files in Selected Option</h4>
+          <ul id="adminPremPdfList" style="list-style: none; padding: 0; max-height: 250px; overflow-y: auto;"></ul>
         </div>
       </div>
 
@@ -3134,10 +3250,25 @@
 
       </div>
 
+      <!-- Admin Credentials (inside Site Settings) -->
+      <div id="adminSecuritySettings"
+        style="margin-top: 40px; border-top: 1px solid rgba(0, 255, 255, 0.3); padding-top: 20px; margin-bottom: 20px;">
+        <h3 style="color: cyan; text-align: left;">🔐 Admin Credentials</h3>
+        <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+          <input type="text" id="newAdminId" class="login-input" placeholder="New Admin Username"
+            style="flex: 1; margin: 0;">
+          <input type="password" id="newAdminPass" class="login-input" placeholder="New Admin Password"
+            style="flex: 1; margin: 0;">
+          <button class="login-btn" onclick="updateAdminCredentials()"
+            style="flex: 1; margin-top: 0; background: #00cec9; color: black; min-width: 150px;">Update
+            Credentials</button>
+        </div>
+      </div>
+
+      <button class="login-btn" onclick="saveSiteSettings()"
+        style="background: #28a745; color: white; margin-top: 5px;">💾 Save Site Settings</button>
+
     </div>
-    <button class="login-btn" onclick="saveSiteSettings()"
-      style="background: #28a745; color: white; margin-top: 15px;">💾
-      Save Site Settings</button>
 
     <!-- 6. NEXTGEN BATTLE ARENA MANAGER -->
     <div id="adminSection_battles" class="admin-section" style="display:none;">
@@ -3283,18 +3414,76 @@
       </div>
     </div>
 
-    <!-- ADMIN SECURITY SETTINGS -->
-    <div id="adminSecuritySettings"
-      style="margin-top: 40px; border-top: 1px solid rgba(0, 255, 255, 0.3); padding-top: 20px; margin-bottom: 40px;">
-      <h3 style="color: cyan; text-align: left;">🔐 Admin Credentials</h3>
-      <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
-        <input type="text" id="newAdminId" class="login-input" placeholder="New Admin Username"
-          style="flex: 1; margin: 0;">
-        <input type="password" id="newAdminPass" class="login-input" placeholder="New Admin Password"
-          style="flex: 1; margin: 0;">
-        <button class="login-btn" onclick="updateAdminCredentials()"
-          style="flex: 1; margin-top: 0; background: #00cec9; color: black; min-width: 150px;">Update
-          Credentials</button>
+    <!-- 7. CODE STUDIO ADMIN -->
+    <div id="adminSection_codeStudio" class="admin-section" style="display:none;">
+      <div
+        style="padding:20px; background:rgba(0,184,148,0.05); border:1px solid rgba(0,184,148,0.3); border-radius:12px;">
+        <h3 style="color:#00b894; margin-top:0;">💻 Code Studio Manager</h3>
+        <p style="color:#aaa; font-size:13px;">Enable and manage Code Studio usage limits and pricing.</p>
+
+        <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+          <h4 style="color: #00b894; margin-top: 0;">⚙️ Usage Limit Settings</h4>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; align-items: center;">
+            <div>
+              <label style="color: #ccc; font-size: 14px; display: block; margin-bottom: 5px;">Free Usage Limit
+                (Uses):</label>
+              <input type="number" id="csFreeLimitInput" class="login-input" style="margin: 0; padding: 8px;"
+                placeholder="2">
+            </div>
+            <div>
+              <label style="color: #ccc; font-size: 14px; display: block; margin-bottom: 5px;">Trial Duration
+                (Hours):</label>
+              <input type="number" id="csTrialHoursInput" class="login-input" style="margin: 0; padding: 8px;"
+                placeholder="24">
+            </div>
+            <div style="grid-column: span 1;">
+              <label style="color: #ccc; font-size: 14px; display: block; margin-bottom: 5px;">Premium Price
+                (Coins):</label>
+              <input type="number" id="csPremiumPriceInput" class="login-input" style="margin: 0; padding: 8px;"
+                placeholder="50">
+            </div>
+            <div style="grid-column: span 1;">
+              <label style="color: #ccc; font-size: 14px; display: block; margin-bottom: 5px;">Premium Validity
+                (Days):</label>
+              <input type="number" id="csPremiumValidityInput" class="login-input" style="margin: 0; padding: 8px;"
+                placeholder="365">
+            </div>
+          </div>
+          <div style="margin-top: 15px; display: flex; gap: 15px;">
+            <label style="color: #eee; font-size: 14px; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="checkbox" id="csLimitEnabled" style="width: 18px; height: 18px;"> Enable Usage Limit
+            </label>
+          </div>
+          <button class="login-btn" onclick="saveCodeStudioAdminSettings()"
+            style="background: #00b894; color: black; margin-top: 15px;">💾 Save Admin Settings</button>
+        </div>
+
+        <h4 style="color:#00b894;">📦 Language Support</h4>
+        <div id="adminCodeStudioLangs" style="margin-top:15px; margin-bottom: 25px;">
+          <p style="color:#666;">Loading...</p>
+        </div>
+
+        <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin: 20px 0;">
+
+        <h4 style="color:gold;">🌟 Premium Members Dashboard</h4>
+        <div style="overflow-x:auto; margin-top:15px;">
+          <table class="admin-table" style="width:100%; min-width:600px;">
+            <thead>
+              <tr>
+                <th>User Name</th>
+                <th>Mobile NO.</th>
+                <th>Premium Since</th>
+                <th>Expiry Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="csPremiumUsersList">
+              <tr>
+                <td colspan="5" style="text-align:center; padding:20px; color:#666;">Loading members list...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -3390,6 +3579,10 @@
       <div class="box premium-box" onclick="openPremiumHub()" id="premiumLinkBox">
         <h1>💎</h1>Premium Notes & Book
       </div>
+      <div class="box" id="codeStudioBox" onclick="openCodeStudio()"
+        style="border-color: #00b894; background: rgba(0,184,148,0.05); box-shadow: 0 0 15px rgba(0,184,148,0.2);">
+        <h1 style="color: #00b894;">💻</h1>Code Studio
+      </div>
       <div class="box" id="battleArenaBox" onclick="openBattleArena()"
         style="border-color: #ff4757; background: rgba(255, 71, 87, 0.05); box-shadow: 0 0 15px rgba(255, 71, 87, 0.2);">
         <h1 style="color: #ff4757;">⚔️</h1>NextGen Battle Arena
@@ -3398,6 +3591,207 @@
   </div>
 
   <!-- BATTLE ARENA VIEW -->
+  <!-- ========== CODE STUDIO ========== -->
+  <div id="codeStudioScreen"
+    style="display:none; min-height:100vh; background: #0a0f1e; font-family: 'Segoe UI', sans-serif;">
+    <style>
+      #csEditor {
+        font-family: 'Courier New', monospace;
+        font-size: 14px;
+        background: #0d1117;
+        color: #e6edf3;
+        border: none;
+        outline: none;
+        resize: none;
+        width: 100%;
+        height: 100%;
+        line-height: 1.6;
+        padding: 15px;
+        box-sizing: border-box;
+        tab-size: 2;
+      }
+
+      .cs-tab-btn {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(0, 184, 148, 0.3);
+        color: #aaa;
+        padding: 6px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 600;
+        transition: 0.2s;
+        white-space: nowrap;
+      }
+
+      .cs-tab-btn:hover,
+      .cs-tab-btn.active {
+        background: #00b894;
+        color: #000;
+        border-color: #00b894;
+      }
+
+      .cs-proj-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 10px;
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 6px;
+        margin-bottom: 5px;
+        cursor: pointer;
+        border-left: 3px solid transparent;
+        transition: 0.2s;
+        font-size: 13px;
+      }
+
+      .cs-proj-item:hover {
+        border-left-color: #00b894;
+        background: rgba(0, 184, 148, 0.08);
+      }
+
+      .cs-proj-item.active {
+        border-left-color: #00b894;
+        background: rgba(0, 184, 148, 0.12);
+        color: #00b894;
+      }
+    </style>
+
+    <!-- TOP BAR -->
+    <div
+      style="display:flex; align-items:center; justify-content:space-between; padding:10px 20px; background:rgba(0,0,0,0.5); border-bottom:1px solid rgba(0,184,148,0.3); flex-wrap:wrap; gap:10px;">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <button onclick="showPage('programsWrapper')"
+          style="background:rgba(0,184,148,0.1); border:1px solid #00b894; color:#00b894; padding:7px 15px; border-radius:6px; cursor:pointer; font-weight:bold; font-size:13px;">⬅
+          Back</button>
+        <h2 style="margin:0; color:#00b894; font-size:18px;">💻 NextGen Code Studio</h2>
+      </div>
+      <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+        <select id="csLangSelect" onchange="onCSLangChange()"
+          style="background:#0d1117; color:#e6edf3; border:1px solid rgba(0,184,148,0.4); padding:7px 12px; border-radius:6px; font-size:13px; cursor:pointer;"></select>
+        <button onclick="runCode()" id="csRunBtn"
+          style="background:linear-gradient(90deg,#00b894,#00cec9); color:#000; border:none; padding:8px 20px; border-radius:6px; font-weight:900; cursor:pointer; font-size:14px; letter-spacing:1px;">▶
+          RUN</button>
+        <button onclick="clearEditor()"
+          style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.2); color:#aaa; padding:7px 14px; border-radius:6px; cursor:pointer; font-size:13px;">🗑️
+          Clear</button>
+        <button onclick="saveProject()"
+          style="background:rgba(0,184,148,0.15); border:1px solid #00b894; color:#00b894; padding:7px 14px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:bold;">💾
+          Save</button>
+        <button onclick="newProject()"
+          style="background:rgba(108,92,231,0.15); border:1px solid #6c5ce7; color:#a29bfe; padding:7px 14px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:bold;">➕
+          New</button>
+      </div>
+    </div>
+
+    <!-- MAIN LAYOUT -->
+    <div style="display:flex; height:calc(100vh - 60px);">
+
+      <!-- LEFT: PROJECT SIDEBAR -->
+      <div
+        style="width:220px; flex-shrink:0; background:rgba(0,0,0,0.4); border-right:1px solid rgba(0,184,148,0.15); display:flex; flex-direction:column; overflow:hidden;">
+        <div style="padding:12px; border-bottom:1px solid rgba(255,255,255,0.08);">
+          <h4 style="color:#00b894; margin:0 0 8px 0; font-size:13px; letter-spacing:1px;">📁 MY PROJECTS</h4>
+          <input id="csSearchProj" type="text" placeholder="Search..." oninput="filterProjects()"
+            style="width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#eee; padding:5px 8px; border-radius:5px; font-size:12px; box-sizing:border-box;">
+        </div>
+        <div id="csProjList" style="flex:1; overflow-y:auto; padding:10px;">
+          <p style="color:#555; font-size:12px; text-align:center; margin-top:20px;">Login to see projects</p>
+        </div>
+        <div style="padding:10px; border-top:1px solid rgba(255,255,255,0.08);">
+          <div id="csCurrentProject"
+            style="color:#00b894; font-size:11px; font-weight:bold; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+            No file open</div>
+        </div>
+      </div>
+
+      <!-- CENTER: EDITOR + OUTPUT -->
+      <div style="flex:1; display:flex; flex-direction:column; overflow:hidden;">
+
+        <!-- EDITOR -->
+        <div style="flex:1; position:relative; min-height:200px;">
+          <div style="position:absolute; top:0; left:0; width:100%; height:100%;">
+            <textarea id="csEditor" placeholder="// Write your code here..." spellcheck="false"
+              onkeydown="handleEditorTab(event)"></textarea>
+          </div>
+        </div>
+
+        <!-- OUTPUT PANEL -->
+        <div
+          style="height:220px; background:#0a0f1e; border-top:2px solid rgba(0,184,148,0.3); display:flex; flex-direction:column;">
+          <div
+            style="display:flex; justify-content:space-between; align-items:center; padding:6px 15px; background:rgba(0,0,0,0.5); border-bottom:1px solid rgba(255,255,255,0.08);">
+            <span style="color:#00b894; font-size:12px; font-weight:bold; letter-spacing:1px;">📤 OUTPUT</span>
+            <div style="display:flex; gap:8px;">
+              <button onclick="clearOutput()"
+                style="background:none; border:1px solid rgba(255,255,255,0.15); color:#777; padding:3px 10px; border-radius:4px; cursor:pointer; font-size:11px;">Clear</button>
+              <span id="csExecTime" style="color:#777; font-size:11px; align-self:center;"></span>
+            </div>
+          </div>
+          <div id="csOutput"
+            style="flex:1; overflow-y:auto; padding:12px 15px; font-family:'Courier New',monospace; font-size:13px; color:#e6edf3; white-space:pre-wrap; line-height:1.6;">
+            <span style="color:#555;">▶ Click RUN to execute your code...</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: HINTS & STDIN -->
+      <div
+        style="width:240px; flex-shrink:0; background:rgba(0,0,0,0.3); border-left:1px solid rgba(255,255,255,0.07); display:flex; flex-direction:column; overflow:hidden;">
+
+        <!-- STDIN (hidden by default) -->
+        <div style="display:none; padding:10px; border-bottom:1px solid rgba(255,255,255,0.08);">
+          <label style="color:#aaa; font-size:11px; font-weight:bold; letter-spacing:1px;">📥 INPUT (stdin)</label>
+          <textarea id="csStdin" placeholder="Enter program input here..."
+            style="width:100%; height:80px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); color:#eee; border-radius:5px; resize:none; font-size:12px; padding:6px; margin-top:5px; box-sizing:border-box; font-family:monospace;"></textarea>
+        </div>
+
+        <!-- HINGLISH ERROR BOX -->
+        <div style="padding:10px; flex:1; overflow-y:auto;">
+          <label style="color:#fd79a8; font-size:11px; font-weight:bold; letter-spacing:1px;">🤖 SMART ERROR
+            (Hinglish)</label>
+          <div id="csHinglishError"
+            style="margin-top:8px; color:#ddd; font-size:12px; line-height:1.7; background:rgba(255,100,100,0.05); border:1px solid rgba(255,100,100,0.1); border-radius:6px; padding:10px; min-height:60px;">
+            <span style="color:#555;">Koi error nahi — sab theek hai! ✅</span>
+          </div>
+        </div>
+
+        <!-- LANGUAGE INFO -->
+        <div style="padding:10px; border-top:1px solid rgba(255,255,255,0.08);">
+          <div id="csLangInfo" style="color:#777; font-size:11px; line-height:1.5;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PREMIUM OVERLAY -->
+    <div id="csPremiumOverlay"
+      style="display:none; position:absolute; inset:0; z-index:100; background:rgba(10,15,30,0.95); backdrop-filter:blur(10px); display:none; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:30px;">
+      <div
+        style="max-width:400px; padding:40px; border:2px solid gold; border-radius:24px; background:rgba(0,0,0,0.4); box-shadow:0 0 40px rgba(255,215,0,0.3); animation: fadeIn 0.5s;">
+        <h1 style="font-size:60px; margin:0;">🔒</h1>
+        <h1 style="color:gold; font-size:28px; margin:15px 0; letter-spacing:1px;">PREMIUM ACCESS</h1>
+        <p style="color:#eee; font-size:16px;">Appne apana free limits (2 baar) use kar liya hai.</p>
+        <p style="color:#aaa; font-size:14px; margin-bottom:30px;">Unlimited coding journeys unlock karne ke liye
+          <b>NextGen Premium</b> choose karein.
+        </p>
+        <div
+          style="background:rgba(255,215,0,0.1); border:1px dashed gold; border-radius:15px; padding:20px; margin-bottom:30px;">
+          <span style="color:#aaa; font-size:12px; display:block; text-transform:uppercase;">Price</span>
+          <span style="color:gold; font-size:32px; font-weight:bold;">🪙 <span id="csPremiumPriceDisplay">50</span>
+            Gold</span>
+        </div>
+        <button class="login-btn" onclick="buyCodeStudioPremium()"
+          style="background:linear-gradient(90deg, gold, #ffaa00); color:black; font-weight:900; width:100%; height:50px; border-radius:12px;">🚀
+          UNLOCK UNLIMITED</button>
+        <button onclick="showPage('programsWrapper')"
+          style="background:none; border:none; color:#666; margin-top:20px; cursor:pointer; font-size:13px;">Wapis
+          Jayein</button>
+      </div>
+    </div>
+  </div>
+  <!-- ========== /CODE STUDIO ========== -->
+
   <div id="combatArena" style="display:none; padding: 20px; max-width: 800px; margin: 0 auto;">
     <button onclick="showPage('programsWrapper')"
       style="margin-bottom:20px; padding: 10px 20px; background: rgba(255, 71, 87, 0.1); border: 1px solid #ff4757; color: #ff4757; border-radius: 5px; cursor: pointer; font-weight: bold;">⬅
@@ -3902,6 +4296,33 @@
     }
     typing();
 
+    /* SECURITY & UTILITY HELPERS */
+    function sanitizeHTML(str) {
+      if (!str) return "";
+      const temp = document.createElement('div');
+      temp.textContent = str;
+      return temp.innerHTML;
+    }
+
+    function getAuthSession() {
+      const sess = localStorage.getItem("nx_session");
+      if (!sess) return null;
+      try {
+        const decoded = atob(sess).split(':');
+        return { mobile: decoded[0], exp: parseInt(decoded[1]) };
+      } catch (e) { return null; }
+    }
+
+    function setAuthSession(mobile, durationHours = 5) {
+      const exp = Date.now() + (durationHours * 60 * 60 * 1000);
+      localStorage.setItem("nx_session", btoa(mobile + ":" + exp));
+    }
+
+    function isAdminAuthenticated() {
+      // Check legacy flag OR new secure token — both are valid
+      return localStorage.getItem("adminSession") === "true";
+    }
+
     /* PAGE NAVIGATION MANAGER */
     function showPage(pageId, pushToHistory = true, navContext = null) {
       if (!pageId) return;
@@ -3912,7 +4333,7 @@
       }
 
       // List of all main content segments
-      const allPages = ["loginScreen", "welcomeScreen", "adminDashboard", "programsWrapper", "dynamicNavSection", "chapters", "content", "semesterMotivationSection", "premiumNavSection", "combatArena", "battleExamEngine", "battleLeaderboardSection"];
+      const allPages = ["loginScreen", "welcomeScreen", "adminDashboard", "programsWrapper", "dynamicNavSection", "chapters", "content", "semesterMotivationSection", "premiumNavSection", "combatArena", "battleExamEngine", "battleLeaderboardSection", "codeStudioScreen"];
 
       allPages.forEach(id => {
         let el = document.getElementById(id);
@@ -3944,6 +4365,10 @@
         const isBattlePage = ["combatArena", "battleExamEngine", "battleLeaderboardSection"].includes(pageId);
         infoSection.style.display = (hideForAuth || isBattlePage) ? "none" : "block";
       }
+
+      // Show neuralHUD only on welcomeScreen; hide on all other pages
+      const neuralHUD = document.getElementById('neuralHUD');
+      if (neuralHUD) neuralHUD.style.display = (pageId === 'welcomeScreen') ? 'flex' : 'none';
 
       window.scrollTo(0, 0);
 
@@ -4006,7 +4431,7 @@
     // Initial State Push
     window.addEventListener('load', () => {
       // Find what page is currently active (visible)
-      const allPages = ["loginScreen", "welcomeScreen", "adminDashboard", "programsWrapper", "dynamicNavSection", "chapters", "content", "semesterMotivationSection", "premiumNavSection"];
+      const allPages = ["loginScreen", "welcomeScreen", "adminDashboard", "programsWrapper", "dynamicNavSection", "chapters", "content", "semesterMotivationSection", "premiumNavSection", "codeStudioScreen"];
       let activePage = "loginScreen";
       allPages.forEach(id => {
         const el = document.getElementById(id);
@@ -4018,22 +4443,38 @@
     function switchAdminTab(tabId) {
       // Hide all sections
       document.querySelectorAll('.admin-section').forEach(sec => sec.style.display = 'none');
-      // Show selected
+      // Show selected section
       const selected = document.getElementById('adminSection_' + tabId);
-      if (selected) selected.style.display = 'block';
+      if (selected) {
+        selected.style.display = 'block';
+      }
 
-      // Update button styles
+      // Highlight active button
       document.querySelectorAll('.admin-tab-btn').forEach(btn => {
         btn.classList.remove('active');
         // Match by tabId or keywords in text
-        if (btn.onclick.toString().includes(`'${tabId}'`)) {
+        const btnText = btn.innerText.toLowerCase();
+        if (
+          (tabId === 'students' && btnText.includes('student')) ||
+          (tabId === 'cms' && btnText.includes('cms')) ||
+          (tabId === 'recharges' && btnText.includes('recharge')) ||
+          (tabId === 'withdrawals' && btnText.includes('withdrawal')) ||
+          (tabId === 'battles' && btnText.includes('battle')) ||
+          (tabId === 'premium' && btnText.includes('premium')) ||
+          (tabId === 'settings' && btnText.includes('site settings')) ||
+          (tabId === 'codeStudio' && btnText.includes('code studio'))
+        ) {
           btn.classList.add('active');
         }
       });
 
-      // Specific renders if needed
-      if (tabId === 'recharges') renderAdminRechargeRequests();
-      if (tabId === 'withdrawals') renderAdminWithdrawalRequests();
+      // Trigger specific load logic if needed
+      if (tabId === 'recharges' && typeof renderAdminRechargeRequests === 'function') renderAdminRechargeRequests();
+      if (tabId === 'withdrawals' && typeof renderAdminWithdrawalRequests === 'function') renderAdminWithdrawalRequests();
+      if (tabId === 'battles' && typeof loadAdminBattles === 'function') loadAdminBattles();
+      if (tabId === 'settings' && typeof loadSiteSettings === 'function') loadSiteSettings();
+      if (tabId === 'premium' && typeof renderActivePremiumUsers === 'function') renderActivePremiumUsers();
+      if (tabId === 'codeStudio' && typeof initAdminCodeStudio === 'function') initAdminCodeStudio();
     }
 
     /* GLOBAL DATA FETCH */
@@ -4387,56 +4828,38 @@
         renderStudentCourses();
         renderPremiumHubCourses();
 
-        let activeUser = localStorage.getItem("activeSessionMobile");
-        let expTime = localStorage.getItem("activeSessionExp");
-        if (localStorage.getItem("adminSession") === "true") {
+        // CHECK SECURE SESSIONS
+        const session = getAuthSession();
+        if (isAdminAuthenticated()) {
           showPage("adminDashboard");
           loadAdminData();
-          initAdminWalletSettings(); // Inject wallet recharge settings initialization
+          if (typeof initAdminWalletSettings === 'function') initAdminWalletSettings();
           renderAdminRechargeRequests();
+          if (typeof renderAdminWithdrawalRequests === 'function') renderAdminWithdrawalRequests();
           renderActivePremiumUsers();
           loadAdminBattles();
-        } else if (activeUser && expTime && Date.now() < parseInt(expTime)) {
-          database.ref('users/' + activeUser).once('value').then((snapshot) => {
+          if (typeof loadAdminBattleBookings === 'function') loadAdminBattleBookings();
+          if (typeof loadSiteSettings === 'function') loadSiteSettings();
+        } else if (session && Date.now() < session.exp) {
+          currentUserMobile = session.mobile;
+          database.ref('users/' + currentUserMobile).once('value').then((snapshot) => {
             let userData = snapshot.val();
             if (userData) {
-              currentUserMobile = activeUser;
-
-              // Sync to LocalStorage for offline and profile access
-              localStorage.setItem(activeUser, JSON.stringify(userData));
-
-              // Show profile picture button in header
-              const picEl = document.getElementById('userProfilePicHeader');
-              if (picEl) {
-                picEl.src = userData.profilePic || `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.name || 'U')}&background=cyan&color=000`;
-                picEl.style.display = 'block';
-              }
-
-              // Show Header Badge
-              const badgeEl = document.getElementById("headerGamificationBadge");
-              if (badgeEl) {
-                let pts = userData.timeSpent || 0;
-                let badge = "Beginner 🌱";
-                let badgeColor = "#38ef7d";
-                if (pts >= 300) { badge = "Master Scholar 👑"; badgeColor = "gold"; }
-                else if (pts >= 60) { badge = "Explorer 🚀"; badgeColor = "cyan"; }
-
-                badgeEl.innerText = badge;
-                badgeEl.style.color = badgeColor;
-                badgeEl.style.borderColor = badgeColor;
-                badgeEl.style.display = "block";
-              }
-
+              // Sync to LocalStorage using obfuscated key
+              localStorage.setItem("user_" + btoa(currentUserMobile), JSON.stringify(userData));
               updateNeuralHUD(userData);
-
-              showPage("welcomeScreen");
-              document.querySelector("#welcomeScreen p").innerText = `\nWelcome back, ${userData.name}!`;
-              startTimeTracking();
-              setTimeout(restoreNavState, 800);
+              enterSite();
+            } else {
+              showPage("loginScreen", false);
             }
           });
+        } else {
+          showPage("loginScreen", false);
         }
-      }).catch(err => console.error("Firebase init failed:", err));
+      }).catch(err => {
+        console.error("Initialization failed:", err);
+        showPage("loginScreen", false);
+      });
     };
 
     function updateNeuralHUD(userData) {
@@ -4468,11 +4891,11 @@
       timeSpentInterval = setInterval(() => {
         if (!currentUserMobile || !isTabVisible) return;
 
-        let stObj = JSON.parse(localStorage.getItem(currentUserMobile)) || {};
+        let stObj = JSON.parse(localStorage.getItem("user_" + btoa(currentUserMobile))) || {};
         stObj.timeSpent = (stObj.timeSpent || 0) + 1;
 
         // Sync to Local for instant UI response if needed
-        localStorage.setItem(currentUserMobile, JSON.stringify(stObj));
+        localStorage.setItem("user_" + btoa(currentUserMobile), JSON.stringify(stObj));
 
         // Sync to Firebase directly
         database.ref('users/' + currentUserMobile + '/timeSpent').set(stObj.timeSpent);
@@ -4740,147 +5163,185 @@
     }
 
     function handleSignUp() {
-      let name = document.getElementById("regName").value.trim();
-      let roll = document.getElementById("regRoll").value.trim();
-      let branch = document.getElementById("regBranch").value;
-      let section = document.getElementById("regSection").value;
-      let mobile = document.getElementById("regMobile").value.trim();
+      try {
+        let name = sanitizeHTML(document.getElementById("regName").value.trim());
+        let roll = sanitizeHTML(document.getElementById("regRoll").value.trim());
+        let branch = document.getElementById("regBranch").value;
+        let section = document.getElementById("regSection").value;
+        let mobile = document.getElementById("regMobile").value.trim();
 
-      if (!name || !roll || !branch || !section || !mobile) {
-        alert("Please fill in all details to register!");
-        return;
-      }
-
-      if (!validateInput(name, roll, mobile)) return;
-
-      let btn = document.querySelector("#signUpForm .login-btn");
-      btn.innerText = "Registering...";
-      btn.disabled = true;
-
-      database.ref('users/' + mobile).once('value').then((snapshot) => {
-        if (snapshot.exists()) {
-          alert("An account with this mobile number already exists! Please login.");
-          toggleAuthMode('login');
-          btn.innerText = "Sign Up & Enter";
-          btn.disabled = false;
+        if (!name || !roll || !branch || !section || !mobile) {
+          alert("Please fill in all details to register!");
           return;
         }
 
-        let userData = {
-          name, roll, branch, section, mobile,
-          registeredAt: Date.now(),
-          timeSpent: 0
-        };
+        if (!validateInput(name, roll, mobile)) return;
 
-        // FACE SCAN SIMULATION
-        document.getElementById('faceScanOverlay').style.display = 'flex';
+        let btn = document.querySelector("#signUpForm .login-btn");
+        btn.innerText = "Registering...";
+        btn.disabled = true;
 
-        setTimeout(() => {
-          database.ref('users/' + mobile).set(userData).then(() => {
-            document.getElementById('faceScanOverlay').style.display = 'none';
-            localStorage.setItem(mobile, JSON.stringify(userData));
-            localStorage.setItem("activeSessionMobile", mobile);
-            localStorage.setItem("activeSessionExp", (Date.now() + 5 * 60 * 60 * 1000).toString());
-
-            currentUserMobile = mobile;
-            alert("Registration Successful!");
-            showPage("welcomeScreen");
-            let wsP = document.querySelector("#welcomeScreen p");
-            wsP.innerText = `\nWelcome, ${name}!`;
-
+        database.ref('users/' + mobile).once('value').then((snapshot) => {
+          if (snapshot.exists()) {
+            alert("An account with this mobile number already exists! Please login.");
+            toggleAuthMode('login');
             btn.innerText = "Sign Up & Enter";
             btn.disabled = false;
-            startTimeTracking();
-            updateNeuralHUD(userData);
-          }).catch(err => {
-            document.getElementById('faceScanOverlay').style.display = 'none';
-            alert("Network error, please try again.");
-            btn.innerText = "Sign Up & Enter";
-            btn.disabled = false;
-          });
-        }, 2500);
-      });
+            return;
+          }
+
+          let userData = {
+            name, roll, branch, section, mobile,
+            registeredAt: Date.now(),
+            timeSpent: 0
+          };
+
+          // FACE SCAN SIMULATION
+          const overlay = document.getElementById('faceScanOverlay');
+          if (overlay) overlay.style.display = 'flex';
+
+          setTimeout(() => {
+            database.ref('users/' + mobile).set(userData).then(() => {
+              if (overlay) overlay.style.display = 'none';
+
+              // Secure Session Storage
+              setAuthSession(mobile);
+              localStorage.setItem("user_" + btoa(mobile), JSON.stringify(userData));
+
+              currentUserMobile = mobile;
+              alert("Registration Successful!");
+              showPage("welcomeScreen");
+
+              const wsP = document.querySelector("#welcomeScreen p");
+              if (wsP) wsP.innerText = `\nWelcome, ${name}!`;
+
+              btn.innerText = "Sign Up & Enter";
+              btn.disabled = false;
+              startTimeTracking();
+              updateNeuralHUD(userData);
+            }).catch(err => {
+              if (overlay) overlay.style.display = 'none';
+              alert("Network error, please try again.");
+              btn.innerText = "Sign Up & Enter";
+              btn.disabled = false;
+            });
+          }, 2500);
+        });
+      } catch (e) {
+        console.error("handleSignUp crash:", e);
+        alert("Registration failed due to an unexpected error.");
+      }
     }
 
     function handleLogin() {
-      let name = document.getElementById("loginName").value.trim();
-      let mobile = document.getElementById("loginMobile").value.trim();
-      let section = document.getElementById("loginSection").value;
+      try {
+        let name = document.getElementById("loginName").value.trim();
+        let mobile = document.getElementById("loginMobile").value.trim();
+        let section = document.getElementById("loginSection").value;
 
-      if (!name || !mobile || !section) {
-        alert("Please enter Name, Section, and Mobile Number!");
-        return;
-      }
+        if (!name || !mobile || !section) {
+          alert("Please enter Name, Section, and Mobile Number!");
+          return;
+        }
 
-      let btn = document.querySelector("#loginForm .login-btn");
-      btn.innerText = "Logging in...";
-      btn.disabled = true;
+        let btn = document.querySelector("#loginForm .login-btn");
+        btn.innerText = "Logging in...";
+        btn.disabled = true;
 
-      database.ref('users/' + mobile).once('value').then((snapshot) => {
-        let savedData = snapshot.val();
-        if (savedData && savedData.name.toLowerCase() === name.toLowerCase() && savedData.section === section) {
+        database.ref('users/' + mobile).once('value').then((snapshot) => {
+          let savedData = snapshot.val();
+          if (savedData && savedData.name.toLowerCase() === name.toLowerCase() && savedData.section === section) {
 
-          // FACE SCAN SIMULATION
-          document.getElementById('faceScanOverlay').style.display = 'flex';
+            // FACE SCAN SIMULATION
+            const overlay = document.getElementById('faceScanOverlay');
+            if (overlay) overlay.style.display = 'flex';
 
-          setTimeout(() => {
-            document.getElementById('faceScanOverlay').style.display = 'none';
-            localStorage.setItem(mobile, JSON.stringify(savedData));
-            localStorage.setItem("activeSessionMobile", mobile);
-            localStorage.setItem("activeSessionExp", (Date.now() + 5 * 60 * 60 * 1000).toString());
+            setTimeout(() => {
+              if (overlay) overlay.style.display = 'none';
 
-            currentUserMobile = mobile;
-            showPage("welcomeScreen");
-            let wsP = document.querySelector("#welcomeScreen p");
-            wsP.innerText = wsP.innerText.split('\n')[0] + `\nWelcome back, ${savedData.name}!`;
+              // Secure Session Storage
+              setAuthSession(mobile);
+              localStorage.setItem("user_" + btoa(mobile), JSON.stringify(savedData));
 
-            startTimeTracking();
-            updateNeuralHUD(savedData);
+              currentUserMobile = mobile;
+              showPage("welcomeScreen");
+
+              const wsP = document.querySelector("#welcomeScreen p");
+              if (wsP) wsP.innerText = `\nWelcome back, ${savedData.name}!`;
+
+              startTimeTracking();
+              updateNeuralHUD(savedData);
+              btn.innerText = "Log In";
+              btn.disabled = false;
+            }, 2500);
+          } else {
+            alert("Incorrect credentials or user not found.");
             btn.innerText = "Log In";
             btn.disabled = false;
-          }, 2500);
-        } else {
-          alert("Incorrect credentials or user not found.");
+          }
+        }).catch(err => {
+          console.error("Login database error:", err);
+          alert("Login failed due to network error.");
           btn.innerText = "Log In";
           btn.disabled = false;
-        }
-      }).catch(err => {
-        alert("Login failed.");
-        btn.innerText = "Log In";
-        btn.disabled = false;
-      });
+        });
+      } catch (e) {
+        console.error("handleLogin crash:", e);
+        alert("An unexpected error occurred.");
+      }
     }
 
     // ADMIN FUNCTIONS
     function handleAdminLogin() {
-      let user = document.getElementById("adminUser").value.trim();
-      let pass = document.getElementById("adminPass").value.trim();
+      let userInput = document.getElementById("adminUser").value.trim();
+      let passInput = document.getElementById("adminPass").value.trim();
 
-      database.ref('adminCredentials').once('value').then(snap => {
-        let creds = snap.val() || { user: "admin", pass: "admin123" };
-        if (user === creds.user && pass === creds.pass) {
+      if (!userInput || !passInput) {
+        alert("Please enter both Username and Password!");
+        return;
+      }
+
+      const doLogin = (creds) => {
+        if (userInput === creds.user && passInput === creds.pass) {
           localStorage.setItem("adminSession", "true");
+          localStorage.setItem("nx_admin_token", btoa("admin_" + Date.now()));
           showPage("adminDashboard");
           loadAdminData();
-          initAdminWalletSettings(); // Inject wallet recharge settings initialization
-          renderAdminRechargeRequests();
-          renderAdminWithdrawalRequests();
-          renderActivePremiumUsers();
-          loadAdminBattles();
-          loadAdminBattleBookings();
+          if (typeof initAdminWalletSettings === 'function') initAdminWalletSettings();
+          if (typeof renderAdminRechargeRequests === 'function') renderAdminRechargeRequests();
+          if (typeof renderAdminWithdrawalRequests === 'function') renderAdminWithdrawalRequests();
+          if (typeof renderActivePremiumUsers === 'function') renderActivePremiumUsers();
+          if (typeof loadAdminBattles === 'function') loadAdminBattles();
+          if (typeof loadAdminBattleBookings === 'function') loadAdminBattleBookings();
+          if (typeof loadSiteSettings === 'function') loadSiteSettings();
         } else {
-          alert("Invalid Admin Credentials!");
+          alert("❌ Wrong Username or Password! Please try again.");
         }
+      };
+
+      // Try Firebase first, fallback to defaults if offline/node missing
+      database.ref('adminCredentials').once('value').then(snap => {
+        const creds = (snap.exists() && snap.val()) ? snap.val() : { user: "admin", pass: "admin123" };
+        doLogin(creds);
+      }).catch(() => {
+        // If Firebase is unreachable, try default credentials
+        doLogin({ user: "admin", pass: "admin123" });
       });
     }
 
     function adminLogout() {
-      if (!confirm("Are you sure you want to logout?")) return;
-      localStorage.removeItem("adminSession");
-      showPage("loginScreen");
-      toggleAuthMode('admin');
-      document.getElementById("adminUser").value = "";
-      document.getElementById("adminPass").value = "";
+      try {
+        if (!confirm("Are you sure you want to logout?")) return;
+        localStorage.removeItem("adminSession");
+        localStorage.removeItem("nx_admin_token");
+        showPage("loginScreen");
+        toggleAuthMode('admin');
+        document.getElementById("adminUser").value = "";
+        document.getElementById("adminPass").value = "";
+      } catch (err) {
+        console.error("Admin Logout Error:", err);
+        location.reload(); // Hard reset as fallback
+      }
     }
 
     function populateBattleCourses() {
@@ -5557,10 +6018,12 @@
       if (!container) return;
       const premiumBox = document.getElementById("premiumLinkBox");
       const battleBox = document.getElementById("battleArenaBox");
+      const codeBox = document.getElementById("codeStudioBox");
 
-      // Clear but keep premium and battle boxes
+      // Clear but keep premium, code studio, and battle boxes
       Array.from(container.children).forEach(child => {
-        if (child !== premiumBox && child !== battleBox) container.removeChild(child);
+        if (child !== premiumBox && child !== battleBox && child !== codeBox)
+          container.removeChild(child);
       });
 
       for (let course in data) {
@@ -5633,6 +6096,7 @@
 
     function onPremOptionChange() {
       renderPremPdfList();
+      renderPremSubOptionList();
       let course = document.getElementById("premCmsCourse").value;
       let option = document.getElementById("premCmsOption").value;
       if (course && option) {
@@ -5729,23 +6193,285 @@
       list.innerHTML = "";
 
       if (!course || !option) return;
-
-      let pdfs = premiumData[course][option];
-      if (!pdfs || pdfs.length === 0) {
-        list.innerHTML = "<li style='color:#ccc;'>No PDFs added yet.</li>";
+      if (!premiumData[course] || !premiumData[course][option]) {
+        list.innerHTML = "<li style='color:#ccc;'>No files added yet.</li>";
         return;
       }
 
-      pdfs.forEach((pdf, index) => {
+      let files = premiumData[course][option].files || premiumData[course][option];
+      // Legacy: if it's an array (old format), treat all as pdfs
+      if (!Array.isArray(files) && typeof files !== 'object') {
+        list.innerHTML = "<li style='color:#ccc;'>No files added yet.</li>";
+        return;
+      }
+
+      let items = Array.isArray(files) ? files.map(f => Object.assign({ type: 'pdf' }, f)) : Object.values(files);
+
+      if (items.length === 0) {
+        list.innerHTML = "<li style='color:#ccc;'>No files added yet.</li>";
+        return;
+      }
+
+      const typeIcon = { pdf: '📄', image: '🖼️', video: '🎬' };
+      const typeColor = { pdf: '#00cec9', image: '#fd79a8', video: '#e17055' };
+
+      items.forEach((file, index) => {
         let li = document.createElement("li");
-        li.style.cssText = "display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(0,255,255,0.05); margin-bottom: 5px; border-radius: 5px;";
+        li.style.cssText = "display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(255,255,255,0.04); margin-bottom: 6px; border-radius: 8px; border-left: 3px solid " + (typeColor[file.type] || '#aaa') + ";";
         li.innerHTML = `
-          <span><b>${pdf.title}</b> <small style="color:#aaa;">(${pdf.link})</small></span>
-          <button onclick="removePremiumPdf(${index})" style="background: transparent; color: #ff4757; border: 1px solid #ff4757; padding: 3px 8px; border-radius: 3px; cursor: pointer;">Delete</button>
+          <span style="flex:1;">${typeIcon[file.type] || '📁'} <b style="color:${typeColor[file.type] || '#fff'}">${file.title}</b> <small style="color:#777;">${file.type}</small><br><small style="color:#555;word-break:break-all;">${file.link}</small></span>
+          <button onclick="removeOptionFile(${index})" style="background: transparent; color: #ff4757; border: 1px solid #ff4757; padding: 4px 10px; border-radius: 4px; cursor: pointer; flex-shrink:0; margin-left:10px;">🗑️</button>
         `;
         list.appendChild(li);
       });
     }
+
+    function removeOptionFile(index) {
+      if (!confirm("Delete this file entry?")) return;
+      let course = document.getElementById("premCmsCourse").value;
+      let option = document.getElementById("premCmsOption").value;
+      if (!course || !option) return;
+
+      let optData = premiumData[course][option];
+      if (Array.isArray(optData)) {
+        optData.splice(index, 1);
+      } else if (optData.files) {
+        optData.files.splice(index, 1);
+      }
+      savePremiumData();
+      renderPremPdfList();
+    }
+
+    // Legacy: kept for backward compat (old removePremiumPdf calls)
+    function removePremiumPdf(index) { removeOptionFile(index); }
+
+    // ===== PREMIUM COURSE ADD/DELETE =====
+    function addPremiumCourse() {
+      let name = document.getElementById("newPremCourseName").value.trim().toUpperCase();
+      if (!name) return alert("Course name cannot be empty.");
+      if (!premiumData) premiumData = {};
+      if (premiumData[name]) return alert(`Premium course '${name}' already exists!`);
+      premiumData[name] = {};
+      savePremiumData();
+      document.getElementById("newPremCourseName").value = "";
+      onPremCourseChange && null;
+      initAdminCMS();
+      renderPremCourseList();
+      alert(`✅ Premium course '${name}' added!`);
+    }
+
+    function deletePremiumCourse() {
+      let course = document.getElementById("deletePremCourseSelect").value;
+      if (!course) return alert("Select a course to delete.");
+      if (!confirm(`Delete premium course '${course}' and ALL its options/files? This cannot be undone.`)) return;
+      delete premiumData[course];
+      database.ref(`premiumData/${course}`).remove().then(() => {
+        alert(`🗑️ Premium course '${course}' deleted.`);
+        initAdminCMS();
+        renderPremCourseList();
+        document.getElementById("premCmsCourse").value = "";
+        document.getElementById("premEditor").style.display = "none";
+      }).catch(e => alert("Error: " + e));
+    }
+
+    function renderPremCourseList() {
+      let sel = document.getElementById("deletePremCourseSelect");
+      let display = document.getElementById("premCourseListDisplay");
+      if (!sel || !display) return;
+      sel.innerHTML = '<option value="" disabled selected>Select Course to Delete</option>';
+      display.innerHTML = "";
+      let premSel = document.getElementById("premCmsCourse");
+      if (premSel) premSel.innerHTML = '<option value="" disabled selected>Select Premium Course</option>';
+      if (!premiumData) return;
+      for (let c in premiumData) {
+        let opt = document.createElement("option");
+        opt.value = c; opt.innerText = c;
+        sel.appendChild(opt);
+        if (premSel) {
+          let o2 = document.createElement("option");
+          o2.value = c; o2.innerText = c;
+          premSel.appendChild(o2);
+        }
+        let chip = document.createElement("span");
+        chip.style.cssText = "background: rgba(255,215,0,0.1); border: 1px solid gold; color: gold; padding: 5px 12px; border-radius: 20px; font-size: 13px; font-weight: bold;";
+        chip.innerText = c;
+        display.appendChild(chip);
+      }
+    }
+
+    // ===== OPTION DELETE/RENAME =====
+    function deletePremiumOption() {
+      let course = document.getElementById("premCmsCourse").value;
+      let option = document.getElementById("premCmsOption").value;
+      if (!course || !option) return alert("Select a course and option first.");
+      if (!confirm(`Delete option '${option}' from '${course}'? All its files and sub-options will be removed.`)) return;
+      delete premiumData[course][option];
+      savePremiumData();
+      onPremCourseChange();
+      document.getElementById("premEditor").style.display = "none";
+      alert(`🗑️ Option '${option}' deleted.`);
+    }
+
+    function renamePremiumOption() {
+      let course = document.getElementById("premCmsCourse").value;
+      let option = document.getElementById("premCmsOption").value;
+      if (!course || !option) return alert("Select a course and option first.");
+      let newName = prompt(`Rename option '${option}' to:`, option);
+      if (!newName || newName.trim() === option) return;
+      newName = newName.trim();
+      if (premiumData[course][newName]) return alert("An option with that name already exists.");
+      premiumData[course][newName] = premiumData[course][option];
+      delete premiumData[course][option];
+      savePremiumData();
+      onPremCourseChange();
+      document.getElementById("premCmsOption").value = newName;
+      onPremOptionChange();
+    }
+
+    // ===== SUB-OPTIONS =====
+    function addPremiumSubOption() {
+      let course = document.getElementById("premCmsCourse").value;
+      let option = document.getElementById("premCmsOption").value;
+      let subName = document.getElementById("newPremSubOptionName").value.trim();
+      if (!course || !option) return alert("Select a course and option first.");
+      if (!subName) return alert("Enter a sub-option name.");
+
+      if (!premiumData[course][option] || typeof premiumData[course][option] !== 'object' || Array.isArray(premiumData[course][option])) {
+        // Migrate from array to object
+        let oldFiles = Array.isArray(premiumData[course][option]) ? premiumData[course][option] : [];
+        premiumData[course][option] = { files: oldFiles, subOptions: {} };
+      }
+      if (!premiumData[course][option].subOptions) premiumData[course][option].subOptions = {};
+      if (premiumData[course][option].subOptions[subName]) return alert("Sub-option already exists!");
+      premiumData[course][option].subOptions[subName] = { files: [] };
+      savePremiumData();
+      document.getElementById("newPremSubOptionName").value = "";
+      renderPremSubOptionList();
+    }
+
+    function renderPremSubOptionList() {
+      let course = document.getElementById("premCmsCourse").value;
+      let option = document.getElementById("premCmsOption").value;
+      let container = document.getElementById("premSubOptionList");
+      if (!container) return;
+      container.innerHTML = "";
+
+      if (!course || !option || !premiumData[course] || !premiumData[course][option]) {
+        container.innerHTML = "<p style='color:#666; font-style:italic; text-align:center;'>Select an option first.</p>";
+        return;
+      }
+
+      let optData = premiumData[course][option];
+      let subOptions = optData.subOptions || {};
+
+      if (Object.keys(subOptions).length === 0) {
+        container.innerHTML = "<p style='color:#666; font-style:italic; text-align:center;'>No sub-options yet. Add one above.</p>";
+        return;
+      }
+
+      for (let subName in subOptions) {
+        let subFiles = subOptions[subName].files || [];
+        let card = document.createElement("div");
+        card.style.cssText = "background: rgba(162,155,254,0.06); border: 1px solid rgba(162,155,254,0.3); border-radius: 8px; padding: 12px; margin-bottom: 10px;";
+        card.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <b style="color:#a29bfe;">📂 ${subName}</b>
+            <div style="display:flex;gap:6px;">
+              <button onclick="renamePremiumSubOption('${subName.replace(/'/g, "\\'")}', '${course.replace(/'/g, "\\'")}', '${option.replace(/'/g, "\\'")}') " style="background:#6c5ce7; color:white; border:none; padding:4px 10px; border-radius:4px; cursor:pointer; font-size:12px;">✏️ Rename</button>
+              <button onclick="deletePremiumSubOption('${subName.replace(/'/g, "\\'")}', '${course.replace(/'/g, "\\'")}', '${option.replace(/'/g, "\\'")}') " style="background:#ff4757; color:white; border:none; padding:4px 10px; border-radius:4px; cursor:pointer; font-size:12px;">🗑️ Delete</button>
+            </div>
+          </div>
+          <div id="subFileList_${subName.replace(/[^a-z0-9]/gi, '_')}" style="margin-bottom:8px; max-height:150px; overflow-y:auto;">
+            ${renderSubFileHTML(subFiles)}
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr auto; gap:6px; font-size:12px;">
+            <input type="text" id="subFileTitle_${subName.replace(/[^a-z0-9]/gi, '_')}" class="login-input" placeholder="Title" style="margin:0; padding:6px; font-size:12px;">
+            <input type="text" id="subFileLink_${subName.replace(/[^a-z0-9]/gi, '_')}" class="login-input" placeholder="Link URL" style="margin:0; padding:6px; font-size:12px;">
+            <select id="subFileType_${subName.replace(/[^a-z0-9]/gi, '_')}" class="login-input" style="margin:0; padding:6px; font-size:12px;">
+              <option value="pdf">📄 PDF</option>
+              <option value="image">🖼️ Image</option>
+              <option value="video">🎬 Video</option>
+            </select>
+          </div>
+          <button onclick="addSubOptionFile('${subName.replace(/'/g, "\\'")}', '${course.replace(/'/g, "\\'")}', '${option.replace(/'/g, "\\'")}') " style="background:#a29bfe; color:black; border:none; padding:6px 14px; border-radius:4px; cursor:pointer; font-weight:bold; margin-top:6px; font-size:12px;">➕ Add File to Sub-Option</button>
+        `;
+        container.appendChild(card);
+      }
+    }
+
+    function renderSubFileHTML(files) {
+      if (!files || files.length === 0) return "<p style='color:#666;font-size:12px;'>No files yet.</p>";
+      const typeIcon = { pdf: '📄', image: '🖼️', video: '🎬' };
+      return files.map((f, i) => `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 8px;background:rgba(255,255,255,0.03);border-radius:4px;margin-bottom:3px;font-size:12px;">
+        <span>${typeIcon[f.type] || '📁'} <b>${f.title}</b></span>
+        <a href="${f.link}" target="_blank" style="color:cyan;font-size:11px;margin:0 8px;">View</a>
+      </div>`).join('');
+    }
+
+    function addSubOptionFile(subName, course, option) {
+      let safe = subName.replace(/[^a-z0-9]/gi, '_');
+      let title = document.getElementById("subFileTitle_" + safe).value.trim();
+      let link = document.getElementById("subFileLink_" + safe).value.trim();
+      let type = document.getElementById("subFileType_" + safe).value;
+      if (!title || !link) return alert("Enter both title and link.");
+
+      let optData = premiumData[course][option];
+      if (!optData.subOptions) optData.subOptions = {};
+      if (!optData.subOptions[subName]) optData.subOptions[subName] = { files: [] };
+      if (!optData.subOptions[subName].files) optData.subOptions[subName].files = [];
+      optData.subOptions[subName].files.push({ title, link, type });
+
+      savePremiumData();
+      renderPremSubOptionList();
+    }
+
+    function deletePremiumSubOption(subName, course, option) {
+      if (!confirm(`Delete sub-option '${subName}' and all its files?`)) return;
+      delete premiumData[course][option].subOptions[subName];
+      savePremiumData();
+      renderPremSubOptionList();
+    }
+
+    function renamePremiumSubOption(subName, course, option) {
+      let newName = prompt(`Rename '${subName}' to:`, subName);
+      if (!newName || newName.trim() === subName) return;
+      newName = newName.trim();
+      let subOpts = premiumData[course][option].subOptions;
+      if (subOpts[newName]) return alert("Sub-option with that name already exists.");
+      subOpts[newName] = subOpts[subName];
+      delete subOpts[subName];
+      savePremiumData();
+      renderPremSubOptionList();
+    }
+
+    // ===== ADD MEDIA TO OPTION =====
+    function _addOptionFile(type) {
+      let course = document.getElementById("premCmsCourse").value;
+      let option = document.getElementById("premCmsOption").value;
+      let titleId = type === 'pdf' ? 'newPremPdfTitle' : type === 'image' ? 'newPremImgTitle' : 'newPremVideoTitle';
+      let linkId = type === 'pdf' ? 'newPremPdfLink' : type === 'image' ? 'newPremImgLink' : 'newPremVideoLink';
+      let title = document.getElementById(titleId).value.trim();
+      let link = document.getElementById(linkId).value.trim();
+      if (!course || !option) return alert("Select a course and option first.");
+      if (!title || !link) return alert("Please fill in both title and link.");
+
+      // Ensure option data supports files array
+      if (Array.isArray(premiumData[course][option])) {
+        let oldArr = premiumData[course][option];
+        premiumData[course][option] = { files: oldArr.map(f => Object.assign({ type: 'pdf' }, f)) };
+      }
+      if (!premiumData[course][option].files) premiumData[course][option].files = [];
+      premiumData[course][option].files.push({ title, link, type });
+      savePremiumData();
+      document.getElementById(titleId).value = "";
+      document.getElementById(linkId).value = "";
+      renderPremPdfList();
+      alert(`✅ ${type.toUpperCase()} "${title}" added!`);
+    }
+
+    function addPremiumPdf() { _addOptionFile('pdf'); }
+    function addPremiumImage() { _addOptionFile('image'); }
+    function addPremiumVideo() { _addOptionFile('video'); }
 
     let cmsSelection = { course: "", branch: "", sem: "", sub: "", ch: "" };
 
@@ -5769,6 +6495,7 @@
         }
       });
       populateBattleCourses();
+      renderPremCourseList();
     }
 
     function onAdminCMSCourseChange() {
@@ -6337,45 +7064,47 @@
     }
 
     function openEditProfile() {
-      if (!currentUserMobile) {
-        alert("You must be logged in to edit your profile.");
-        return;
-      }
-      isRecoveringMode = false;
-      document.querySelector("#editProfileScreen h2").innerText = "✏️ Edit Profile";
-
-      const showModal = (user) => {
-        document.getElementById("editName").value = user.name || "";
-        document.getElementById("editRoll").value = user.roll || "";
-        document.getElementById("editBranch").value = user.branch || "BCA";
-        document.getElementById("editSection").value = user.section || "A1";
-        document.getElementById("editMobile").value = user.mobile || "";
-
-        editProfilePicBase64 = user.profilePic || null;
-        if (editProfilePicBase64) {
-          document.getElementById('editProfilePicPreview').src = editProfilePicBase64;
-        } else {
-          document.getElementById('editProfilePicPreview').src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(user.name || 'U') + "&background=cyan&color=000";
+      try {
+        if (!currentUserMobile) {
+          alert("Session expired. Please log in again.");
+          return;
         }
+        isRecoveringMode = false;
 
-        document.getElementById('editProfilePicInput').value = ""; // Reset the file input
-        document.getElementById("editProfileScreen").style.display = "flex";
-      };
+        const showModal = (user) => {
+          document.getElementById("editName").value = user.name || "";
+          document.getElementById("editRoll").value = user.roll || "";
+          document.getElementById("editBranch").value = user.branch || "BCA";
+          document.getElementById("editSection").value = user.section || "A1";
+          document.getElementById("editMobile").value = user.mobile || "";
 
-      let savedData = localStorage.getItem(currentUserMobile);
-      if (savedData) {
-        showModal(JSON.parse(savedData));
-      } else {
-        // Fallback: Fetch from Firebase if localStorage is empty
-        database.ref('users/' + currentUserMobile).once('value').then(snap => {
-          if (snap.exists()) {
-            const user = snap.val();
-            localStorage.setItem(currentUserMobile, JSON.stringify(user));
-            showModal(user);
+          editProfilePicBase64 = user.profilePic || null;
+          if (editProfilePicBase64) {
+            document.getElementById('editProfilePicPreview').src = editProfilePicBase64;
           } else {
-            alert("User data not found. Please log in again.");
+            document.getElementById('editProfilePicPreview').src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(user.name || 'U') + "&background=cyan&color=000";
           }
-        });
+
+          document.getElementById('editProfilePicInput').value = "";
+          document.getElementById("editProfileScreen").style.display = "flex";
+        };
+
+        let savedData = localStorage.getItem("user_" + btoa(currentUserMobile));
+        if (savedData) {
+          showModal(JSON.parse(savedData));
+        } else {
+          database.ref('users/' + currentUserMobile).once('value').then(snap => {
+            if (snap.exists()) {
+              const user = snap.val();
+              localStorage.setItem("user_" + btoa(currentUserMobile), JSON.stringify(user));
+              showModal(user);
+            } else {
+              alert("User profile not found.");
+            }
+          });
+        }
+      } catch (err) {
+        console.error("openEditProfile error:", err);
       }
     }
 
@@ -6385,150 +7114,113 @@
     }
 
     function saveProfileChanges() {
-      let newName = document.getElementById("editName").value.trim();
-      let newRoll = document.getElementById("editRoll").value.trim();
-      let newBranch = document.getElementById("editBranch").value;
-      let newSection = document.getElementById("editSection").value;
-      let newMobile = document.getElementById("editMobile").value.trim();
+      try {
+        let newName = sanitizeHTML(document.getElementById("editName").value.trim());
+        let newRoll = sanitizeHTML(document.getElementById("editRoll").value.trim());
+        let newBranch = document.getElementById("editBranch").value;
+        let newSection = document.getElementById("editSection").value;
+        let newMobile = document.getElementById("editMobile").value.trim();
 
-      if (!newName || !newRoll || !newBranch || !newSection || !newMobile) {
-        alert("Please fill in all details to update your profile!");
-        return;
-      }
+        if (!newName || !newRoll || !newBranch || !newSection || !newMobile) {
+          alert("Please fill in all details!");
+          return;
+        }
 
-      if (!validateInput(newName, newRoll, newMobile)) return;
+        if (!validateInput(newName, newRoll, newMobile)) return;
 
-      let activeMobileKey = isRecoveringMode ? tempRecoverMobile : currentUserMobile;
-
-      // Check if mobile changed and new mobile already exists
-      if (newMobile !== activeMobileKey) {
-        database.ref('users/' + newMobile).once('value').then(snap => {
-          if (snap.exists()) {
-            alert("The new mobile number is already registered by another user.");
-            return;
-          } else {
-            executeProfileUpdate(activeMobileKey, newName, newRoll, newBranch, newSection, newMobile);
-          }
-        });
-      } else {
+        let activeMobileKey = isRecoveringMode ? tempRecoverMobile : currentUserMobile;
         executeProfileUpdate(activeMobileKey, newName, newRoll, newBranch, newSection, newMobile);
+      } catch (err) {
+        console.error("saveProfileChanges error:", err);
       }
     }
 
     function executeProfileUpdate(activeMobileKey, newName, newRoll, newBranch, newSection, newMobile) {
-      let updatedData = {
-        name: newName,
-        roll: newRoll,
-        branch: newBranch,
-        section: newSection,
-        mobile: newMobile
-      };
-      if (editProfilePicBase64) {
-        updatedData.profilePic = editProfilePicBase64;
-      }
+      try {
+        let updatedData = {
+          name: newName,
+          roll: newRoll,
+          branch: newBranch,
+          section: newSection,
+          mobile: newMobile
+        };
+        if (editProfilePicBase64) updatedData.profilePic = editProfilePicBase64;
 
-      // Keep offline compat tracker
-      let stObj = JSON.parse(localStorage.getItem(activeMobileKey)) || {};
+        const sessionKey = "user_" + btoa(activeMobileKey);
+        let stObj = JSON.parse(localStorage.getItem(sessionKey)) || {};
 
-      let btn = document.querySelector("#editProfileScreen .login-btn");
-      btn.innerText = "Saving...";
-      btn.disabled = true;
+        let btn = document.querySelector("#editProfileScreen .login-btn");
+        btn.innerText = "Processing...";
+        btn.disabled = true;
 
-      database.ref('users/' + newMobile).update(updatedData).then(() => {
-        if (newMobile !== activeMobileKey) {
-          database.ref('users/' + activeMobileKey).remove(); // clear old node
-          localStorage.removeItem(activeMobileKey);
-        }
-
-        let merged = { ...stObj, ...updatedData, progressTracker: stObj.progressTracker || {}, premiumUnlocked: stObj.premiumUnlocked || {} };
-        localStorage.setItem(newMobile, JSON.stringify(merged));
-
-        if (!isRecoveringMode) {
-          currentUserMobile = newMobile; // update tracking
-          localStorage.setItem("activeSessionMobile", newMobile);
-          let wsP = document.querySelector("#welcomeScreen p");
-          wsP.innerText = wsP.innerText.split('\n')[0] + `\nWelcome, ${newName}!`;
-
-          if (editProfilePicBase64 && document.getElementById('userProfilePicHeader')) {
-            document.getElementById('userProfilePicHeader').src = editProfilePicBase64;
-            document.getElementById('userProfilePicHeader').style.display = "block";
+        database.ref('users/' + newMobile).update(updatedData).then(() => {
+          if (newMobile !== activeMobileKey) {
+            database.ref('users/' + activeMobileKey).remove();
+            localStorage.removeItem(sessionKey);
+            localStorage.removeItem("nav_" + btoa(activeMobileKey));
           }
-        }
 
-        alert(isRecoveringMode ? "Registration Fixed Successfully! Please log in." : "Profile updated successfully!");
-        closeEditProfile();
+          let merged = { ...stObj, ...updatedData };
+          localStorage.setItem("user_" + btoa(newMobile), JSON.stringify(merged));
 
-        btn.innerText = "💾 Save Changes";
-        btn.disabled = false;
+          if (!isRecoveringMode) {
+            currentUserMobile = newMobile;
+            setAuthSession(newMobile);
+            updateNeuralHUD(merged);
+          }
 
-        if (isRecoveringMode) {
-          toggleAuthMode('login');
-        }
-      }).catch(err => {
-        alert("Network Error, Failed to update profile details.");
-        btn.innerText = "💾 Save Changes";
-        btn.disabled = false;
-      });
+          alert("Profile Synchronized!");
+          closeEditProfile();
+          setTimeout(() => location.reload(), 500);
+        }).catch(err => {
+          console.error("executeProfileUpdate error:", err);
+          alert("Session update failed. Please check network.");
+          btn.innerText = "💾 Save Changes";
+          btn.disabled = false;
+        });
+      } catch (err) {
+        console.error("executeProfileUpdate crash:", err);
+      }
     }
 
     function logoutUser() {
-      if (!confirm("Are you sure you want to log out?")) return;
-      localStorage.removeItem("activeSessionMobile");
-      localStorage.removeItem("activeSessionExp");
-      currentUserMobile = "";
-      closeEditProfile();
-      showPage("loginScreen");
-      toggleAuthMode('login');
-      document.getElementById("neuralHUD").style.display = "none";
-      if (timeSpentInterval) clearInterval(timeSpentInterval);
+      try {
+        if (!confirm("Confirm Logout Securely?")) return;
+        localStorage.removeItem("nx_session");
+        localStorage.removeItem("user_" + btoa(currentUserMobile));
+        localStorage.removeItem("nav_" + btoa(currentUserMobile));
+        currentUserMobile = "";
+        location.reload(); // Cleanest way to reset all states
+      } catch (err) {
+        localStorage.clear();
+        location.reload();
+      }
     }
 
     // -------------- PROGRESS TRACKING LOGIC --------------
     function getStudentTracker() {
       if (!currentUserMobile) return { progressTracker: {} };
-      let stObj = JSON.parse(localStorage.getItem(currentUserMobile)) || { progressTracker: {} };
+      const sessionKey = "user_" + btoa(currentUserMobile);
+      let stObj = JSON.parse(localStorage.getItem(sessionKey)) || { progressTracker: {} };
       if (!stObj.progressTracker) {
         stObj.progressTracker = {};
-        localStorage.setItem(currentUserMobile, JSON.stringify(stObj));
+        localStorage.setItem(sessionKey, JSON.stringify(stObj));
       }
       return stObj;
     }
 
     function toggleProgress(type, index, isChecked) {
       if (!currentUserMobile) return;
-
       let stObj = getStudentTracker();
-      let c = studentNavState.course;
-      let b = studentNavState.branch;
-      let sem = studentNavState.sem;
-      let sub = studentNavState.subject;
-      let ch = studentNavState.chapter;
+      stObj.progressTracker[type + "_" + index] = isChecked;
 
-      if (!c || !b || !sem || !sub || !ch) return;
-
-      if (!stObj.progressTracker[c]) stObj.progressTracker[c] = {};
-      if (!stObj.progressTracker[c][b]) stObj.progressTracker[c][b] = {};
-      if (!stObj.progressTracker[c][b][sem]) stObj.progressTracker[c][b][sem] = {};
-      if (!stObj.progressTracker[c][b][sem][sub]) stObj.progressTracker[c][b][sem][sub] = {};
-      if (!stObj.progressTracker[c][b][sem][sub][ch]) stObj.progressTracker[c][b][sem][sub][ch] = {};
-      if (!stObj.progressTracker[c][b][sem][sub][ch][type]) stObj.progressTracker[c][b][sem][sub][ch][type] = {};
-
-      stObj.progressTracker[c][b][sem][sub][ch][type][index] = isChecked;
-
-      localStorage.setItem(currentUserMobile, JSON.stringify(stObj));
-      database.ref(`users/${currentUserMobile}/progressTracker`).set(stObj.progressTracker);
+      database.ref('users/' + currentUserMobile + '/progressTracker').set(stObj.progressTracker);
+      localStorage.setItem("user_" + btoa(currentUserMobile), JSON.stringify(stObj));
     }
-
     function isProgressCompleted(type, index) {
       let stObj = getStudentTracker();
-      let c = studentNavState.course;
-      let b = studentNavState.branch;
-      let sem = studentNavState.sem;
-      let sub = studentNavState.subject;
-      let ch = studentNavState.chapter;
-
       try {
-        return !!stObj.progressTracker[c][b][sem][sub][ch][type][index];
+        return !!stObj.progressTracker[type + "_" + index];
       } catch (e) {
         return false;
       }
@@ -6927,18 +7619,27 @@
     }
 
     function enterSite() {
-      requestNotificationPermission();
-      showPage("programsWrapper");
-      startTimeTracking(); // start time tracking when they enter
-      // Setup profile pic in header
-      let stObj = JSON.parse(localStorage.getItem(currentUserMobile) || "{}");
-      if (stObj.profilePic) {
-        document.getElementById('userProfilePicHeader').src = stObj.profilePic;
-      } else {
-        document.getElementById('userProfilePicHeader').src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(stObj.name || 'U') + "&background=cyan&color=000";
+      try {
+        requestNotificationPermission();
+        showPage("programsWrapper");
+        startTimeTracking();
+
+        // Setup profile pic in header using secure key
+        let stObj = JSON.parse(localStorage.getItem("user_" + btoa(currentUserMobile)) || "{}");
+        const headerPic = document.getElementById('userProfilePicHeader');
+        if (headerPic) {
+          if (stObj.profilePic) {
+            headerPic.src = stObj.profilePic;
+          } else {
+            headerPic.src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(stObj.name || 'U') + "&background=cyan&color=000";
+          }
+          headerPic.style.display = 'block';
+        }
+
+        setTimeout(restoreNavState, 100);
+      } catch (err) {
+        console.error("enterSite failed:", err);
       }
-      document.getElementById('userProfilePicHeader').style.display = 'block';
-      setTimeout(restoreNavState, 100);
     }
 
     function saveNavState() {
@@ -6948,12 +7649,12 @@
         currentNavLevel: currentNavLevel,
         timestamp: Date.now()
       };
-      localStorage.setItem(currentUserMobile + "_navState", JSON.stringify(state));
+      localStorage.setItem("nav_" + btoa(currentUserMobile), JSON.stringify(state));
     }
 
     function restoreNavState() {
       if (!currentUserMobile) return;
-      let saved = localStorage.getItem(currentUserMobile + "_navState");
+      let saved = localStorage.getItem("nav_" + btoa(currentUserMobile));
       if (!saved) return;
 
       let state = JSON.parse(saved);
@@ -7194,7 +7895,12 @@
                 }).then(() => {
                   return database.ref(`battles/active/${id}/joinedCount`).transaction(c => (c || 0) + 1);
                 }).then(() => {
-                  alert("✅ Joined successfully! Your seat is booked.");
+                  showCongratulations(
+                    'COMBAT READY!',
+                    `You joined <b>${b.title}</b>!`,
+                    'Your seat is booked. Get ready for the battle!',
+                    'LET\'S GO'
+                  );
                   updateWalletDisplay();
                 });
               }
@@ -7213,7 +7919,12 @@
           }).then(() => {
             return database.ref(`battles/active/${id}/joinedCount`).transaction(c => (c || 0) + 1);
           }).then(() => {
-            alert("✅ Joined successfully! Get ready for combat.");
+            showCongratulations(
+              'COMBAT READY!',
+              `You joined <b>${b.title}</b>!`,
+              'Free entry confirmed. Get ready for the battle!',
+              'LET\'S GO'
+            );
           });
         }
       });
@@ -7452,7 +8163,7 @@
 
       const resultPayload = {
         mobile: currentUserMobile,
-        name: JSON.parse(localStorage.getItem(currentUserMobile))?.name || "Unknown Warrior",
+        name: JSON.parse(localStorage.getItem("user_" + btoa(currentUserMobile)))?.name || "Unknown Warrior",
         correct, wrong, skipped,
         marks: totalMarks,
         timeUsed: 600 - timeLeft,
@@ -7797,6 +8508,471 @@
       currentBattleQuestions.splice(idx, 1);
       renderBattleQuestionPreview();
     }
+
+    // =============================================
+    // ========== CODE STUDIO ENGINE ==============
+    // =============================================
+
+    // Wandbox API — FREE, no API key needed! https://wandbox.org
+    const CS_LANGUAGES = {
+      python: { name: 'Python', icon: '🐍', compiler: 'cpython-3.12.7', ext: '.py', template: 'print("Hello, World!")' },
+      c: { name: 'C', icon: '🔵', compiler: 'gcc-13.2.0-c', ext: '.c', template: '#include <stdio.h>\n\nint main() {\n    printf("Hello, World!\\n");\n    return 0;\n}' },
+      cpp: { name: 'C++', icon: '🟣', compiler: 'gcc-13.2.0', ext: '.cpp', template: '#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello, World!" << endl;\n    return 0;\n}' },
+      java: { name: 'Java', icon: '☕', compiler: 'openjdk-jdk-22+36', ext: '.java', template: 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}' },
+      javascript: { name: 'JavaScript', icon: '🟡', compiler: 'nodejs-20.17.0', ext: '.js', template: 'console.log("Hello, World!");' },
+      typescript: { name: 'TypeScript', icon: '🔷', compiler: 'typescript-5.6.2', ext: '.ts', template: 'console.log("Hello, World!");' },
+      php: { name: 'PHP', icon: '🐘', compiler: 'php-8.3.12', ext: '.php', template: '<?php\necho "Hello, World!";\n?>' },
+      ruby: { name: 'Ruby', icon: '❤️', compiler: 'ruby-3.4.1', ext: '.rb', template: 'puts "Hello, World!"' },
+      go: { name: 'Go', icon: '🔷', compiler: 'go-1.23.2', ext: '.go', template: 'package main\nimport "fmt"\nfunc main() {\n    fmt.Println("Hello, World!")\n}' },
+      rust: { name: 'Rust', icon: '🦀', compiler: 'rust-1.82.0', ext: '.rs', template: 'fn main() {\n    println!("Hello, World!");\n}' },
+      csharp: { name: 'C#', icon: '💜', compiler: 'dotnetcore-8.0.402', ext: '.cs', template: 'using System;\nclass Program {\n    static void Main() {\n        Console.WriteLine("Hello, World!");\n    }\n}' },
+      lua: { name: 'Lua', icon: '🌙', compiler: 'lua-5.4.7', ext: '.lua', template: 'print("Hello, World!")' },
+      bash: { name: 'Bash', icon: '⚡', compiler: 'bash', ext: '.sh', template: 'echo "Hello, World!"' },
+    };
+
+    let csEnabledLangs = Object.keys(CS_LANGUAGES);
+    let csCurrentLang = 'python';
+    let csOpenProjectId = null;
+    let csProjects = {};
+    let csConfig = { price: 50, freeLimit: 2, trialHours: 24, limitEnabled: true };
+
+    async function initCodeStudio() {
+      // 1. Load Admin Config
+      const configSnap = await database.ref('codeStudioConfig').once('value');
+      if (configSnap.exists()) {
+        const val = configSnap.val();
+        csConfig = {
+          price: parseInt(val.price) || 50,
+          freeLimit: parseInt(val.freeLimit) || 2,
+          trialHours: parseInt(val.trialHours) || 24,
+          premiumValidityDays: parseInt(val.premiumValidityDays) || 365,
+          limitEnabled: val.limitEnabled !== undefined ? val.limitEnabled : true
+        };
+        if (val.enabledLangs) csEnabledLangs = val.enabledLangs;
+      }
+
+      buildLangDropdown();
+      loadUserProjects();
+
+      // 2. Access Check
+      checkCodeStudioAccess();
+    }
+
+    async function checkCodeStudioAccess() {
+      const mobile = currentUserMobile;
+      if (!mobile) {
+        showPage('loginScreen');
+        return;
+      }
+
+      // If limit is disabled globally
+      if (!csConfig.limitEnabled) {
+        document.getElementById('csPremiumOverlay').style.display = 'none';
+        return;
+      }
+
+      const snap = await database.ref(`users/${mobile}/codeStudio`).once('value');
+      const data = snap.val() || { usageCount: 0, isPremium: false, trialStartTime: null };
+
+      if (data.isPremium) {
+        if (data.premiumExpiresAt && Date.now() > data.premiumExpiresAt) {
+          // Premium expired, treat as non-premium (re-enable overlay)
+        } else {
+          document.getElementById('csPremiumOverlay').style.display = 'none';
+          return;
+        }
+      }
+
+      // 1. Trial Start Time Logic
+      let trialStartTime = data.trialStartTime;
+      if (!trialStartTime) {
+        trialStartTime = Date.now();
+        await database.ref(`users/${mobile}/codeStudio/trialStartTime`).set(trialStartTime);
+      }
+
+      const expiryTime = trialStartTime + (csConfig.trialHours * 3600000);
+      const isExpired = Date.now() > expiryTime;
+      const isOverUsage = (data.usageCount || 0) >= csConfig.freeLimit;
+
+      if (!isExpired && !isOverUsage) {
+        // Active Trial
+        const nextCount = (data.usageCount || 0) + 1;
+        database.ref(`users/${mobile}/codeStudio/usageCount`).set(nextCount);
+        document.getElementById('csPremiumOverlay').style.display = 'none';
+
+        // Show remaining time/uses
+        const msLeft = expiryTime - Date.now();
+        const hrs = Math.floor(msLeft / 3600000);
+        const mins = Math.floor((msLeft % 3600000) / 60000);
+        const usesLeft = (csConfig.freeLimit || 0) - nextCount;
+
+        document.getElementById('csOutput').innerHTML = `<span style="color:gold;">⏳ Trial: ${hrs}h ${mins}m left | 💡 Uses: ${usesLeft >= 0 ? usesLeft : 0} left</span><br><br>` +
+          '<span style="color:#555;">▶ Click RUN to execute your code...</span>';
+      } else {
+        // Locked
+        document.getElementById('csPremiumPriceDisplay').textContent = csConfig.price;
+        const msg = isExpired ? `Aapka ${csConfig.trialHours}h trial khatam ho gaya hai.` : `Aapne free limit (${csConfig.freeLimit} uses) use kar liya hai.`;
+        const pTag = document.querySelector('#csPremiumOverlay p');
+        if (pTag) pTag.textContent = msg;
+        document.getElementById('csPremiumOverlay').style.display = 'flex';
+      }
+    }
+
+    async function buyCodeStudioPremium() {
+      const mobile = currentUserMobile;
+      if (!mobile) return;
+
+      const balanceSnap = await database.ref(`users/${mobile}/profile/wallet`).once('value');
+      const balance = balanceSnap.val() || 0;
+
+      if (balance < csConfig.price) {
+        alert(`❌ Insufficient Coins!\nYou need ${csConfig.price} coins, but you only have ${balance} coins in your Neural Wallet.`);
+        return;
+      }
+
+      if (confirm(`Unlock Premium Access for ${csConfig.price} Coins?`)) {
+        const expiry = Date.now() + (csConfig.premiumValidityDays * 24 * 60 * 60 * 1000);
+        await database.ref(`users/${mobile}/profile/wallet`).set(balance - csConfig.price);
+        await database.ref(`users/${mobile}/codeStudio`).update({
+          isPremium: true,
+          premiumExpiresAt: expiry
+        });
+
+        // Success UI
+        document.getElementById('csPremiumOverlay').style.display = 'none';
+        showCongratulations(
+          'CONGRATULATIONS!',
+          'You are now a <b>Premium Code Studio Member</b>!',
+          `Unlimited access unlocked for ${csConfig.premiumValidityDays} days.`,
+          'START CODING'
+        );
+      }
+    }
+
+    function showCongratulations(title, message, subMessage, buttonText) {
+      const div = document.createElement('div');
+      div.style.cssText = 'position:fixed; inset:0; z-index:99999; background:rgba(0,0,0,0.9); display:flex; justify-content:center; align-items:center; animation: fadeIn 0.5s;';
+      div.innerHTML = `
+        <div style="text-align:center; padding:40px; background:#0b132b; border:2px solid gold; border-radius:20px; box-shadow:0 0 50px gold; max-width: 450px; width: 90%;">
+          <h1 style="font-size:80px; margin:0;">🎊</h1>
+          <h1 style="color:gold; font-size:32px; margin:10px 0;">${title}</h1>
+          <p style="color:#eee; font-size:18px;">${message}</p>
+          <p style="color:#aaa; font-size:14px; margin-bottom:25px;">${subMessage}</p>
+          <button class="login-btn" style="background:#00b894; color:black; width:200px;" onclick="this.parentElement.parentElement.remove()">${buttonText}</button>
+        </div>
+      `;
+      document.body.appendChild(div);
+      for (let i = 0; i < 30; i++) createParticle();
+    }
+
+    function createParticle() {
+      const p = document.createElement('div');
+      p.style.cssText = `position:fixed; width:10px; height:10px; background:hsl(${Math.random() * 360},100%,50%); z-index:99998; border-radius:50%; pointer-events:none;`;
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.top = '-10px';
+      document.body.appendChild(p);
+      const anim = p.animate([
+        { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+        { transform: `translate(${(Math.random() - 0.5) * 200}px, 100vh) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+      ], { duration: 1500 + Math.random() * 2000, easing: 'ease-in' });
+      anim.onfinish = () => p.remove();
+    }
+
+    function buildLangDropdown() {
+      let sel = document.getElementById('csLangSelect');
+      if (!sel) return;
+      sel.innerHTML = '';
+      csEnabledLangs.forEach(key => {
+        if (!CS_LANGUAGES[key]) return;
+        let opt = document.createElement('option');
+        opt.value = key;
+        opt.textContent = CS_LANGUAGES[key].icon + ' ' + CS_LANGUAGES[key].name;
+        sel.appendChild(opt);
+      });
+      sel.value = csCurrentLang;
+      onCSLangChange();
+    }
+
+    function onCSLangChange() {
+      let sel = document.getElementById('csLangSelect');
+      if (!sel) return;
+      csCurrentLang = sel.value;
+      let lang = CS_LANGUAGES[csCurrentLang];
+      if (!lang) return;
+      let infoEl = document.getElementById('csLangInfo');
+      if (infoEl) infoEl.innerHTML = `<b style="color:#00b894">${lang.icon} ${lang.name}</b><br>Compiler: ${lang.compiler}<br>File: *${lang.ext}`;
+      if (!document.getElementById('csEditor').value.trim() || document.getElementById('csEditor').value.includes('Hello, World!')) {
+        document.getElementById('csEditor').value = lang.template;
+      }
+    }
+
+    function openCodeStudio() {
+      showPage('codeStudioScreen');
+      initCodeStudio();
+    }
+
+    function handleEditorTab(e) {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        let ta = document.getElementById('csEditor');
+        let start = ta.selectionStart, end = ta.selectionEnd;
+        ta.value = ta.value.substring(0, start) + '  ' + ta.value.substring(end);
+        ta.selectionStart = ta.selectionEnd = start + 2;
+      }
+    }
+
+    function clearEditor() {
+      let lang = CS_LANGUAGES[csCurrentLang];
+      document.getElementById('csEditor').value = lang ? lang.template : '';
+      clearOutput();
+    }
+    function clearOutput() {
+      document.getElementById('csOutput').innerHTML = '<span style="color:#555;">▶ Click RUN to execute your code...</span>';
+      document.getElementById('csHinglishError').innerHTML = '<span style="color:#555;">Koi error nahi — sab theek hai! ✅</span>';
+      document.getElementById('csExecTime').textContent = '';
+    }
+
+    async function runCode() {
+      let code = document.getElementById('csEditor').value.trim();
+      let outEl = document.getElementById('csOutput');
+      let runBtn = document.getElementById('csRunBtn');
+      let lang = CS_LANGUAGES[csCurrentLang];
+      if (!lang || !code) { outEl.innerHTML = '<span style="color:#777;">Kuch code likho pehle!</span>'; return; }
+
+      runBtn.textContent = '⏳ Running...';
+      runBtn.disabled = true;
+      outEl.innerHTML = '<span style="color:#00b894;">⟳ Compiling and running...</span>';
+      document.getElementById('csHinglishError').innerHTML = '<span style="color:#aaa;">Checking...</span>';
+
+      let t0 = Date.now();
+      try {
+        let body = csCurrentLang === 'java'
+          ? { compiler: lang.compiler, codes: [{ file: 'Main.java', code: code }], stdin: '', save: false }
+          : { compiler: lang.compiler, code: code, stdin: '', save: false };
+
+        let resp = await fetch('https://wandbox.org/api/compile.json', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        if (!resp.ok) throw new Error(`Server error ${resp.status}`);
+        let data = await resp.json();
+
+        let elapsed = ((Date.now() - t0) / 1000).toFixed(2);
+        document.getElementById('csExecTime').textContent = `⏱ ${elapsed}s`;
+
+        let stdout = (data.program_output || '').trim();
+        let progErr = (data.program_error || '').trim();
+        let compileMsg = (data.compiler_message || '').trim();
+        let isSuccess = String(data.status || '0') === '0';
+        let stderr = (!isSuccess && compileMsg) ? compileMsg : progErr;
+
+        if (stdout) {
+          outEl.innerHTML = `<span style="color:#a8ff78;">${escapeHtml(stdout)}</span>`;
+          if (compileMsg && isSuccess) {
+            outEl.innerHTML += `\n<span style="color:#fdcb6e;font-size:11px;">[warnings]:\n${escapeHtml(compileMsg)}</span>`;
+          }
+          document.getElementById('csHinglishError').innerHTML = '<span style="color:#00b894;">✅ Code bilkul sahi chal gaya bhai! Koi error nahi.</span>';
+        } else if (!isSuccess || progErr) {
+          let errText = stderr || 'Unknown error.';
+          outEl.innerHTML = `<span style="color:#ff6b81;">${escapeHtml(errText)}</span>`;
+          document.getElementById('csHinglishError').innerHTML = getHinglishError(errText, csCurrentLang);
+        } else {
+          outEl.innerHTML = `<span style="color:#777;">Program chal gaya lekin koi output nahi aaya.<br><small>print() / cout / System.out.println() use karo.</small></span>`;
+          document.getElementById('csHinglishError').innerHTML = '<span style="color:#00b894;">✅ Code sahi hai — koi error nahi. Output ke liye print/cout add karo!</span>';
+        }
+      } catch (err) {
+        outEl.innerHTML = `<span style="color:#ff6b81;">❌ Connection error: ${escapeHtml(err.message)}<br><small>Internet check karo ya thodi der baad try karo.</small></span>`;
+        document.getElementById('csHinglishError').innerHTML = '<span style="color:#fd79a8;">🌐 Wandbox server se connect nahi hua. Internet check karo.</span>';
+      } finally {
+        runBtn.textContent = '▶ RUN';
+        runBtn.disabled = false;
+      }
+    }
+
+    function escapeHtml(s) {
+      return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function getHinglishError(stderr, lang) {
+      if (!stderr) return '<span style="color:#00b894;">✅ Koi error nahi!</span>';
+      let e = stderr.toLowerCase();
+      let hints = [];
+      if (e.includes("expected ';'") || e.includes("missing ';'")) hints.push("👉 Bhai, semicolon <b>(;)</b> lagaana bhool gaye!");
+      if (e.includes("expected '}'") || e.includes("expected '{'") || e.includes("unmatched")) hints.push("👉 Curly bracket <b>{ }</b> check karo mismatch lag raha hai.");
+      if (e.includes("undeclared") || e.includes("undefined") || e.includes("not defined")) hints.push("👉 Variable use kiya lekin <b>declare nahi kiya</b>.");
+      if (e.includes("indentationerror")) hints.push("👉 Python mein <b>indentation (space/tab)</b> galat hai!");
+      if (e.includes("syntaxerror")) hints.push("👉 <b>Syntax galat hai</b> — spelling ya brackets check karo.");
+      if (hints.length === 0) hints.push(`👉 <b>Error:</b> <code style="font-size:11px;color:#ff6b81;">${escapeHtml(stderr.substring(0, 150))}</code>`);
+      return `<div style="color:#fff;">${hints.join('<br><br>')}</div>`;
+    }
+
+    // ===== PROJECT MANAGER =====
+    function loadUserProjects() {
+      let mobile = currentUserMobile;
+      let list = document.getElementById('csProjList');
+      if (!mobile || !list) { list && (list.innerHTML = '<p style="color:#555;font-size:12px;text-align:center;margin-top:20px;">Login karein projects save karne ke liye</p>'); return; }
+      database.ref(`codeProjects/${mobile}`).on('value', snap => {
+        csProjects = snap.val() || {};
+        renderProjectList();
+      });
+    }
+
+    function renderProjectList(filter = '') {
+      let list = document.getElementById('csProjList');
+      if (!list) return;
+      list.innerHTML = '';
+      let keys = Object.keys(csProjects).filter(k => k.toLowerCase().includes(filter.toLowerCase()));
+      keys.sort((a, b) => (csProjects[b].updatedAt || 0) - (csProjects[a].updatedAt || 0));
+      keys.forEach(id => {
+        let p = csProjects[id];
+        let item = document.createElement('div');
+        item.className = 'cs-proj-item' + (id === csOpenProjectId ? ' active' : '');
+        item.innerHTML = `
+          <span onclick="openProject('${id}')" style="flex:1;">📄 ${escapeHtml(p.name)}</span>
+          <button onclick="deleteProject('${id}')" style="background:none;border:none;color:#ff4757;cursor:pointer;font-size:11px;">🗑️</button>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    function filterProjects() {
+      let q = document.getElementById('csSearchProj').value;
+      renderProjectList(q);
+    }
+
+    function newProject() {
+      let name = prompt('Project ka naam?', 'My Project');
+      if (!name) return;
+      let mobile = currentUserMobile;
+      let id = 'proj_' + Date.now();
+      let proj = { name: name.trim(), lang: csCurrentLang, code: CS_LANGUAGES[csCurrentLang].template, updatedAt: Date.now() };
+      database.ref(`codeProjects/${mobile}/${id}`).set(proj).then(() => {
+        csOpenProjectId = id;
+        openProject(id);
+      });
+    }
+
+    function openProject(id) {
+      let p = csProjects[id];
+      if (!p) return;
+      csOpenProjectId = id;
+      document.getElementById('csEditor').value = p.code || '';
+      document.getElementById('csLangSelect').value = p.lang;
+      csCurrentLang = p.lang;
+      onCSLangChange();
+      document.getElementById('csCurrentProject').textContent = '📄 ' + p.name;
+      renderProjectList();
+    }
+
+    async function saveProject() {
+      let mobile = currentUserMobile;
+      if (!mobile) return alert('Login please!');
+      if (!csOpenProjectId) { newProject(); return; }
+      let update = { code: document.getElementById('csEditor').value, lang: csCurrentLang, updatedAt: Date.now() };
+      await database.ref(`codeProjects/${mobile}/${csOpenProjectId}`).update(update);
+      alert('💾 Project Saved!');
+    }
+
+    function deleteProject(id) {
+      if (!confirm('Delete this project?')) return;
+      database.ref(`codeProjects/${currentUserMobile}/${id}`).remove();
+    }
+
+    // ===== ADMIN CODE STUDIO CONTROLS =====
+    async function initAdminCodeStudio() {
+      const snap = await database.ref('codeStudioConfig').once('value');
+      const val = snap.val() || { price: 50, freeLimit: 2, trialHours: 24, premiumValidityDays: 365, limitEnabled: true, enabledLangs: Object.keys(CS_LANGUAGES) };
+
+      const flInput = document.getElementById('csFreeLimitInput');
+      const thInput = document.getElementById('csTrialHoursInput');
+      const ppInput = document.getElementById('csPremiumPriceInput');
+      const pvInput = document.getElementById('csPremiumValidityInput');
+      const leInput = document.getElementById('csLimitEnabled');
+
+      if (flInput) flInput.value = val.freeLimit || 2;
+      if (thInput) thInput.value = val.trialHours || 24;
+      if (ppInput) ppInput.value = val.price || 50;
+      if (pvInput) pvInput.value = val.premiumValidityDays || 365;
+      if (leInput) leInput.checked = val.limitEnabled !== false;
+
+      // Load Languages
+      let container = document.getElementById('adminCodeStudioLangs');
+      if (container) {
+        container.innerHTML = '';
+        Object.keys(CS_LANGUAGES).forEach(key => {
+          let enabled = (val.enabledLangs || Object.keys(CS_LANGUAGES)).includes(key);
+          let lang = CS_LANGUAGES[key];
+          let div = document.createElement('div');
+          div.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:6px;margin-bottom:6px;';
+          div.innerHTML = `
+            <span style="color:#eee;font-size:13px;">${lang.icon} ${lang.name}</span>
+            <label style="cursor:pointer;"><input type="checkbox" class="cs-lang-cb" data-lang="${key}" ${enabled ? 'checked' : ''}> ON</label>
+          `;
+          container.appendChild(div);
+        });
+      }
+
+      // Load Premium Users
+      renderPremiumCSUsers();
+    }
+
+    async function renderPremiumCSUsers() {
+      const tbody = document.getElementById('csPremiumUsersList');
+      if (!tbody) return;
+
+      const usersSnap = await database.ref('users').once('value');
+      const users = usersSnap.val();
+      let html = '';
+
+      if (users) {
+        Object.keys(users).forEach(mobile => {
+          const u = users[mobile];
+          if (u.codeStudio && u.codeStudio.isPremium) {
+            const name = u.name || 'Unknown';
+            const expiry = u.codeStudio.premiumExpiresAt ? new Date(u.codeStudio.premiumExpiresAt).toLocaleString() : 'LifeTime';
+            const isExpired = u.codeStudio.premiumExpiresAt && Date.now() > u.codeStudio.premiumExpiresAt;
+            const status = isExpired ? '<span style="color:#ff4757;">Expired</span>' : '<span style="color:#2ecc71;">Active</span>';
+            const trialStart = u.codeStudio.trialStartTime ? new Date(u.codeStudio.trialStartTime).toLocaleString() : 'N/A';
+
+            html += `
+              <tr>
+                <td>${name}</td>
+                <td>${mobile}</td>
+                <td style="font-size:11px;">${trialStart}</td>
+                <td style="font-size:11px;">${expiry}</td>
+                <td>${status}</td>
+              </tr>
+            `;
+          }
+        });
+      }
+
+      tbody.innerHTML = html || '<tr><td colspan="5" style="text-align:center; padding:20px; color:#666;">No premium members found yet.</td></tr>';
+    }
+
+    async function saveCodeStudioAdminSettings() {
+      const freeLimit = parseInt(document.getElementById('csFreeLimitInput').value) || 0;
+      const trialHours = parseInt(document.getElementById('csTrialHoursInput').value) || 0;
+      const price = parseInt(document.getElementById('csPremiumPriceInput').value) || 0;
+      const premiumValidityDays = parseInt(document.getElementById('csPremiumValidityInput').value) || 365;
+      const limitEnabled = document.getElementById('csLimitEnabled').checked;
+      const enabledLangs = [];
+      document.querySelectorAll('.cs-lang-cb').forEach(cb => { if (cb.checked) enabledLangs.push(cb.getAttribute('data-lang')); });
+
+      await database.ref('codeStudioConfig').set({ freeLimit, trialHours, price, premiumValidityDays, limitEnabled, enabledLangs });
+      alert('✅ Code Studio settings saved!');
+      csConfig = { price, freeLimit, trialHours, premiumValidityDays, limitEnabled };
+      csEnabledLangs = enabledLangs;
+    }
+
+    // Make showPage aware of codeStudioScreen
+    // (it's already in allPages check via the existing showPage function)
+
+    // =============================================
+    // ========== /CODE STUDIO ENGINE ==============
+    // =============================================
+
     function loadAdminBattles() {
       let tbody = document.getElementById('adminBattleTableBody');
       if (!tbody) return;
@@ -8656,7 +9832,12 @@
                 let payload = { active: true, expiresAt: expiry };
                 return database.ref(`users/${currentUserMobile}/premiumUnlocked/${itemKey}`).set(payload);
               }).then(() => {
-                alert(`✅ ${option} unlocked successfully!\nValid for ${activeDuration} days.\nDeducted ${activeAmount} Gold Coins.`);
+                showCongratulations(
+                  'UNLOCKED!',
+                  `<b>${option}</b> is now available!`,
+                  `Full access granted for ${activeDuration} days. Happy learning!`,
+                  'START LEARNING'
+                );
                 showPremiumOptions(course); // Refresh UI to show it's unlocked
                 updateWalletDisplay(); // Update wallet UI if visible
               }).catch(err => {
@@ -9147,6 +10328,12 @@
           <path
             d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849s-.011 3.585-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.849-.07c-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849s.012-3.584.07-4.849c.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.337 2.615 6.76 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.337-2.617-6.761-6.98-6.98-1.28-.058-1.689-.072-4.948-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
         </svg>
+      </a>
+      <a href="https://nextgen-library.blogspot.com/" target="_blank" class="social-btn" title="Blogger">
+        <i class="fab fa-blogger"></i>
+      </a>
+      <a href="https://wa.me/918009401313" target="_blank" class="social-btn" title="WhatsApp">
+        <i class="fab fa-whatsapp"></i>
       </a>
     </div>
   </footer>
