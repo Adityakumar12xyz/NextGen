@@ -112,6 +112,18 @@
       overflow-x: hidden;
     }
 
+    body.low-power {
+      animation: none !important;
+      background: #0a0a0a !important;
+    }
+    body.low-power #vfx-canvas {
+      display: none !important;
+    }
+    body.low-power * {
+      animation-duration: 0.01s !important;
+      transition-duration: 0.01s !important;
+    }
+
     /* Interactive VFX Canvas */
     #vfx-canvas {
       position: fixed;
@@ -4076,6 +4088,18 @@
           </select>
         </label>
       </div>
+
+      <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 15px; margin-top: 20px;">
+        <h4 style="margin-top: 0; color: #ff4757;">⚡ Performance & Battery</h4>
+        <label class="cms-dynamic-field">
+          <span>Low Power Mode:</span>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <input type="checkbox" id="lowPowerModeToggle" onchange="toggleLowPowerMode()"
+              style="width:20px; height:20px; cursor:pointer; accent-color:#ff4757;">
+            <span style="font-size:12px; color:#aaa;">(Disables VFX & Background Animations)</span>
+          </div>
+        </label>
+      </div>
     </div>
 
     <!-- 6. NEXTGEN BATTLE ARENA MANAGER -->
@@ -5036,6 +5060,17 @@
     </div>
   </div>
 
+  <!-- PREMIUM VIEWER MODAL -->
+  <div id="premiumViewerModal" class="modal" style="display: none; background: rgba(0,0,0,0.95); z-index: 3000;">
+    <div class="modal-content" style="max-width: 1000px; padding: 0; background: #000; border: 1px solid gold; position: relative;">
+      <span class="close-btn" onclick="closePremiumViewer()" style="position: absolute; right: 15px; top: 5px; color: gold; cursor: pointer; font-size: 30px; z-index: 1001;">&times;</span>
+      <div id="premiumViewerTitle" style="padding: 15px; color: gold; font-weight: bold; border-bottom: 1px solid rgba(255,215,0,0.3); font-family: 'Outfit';">Viewing Premium Content</div>
+      <div id="premiumViewerContent" style="position: relative; width: 100%; height: 80vh;">
+        <!-- Iframe and overlay will be injected here -->
+      </div>
+    </div>
+  </div>
+
   <!-- Wallet Recharge Modal -->
   <div id="walletRechargeModal"
     style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 2000; justify-content: center; align-items: center;">
@@ -5920,6 +5955,9 @@
       }
     }
 
+    /* GLOBAL CONFIGS */
+    let lowPowerEnabled = localStorage.getItem('lowPowerMode') === 'true';
+
     /* DATA */
     let oldData = {
       Math: {
@@ -6219,7 +6257,9 @@
         database.ref('premiumData').once('value')
       ]).then(snapshots => {
         let [courseSnap, pConfSnap, pCourseConfSnap, pDataSnap] = snapshots;
-        if (courseSnap.exists() && courseSnap.val()) data = courseSnap.val();
+        if (courseSnap.exists() && courseSnap.val()) {
+          data = courseSnap.val();
+        }
         if (pConfSnap.exists() && pConfSnap.val()) globalPremiumConfig = pConfSnap.val();
         if (pCourseConfSnap.exists() && pCourseConfSnap.val()) globalPremiumCourseConfigs = pCourseConfSnap.val();
         if (pDataSnap.exists() && pDataSnap.val()) premiumData = pDataSnap.val();
@@ -11979,6 +12019,21 @@ Ensure options are clear and only one is correct.`;
       else if (level === 'branch') {
         studentNavState.branch = selection;
         currentNavLevel = 'semesters';
+        
+        // --- JUST IN TIME FALLBACK FOR BCA SEMESTERS ---
+        if (studentNavState.course === "BCA" && (selection === "DDU" || selection === "AKTU")) {
+          if (!data["BCA"][selection] || Object.keys(data["BCA"][selection]).filter(k => k !== "_initialized").length === 0) {
+            data["BCA"][selection] = JSON.parse(JSON.stringify(defaultData["BCA"][selection]));
+          } else {
+            for (let i = 1; i <= 6; i++) {
+              if (!data["BCA"][selection][i] || Object.keys(data["BCA"][selection][i]).filter(k => k !== "_initialized").length === 0) {
+                data["BCA"][selection][i] = JSON.parse(JSON.stringify(defaultData["BCA"][selection][i]));
+              }
+            }
+          }
+        }
+        // -----------------------------------------------
+
         let sems = data[studentNavState.course][selection];
         for (let s in sems) {
           if (s === "_initialized") continue;
@@ -11989,6 +12044,15 @@ Ensure options are clear and only one is correct.`;
       else if (level === 'semester') {
         studentNavState.sem = selection;
         currentNavLevel = 'subjects';
+        
+        // --- JUST IN TIME FALLBACK FOR BCA SUBJECTS ---
+        if (studentNavState.course === "BCA" && (studentNavState.branch === "DDU" || studentNavState.branch === "AKTU")) {
+          if (!data["BCA"][studentNavState.branch][selection] || Object.keys(data["BCA"][studentNavState.branch][selection]).filter(k => k !== "_initialized").length === 0) {
+            data["BCA"][studentNavState.branch][selection] = JSON.parse(JSON.stringify(defaultData["BCA"][studentNavState.branch][selection]));
+          }
+        }
+        // ----------------------------------------------
+
         let subs = data[studentNavState.course][studentNavState.branch][selection];
         for (let su in subs) {
           if (su === "_initialized") continue;
@@ -11999,6 +12063,14 @@ Ensure options are clear and only one is correct.`;
         studentNavState.subject = selection;
         document.getElementById("dynamicNavSection").style.display = "none";
         document.getElementById("chapters").style.display = "block";
+
+        // --- JUST IN TIME FALLBACK FOR BCA CHAPTERS ---
+        if (studentNavState.course === "BCA" && (studentNavState.branch === "DDU" || studentNavState.branch === "AKTU")) {
+          if (!data["BCA"][studentNavState.branch][studentNavState.sem][selection] || Object.keys(data["BCA"][studentNavState.branch][studentNavState.sem][selection]).filter(k => k !== "_initialized").length === 0) {
+            data["BCA"][studentNavState.branch][studentNavState.sem][selection] = JSON.parse(JSON.stringify(defaultData["BCA"][studentNavState.branch][studentNavState.sem][selection]));
+          }
+        }
+        // ----------------------------------------------
 
         let chapters = data[studentNavState.course][studentNavState.branch][studentNavState.sem][selection];
         let chList = document.getElementById("chapterList");
@@ -12651,7 +12723,7 @@ Ensure options are clear and only one is correct.`;
                          <h3 style="margin:0; color:white;">${file.title}</h3>`;
         box.onmouseenter = () => box.style.transform = "scale(1.05)";
         box.onmouseleave = () => box.style.transform = "scale(1)";
-        box.onclick = () => window.open(file.link, "_blank");
+        box.onclick = () => openPremiumViewer(file);
         grid.appendChild(box);
       });
 
@@ -12677,7 +12749,7 @@ Ensure options are clear and only one is correct.`;
               let fIcon = f.type === 'video' ? '🎬' : f.type === 'image' ? '🖼️' : '📄';
               fBox.innerHTML = `<div style="font-size:24px; margin-bottom:5px;">${fIcon}</div>
                                 <div style="font-size:13px; color:white; font-weight:bold; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${f.title}</div>`;
-              fBox.onclick = () => window.open(f.link, "_blank");
+              fBox.onclick = () => openPremiumViewer(f);
               fBox.onmouseenter = () => fBox.style.background = "rgba(162,155,254,0.1)";
               fBox.onmouseleave = () => fBox.style.background = "rgba(255,255,255,0.03)";
               subGrid.appendChild(fBox);
@@ -12688,6 +12760,83 @@ Ensure options are clear and only one is correct.`;
         }
       }
     }
+
+    function openPremiumViewer(file) {
+      const modal = document.getElementById("premiumViewerModal");
+      const title = document.getElementById("premiumViewerTitle");
+      const content = document.getElementById("premiumViewerContent");
+
+      modal.style.display = "flex";
+      title.innerText = "💎 Viewing: " + file.title;
+      content.innerHTML = "";
+
+      let finalUrl = file.link;
+      if (file.link.includes("drive.google.com")) {
+        let fileId = file.link.match(/\/d\/(.*?)\//)?.[1] || file.link.match(/id=(.*?)($|&)/)?.[1];
+        let folderId = file.link.match(/\/folders\/(.*?)(\?|$|\/)/)?.[1];
+        
+        if (fileId) {
+          finalUrl = "https://drive.google.com/file/d/" + fileId + "/preview?rm=minimal#toolbar=0";
+        } else if (folderId) {
+          finalUrl = "https://drive.google.com/embeddedfolderview?id=" + folderId + "#list";
+        }
+      } else if (file.link.includes("youtube.com") || file.link.includes("youtu.be")) {
+        // Use the existing getEmbedUrl logic if available, or simple match
+        let videoId = "";
+        if (file.link.includes("youtu.be/")) videoId = file.link.split("youtu.be/")[1].split(/[?#]/)[0];
+        else if (file.link.includes("v=")) videoId = new URLSearchParams(new URL(file.link).search).get("v");
+        if (videoId) finalUrl = `https://www.youtube.com/embed/${videoId}`;
+      }
+
+      let iframe = document.createElement("iframe");
+      iframe.width = "100%";
+      iframe.height = "100%";
+      iframe.frameBorder = "0";
+      // Omit 'allow-popups' to aggressively block native Drive UI from un-quarantining the file to be downloaded
+      iframe.setAttribute("sandbox", "allow-scripts allow-same-origin");
+      iframe.src = finalUrl;
+      content.appendChild(iframe);
+
+      if (file.link.includes("drive.google.com")) {
+        // Security Overlay to block toolbar
+        let overlay = document.createElement("div");
+        overlay.style.position = "absolute";
+        overlay.style.top = "0";
+        overlay.style.left = "0";
+        overlay.style.width = "100%";
+        overlay.style.height = "60px";
+        overlay.style.background = "transparent";
+        overlay.style.zIndex = "10";
+        overlay.oncontextmenu = () => false;
+        content.appendChild(overlay);
+      }
+      
+      playUISound();
+    }
+
+    function closePremiumViewer() {
+      const modal = document.getElementById("premiumViewerModal");
+      modal.style.display = "none";
+      document.getElementById("premiumViewerContent").innerHTML = "";
+    }
+
+    // GLOBAL PROTECTION LOGIC
+    document.addEventListener('contextmenu', function(e) {
+      if (document.getElementById("premiumViewerModal").style.display === "flex" || document.getElementById("content").style.display === "block") {
+        e.preventDefault();
+        return false;
+      }
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (document.getElementById("premiumViewerModal").style.display === "flex" || document.getElementById("content").style.display === "block") {
+        // Block Ctrl+S, Ctrl+P, Ctrl+U
+        if (e.ctrlKey && (e.key === 's' || e.key === 'p' || e.key === 'u' || e.key === 'S' || e.key === 'P' || e.key === 'U')) {
+          e.preventDefault();
+          return false;
+        }
+      }
+    });
 
 
 
@@ -12880,6 +13029,7 @@ Ensure options are clear and only one is correct.`;
     }
 
     function animateParticles() {
+      if (lowPowerEnabled) return; // Exit if low power mode is active
       requestAnimationFrame(animateParticles);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       for (let i = 0; i < particles.length; i++) {
@@ -13321,6 +13471,10 @@ Ensure options are clear and only one is correct.`;
       if (installBtn) installBtn.style.display = show ? 'flex' : 'none';
       if (promoBanner) promoBanner.style.display = show ? 'block' : 'none';
     }
+    
+    // Always attempt to show the install UI by default if not standalone
+    // (This guarantees the button next to Leadership is visible for uninstalled users)
+    updatePwaUi(true);
 
     window.addEventListener('beforeinstallprompt', (e) => {
       console.log('PWA: beforeinstallprompt event fired');
@@ -13349,6 +13503,30 @@ Ensure options are clear and only one is correct.`;
 
     if (installBtn) {
       installBtn.addEventListener('click', triggerPwaInstall);
+    }
+
+    // --- LOW POWER MODE INITIALIZATION & TOGGLE ---
+    setTimeout(() => {
+      const lpToggle = document.getElementById('lowPowerModeToggle');
+      if (lpToggle) {
+        lpToggle.checked = lowPowerEnabled;
+        if (lowPowerEnabled) document.body.classList.add('low-power');
+      }
+    }, 1000);
+
+    function toggleLowPowerMode() {
+      const lpToggle = document.getElementById('lowPowerModeToggle');
+      if (!lpToggle) return;
+      lowPowerEnabled = lpToggle.checked;
+      localStorage.setItem('lowPowerMode', lowPowerEnabled);
+      if (lowPowerEnabled) {
+        document.body.classList.add('low-power');
+        triggerNeuralSyncNotification("🔋 Low Power Mode: Animations & VFX Disabled for Performance.");
+      } else {
+        document.body.classList.remove('low-power');
+        triggerNeuralSyncNotification("🚀 Performance Mode: Animations & VFX Enabled.");
+        if (typeof animateParticles === 'function') animateParticles(); // Restart the animation loop
+      }
     }
 
   </script>
