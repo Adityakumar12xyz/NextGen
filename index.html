@@ -116,9 +116,11 @@
       animation: none !important;
       background: #0a0a0a !important;
     }
+
     body.low-power #vfx-canvas {
       display: none !important;
     }
+
     body.low-power * {
       animation-duration: 0.01s !important;
       transition-duration: 0.01s !important;
@@ -2092,6 +2094,7 @@
         max-width: 100%;
       }
     }
+
     /* DATA LOADING OVERLAY */
     #dataLoadingOverlay {
       position: fixed;
@@ -2132,7 +2135,9 @@
     }
 
     @keyframes spin {
-      to { transform: rotate(360deg); }
+      to {
+        transform: rotate(360deg);
+      }
     }
   </style>
   <!-- JSZip for Code Studio Downloads -->
@@ -3530,16 +3535,21 @@
     <!-- ============================================================ -->
     <div id="adminSection_examcms" class="admin-section" style="display:none;">
       <h3 style="color: #ff9ff3;">🏆 Competitive Exam Content Manager</h3>
-      <p style="color: #aaa; font-size: 13px;">Add/edit lectures, notes, test series for SSC, Railways, UPSC, JEE/NEET, and any other exam you add.</p>
+      <p style="color: #aaa; font-size: 13px;">Add/edit lectures, notes, test series for SSC, Railways, UPSC, JEE/NEET,
+        and any other exam you add.</p>
 
       <!-- NEW: JOB ALERTS / NOTIFICATIONS MGMT -->
-      <div style="background: rgba(255,234,0,0.1); padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(255,234,0,0.3);">
+      <div
+        style="background: rgba(255,234,0,0.1); padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(255,234,0,0.3);">
         <h4 style="color: #feca57; margin-top: 0;">📢 Job Alerts & Dashboard Notifications</h4>
         <div id="adminAlertList" style="max-height:100px; overflow-y:auto; margin-bottom:10px;"></div>
         <div style="display:flex; gap:10px;">
-          <input type="text" id="newAlertText" class="login-input" placeholder="Update Text (e.g. SSC CGL Admit Card out!)" style="flex:3; margin:0;">
-          <input type="text" id="newAlertLink" class="login-input" placeholder="Link (Optional)" style="flex:2; margin:0;">
-          <button class="login-btn" onclick="addExamAlert()" style="flex:1; margin:0; background:#feca57; color:black; font-weight:bold;">➕ Public Alert</button>
+          <input type="text" id="newAlertText" class="login-input"
+            placeholder="Update Text (e.g. SSC CGL Admit Card out!)" style="flex:3; margin:0;">
+          <input type="text" id="newAlertLink" class="login-input" placeholder="Link (Optional)"
+            style="flex:2; margin:0;">
+          <button class="login-btn" onclick="addExamAlert()"
+            style="flex:1; margin:0; background:#feca57; color:black; font-weight:bold;">➕ Public Alert</button>
         </div>
       </div>
 
@@ -3550,9 +3560,12 @@
           <select id="examCmsTrack" class="login-input" style="flex:2; margin:0;" onchange="loadExamCmsTopics()">
             <option value="" disabled selected>-- Select Exam Track --</option>
           </select>
-          <input type="text" id="newExamTrackName" class="login-input" placeholder="New Exam Track (e.g. Banking)" style="flex:2; margin:0;">
-          <button class="login-btn" onclick="addExamTrack()" style="flex:1; margin:0; background:#00cec9; color:black;">➕ Add Exam</button>
-          <button class="login-btn" onclick="deleteExamTrack()" style="flex:1; margin:0; background:#ff4757; color:white;">🗑️ Delete</button>
+          <input type="text" id="newExamTrackName" class="login-input" placeholder="New Exam Track (e.g. Banking)"
+            style="flex:2; margin:0;">
+          <button class="login-btn" onclick="addExamTrack()"
+            style="flex:1; margin:0; background:#00cec9; color:black;">➕ Add Exam</button>
+          <button class="login-btn" onclick="deleteExamTrack()"
+            style="flex:1; margin:0; background:#ff4757; color:white;">🗑️ Delete</button>
         </div>
       </div>
 
@@ -3563,19 +3576,25 @@
           <select id="examCmsTopic" class="login-input" style="flex:2; margin:0;" onchange="loadExamCmsContent()">
             <option value="" disabled selected>-- Select Topic --</option>
           </select>
-          <input type="text" id="newExamTopicName" class="login-input" placeholder="New Topic (e.g. General Science)" style="flex:2; margin:0;">
-          <button class="login-btn" onclick="addExamTopic()" style="flex:1; margin:0; background:#6c5ce7; color:white;">➕ Add Topic</button>
-          <button class="login-btn" onclick="deleteExamTopic()" style="flex:1; margin:0; background:#ff4757; color:white;">🗑️ Delete</button>
+          <input type="text" id="newExamTopicName" class="login-input" placeholder="New Topic (e.g. General Science)"
+            style="flex:2; margin:0;">
+          <button class="login-btn" onclick="addExamTopic()"
+            style="flex:1; margin:0; background:#6c5ce7; color:white;">➕ Add Topic</button>
+          <button class="login-btn" onclick="deleteExamTopic()"
+            style="flex:1; margin:0; background:#ff4757; color:white;">🗑️ Delete</button>
         </div>
         <div id="examTopicChips" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;"></div>
       </div>
 
       <!-- STEP 3: Content Editor -->
-      <div id="examCmsEditor" style="display:none; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 15px; margin-bottom: 20px;">
-        <h4 style="color: #00b894; margin-top: 0;">✏️ Step 3: Add/Edit Content for <span id="examEditorLabel" style="color:cyan;">—</span></h4>
+      <div id="examCmsEditor"
+        style="display:none; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+        <h4 style="color: #00b894; margin-top: 0;">✏️ Step 3: Add/Edit Content for <span id="examEditorLabel"
+            style="color:cyan;">—</span></h4>
 
         <!-- LECTURES & NOTES BOX (Teacher Focused) -->
-        <div style="margin-bottom: 20px; border: 1px solid rgba(0,242,254,0.3); border-radius: 12px; padding: 15px; background: rgba(0,242,254,0.05);">
+        <div
+          style="margin-bottom: 20px; border: 1px solid rgba(0,242,254,0.3); border-radius: 12px; padding: 15px; background: rgba(0,242,254,0.05);">
           <h5 style="color: #00f2fe; margin-top:0;">👨‍🏫 Teacher Content Pack (Video + PDF)</h5>
           <div id="examTeacherPackList"></div>
           <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px;">
@@ -3584,71 +3603,93 @@
             <input type="text" id="packVideoUrl" class="login-input" placeholder="YouTube Embed URL" style="margin:0;">
             <input type="text" id="packPdfUrl" class="login-input" placeholder="PDF Drive Link" style="margin:0;">
           </div>
-          <button class="login-btn" onclick="addTeacherPack()" style="margin-top:10px; width:100%; background:#00f2fe; color:black; font-weight:bold;">➕ Add Teacher Lesson Pack</button>
+          <button class="login-btn" onclick="addTeacherPack()"
+            style="margin-top:10px; width:100%; background:#00f2fe; color:black; font-weight:bold;">➕ Add Teacher Lesson
+            Pack</button>
         </div>
 
         <!-- MIND GAMES (AI Questions) -->
-        <div style="margin-bottom: 20px; border: 1px solid rgba(255,107,107,0.3); border-radius: 12px; padding: 15px; background: rgba(255,107,107,0.05);">
+        <div
+          style="margin-bottom: 20px; border: 1px solid rgba(255,107,107,0.3); border-radius: 12px; padding: 15px; background: rgba(255,107,107,0.05);">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
             <h5 style="color: #ff6b6b; margin:0;">🧠 Mind Games (AI Questions)</h5>
-            <button class="login-btn" onclick="openAIGenerator()" style="margin:0; padding:5px 12px; background:#6c5ce7; font-size:12px;">🤖 Generate with AI</button>
+            <button class="login-btn" onclick="openAIGenerator()"
+              style="margin:0; padding:5px 12px; background:#6c5ce7; font-size:12px;">🤖 Generate with AI</button>
           </div>
           <div id="examGameList"></div>
           <div style="background:rgba(0,0,0,0.2); padding:10px; border-radius:8px; margin-top:10px;">
-            <textarea id="newGameQuestion" class="login-input" placeholder="Question Text" style="height:60px; margin-bottom:8px;"></textarea>
+            <textarea id="newGameQuestion" class="login-input" placeholder="Question Text"
+              style="height:60px; margin-bottom:8px;"></textarea>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
-               <input type="text" id="newGameOptA" class="login-input" placeholder="Option A" style="margin:0;">
-               <input type="text" id="newGameOptB" class="login-input" placeholder="Option B" style="margin:0;">
-               <input type="text" id="newGameOptC" class="login-input" placeholder="Option C" style="margin:0;">
-               <input type="text" id="newGameOptD" class="login-input" placeholder="Option D" style="margin:0;">
+              <input type="text" id="newGameOptA" class="login-input" placeholder="Option A" style="margin:0;">
+              <input type="text" id="newGameOptB" class="login-input" placeholder="Option B" style="margin:0;">
+              <input type="text" id="newGameOptC" class="login-input" placeholder="Option C" style="margin:0;">
+              <input type="text" id="newGameOptD" class="login-input" placeholder="Option D" style="margin:0;">
             </div>
             <div style="display:flex; gap:10px; margin-top:8px;">
-               <select id="newGameCorrect" class="login-input" style="flex:1; margin:0;">
-                 <option value="" disabled selected>Correct Answer</option>
-                 <option value="A">Option A</option>
-                 <option value="B">Option B</option>
-                 <option value="C">Option C</option>
-                 <option value="D">Option D</option>
-               </select>
-               <input type="text" id="newGameReason" class="login-input" placeholder="Explanation (Optional)" style="flex:2; margin:0;">
+              <select id="newGameCorrect" class="login-input" style="flex:1; margin:0;">
+                <option value="" disabled selected>Correct Answer</option>
+                <option value="A">Option A</option>
+                <option value="B">Option B</option>
+                <option value="C">Option C</option>
+                <option value="D">Option D</option>
+              </select>
+              <input type="text" id="newGameReason" class="login-input" placeholder="Explanation (Optional)"
+                style="flex:2; margin:0;">
             </div>
-            <button class="login-btn" onclick="addExamGameQuestion()" style="margin-top:10px; width:100%; background:#ff6b6b; color:white; font-weight:bold;">➕ Add Question Manually</button>
+            <button class="login-btn" onclick="addExamGameQuestion()"
+              style="margin-top:10px; width:100%; background:#ff6b6b; color:white; font-weight:bold;">➕ Add Question
+              Manually</button>
           </div>
         </div>
 
         <!-- TEST SERIES (Kept Simpler) -->
-        <div style="margin-bottom: 20px; border: 1px solid rgba(108,92,231,0.3); border-radius: 12px; padding: 15px; background: rgba(108,92,231,0.05);">
+        <div
+          style="margin-bottom: 20px; border: 1px solid rgba(108,92,231,0.3); border-radius: 12px; padding: 15px; background: rgba(108,92,231,0.05);">
           <h5 style="color: #a29bfe; margin-top:0;">📝 Test Series / Practice Sets</h5>
           <div id="examTestList"></div>
           <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;">
             <input type="text" id="newTestTitle" class="login-input" placeholder="Test Title" style="flex:1; margin:0;">
-            <input type="text" id="newTestUrl" class="login-input" placeholder="Test URL / Link" style="flex:1; margin:0;">
-            <button class="login-btn" onclick="addExamTest()" style="margin:0; background:#6c5ce7; color:white;">➕ Add Test</button>
+            <input type="text" id="newTestUrl" class="login-input" placeholder="Test URL / Link"
+              style="flex:1; margin:0;">
+            <button class="login-btn" onclick="addExamTest()" style="margin:0; background:#6c5ce7; color:white;">➕ Add
+              Test</button>
           </div>
         </div>
 
-        <button class="login-btn" onclick="saveExamContent()" style="width:100%; background: linear-gradient(90deg, #00f2fe, #4facfe); color:black; font-size:16px; font-weight:900; height:50px; border-radius:12px;">💾 SAVE ALL CHANGES TO FIREBASE</button>
+        <button class="login-btn" onclick="saveExamContent()"
+          style="width:100%; background: linear-gradient(90deg, #00f2fe, #4facfe); color:black; font-size:16px; font-weight:900; height:50px; border-radius:12px;">💾
+          SAVE ALL CHANGES TO FIREBASE</button>
       </div>
     </div>
 
     <!-- AI GENERATOR MODAL (Invisible by default) -->
-    <div id="aiExamGeneratorModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:5000; overflow-y:auto; padding:20px;">
-        <div style="max-width:600px; margin:40px auto; background:#1e272e; padding:25px; border-radius:20px; border:1px solid #6c5ce7; box-shadow:0 0 30px rgba(108,92,231,0.4);">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                <h3 style="color:#feca57; margin:0;">🤖 AI Question Generator</h3>
-                <button onclick="closeAIGenerator()" style="background:transparent; border:none; color:#aaa; cursor:pointer; font-size:24px;">&times;</button>
-            </div>
-            
-            <p style="color:#ccc; font-size:14px; line-height:1.6;">
-                1. Copy this prompt to your favorite AI (Gemini/ChatGPT): <br>
-                <code id="aiGeneratorPrompt" style="display:block; background:#000; padding:10px; border-radius:8px; margin:10px 0; color:#00f2fe; font-size:12px; border:1px solid #333; cursor:pointer;" onclick="copyAIPrompt()">Click to copy magic prompt</code>
-            </p>
-            
-            <p style="color:#ccc; font-size:14px; margin-top:15px;">2. Paste the AI-generated JSON response here:</p>
-            <textarea id="aiJsonResponse" class="login-input" style="height:200px; border-color:#6c5ce7; font-family:monospace; font-size:12px;" placeholder='[{"q": "...", "a": "...", "b": "...", "c": "...", "d": "...", "ans": "A", "exp": "..."}]'></textarea>
-            
-            <button class="login-btn" onclick="importAIQuestions()" style="width:100%; background:#6c5ce7; color:white; margin-top:15px; font-weight:bold;">⚡ Import Questions Instantly</button>
+    <div id="aiExamGeneratorModal"
+      style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:5000; overflow-y:auto; padding:20px;">
+      <div
+        style="max-width:600px; margin:40px auto; background:#1e272e; padding:25px; border-radius:20px; border:1px solid #6c5ce7; box-shadow:0 0 30px rgba(108,92,231,0.4);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+          <h3 style="color:#feca57; margin:0;">🤖 AI Question Generator</h3>
+          <button onclick="closeAIGenerator()"
+            style="background:transparent; border:none; color:#aaa; cursor:pointer; font-size:24px;">&times;</button>
         </div>
+
+        <p style="color:#ccc; font-size:14px; line-height:1.6;">
+          1. Copy this prompt to your favorite AI (Gemini/ChatGPT): <br>
+          <code id="aiGeneratorPrompt"
+            style="display:block; background:#000; padding:10px; border-radius:8px; margin:10px 0; color:#00f2fe; font-size:12px; border:1px solid #333; cursor:pointer;"
+            onclick="copyAIPrompt()">Click to copy magic prompt</code>
+        </p>
+
+        <p style="color:#ccc; font-size:14px; margin-top:15px;">2. Paste the AI-generated JSON response here:</p>
+        <textarea id="aiJsonResponse" class="login-input"
+          style="height:200px; border-color:#6c5ce7; font-family:monospace; font-size:12px;"
+          placeholder='[{"q": "...", "a": "...", "b": "...", "c": "...", "d": "...", "ans": "A", "exp": "..."}]'></textarea>
+
+        <button class="login-btn" onclick="importAIQuestions()"
+          style="width:100%; background:#6c5ce7; color:white; margin-top:15px; font-weight:bold;">⚡ Import Questions
+          Instantly</button>
+      </div>
     </div>
 
     <!-- ACTIVE PREMIUM MEMBERS & MGMT -->
@@ -4387,9 +4428,11 @@
 
   <!-- WELCOME -->
   <div id="welcomeScreen" style="display:none;">
-    <div style="position: absolute; top: 15px; right: 20px; z-index: 100; display: flex; align-items: center; gap: 10px;">
+    <div
+      style="position: absolute; top: 15px; right: 20px; z-index: 100; display: flex; align-items: center; gap: 10px;">
       <button onclick="openEditProfile()"
-        style="font-size: 14px; padding: 10px 15px; background: rgba(0, 242, 254, 0.1); border: 1px solid rgba(0, 242, 254, 0.5); border-radius: 8px; color: #00f2fe; cursor: pointer; backdrop-filter: blur(5px); box-shadow: 0 4px 15px rgba(0,0,0,0.2);">✏️ Profile</button>
+        style="font-size: 14px; padding: 10px 15px; background: rgba(0, 242, 254, 0.1); border: 1px solid rgba(0, 242, 254, 0.5); border-radius: 8px; color: #00f2fe; cursor: pointer; backdrop-filter: blur(5px); box-shadow: 0 4px 15px rgba(0,0,0,0.2);">✏️
+        Profile</button>
     </div>
 
     <!-- CSS Floating shapes for VFX -->
@@ -4433,8 +4476,8 @@
       .mode-chip {
         padding: 6px 14px;
         border-radius: 20px;
-        border: 1px solid rgba(255,255,255,0.15);
-        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.05);
         color: #aaa;
         font-size: 12px;
         font-weight: 500;
@@ -4444,10 +4487,11 @@
         font-family: 'Outfit', sans-serif;
         letter-spacing: 0.5px;
       }
+
       .mode-chip:hover {
-        background: rgba(0,242,254,0.15);
+        background: rgba(0, 242, 254, 0.15);
         color: #00f2fe;
-        border-color: rgba(0,242,254,0.5);
+        border-color: rgba(0, 242, 254, 0.5);
         transform: scale(1.05);
       }
 
@@ -4505,7 +4549,9 @@
       top: 0;
       z-index: 50;
     ">
-      <span style="color: #aaa; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; align-self: center; margin-right: 4px;">⚡ Mode:</span>
+      <span
+        style="color: #aaa; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; align-self: center; margin-right: 4px;">⚡
+        Mode:</span>
       <!-- Chips injected dynamically by renderStudentCourses() -->
     </div>
 
@@ -4520,11 +4566,25 @@
       overflow: hidden;
       white-space: nowrap;
     ">
-      <div style="background:#ff4757; color:white; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:bold; animation: pulse 2s infinite;">NEW ALERT</div>
+      <div
+        style="background:#ff4757; color:white; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:bold; animation: pulse 2s infinite;">
+        NEW ALERT</div>
       <div id="tickerContent" style="color:#eee; font-size:13px; font-weight:500;"></div>
     </div>
     <style>
-      @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+      @keyframes pulse {
+        0% {
+          opacity: 0.6;
+        }
+
+        50% {
+          opacity: 1;
+        }
+
+        100% {
+          opacity: 0.6;
+        }
+      }
     </style>
 
     <div class="subjects" id="programs">
@@ -5113,9 +5173,13 @@
 
   <!-- PREMIUM VIEWER MODAL -->
   <div id="premiumViewerModal" class="modal" style="display: none; background: rgba(0,0,0,0.95); z-index: 3000;">
-    <div class="modal-content" style="max-width: 1000px; padding: 0; background: #000; border: 1px solid gold; position: relative;">
-      <span class="close-btn" onclick="closePremiumViewer()" style="position: absolute; right: 15px; top: 5px; color: gold; cursor: pointer; font-size: 30px; z-index: 1001;">&times;</span>
-      <div id="premiumViewerTitle" style="padding: 15px; color: gold; font-weight: bold; border-bottom: 1px solid rgba(255,215,0,0.3); font-family: 'Outfit';">Viewing Premium Content</div>
+    <div class="modal-content"
+      style="max-width: 1000px; padding: 0; background: #000; border: 1px solid gold; position: relative;">
+      <span class="close-btn" onclick="closePremiumViewer()"
+        style="position: absolute; right: 15px; top: 5px; color: gold; cursor: pointer; font-size: 30px; z-index: 1001;">&times;</span>
+      <div id="premiumViewerTitle"
+        style="padding: 15px; color: gold; font-weight: bold; border-bottom: 1px solid rgba(255,215,0,0.3); font-family: 'Outfit';">
+        Viewing Premium Content</div>
       <div id="premiumViewerContent" style="position: relative; width: 100%; height: 80vh;">
         <!-- Iframe and overlay will be injected here -->
       </div>
@@ -6317,7 +6381,7 @@
       console.group("🚀 NEURAL SYNC: Initialization Started");
       const loadingText = document.getElementById("loadingStatusText");
       const loadingOverlay = document.getElementById("dataLoadingOverlay");
-      
+
       const updateStatus = (msg) => {
         if (loadingText) loadingText.innerText = `Neural Sync: ${msg}`;
         console.log(`[INIT STATUS] ${msg}`);
@@ -6326,14 +6390,14 @@
       try {
         updateStatus("Requesting Notification Permissions...");
         if ("Notification" in window && Notification.permission === "default") {
-          try { await Notification.requestPermission(); } catch(e) {}
+          try { await Notification.requestPermission(); } catch (e) { }
         }
 
         updateStatus("Starting Data Sync (20s limit)...");
-        
+
         // Timeout logic for Firebase (20 seconds for reliability)
         const timeoutDuration = 20000;
-        const fetchTimeout = (label) => new Promise((_, reject) => 
+        const fetchTimeout = (label) => new Promise((_, reject) =>
           setTimeout(() => reject(new Error(`${label} Timeout`)), timeoutDuration)
         );
 
@@ -6464,10 +6528,10 @@
       document.getElementById('hudRank').innerText = badge;
       document.getElementById('hudRank').style.color = badgeColor;
       document.getElementById('hudPoints').innerText = pts + " XP";
-      
+
       const quickSwitcher = document.getElementById('quickTrackSwitcher');
       if (quickSwitcher && userData.branch) {
-          quickSwitcher.value = userData.branch;
+        quickSwitcher.value = userData.branch;
       }
       // Highlight the active mode chip
       highlightActiveChip();
@@ -6940,7 +7004,7 @@
     // ================================================================
     // ⚡ COMPETITIVE EXAM CMS ENGINE (v2 - Packs, Games, Alerts)
     // ================================================================
-    let examCmsData = {}; 
+    let examCmsData = {};
     let examCmsActiveTrack = null;
     let examCmsActiveTopic = null;
     let examCmsLocalContent = { packs: [], games: [], tests: [] };
@@ -6957,7 +7021,7 @@
           sel.appendChild(o);
         });
         for (let course in data) {
-          if (!examCmsData[course] && ['SSC','Railways','UPSC','JEE/NEET','Banking','NDA','CDS'].some(k => course.includes(k.split('/')[0]))) {
+          if (!examCmsData[course] && ['SSC', 'Railways', 'UPSC', 'JEE/NEET', 'Banking', 'NDA', 'CDS'].some(k => course.includes(k.split('/')[0]))) {
             const o = document.createElement('option');
             o.value = course; o.innerText = course;
             sel.appendChild(o);
@@ -6972,14 +7036,14 @@
       database.ref('examAlerts').on('value', snap => {
         const alerts = snap.val() || [];
         const el = document.getElementById('adminAlertList');
-        if(!el) return;
-        if(!alerts.length) { el.innerHTML = '<p style="color:#666; font-size:12px;">No active alerts.</p>'; return; }
+        if (!el) return;
+        if (!alerts.length) { el.innerHTML = '<p style="color:#666; font-size:12px;">No active alerts.</p>'; return; }
         el.innerHTML = alerts.map((a, i) => `
           <div style="background:rgba(255,234,0,0.1); padding:5px 10px; border-radius:6px; margin-bottom:5px; font-size:12px; display:flex; justify-content:space-between;">
             <span style="color:#eee;">${a.text}</span>
             <button onclick="deleteExamAlert(${i})" style="background:transparent; border:none; color:#ff4757; cursor:pointer;">&times;</button>
           </div>`).join('');
-        
+
         // Also update student ticker if visible
         updateStudentTicker(alerts);
       });
@@ -6988,11 +7052,11 @@
     function addExamAlert() {
       const text = document.getElementById('newAlertText').value.trim();
       const link = document.getElementById('newAlertLink').value.trim();
-      if(!text) return;
+      if (!text) return;
       database.ref('examAlerts').once('value').then(snap => {
         const alerts = snap.val() || [];
         alerts.unshift({ text, link, date: Date.now() });
-        if(alerts.length > 5) alerts.pop(); // Keep last 5
+        if (alerts.length > 5) alerts.pop(); // Keep last 5
         database.ref('examAlerts').set(alerts);
         document.getElementById('newAlertText').value = '';
         document.getElementById('newAlertLink').value = '';
@@ -7010,8 +7074,8 @@
     function updateStudentTicker(alerts) {
       const ticker = document.getElementById('examAlertTicker');
       const content = document.getElementById('tickerContent');
-      if(!ticker || !content) return;
-      if(!alerts.length) { ticker.style.display = 'none'; return; }
+      if (!ticker || !content) return;
+      if (!alerts.length) { ticker.style.display = 'none'; return; }
       ticker.style.display = 'flex';
       content.innerHTML = alerts.map(a => a.link ? `<a href="${a.link}" target="_blank" style="color:#00f2fe; text-decoration:none;">${a.text}</a>` : a.text).join(' &nbsp; | &nbsp; ');
     }
@@ -7026,7 +7090,7 @@
         const updates = {};
         updates['_init'] = true;
         updates[defaultTopic] = { packs: [], games: [], tests: [] };
-        
+
         database.ref('examContent/' + name).set(updates).then(() => {
           alert('✅ Exam track "' + name + '" added with default topic!');
           document.getElementById('newExamTrackName').value = '';
@@ -7148,7 +7212,7 @@
       el.innerHTML = examCmsLocalContent.games.map((g, i) => `
         <div style="background:rgba(255,107,107,0.1); padding:8px; border-radius:8px; margin-bottom:8px; border:1px solid rgba(255,107,107,0.2); font-size:12px;">
           <div style="display:flex; justify-content:space-between;">
-            <b style="color:#ff6b6b;">Q${i+1}: ${g.q.substring(0,40)}...</b>
+            <b style="color:#ff6b6b;">Q${i + 1}: ${g.q.substring(0, 40)}...</b>
             <button onclick="removeExamGame(${i})" style="background:transparent; border:none; color:#ff4757; cursor:pointer;">🗑️</button>
           </div>
           <div style="color:#aaa;">Ans: ${g.ans}</div>
@@ -7165,8 +7229,8 @@
       const exp = document.getElementById('newGameReason').value.trim();
       if (!q || !a || !b || !ans) { alert('Question, Options A/B, and Correct Answer are required!'); return; }
       examCmsLocalContent.games.push({ q, a, b, c, d, ans, exp });
-      document.getElementById('newGameQuestion').value = ''; document.getElementById('newGameOptA').value = ''; 
-      document.getElementById('newGameOptB').value = ''; document.getElementById('newGameOptC').value = ''; 
+      document.getElementById('newGameQuestion').value = ''; document.getElementById('newGameOptA').value = '';
+      document.getElementById('newGameOptB').value = ''; document.getElementById('newGameOptC').value = '';
       document.getElementById('newGameOptD').value = ''; document.getElementById('newGameCorrect').value = '';
       document.getElementById('newGameReason').value = '';
       renderExamGames();
@@ -7194,17 +7258,17 @@ Ensure options are clear and only one is correct.`;
     function importAIQuestions() {
       try {
         const json = document.getElementById('aiJsonResponse').value.trim();
-        if(!json) { alert('Please paste the JSON response from AI!'); return; }
+        if (!json) { alert('Please paste the JSON response from AI!'); return; }
         const parsed = JSON.parse(json);
-        if(!Array.isArray(parsed)) throw new Error('Input must be an array of questions');
+        if (!Array.isArray(parsed)) throw new Error('Input must be an array of questions');
         parsed.forEach(q => {
-          if(q.q && q.a && q.b && q.ans) examCmsLocalContent.games.push(q);
+          if (q.q && q.a && q.b && q.ans) examCmsLocalContent.games.push(q);
         });
         alert(`✅ Success! Imported ${parsed.length} questions.`);
         document.getElementById('aiJsonResponse').value = '';
         closeAIGenerator();
         renderExamGames();
-      } catch(err) { alert('❌ Error: Invalid JSON format. Make sure you copied the entire array correctly.'); }
+      } catch (err) { alert('❌ Error: Invalid JSON format. Make sure you copied the entire array correctly.'); }
     }
 
     // TEST SERIES
@@ -7311,11 +7375,11 @@ Ensure options are clear and only one is correct.`;
       database.ref('examContent/' + track + '/' + topic + '/games').once('value').then(snap => {
         const questions = snap.val() || [];
         if (!questions.length) { alert("No questions found!"); return; }
-        
+
         // Use the existing game overlay style
         let score = 0;
         let currentIdx = 0;
-        
+
         function showQuestion(idx) {
           if (idx >= questions.length) {
             finishGame();
@@ -7326,7 +7390,7 @@ Ensure options are clear and only one is correct.`;
             <div style="padding:20px; color:white; font-family:inherit;">
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
                 <span style="color:#ff9f43; font-weight:bold;">Score: ${score}</span>
-                <span style="color:#aaa;">Q: ${idx+1}/${questions.length}</span>
+                <span style="color:#aaa;">Q: ${idx + 1}/${questions.length}</span>
               </div>
               <h2 style="font-size:18px; line-height:1.5; margin-bottom:25px;">${q.q}</h2>
               <div style="display:grid; gap:12px;">
@@ -7337,31 +7401,31 @@ Ensure options are clear and only one is correct.`;
               </div>
               <div id="quizFeedback" style="display:none; margin-top:20px; padding:15px; border-radius:12px; background:rgba(255,255,255,0.05); font-size:13px; line-height:1.4;"></div>
             </div>`;
-          
+
           const gameOverlay = document.createElement('div');
           gameOverlay.id = "examGameOverlay";
           gameOverlay.style.cssText = "position:fixed; top:0; left:0; width:100%; height:100%; z-index:9000; background:#0f172a; overflow-y:auto;";
           gameOverlay.innerHTML = quizHtml;
           document.body.appendChild(gameOverlay);
-          
+
           window.checkAns = (ans) => {
             const feedback = document.getElementById('quizFeedback');
             const isCorrect = (ans === q.ans);
-            if(isCorrect) { score += 10; feedback.style.color = "#00b894"; }
+            if (isCorrect) { score += 10; feedback.style.color = "#00b894"; }
             else { feedback.style.color = "#ff4757"; }
-            
+
             feedback.innerHTML = `<b>${isCorrect ? "✅ Correct!" : "❌ Wrong!"}</b><br>${q.exp || "The correct answer is " + q.ans + "."}<br><br><button onclick="nextQ()" class="login-btn" style="margin:0; width:100%;">Next Question →</button>`;
             feedback.style.display = 'block';
             // Disable all opt clicks
             document.querySelectorAll('.quiz-opt').forEach(opt => opt.onclick = null);
           };
-          
+
           window.nextQ = () => {
             document.body.removeChild(gameOverlay);
             showQuestion(idx + 1);
           };
         }
-        
+
         function finishGame() {
           const finishedHtml = `
             <div style="height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; color:white; text-align:center; padding:20px;">
@@ -7373,13 +7437,13 @@ Ensure options are clear and only one is correct.`;
           const gameOverlay = document.getElementById('examGameOverlay');
           gameOverlay.innerHTML = finishedHtml;
         }
-        
+
         showQuestion(0);
       });
     }
 
     // Styles for the quiz
-    if(!document.getElementById('examQuizStyles')) {
+    if (!document.getElementById('examQuizStyles')) {
       const s = document.createElement('style');
       s.id = "examQuizStyles";
       s.textContent = `
@@ -9447,11 +9511,18 @@ Ensure options are clear and only one is correct.`;
 
       document.getElementById("selectedPathDisplay").innerText = `Selected: Sem ${sem} > ${sub} > ${ch}`;
 
-      document.getElementById("cmsVideo").value = Array.isArray(content.video) ? content.video.join('\n') : (content.video || "");
-      document.getElementById("cmsPdf").value = Array.isArray(content.pdf) ? content.pdf.join('\n') : (content.pdf || "");
-      document.getElementById("cmsNotes").value = Array.isArray(content.notes) ? content.notes.join('\n') : (content.notes || "");
-      document.getElementById("cmsAssignment").value = Array.isArray(content.assignment) ? content.assignment.join('\n') : (content.assignment || "");
-      document.getElementById("cmsHomework").value = Array.isArray(content.homework) ? content.homework.join('\n') : (content.homework || "");
+      const parseFB = (val) => {
+        if (!val) return "";
+        if (Array.isArray(val)) return val.join('\n');
+        if (typeof val === "string") return val;
+        if (typeof val === "object") return Object.values(val).filter(v => v).join('\n');
+        return "";
+      };
+      document.getElementById("cmsVideo").value = parseFB(content.video);
+      document.getElementById("cmsPdf").value = parseFB(content.pdf);
+      document.getElementById("cmsNotes").value = parseFB(content.notes);
+      document.getElementById("cmsAssignment").value = parseFB(content.assignment);
+      document.getElementById("cmsHomework").value = parseFB(content.homework);
 
       document.getElementById("cmsContentEditor").style.display = "block";
       document.getElementById("cmsContentEditor").scrollIntoView({ behavior: 'smooth' });
@@ -9889,13 +9960,13 @@ Ensure options are clear and only one is correct.`;
         highlightActiveChip(); // revert visual back
         return;
       }
-      
+
       let ud = JSON.parse(localStorage.getItem("user_" + btoa(currentUserMobile)));
       if (ud) {
         ud.branch = newTrack;
         let editBranch = document.getElementById("editBranch");
-        if(editBranch) editBranch.value = newTrack;
-        
+        if (editBranch) editBranch.value = newTrack;
+
         // Save to Firebase instantly
         database.ref('users/' + currentUserMobile + '/branch').set(newTrack).then(() => {
           localStorage.setItem("user_" + btoa(currentUserMobile), JSON.stringify(ud));
@@ -12139,9 +12210,9 @@ Ensure options are clear and only one is correct.`;
             // Normal college course — use branch/semester navigation
             let branches = data[selection];
             if (selection === "BCA" && (!branches || Object.keys(branches).filter(k => k !== "_initialized").length === 0)) {
-               // Robust fallback if BCA branches themselves are missing from Firebase
-               data["BCA"] = JSON.parse(JSON.stringify(defaultData["BCA"]));
-               branches = data["BCA"];
+              // Robust fallback if BCA branches themselves are missing from Firebase
+              data["BCA"] = JSON.parse(JSON.stringify(defaultData["BCA"]));
+              branches = data["BCA"];
             }
             if (branches) {
               for (let br in branches) {
@@ -12165,7 +12236,7 @@ Ensure options are clear and only one is correct.`;
       else if (level === 'branch') {
         studentNavState.branch = selection;
         currentNavLevel = 'semesters';
-        
+
 
         enforceBCA(data);
         if (!studentNavState.course) studentNavState.course = "BCA";
@@ -12179,12 +12250,12 @@ Ensure options are clear and only one is correct.`;
       else if (level === 'semester') {
         studentNavState.sem = selection;
         currentNavLevel = 'subjects';
-        
+
 
         enforceBCA(data);
         if (!studentNavState.course) studentNavState.course = "BCA";
-        let subs = (data[studentNavState.course] && data[studentNavState.course][studentNavState.branch]) ? 
-                   data[studentNavState.course][studentNavState.branch][selection] : null;
+        let subs = (data[studentNavState.course] && data[studentNavState.course][studentNavState.branch]) ?
+          data[studentNavState.course][studentNavState.branch][selection] : null;
         for (let su in subs) {
           if (su === "_initialized") continue;
           html += `<div class="box" onclick="openStudentLevel('subject', '${su}')">📘 ${su}</div>`;
@@ -12194,7 +12265,7 @@ Ensure options are clear and only one is correct.`;
         studentNavState.subject = selection;
         document.getElementById("dynamicNavSection").style.display = "none";
         document.getElementById("chapters").style.display = "block";
-        
+
 
         let chapters = data[studentNavState.course][studentNavState.branch][studentNavState.sem][selection];
         let chList = document.getElementById("chapterList");
@@ -12277,6 +12348,7 @@ Ensure options are clear and only one is correct.`;
         if (!val) return [];
         if (Array.isArray(val)) return val;
         if (typeof val === "string") return val.split('\n').filter(v => v.trim() !== "");
+        if (typeof val === "object") return Object.values(val).filter(v => v && v.toString().trim() !== "");
         return [];
       };
 
@@ -12898,7 +12970,7 @@ Ensure options are clear and only one is correct.`;
       if (file.link.includes("drive.google.com")) {
         let fileId = file.link.match(/\/d\/(.*?)\//)?.[1] || file.link.match(/id=(.*?)($|&)/)?.[1];
         let folderId = file.link.match(/\/folders\/(.*?)(\?|$|\/)/)?.[1];
-        
+
         if (fileId) {
           finalUrl = "https://drive.google.com/file/d/" + fileId + "/preview?rm=minimal#toolbar=0";
         } else if (folderId) {
@@ -12934,7 +13006,7 @@ Ensure options are clear and only one is correct.`;
         overlay.oncontextmenu = () => false;
         content.appendChild(overlay);
       }
-      
+
       playUISound();
     }
 
@@ -12945,14 +13017,14 @@ Ensure options are clear and only one is correct.`;
     }
 
     // GLOBAL PROTECTION LOGIC
-    document.addEventListener('contextmenu', function(e) {
+    document.addEventListener('contextmenu', function (e) {
       if (document.getElementById("premiumViewerModal").style.display === "flex" || document.getElementById("content").style.display === "block") {
         e.preventDefault();
         return false;
       }
     });
 
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
       if (document.getElementById("premiumViewerModal").style.display === "flex" || document.getElementById("content").style.display === "block") {
         // Block Ctrl+S, Ctrl+P, Ctrl+U
         if (e.ctrlKey && (e.key === 's' || e.key === 'p' || e.key === 'u' || e.key === 'S' || e.key === 'P' || e.key === 'U')) {
@@ -13595,7 +13667,7 @@ Ensure options are clear and only one is correct.`;
       if (installBtn) installBtn.style.display = show ? 'flex' : 'none';
       if (promoBanner) promoBanner.style.display = show ? 'block' : 'none';
     }
-    
+
     // Always attempt to show the install UI by default if not standalone
     // (This guarantees the button next to Leadership is visible for uninstalled users)
     updatePwaUi(true);
