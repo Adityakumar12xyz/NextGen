@@ -2,6 +2,8 @@
 <html lang="en">
 
 <head>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1203992163053810"
+    crossorigin="anonymous"></script>
   <title>NextGen Digital Library | Web Development Project by Aditya Kumar</title>
   <meta name="description"
     content="NextGen Digital Library - A modern web platform for digital resources. Created by Aditya Kumar, Web Developer.">
@@ -14,6 +16,24 @@
   <meta property="og:description"
     content="Explore the NextGen Digital Library, a web development project showcasing digital resource management.">
   <meta name="google-site-verification" content="9uLHaP53sHpPBy6U9jzpeNOmJIbCl11ZRMo8hN7dyaw" />
+  <meta name="robots" content="index, follow">
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="sitemap.xml">
+
+  <!-- Structured Data for SEO (AdSense Approval Help) -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "EducationalOrganization",
+      "name": "NextGen Digital Library",
+      "url": "https://adityakumar12xyz.github.io/NextGen/",
+      "logo": "https://adityakumar12xyz.github.io/NextGen/img1.png",
+      "description": "A modern web platform for digital resources and learning.",
+      "author": {
+        "@type": "Person",
+        "name": "Aditya Kumar"
+      }
+    }
+  </script>
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -243,7 +263,7 @@
 
     /* LOGIN SCREEN */
     #loginScreen {
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -257,6 +277,9 @@
       top: 0;
       left: 0;
       z-index: 999;
+      overflow-y: auto;
+      padding: 20px 0;
+      box-sizing: border-box;
     }
 
     .light #loginScreen {
@@ -267,7 +290,7 @@
       /* Advanced Glassmorphism */
       background: rgba(15, 32, 39, 0.45);
       border: 1px solid rgba(0, 255, 255, 0.2);
-      padding: 40px;
+      padding: 30px 20px;
       border-radius: 20px;
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(0, 255, 255, 0.1);
       backdrop-filter: blur(20px);
@@ -276,6 +299,17 @@
       max-width: 420px;
       margin: 10px;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
+      max-height: 90vh;
+      overflow-y: auto;
+      scrollbar-width: none;
+      /* Firefox */
+      -ms-overflow-style: none;
+      /* IE and Edge */
+    }
+
+    .login-box::-webkit-scrollbar {
+      display: none;
+      /* Chrome, Safari and Opera */
     }
 
     .login-box:hover {
@@ -2139,6 +2173,147 @@
         transform: rotate(360deg);
       }
     }
+
+    /* COOKIE CONSENT BANNER */
+    #cookieConsent {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      background: rgba(15, 32, 39, 0.95);
+      border: 1px solid cyan;
+      color: white;
+      padding: 20px;
+      border-radius: 15px;
+      z-index: 20005;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .cookie-btn {
+      padding: 8px 20px;
+      background: cyan;
+      color: black;
+      border: none;
+      border-radius: 20px;
+      font-weight: 900;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+      #cookieConsent {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    /* APP FEEL: NO SELECTION & ANIMATIONS */
+    body {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    input,
+    textarea,
+    select,
+    .content {
+      user-select: auto;
+      -webkit-user-select: auto;
+    }
+
+    @keyframes slideFadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .page-transition {
+      animation: slideFadeIn 0.35s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
+    }
+
+    button:active,
+    .box:active,
+    .subject-box:active,
+    .nav-item:active {
+      transform: scale(0.95) !important;
+      transition: transform 0.1s ease !important;
+    }
+
+    /* APP BOTTOM NAVIGATION BAR */
+    .app-bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(11, 19, 43, 0.98);
+      border-top: 1px solid rgba(0, 255, 255, 0.2);
+      backdrop-filter: blur(15px);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 8px 0 12px 0;
+      z-index: 9999;
+      box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.6);
+    }
+
+    .app-bottom-nav .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: #666;
+      font-size: 11px;
+      font-weight: 900;
+      cursor: pointer;
+      flex: 1;
+      transition: all 0.3s;
+    }
+
+    .app-bottom-nav .nav-item i {
+      font-size: 22px;
+      margin-bottom: 2px;
+      transition: transform 0.3s, color 0.3s;
+    }
+
+    .app-bottom-nav .nav-item.active {
+      color: cyan;
+      text-shadow: 0 0 10px cyan;
+    }
+
+    .app-bottom-nav .nav-item.active i {
+      transform: translateY(-4px) scale(1.15);
+    }
+
+    @media (min-width: 800px) {
+      .app-bottom-nav {
+        display: none !important;
+      }
+
+      body {
+        padding-bottom: 0 !important;
+      }
+    }
+
+    @media (max-width: 799px) {
+      body {
+        padding-bottom: 65px;
+      }
+
+      /* Space for navbar */
+    }
   </style>
   <!-- JSZip for Code Studio Downloads -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -2842,25 +3017,32 @@
         <div id="searchResultsModal" class="search-dropdown"></div>
       </div>
       <div id="headerWalletDisplay" style="margin-left: 15px; display: flex; align-items: center; gap: 10px;">
-        <!-- Daily Bonus Button -->
-        <button id="dailyBonusBtn" onclick="claimDailyBonus()"
-          style="background: linear-gradient(135deg, #ff9f43, #ff6b6b); border: none; color: white; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; box-shadow: 0 0 10px rgba(255, 159, 67, 0.3); display: flex; align-items: center; gap: 5px;">🎁
-          BONUS</button>
         <!-- NEW NEURAL WALLET BALANCE SQUARE -->
         <div
-          style="background: rgba(11, 19, 43, 0.8); padding: 5px 15px; border: 2px solid cyan; border-radius: 10px; font-weight: 900; box-shadow: 0 0 15px rgba(0,242,254,0.4); text-align: center; min-width: 140px;">
-          <span
-            style="color: #00f2fe; font-size: 10px; display: block; text-transform: uppercase; letter-spacing: 1px;">Neural
-            Wallet Balance</span>
-          <span style="color: gold; font-size: 18px; text-shadow: 0 0 10px gold;">🪙 <span
-              id="headerWalletBalance">0.00</span></span>
+          style="background: rgba(11, 19, 43, 0.8); border: 2px solid cyan; border-radius: 10px; font-weight: 900; box-shadow: 0 0 15px rgba(0,242,254,0.4); display: flex; align-items: stretch; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;"
+          onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'" onmouseleave="this.style.transform='scale(1)'">
+          <div
+            id="walletCoinArea"
+            onclick="claimDailyBonus()"
+            title="Click to claim your Daily Bonus!"
+            style="padding: 6px 15px; text-align: center; min-width: 120px; display: flex; flex-direction: column; justify-content: center; cursor: pointer; position: relative;">
+            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle, rgba(255,215,0,0.15) 0%, transparent 70%); pointer-events: none; animation: pulseGlow 2s infinite;"></div>
+            <span
+              style="color: #00f2fe; font-size: 10px; display: block; text-transform: uppercase; letter-spacing: 1px;">Neural
+              Wallet</span>
+            <span style="color: gold; font-size: 18px; text-shadow: 0 0 10px gold; margin-top:2px;">🪙 <span
+                id="headerWalletBalance">0.00</span></span>
+          </div>
+          <div
+            style="display: flex; flex-direction: column; border-left: 1px solid rgba(0,242,254,0.3); background: rgba(0,0,0,0.5);">
+            <button onclick="topUpWallet()"
+              style="background: linear-gradient(90deg, #00cec9, #00b894); border: none; color: black; padding: 6px 15px; font-size: 11px; font-weight: 900; cursor: pointer; transition: 0.3s; border-bottom: 1px solid rgba(0,0,0,0.5); text-align: left; height: 100%;">➕
+              RECHARGE</button>
+            <button onclick="openWithdrawalModal()"
+              style="background: rgba(255, 71, 87, 0.15); border: none; color: #ff4757; padding: 6px 15px; font-size: 11px; font-weight: 900; cursor: pointer; transition: 0.3s; text-align: left; height: 100%;">💸
+              WITHDRAW</button>
+          </div>
         </div>
-        <button onclick="topUpWallet()"
-          style="background: #00cec9; border: none; color: black; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; box-shadow: 0 0 10px rgba(0, 206, 201, 0.3);">➕
-          RECHARGE</button>
-        <button onclick="openWithdrawalModal()"
-          style="background: rgba(255, 71, 87, 0.2); border: 1px solid #ff4757; color: #ff4757; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s;">💸
-          WITHDRAW</button>
       </div>
       <button id="pwaInstallBtn" class="pwa-hide-on-install"
         style="display: none; align-items: center; gap: 5px; font-size: 14px; padding: 6px 12px; background: #00f2fe; color: black; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; box-shadow: 0 0 10px #00f2fe;">
@@ -2918,6 +3100,9 @@
         <input type="tel" id="regMobile" class="login-input" placeholder="Mobile Number">
 
         <button class="login-btn" onclick="handleSignUp()">Sign Up & Enter</button>
+        <button class="login-btn" onclick="loginAsGuest()"
+          style="background: rgba(255,255,255,0.1); border: 1px solid #4facfe; color: #4facfe; margin-top: 10px;">Explore
+          as Guest (No Login)</button>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
           <p class="auth-toggle" style="margin: 0;">Already have an account? <span
               onclick="toggleAuthMode('login')">Login</span></p>
@@ -2946,6 +3131,9 @@
         </select>
         <input type="tel" id="loginMobile" class="login-input" placeholder="Mobile Number">
         <button class="login-btn" onclick="handleLogin()">Log In</button>
+        <button class="login-btn" onclick="loginAsGuest()"
+          style="background: rgba(255,255,255,0.1); border: 1px solid #4facfe; color: #4facfe; margin-top: 10px;">Explore
+          as Guest (No Login)</button>
         <p class="auth-toggle" style="text-align: right; margin-top: 5px;">Forgot Details? <span
             onclick="recoverDetails()">Click Here</span></p>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
@@ -4074,12 +4262,16 @@
             style="display:none; background:rgba(0,0,0,0.2); padding:15px; border-radius:10px;">
             <textarea id="adminGameQuestText" class="login-input" placeholder="Enter Question or Code Snippet..."
               style="height:100px;"></textarea>
-            
+
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
-              <input type="text" id="adminGameQuestOptA" class="login-input" style="margin:0;" placeholder="Option 1 (Required)">
-              <input type="text" id="adminGameQuestOptB" class="login-input" style="margin:0;" placeholder="Option 2 (Required)">
-              <input type="text" id="adminGameQuestOptC" class="login-input" style="margin:0;" placeholder="Option 3 (Optional)">
-              <input type="text" id="adminGameQuestOptD" class="login-input" style="margin:0;" placeholder="Option 4 (Optional)">
+              <input type="text" id="adminGameQuestOptA" class="login-input" style="margin:0;"
+                placeholder="Option 1 (Required)">
+              <input type="text" id="adminGameQuestOptB" class="login-input" style="margin:0;"
+                placeholder="Option 2 (Required)">
+              <input type="text" id="adminGameQuestOptC" class="login-input" style="margin:0;"
+                placeholder="Option 3 (Optional)">
+              <input type="text" id="adminGameQuestOptD" class="login-input" style="margin:0;"
+                placeholder="Option 4 (Optional)">
             </div>
 
             <select id="adminGameQuestCorrect" class="login-input" style="margin-bottom: 10px;">
@@ -4711,6 +4903,9 @@
         <button onclick="runCode()" id="csRunBtn"
           style="background:linear-gradient(90deg,#00b894,#00cec9); color:#000; border:none; padding:8px 20px; border-radius:6px; font-weight:900; cursor:pointer; font-size:14px; letter-spacing:1px;">▶
           RUN</button>
+        <button onclick="optimizeCodeAI()" id="csAiBtn"
+          style="background:linear-gradient(90deg, #6c5ce7, #a29bfe); color:white; border:none; padding:8px 14px; border-radius:6px; font-weight:900; cursor:pointer; font-size:13px; margin-left:5px; box-shadow:0 4px 10px rgba(108,92,231,0.3);">✨
+          AI OPTIMIZE</button>
         <button onclick="clearEditor()"
           style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.2); color:#aaa; padding:7px 14px; border-radius:6px; cursor:pointer; font-size:13px;">🗑️
           Clear</button>
@@ -4720,6 +4915,9 @@
         <button onclick="saveProject()"
           style="background:rgba(0,184,148,0.15); border:1px solid #00b894; color:#00b894; padding:7px 14px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:bold;">💾
           Save</button>
+        <button onclick="shareCode()"
+          style="background:rgba(108,92,231,0.15); border:1px solid #6c5ce7; color:#a29bfe; padding:7px 14px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:bold; margin-left:5px;">🔗
+          Share</button>
         <button onclick="newProject()"
           style="background:rgba(108,92,231,0.15); border:1px solid #6c5ce7; color:#a29bfe; padding:7px 14px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:bold;">➕
           New</button>
@@ -4754,7 +4952,7 @@
         <div style="flex:1; position:relative; min-height:200px;">
           <div style="position:absolute; top:0; left:0; width:100%; height:100%;">
             <textarea id="csEditor" placeholder="// Write your code here..." spellcheck="false"
-              onkeydown="handleEditorTab(event)"></textarea>
+              onkeydown="handleEditorTab(event)" oninput="checkSyntaxLive()"></textarea>
           </div>
         </div>
 
@@ -5080,7 +5278,7 @@
       <button onclick="showPage('programsWrapper')"
         style="padding: 12px 25px; font-size:16px; background: rgba(0, 255, 255, 0.1); border: 1px solid cyan; color: cyan; border-radius: 10px; cursor: pointer;">⬅
         Back</button>
-      <button onclick="openGameLeaderboard()"
+      <button onclick="openLeaderboard()"
         style="background: rgba(255, 215, 0, 0.1); border: 1px solid gold; color: gold; padding: 10px 20px; border-radius: 10px; font-weight: bold; cursor: pointer;">🏆
         Leaderboard</button>
     </div>
@@ -5143,6 +5341,32 @@
           <li><strong>Updates:</strong> Terms may be updated. Continued use implies acceptance</li>
           <li><strong>Support:</strong> Contact us for queries or concerns regarding any content</li>
         </ul>
+      </div>
+
+      <div class="info-box">
+        <h3>🛡️ Privacy Policy</h3>
+        <p>At NextGen Library, we value your privacy. This policy explains how we handle your data:</p>
+        <ul>
+          <li><strong>Data Collection:</strong> We collect minimal data (Name, Roll No, Mobile) purely for academic
+            tracking.</li>
+          <li><strong>Cookies:</strong> We use cookies to maintain your login session and improve site performance. We
+            also use Google AdSense which may use cookies for personalized ads.</li>
+          <li><strong>Third Parties:</strong> Your data is never sold. We only use Firebase for secure storage and
+            Google for analytics/ads.</li>
+          <li><strong>Consent:</strong> By using our platform, you consent to our data practices.</li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <h3>📧 Contact Us</h3>
+        <p>Need help or have questions? Reach out to our team:</p>
+        <ul>
+          <li><strong>Email:</strong> adityakumar@nextgenlibrary.com</li>
+          <li><strong>Support:</strong> Available Monday to Saturday (10 AM - 6 PM)</li>
+          <li><strong>Location:</strong> Digital Workspace, India</li>
+        </ul>
+        <p style="font-size: 11px; color: #888;">Note: For faster resolution, please include your registered mobile
+          number in the email.</p>
       </div>
     </div>
   </div>
@@ -5450,8 +5674,37 @@
       gameSessionStartTime = now; // Reset for next minute
     }
 
+    /* ANTI-CHEAT SYSTEM for Games */
+    let antiCheatActive = false;
+    let antiCheatGame = "";
+
+    function monitorTabSwitch() {
+      if (!antiCheatActive) return;
+      if (document.hidden || !document.hasFocus()) {
+        antiCheatActive = false;
+        triggerNeuralSyncNotification("🚫 CHEAT DETECTED: Tab switching is forbidden!");
+        alert(`🚨 ANTI-CHEAT: ${antiCheatGame} ke dauran tab switch allowed nahi hai! Game band ho gaya.`);
+        showPage('mindGamesHub');
+        stopAntiCheat();
+      }
+    }
+
+    function startAntiCheat(gameName) {
+      antiCheatActive = true;
+      antiCheatGame = gameName;
+      document.addEventListener('visibilitychange', monitorTabSwitch);
+      window.addEventListener('blur', monitorTabSwitch);
+    }
+
+    function stopAntiCheat() {
+      antiCheatActive = false;
+      document.removeEventListener('visibilitychange', monitorTabSwitch);
+      window.removeEventListener('blur', monitorTabSwitch);
+    }
+
     async function startMathDash() {
       if (!(await checkGameAccess())) return;
+      startAntiCheat("Math Dash");
       gameSessionStartTime = Date.now();
       currentGameType = "math";
       gameScore = 0;
@@ -5515,6 +5768,7 @@
 
     async function startCodePredictor() {
       if (!(await checkGameAccess())) return;
+      startAntiCheat("Code Predictor");
       gameSessionStartTime = Date.now();
       currentGameType = "code";
       gameScore = 0;
@@ -5571,6 +5825,7 @@
 
     async function startLogicPuzzle() {
       if (!(await checkGameAccess())) return;
+      startAntiCheat("Logic Puzzle");
       gameSessionStartTime = Date.now();
       currentGameType = "logic";
       gameScore = 0;
@@ -5664,6 +5919,7 @@
 
     async function startDynamicGame(catId, catName) {
       if (!(await checkGameAccess())) return;
+      startAntiCheat(catName);
       gameSessionStartTime = Date.now();
       currentGameType = catId;
       gameScore = 0;
@@ -5697,7 +5953,7 @@
       const q = questions[Math.floor(Math.random() * questions.length)];
       // Shuffle options for the user
       const shuffledOptions = shuffleArray([...q.options]);
-      
+
       let optionsHtml = shuffledOptions.map(opt => `
         <button class="login-btn" onclick="checkDynamicAnswer('${opt.replace(/'/g, "\\'")}', '${q.answer.replace(/'/g, "\\'")}', ${JSON.stringify(questions).replace(/"/g, '&quot;')})" style="margin-top: 10px; background: rgba(0,242,254,0.2); border: 1px solid cyan;">${opt}</button>
       `).join("");
@@ -5722,6 +5978,7 @@
     }
 
     function endGame() {
+      stopAntiCheat();
       clearInterval(gameTimerInterval);
       trackGameTime(); // Final track
       gameSessionStartTime = null;
@@ -5814,30 +6071,6 @@
       });
     }
 
-    function openGameLeaderboard() {
-      database.ref('gameLeaderboard').orderByChild('score').limitToLast(10).once('value').then(snap => {
-        let data = snap.val() || {};
-        let list = Object.values(data).sort((a, b) => b.score - a.score);
-
-        let html = list.map((u, i) => `
-          <div style="display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); color: ${i < 3 ? 'gold' : 'white'}">
-            <span>${i + 1}. ${u.name}</span>
-            <span>${u.score} pts</span>
-          </div>
-        `).join("");
-
-        const modal = document.createElement("div");
-        modal.style = "position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 20000; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(10px);";
-        modal.innerHTML = `
-          <div style="background: #1c2541; border: 2px solid gold; padding: 30px; border-radius: 20px; width: 90%; max-width: 400px;">
-            <h2 style="color: gold; text-align: center; margin-top: 0;">🏆 Top Mind Gamers</h2>
-            <div style="margin: 20px 0;">${html || '<p style="text-align: center; color: #888;">No scores yet!</p>'}</div>
-            <button onclick="this.parentElement.parentElement.remove()" class="login-btn" style="background: gold; color: black;">CLOSE</button>
-          </div>
-        `;
-        document.body.appendChild(modal);
-      });
-    }
 
     /* AUTO TYPING */
     let text = "WELCOME TO NEXTGEN LIBRARY";
@@ -5912,8 +6145,13 @@
         if (el) {
           if (id === pageId) {
             el.style.display = (id === "loginScreen" || id === "welcomeScreen" || id === "battleExamEngine") ? "flex" : "block";
+            // Re-trigger animation
+            el.classList.remove('page-transition');
+            void el.offsetWidth;
+            el.classList.add('page-transition');
           } else {
             el.style.display = "none";
+            el.classList.remove('page-transition');
           }
         }
       });
@@ -5923,12 +6161,28 @@
       const footer = document.getElementById("mainFooter");
       const aiTutor = document.getElementById("aiTutorWidget");
       const ticker = document.getElementById("globalTicker");
+      const bottomNav = document.getElementById("appBottomNav");
 
       const hideForAuth = ["loginScreen", "welcomeScreen", "adminDashboard"].includes(pageId);
       const isCertStore = (pageId === "certificateStoreScreen" || pageId === "myCollectionScreen");
 
       if (header) header.style.display = (hideForAuth || isCertStore) ? "none" : "flex";
       if (footer) footer.style.display = hideForAuth ? "none" : "block";
+
+      if (bottomNav) {
+        bottomNav.style.display = (hideForAuth || isCertStore) ? "none" : "flex";
+        // Update Bottom Nav Active State
+        document.querySelectorAll('.app-bottom-nav .nav-item').forEach(item => item.classList.remove('active'));
+        if (pageId === 'programsWrapper' || pageId === 'chapters' || pageId === 'content' || pageId === 'dynamicNavSection') {
+          document.getElementById('nav_home')?.classList.add('active');
+        } else if (pageId === 'codeStudioScreen') {
+          document.getElementById('nav_code')?.classList.add('active');
+        } else if (pageId === 'mindGamesHub') {
+          document.getElementById('nav_games')?.classList.add('active');
+        } else if (pageId === 'combatArena' || pageId === 'battleLeaderboardSection') {
+          document.getElementById('nav_arena')?.classList.add('active');
+        }
+      }
       if (aiTutor) aiTutor.style.display = (hideForAuth || isCertStore) ? "none" : "block";
       if (ticker) ticker.style.display = (hideForAuth || isCertStore) ? "none" : (globalSiteConfig.ticker ? "block" : "none");
 
@@ -6557,6 +6811,10 @@
       if (!userData) return;
       document.getElementById('neuralHUD').style.display = 'flex';
 
+      if (typeof updateWalletDisplay === 'function') {
+        updateWalletDisplay();
+      }
+
       let pts = userData.timeSpent || 0;
       let badge = "Beginner 🌱";
       let badgeColor = "#38ef7d";
@@ -6872,6 +7130,24 @@
       return true;
     }
 
+    /* LOGIN AS GUEST */
+    function loginAsGuest() {
+      currentUserMobile = "GUEST_USER";
+      setAuthSession("GUEST_USER", 24); // 24 hour session for guests
+      const guestData = {
+        name: "Guest Explorer",
+        mobile: "GUEST_USER",
+        branch: "Explore",
+        section: "Demo",
+        timeSpent: 0,
+        isGuest: true
+      };
+      localStorage.setItem("user_" + btoa("GUEST_USER"), JSON.stringify(guestData));
+      updateNeuralHUD(guestData);
+      enterSite();
+      triggerNeuralSyncNotification("🚀 Guest Mode Activated: Welcome to NextGen Library.");
+    }
+
     function handleSignUp() {
       try {
         let name = sanitizeHTML(document.getElementById("regName").value.trim());
@@ -6924,6 +7200,15 @@
 
               const wsP = document.querySelector("#welcomeScreen p");
               if (wsP) wsP.innerText = `\nWelcome, ${name}!`;
+
+              // Initialize in gameLeaderboard (if not exists)
+              let picUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(name || 'U')}&background=cyan&color=000`;
+              database.ref('gameLeaderboard/' + mobile).set({
+                name: name,
+                score: 0,
+                pic: picUrl,
+                lastPlayed: Date.now()
+              });
 
               btn.innerText = "Sign Up & Enter";
               btn.disabled = false;
@@ -6978,6 +7263,19 @@
 
               const wsP = document.querySelector("#welcomeScreen p");
               if (wsP) wsP.innerText = `\nWelcome back, ${savedData.name}!`;
+
+              // Ensure user is in gameLeaderboard
+              database.ref('gameLeaderboard/' + mobile).once('value').then(glbSnap => {
+                if (!glbSnap.exists()) {
+                  let picUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(savedData.name || 'U')}&background=cyan&color=000`;
+                  database.ref('gameLeaderboard/' + mobile).set({
+                    name: savedData.name,
+                    score: savedData.timeSpent || 0,
+                    pic: picUrl,
+                    lastPlayed: Date.now()
+                  });
+                }
+              });
 
               startTimeTracking();
               updateNeuralHUD(savedData);
@@ -7069,7 +7367,7 @@
           }
           courseSel.value = tCourse;
           courseSel.disabled = true; // Lock dropdown
-          if (typeof populateCmsBranches === 'function') populateCmsBranches(); 
+          if (typeof populateCmsBranches === 'function') populateCmsBranches();
         }
       }
     }
@@ -8147,17 +8445,17 @@ Ensure options are clear and only one is correct.`;
 
       database.ref('gameSettings/categories').once('value').then(snap => {
         let cats = snap.val() || {};
-        
+
         // Initialize defaults in Firebase if it's the very first time
         if (Object.keys(cats).length === 0) {
-           const defaults = { 
-             code: { name: "Code Predictor" }, 
-             logic: { name: "Logic Puzzle" }, 
-             math: { name: "Math Dash" } 
-           };
-           // We only do this once to set the baseline
-           database.ref('gameSettings/categories').update(defaults);
-           cats = defaults;
+          const defaults = {
+            code: { name: "Code Predictor" },
+            logic: { name: "Logic Puzzle" },
+            math: { name: "Math Dash" }
+          };
+          // We only do this once to set the baseline
+          database.ref('gameSettings/categories').update(defaults);
+          cats = defaults;
         }
 
         list.innerHTML = "";
@@ -8227,7 +8525,7 @@ Ensure options are clear and only one is correct.`;
           document.getElementById('adminGameQuestOptB').value = result.options[1] || "";
           document.getElementById('adminGameQuestOptC').value = result.options[2] || "";
           document.getElementById('adminGameQuestOptD').value = result.options[3] || "";
-          
+
           // Find correct option index
           const idx = result.options.indexOf(result.answer);
           if (idx !== -1) document.getElementById('adminGameQuestCorrect').value = idx;
@@ -8363,7 +8661,7 @@ Ensure options are clear and only one is correct.`;
     function addDynamicGameQuestion() {
       const cat = document.getElementById('adminGameCategorySelect').value;
       const text = document.getElementById('adminGameQuestText').value.trim();
-      
+
       const optA = document.getElementById('adminGameQuestOptA').value.trim();
       const optB = document.getElementById('adminGameQuestOptB').value.trim();
       const optC = document.getElementById('adminGameQuestOptC').value.trim();
@@ -10478,7 +10776,8 @@ Ensure options are clear and only one is correct.`;
       let list = document.getElementById('leaderboardList');
       list.innerHTML = "<p style='color:cyan;'>Loading leaders...</p>";
 
-      database.ref('gameLeaderboard').orderByChild('score').limitToLast(20).once('value').then(snap => {
+      // Increased limit to 100 students for leadership visibility
+      database.ref('gameLeaderboard').orderByChild('score').limitToLast(100).once('value').then(snap => {
         let data = snap.val() || {};
         let usersArr = [];
         for (let key in data) {
@@ -10496,12 +10795,12 @@ Ensure options are clear and only one is correct.`;
           return;
         }
 
-        list.innerHTML = "";
+        let resultHtml = "";
         usersArr.forEach((u, idx) => {
           let isTop = idx === 0 ? "👑 " : (idx === 1 ? "🥈 " : (idx === 2 ? "🥉 " : ""));
           let borderCol = idx === 0 ? "gold" : (idx === 1 ? "silver" : (idx === 2 ? "#cd7f32" : "rgba(0,255,255,0.3)"));
           let bgCol = idx === 0 ? "rgba(255,215,0,0.1)" : "rgba(255,255,255,0.05)";
-          list.innerHTML += `
+          resultHtml += `
             <div style="display: flex; align-items: center; gap: 15px; background: ${bgCol}; padding: 10px; border-radius: 10px; border: 1px solid ${borderCol}; transition: transform 0.2s;">
               <span style="font-size: 20px; font-weight: bold; width: 25px; color:${borderCol};">${idx + 1}.</span>
               <img src="${u.pic}" style="width: 45px; height: 45px; border-radius: 50%; border: 2px solid ${borderCol}; object-fit: cover;">
@@ -10512,6 +10811,7 @@ Ensure options are clear and only one is correct.`;
             </div>
           `;
         });
+        list.innerHTML = resultHtml;
       }).catch(err => {
         console.error("Leaderboard Error:", err);
         list.innerHTML = "<p style='color:red;'>Failed to load leaderboard. (Permission Error)</p>";
@@ -10595,10 +10895,16 @@ Ensure options are clear and only one is correct.`;
       updateWalletDisplay();
     }
 
+    let globalWalletListener = null;
     function updateWalletDisplay() {
       if (!currentUserMobile) return;
-      // Use real-time listener for instant updates
-      database.ref('users/' + currentUserMobile + '/profile/wallet').on('value', snap => {
+
+      if (globalWalletListener) {
+        globalWalletListener.off(); // Remove old listener so we don't multiply triggers
+      }
+
+      globalWalletListener = database.ref('users/' + currentUserMobile + '/profile/wallet');
+      globalWalletListener.on('value', snap => {
         let bal = snap.val() || 0;
         let balText = parseFloat(bal).toFixed(2);
 
@@ -11648,11 +11954,15 @@ Ensure options are clear and only one is correct.`;
       outEl.innerHTML = '<span style="color:#00b894;">⟳ Compiling and running...</span>';
       document.getElementById('csHinglishError').innerHTML = '<span style="color:#aaa;">Checking...</span>';
 
+      // Analytics
+      database.ref('stats/codeStudio/runs').transaction(c => (c || 0) + 1);
+
       let t0 = Date.now();
       try {
+        let stdin = document.getElementById('csStdin') ? document.getElementById('csStdin').value : '';
         let body = csCurrentLang === 'java'
-          ? { compiler: lang.compiler, codes: [{ file: 'Main.java', code: code }], stdin: '', save: false }
-          : { compiler: lang.compiler, code: code, stdin: '', save: false };
+          ? { compiler: lang.compiler, codes: [{ file: 'Main.java', code: code }], stdin: stdin, save: false }
+          : { compiler: lang.compiler, code: code, stdin: stdin, save: false };
 
         let resp = await fetch('https://wandbox.org/api/compile.json', {
           method: 'POST',
@@ -11694,6 +12004,48 @@ Ensure options are clear and only one is correct.`;
       }
     }
 
+    async function optimizeCodeAI() {
+      const code = document.getElementById('csEditor').value.trim();
+      if (!code) return alert("Bhai, pehle code to likho optimize karne ke liye!");
+
+      const btn = document.getElementById('csAiBtn');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = "⏳ Thinking...";
+      btn.disabled = true;
+
+      try {
+        const prompt = `You are a Senior Software Engineer. Rewrite and optimize this ${csCurrentLang} code for better performance, readability, and modern standards. Provide ONLY the corrected code inside a markdown block.
+        
+        CODE:
+        ${code}`;
+
+        // Analytics
+        database.ref('stats/codeStudio/ai_optimizes').transaction(c => (c || 0) + 1);
+
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${NEXTGEN_AI}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+        });
+
+        const data = await response.json();
+        const rawText = data.candidates[0].content.parts[0].text;
+        const codeMatch = rawText.match(/```(?:\w+)?\n([\s\S]*?)```/);
+        const optimizedCode = codeMatch ? codeMatch[1] : rawText.trim();
+
+        if (optimizedCode) {
+          document.getElementById('csEditor').value = optimizedCode;
+          triggerNeuralSyncNotification("✨ AI has polished your code!");
+        }
+      } catch (e) {
+        console.error("AI Optimization Error:", e);
+        alert("❌ AI optimization failed: " + e.message);
+      } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    }
+
     function escapeHtml(s) {
       return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
@@ -11707,7 +12059,14 @@ Ensure options are clear and only one is correct.`;
       if (e.includes("undeclared") || e.includes("undefined") || e.includes("not defined")) hints.push("👉 Variable use kiya lekin <b>declare nahi kiya</b>.");
       if (e.includes("indentationerror")) hints.push("👉 Python mein <b>indentation (space/tab)</b> galat hai!");
       if (e.includes("syntaxerror")) hints.push("👉 <b>Syntax galat hai</b> — spelling ya brackets check karo.");
-      if (hints.length === 0) hints.push(`👉 <b>Error:</b> <code style="font-size:11px;color:#ff6b81;">${escapeHtml(stderr.substring(0, 150))}</code>`);
+      if (e.includes("division by zero") || e.includes("zerodivisionerror")) hints.push("👉 Bhai, <b>zero se divide</b> nahi kar sakte!");
+      if (e.includes("nullpointerexception")) hints.push("👉 Java mein <b>null pointer exception</b> hai — object check karo.");
+      if (e.includes("segmentation fault")) hints.push("👉 C/C++ mein <b>memory error (Segfault)</b> hai — pointers check karo.");
+      if (e.includes("module not found") || e.includes("no module named")) hints.push("👉 Ye <b>library/module</b> install nahi hai ya import galat hai.");
+      if (e.includes("unexpected token")) hints.push("👉 Code mein koi <b>f फालतू symbol</b> hai jo wahaan nahi hona chahiye.");
+      if (e.includes("tuple' object is not callable")) hints.push("👉 Python mein function samajh kar tuple call kar rahe ho.");
+      if (e.includes("list index out of range") || e.includes("index out of bounds")) hints.push("👉 <b>Array/List ka size</b> check karo, tum limit se bahar ja rahe ho.");
+      if (hints.length === 0) hints.push(`👉 <b>Error Samjho:</b> <code style="font-size:11px;color:#ff6b81;">${escapeHtml(stderr.substring(0, 150))}</code>`);
       return `<div style="color:#fff;">${hints.join('<br><br>')}</div>`;
     }
 
@@ -11776,6 +12135,119 @@ Ensure options are clear and only one is correct.`;
       let update = { code: document.getElementById('csEditor').value, lang: csCurrentLang, updatedAt: Date.now() };
       await database.ref(`codeProjects/${mobile}/${csOpenProjectId}`).update(update);
       alert('💾 Project Saved!');
+    }
+
+    function checkSyntaxLive() {
+      let code = document.getElementById('csEditor').value;
+      let errorEl = document.getElementById('csHinglishError');
+      let indicators = [];
+
+      // Bracket balancing check
+      let stack = [];
+      let brackets = { '{': '}', '(': ')', '[': ']' };
+      for (let char of code) {
+        if (brackets[char]) stack.push(char);
+        else if (Object.values(brackets).includes(char)) {
+          if (stack.length === 0 || brackets[stack.pop()] !== char) {
+            indicators.push("❌ Bracket mismatch detected!");
+            break;
+          }
+        }
+      }
+
+      // Basic semicolon check for C-style languages
+      if (['c', 'cpp', 'java'].includes(csCurrentLang)) {
+        let lines = code.split('\n');
+        for (let i = 0; i < lines.length; i++) {
+          let line = lines[i].trim();
+          if (line && !line.endsWith(';') && !line.endsWith('{') && !line.endsWith('}') && !line.startsWith('//') && !line.startsWith('#')) {
+            indicators.push(`⚠️ Line ${i + 1}: Semicolon (;) missing?`);
+            break;
+          }
+        }
+      }
+
+      if (indicators.length > 0) {
+        errorEl.innerHTML = `<span style="color:#fd79a8; font-size:12px;">${indicators.join('<br>')}</span>`;
+      } else {
+        errorEl.innerHTML = '<span style="color:#00b894; font-size:12px;">✅ Looks good so far!</span>';
+      }
+    }
+
+    async function shareCode() {
+      const code = document.getElementById('csEditor').value.trim();
+      if (!code) return alert("Pehle code likho share karne ke liye!");
+      const id = "SHARE_" + Math.random().toString(36).substr(2, 9);
+      await database.ref(`sharedCodes/${id}`).set({ code, lang: csCurrentLang, createdAt: Date.now() });
+      const url = window.location.origin + window.location.pathname + "#code-" + id;
+      prompt("🚀 Copy this URL to share your code:", url);
+    }
+
+    async function checkSharedLink() {
+      const hash = window.location.hash;
+      if (hash.startsWith("#code-")) {
+        const id = hash.replace("#code-", "");
+        const snap = await database.ref(`sharedCodes/${id}`).once('value');
+        if (snap.exists()) {
+          const data = snap.val();
+          document.getElementById('csEditor').value = data.code;
+          csCurrentLang = data.lang;
+          if (typeof buildLangDropdown === 'function') buildLangDropdown();
+          triggerNeuralSyncNotification("🔗 Shared code loaded successfully!");
+          showPage('codeStudioScreen');
+        }
+      }
+    }
+    window.addEventListener('load', checkSharedLink);
+
+    function clearEditor() {
+      if (confirm("Editor saaf kar dein? Sara code delete ho jayega.")) {
+        document.getElementById('csEditor').value = '';
+        if (typeof checkSyntaxLive === 'function') checkSyntaxLive();
+      }
+    }
+
+    function clearOutput() {
+      const out = document.getElementById('csOutput');
+      if (out) out.innerHTML = '<span style="color:#777;">Output cleared.</span>';
+      const hing = document.getElementById('csHinglishError');
+      if (hing) hing.innerHTML = '';
+      const time = document.getElementById('csExecTime');
+      if (time) time.textContent = '';
+    }
+
+    function submitAssignmentUI() {
+      if (!currentUserMobile) return alert("Please Login to submit assignments.");
+      let fileInput = document.createElement("input");
+      fileInput.type = "file";
+      fileInput.accept = "image/*,application/pdf";
+      fileInput.onchange = (e) => {
+        let file = e.target.files[0];
+        if (!file) return;
+        if (file.size > 2 * 1024 * 1024) return alert("❌ File size exceed! 2MB se kam ki file upload karein.");
+
+        let reader = new FileReader();
+        reader.onload = (re) => {
+          let base64 = re.target.result;
+          let { course, branch, sem, subject, chapter } = studentNavState;
+          let path = `assignments/submissions/${course}/${branch}/${sem}/${subject}/${chapter}/${currentUserMobile}`;
+
+          database.ref(path).set({
+            userName: JSON.parse(localStorage.getItem("user_" + btoa(currentUserMobile)))?.name || "Student",
+            file: base64,
+            fileName: file.name,
+            submittedAt: Date.now(),
+            status: 'pending'
+          }).then(() => {
+            alert("✅ ASSIGNMENT SUBMITTED! Admin will review it soon.");
+            triggerNeuralSyncNotification("📤 Assignment submitted successfully.");
+          }).catch(err => {
+            alert("❌ Submission failed: " + err.message);
+          });
+        };
+        reader.readAsDataURL(file);
+      };
+      fileInput.click();
     }
 
     function deleteProject(id) {
@@ -12456,6 +12928,18 @@ Ensure options are clear and only one is correct.`;
       };
 
       renderBlock(getArray(chapterData.assignment), "assignmentText", "assignmentSection", "assignment");
+
+      // Add Submit Assignment Button
+      let assignSec = document.getElementById("assignmentSection");
+      if (assignSec && assignSec.style.display !== "none") {
+        let submitBtn = document.createElement("button");
+        submitBtn.className = "login-btn";
+        submitBtn.style = "background:linear-gradient(90deg, #ff9f43, #f39c12); color:white; margin-top:10px;";
+        submitBtn.innerHTML = "📤 SUBMIT YOUR ASSIGNMENT";
+        submitBtn.onclick = () => submitAssignmentUI();
+        document.getElementById("assignmentText").appendChild(submitBtn);
+      }
+
       renderBlock(getArray(chapterData.homework), "homeworkText", "homeworkSection", "homework");
 
       let notesArr = getArray(chapterData.notes);
@@ -13504,6 +13988,16 @@ Ensure options are clear and only one is correct.`;
     <div class="footer-text">© 2026 <span class="footer-brand">NextGen Digital Library</span> | Designed & Developed by
       <span style="color: white; font-weight: bold;">Aditya Kumar</span>
     </div>
+    <div style="margin: 10px 0; display: flex; gap: 20px; justify-content: center; font-size: 12px; opacity: 0.8;">
+      <a href="javascript:void(0)" onclick="showPage('info-section')"
+        style="color: cyan; text-decoration: none;">About</a>
+      <a href="javascript:void(0)" onclick="showPage('info-section')"
+        style="color: cyan; text-decoration: none;">Privacy Policy</a>
+      <a href="javascript:void(0)" onclick="showPage('info-section')"
+        style="color: cyan; text-decoration: none;">Terms</a>
+      <a href="javascript:void(0)" onclick="showPage('info-section')"
+        style="color: cyan; text-decoration: none;">Contact</a>
+    </div>
     <div class="social-links">
       <a href="https://www.linkedin.com/in/aditya-kumar-878b3b289" target="_blank" class="social-btn" title="LinkedIn">
         <svg viewBox="0 0 24 24">
@@ -13526,6 +14020,25 @@ Ensure options are clear and only one is correct.`;
       </a>
     </div>
   </footer>
+  <!-- APP BOTTOM NAVIGATION BAR (MOBILE ONLY) -->
+  <div id="appBottomNav" class="app-bottom-nav" style="display:none;">
+    <div class="nav-item active" onclick="showPage('programsWrapper')" id="nav_home">
+      <i class="fas fa-home"></i>
+      <span>Home</span>
+    </div>
+    <div class="nav-item" onclick="initCodeStudio()" id="nav_code">
+      <i class="fas fa-laptop-code"></i>
+      <span>Studio</span>
+    </div>
+    <div class="nav-item" onclick="showPage('mindGamesHub')" id="nav_games">
+      <i class="fas fa-gamepad"></i>
+      <span>Games</span>
+    </div>
+    <div class="nav-item" onclick="openBattleArena()" id="nav_arena">
+      <i class="fas fa-khanda"></i>
+      <span>Arena</span>
+    </div>
+  </div>
   <!-- Withdrawal Modal [FIXED POSITION] -->
   <div id="withdrawalModal" class="modal" style="z-index: 20002;">
     <div class="modal-content" style="max-width: 400px; text-align: center;">
@@ -13761,6 +14274,29 @@ Ensure options are clear and only one is correct.`;
       }
     }
 
+  </script>
+  <!-- COOKIE CONSENT BANNER -->
+  <div id="cookieConsent" style="display: none;">
+    <div style="flex: 1;">
+      <span style="font-weight: bold; color: cyan;">🍪 Cookie Privacy:</span> We use cookies to enhance your experience
+      and for Google AdSense analytics. By continuing, you agree to our <a href="javascript:void(0)"
+        onclick="showPage('info-section')" style="color: cyan;">Privacy Policy</a>.
+    </div>
+    <button class="cookie-btn" onclick="acceptCookies()">Got it / Accept</button>
+  </div>
+
+  <script>
+    function acceptCookies() {
+      localStorage.setItem("cookiesAccepted", "true");
+      document.getElementById('cookieConsent').style.display = 'none';
+    }
+
+    // Show banner if not accepted
+    setTimeout(() => {
+      if (!localStorage.getItem("cookiesAccepted")) {
+        document.getElementById('cookieConsent').style.display = 'flex';
+      }
+    }, 2000);
   </script>
 </body>
 
