@@ -53,8 +53,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <style>
-    /* Add external dependencies here */
-    /* 📱 PWA SMART VISIBILITY & PROMO */
+    /* --- */
+    /* --- */
     @media (display-mode: standalone) {
       .pwa-hide-on-install {
         display: none !important;
@@ -120,7 +120,7 @@
     body {
       margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      /* Animated Gradient Background */
+      /* --- */
       background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #0b132b, #1c2541);
       background-size: 400% 400%;
       animation: gradientBG 15s ease infinite;
@@ -146,7 +146,7 @@
       transition-duration: 0.01s !important;
     }
 
-    /* Interactive VFX Canvas */
+    /* --- */
     #vfx-canvas {
       position: fixed;
       top: 0;
@@ -158,7 +158,7 @@
       opacity: 0.6;
     }
 
-    /* Background Animation Keyframes */
+    /* --- */
     @keyframes gradientBG {
       0% {
         background-position: 0% 50%;
@@ -173,7 +173,7 @@
       }
     }
 
-    /* HEADER */
+    /* --- */
     #globalTicker {
       background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
       color: #000;
@@ -254,14 +254,14 @@
       }
     }
 
-    /* SEARCH */
+    /* --- */
     input {
       padding: 8px;
       border: none;
       border-radius: 5px;
     }
 
-    /* LOGIN SCREEN */
+    /* --- */
     #loginScreen {
       min-height: 100vh;
       display: flex;
@@ -269,7 +269,7 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      /* Transparent background to show body animated gradient */
+      /* --- */
       background: transparent;
       backdrop-filter: blur(5px);
       position: fixed;
@@ -287,7 +287,7 @@
     }
 
     .login-box {
-      /* Advanced Glassmorphism */
+      /* --- */
       background: rgba(15, 32, 39, 0.45);
       border: 1px solid rgba(0, 255, 255, 0.2);
       padding: 30px 20px;
@@ -302,14 +302,14 @@
       max-height: 90vh;
       overflow-y: auto;
       scrollbar-width: none;
-      /* Firefox */
+      /* --- */
       -ms-overflow-style: none;
-      /* IE and Edge */
+      /* --- */
     }
 
     .login-box::-webkit-scrollbar {
       display: none;
-      /* Chrome, Safari and Opera */
+      /* --- */
     }
 
     .login-box:hover {
@@ -317,7 +317,7 @@
       box-shadow: 0 20px 45px rgba(0, 255, 255, 0.3);
     }
 
-    /* BATTLE ARENA STYLES */
+    /* --- */
     .battle-card {
       background: rgba(11, 19, 43, 0.8);
       border: 1px solid #ff4757;
@@ -515,7 +515,7 @@
       color: cyan;
     }
 
-    /* ADMIN DASHBOARD */
+    /* --- */
     #adminDashboard {
       display: none;
       padding: 40px;
@@ -585,7 +585,7 @@
       color: #0056b3;
     }
 
-    /* CMS DYNAMIC FIELDS */
+    /* --- */
     .cms-dynamic-field {
       display: flex;
       gap: 15px;
@@ -630,7 +630,7 @@
       transform: translateY(-2px);
     }
 
-    /* SELECT DROPDOWN FOR SIGN UP */
+    /* --- */
     select.login-input {
       appearance: none;
       -webkit-appearance: none;
@@ -654,7 +654,7 @@
       color: black;
     }
 
-    /* WELCOME */
+    /* --- */
     #welcomeScreen {
       display: none;
       flex-direction: column;
@@ -677,7 +677,7 @@
       background: linear-gradient(90deg, #00f2fe, #4facfe, #00f2fe);
       background-size: 200% auto;
       color: transparent;
-      -webkit-background-clip: text;
+      -webkit-background-clip: text; background-clip: text;
       background-clip: text;
       animation: shine 3s linear infinite;
       margin-bottom: 10px;
@@ -690,7 +690,7 @@
       }
     }
 
-    /* PREMIUM BRANDING */
+    /* --- */
     @keyframes brandShimmer {
       0% {
         background-position: 0% 50%;
@@ -705,7 +705,7 @@
       font-family: 'Outfit', sans-serif;
       background: linear-gradient(90deg, #00f2fe, #4facfe, #706fd3, #00f2fe);
       background-size: 200% auto;
-      -webkit-background-clip: text;
+      -webkit-background-clip: text; background-clip: text;
       background-clip: text;
       color: transparent;
       animation: brandShimmer 5s linear infinite;
@@ -752,7 +752,7 @@
       }
     }
 
-    /* SUBJECTS */
+    /* --- */
     .subjects {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -779,7 +779,7 @@
     }
 
     .box {
-      /* Deep space glassmorphic */
+      /* --- */
       background: rgba(15, 32, 39, 0.6);
       padding: 30px;
       border-radius: 20px;
@@ -800,12 +800,12 @@
       gap: 15px;
       position: relative;
       overflow: hidden;
-      /* 3D TILT FOUNDATION */
+      /* --- */
       transform-style: preserve-3d;
       perspective: 1000px;
     }
 
-    /* Glow effect on hover */
+    /* --- */
     .box::after {
       content: '';
       position: absolute;
@@ -854,7 +854,7 @@
       transform: scale(1.1);
     }
 
-    /* CHAPTERS */
+    /* --- */
     .chapters,
     .content {
       display: none;
@@ -874,7 +874,7 @@
       align-items: center;
     }
 
-    /* Admin Delete Subject Button inside li */
+    /* --- */
     .delete-subject-btn {
       background: #ff4757;
       color: white;
@@ -885,7 +885,7 @@
       font-size: 12px;
     }
 
-    /* CONTENT */
+    /* --- */
     .section {
       background: rgba(15, 32, 39, 0.6);
       padding: 20px;
@@ -903,7 +903,7 @@
       border-color: rgba(0, 242, 254, 0.4);
     }
 
-    /* PROGRESS TRACKING STYLES */
+    /* --- */
     .progress-box {
       background: rgba(15, 32, 39, 0.7);
       padding: 30px;
@@ -968,7 +968,7 @@
 
 
 
-    /* BUTTON */
+    /* --- */
     button {
       padding: 12px 24px;
       border: none;
@@ -995,7 +995,7 @@
       }
     }
 
-    /* SEMESTER VIEW WITH MOTIVATION */
+    /* --- */
     #semesters {
       display: grid !important;
       grid-template-columns: 1fr;
@@ -1012,10 +1012,10 @@
 
 
 
-    /* DARK AND LIGHT MODE */
+    /* --- */
     .light {
       background: #f0f4f8;
-      /* Soft light background */
+      /* --- */
       color: #333;
     }
 
@@ -1095,7 +1095,7 @@
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
 
-    /* ABOUT & TERMS SECTION */
+    /* --- */
     .info-section {
       display: block;
       padding: 40px 20px;
@@ -1179,7 +1179,7 @@
       }
     }
 
-    /* SEMESTER MOTIVATION & TASKS */
+    /* --- */
     .semester-section {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -1263,7 +1263,7 @@
       accent-color: #00ff00;
     }
 
-    /* PREMIUM NOTES & BOOK */
+    /* --- */
     .premium-box {
       background: rgba(30, 25, 10, 0.7);
       border: 1px solid rgba(255, 215, 0, 0.5);
@@ -1310,7 +1310,7 @@
       filter: none;
     }
 
-    /* PAYMENT MODAL */
+    /* --- */
     #paymentModal {
       display: none;
       position: fixed;
@@ -1335,9 +1335,9 @@
       max-width: 400px;
       width: 90%;
       max-height: 90vh;
-      /* Set maximum height relative to viewport */
+      /* --- */
       overflow-y: auto;
-      /* Enable vertical scrolling */
+      /* --- */
       position: relative;
     }
 
@@ -1416,7 +1416,7 @@
       color: white;
     }
 
-    /* CERTIFICATE STORE STYLES */
+    /* --- */
     #certificateStoreScreen {
       padding: 40px 20px;
       max-width: 1200px;
@@ -1533,7 +1533,7 @@
       opacity: 1;
     }
 
-    /* ADMIN CERTIFICATE SECTION */
+    /* --- */
     .cert-admin-form {
       background: rgba(255, 255, 255, 0.05);
       padding: 25px;
@@ -1602,7 +1602,7 @@
       color: black;
     }
 
-    /* CONFETTI ANIMATION */
+    /* --- */
     .confetti {
       position: absolute;
       width: 10px;
@@ -1629,7 +1629,7 @@
       }
     }
 
-    /* MODAL SYSTEM (REFINED) */
+    /* --- */
     .modal {
       display: none;
       position: fixed;
@@ -1666,7 +1666,7 @@
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 242, 254, 0.1);
     }
 
-    /* BANNER SLIDER */
+    /* --- */
     .slider-main {
       width: 100%;
       max-width: 1472px;
@@ -1734,7 +1734,7 @@
       box-shadow: 0 0 10px cyan;
     }
 
-    /* PREMIUM FOOTER */
+    /* --- */
     footer {
       padding: 40px 20px;
       margin-top: auto;
@@ -1841,7 +1841,7 @@
       text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
     }
 
-    /* NEURAL HUD OVERLAY */
+    /* --- */
     #neuralHUD {
       position: fixed;
       top: 80px;
@@ -1894,7 +1894,7 @@
       text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
     }
 
-    /* FACE-SCAN AUTH SIMULATION */
+    /* --- */
     #faceScanOverlay {
       position: fixed;
       top: 0;
@@ -2027,7 +2027,7 @@
       }
     }
 
-    /* 3D FLIP-BOOK VIEWER */
+    /* --- */
     .book-opening {
       animation: bookFlip 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       transform-origin: left center;
@@ -2046,7 +2046,7 @@
       }
     }
 
-    /* FEATURE 8: ADVANCED THEMES */
+    /* --- */
     body.sepia {
       background: #f4ecd8 !important;
       color: #5b4636 !important;
@@ -2073,7 +2073,7 @@
       box-shadow: 0 0 10px rgba(0, 255, 255, 0.1) !important;
     }
 
-    /* FEATURE 10: AR BUTTON CSS */
+    /* --- */
     .ar-preview-btn {
       background: linear-gradient(45deg, #ff00cc, #333399);
       color: white;
@@ -2091,7 +2091,7 @@
       transform: translateY(-2px);
     }
 
-    /* TABLET RESPONSIVENESS FIX */
+    /* --- */
     * {
       box-sizing: border-box;
     }
@@ -2129,7 +2129,7 @@
       }
     }
 
-    /* DATA LOADING OVERLAY */
+    /* --- */
     #dataLoadingOverlay {
       position: fixed;
       top: 0;
@@ -2174,7 +2174,7 @@
       }
     }
 
-    /* COOKIE CONSENT BANNER */
+    /* --- */
     #cookieConsent {
       position: fixed;
       bottom: 20px;
@@ -2213,7 +2213,7 @@
       }
     }
 
-    /* APP FEEL: NO SELECTION & ANIMATIONS */
+    /* --- */
     body {
       -webkit-tap-highlight-color: transparent;
       user-select: none;
@@ -2252,7 +2252,7 @@
       transition: transform 0.1s ease !important;
     }
 
-    /* APP BOTTOM NAVIGATION BAR */
+    /* --- */
     .app-bottom-nav {
       position: fixed;
       bottom: 0;
@@ -2312,7 +2312,7 @@
         padding-bottom: 65px;
       }
 
-      /* Space for navbar */
+      /* --- */
     }
   </style>
   <!-- JSZip for Code Studio Downloads -->
@@ -2545,7 +2545,7 @@
   <!-- SUNO PROFILE ID CARD — Premium CSS Styles                  -->
   <!-- ═══════════════════════════════════════════════════════════ -->
   <style>
-    /* ── WRAPPER ────────────────────────────────────────────── */
+    /* --- */
     .profile-idcard-wrapper {
       width: 100%;
       margin: 0 0 20px 0;
@@ -2564,7 +2564,7 @@
       text-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
     }
 
-    /* ── CARD SHELL ─────────────────────────────────────────── */
+    /* --- */
     .profile-live-idcard {
       position: relative;
       width: 100%;
@@ -2593,7 +2593,7 @@
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
 
-    /* ── BACKGROUND EFFECTS ─────────────────────────────────── */
+    /* --- */
     .plc-holo-layer {
       position: absolute;
       inset: 0;
@@ -2675,7 +2675,7 @@
       }
     }
 
-    /* ── HEADER ─────────────────────────────────────────────── */
+    /* --- */
     .plc-header {
       position: relative;
       z-index: 5;
@@ -2723,7 +2723,7 @@
       margin-top: 1px;
     }
 
-    /* Chip design */
+    /* --- */
     .plc-chip {
       width: 32px;
       height: 22px;
@@ -2746,7 +2746,7 @@
       border-radius: 1px;
     }
 
-    /* ── BODY ───────────────────────────────────────────────── */
+    /* --- */
     .plc-body {
       position: relative;
       z-index: 5;
@@ -2756,7 +2756,7 @@
       padding: 16px 18px;
     }
 
-    /* Avatar ring */
+    /* --- */
     .plc-avatar-ring {
       position: relative;
       flex-shrink: 0;
@@ -2821,7 +2821,7 @@
       }
     }
 
-    /* Info section */
+    /* --- */
     .plc-info {
       flex: 1;
       overflow: hidden;
@@ -2888,7 +2888,7 @@
       color: gold;
     }
 
-    /* ── FOOTER ─────────────────────────────────────────────── */
+    /* --- */
     .plc-footer {
       position: relative;
       z-index: 5;
@@ -2917,7 +2917,7 @@
       font-family: monospace;
     }
 
-    /* ── ACTION BUTTONS ─────────────────────────────────────── */
+    /* --- */
     .plc-action-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -2992,67 +2992,80 @@
 
 
 
-  <header style="display:none;">
-    <div style="display:flex; align-items:center; gap:10px; flex-grow:1;">
-      <div style="position: relative; cursor: pointer; display: flex; align-items: center; gap: 8px;"
-        onclick="openEditProfile()" title="Edit Profile">
-        <img id="userProfilePicHeader" src="https://ui-avatars.com/api/?name=U&background=cyan&color=000" alt="Profile"
-          style="width: 45px; height: 45px; border-radius: 50%; border: 2px solid cyan; object-fit: cover; display: none;">
-        <!-- Header Badge -->
-        <div id="headerGamificationBadge"
-          style="display: none; background: rgba(0,242,254,0.1); border: 1px solid rgba(0,242,254,0.3); padding: 4px 10px; border-radius: 15px; font-size: 11px; font-weight: bold; color: gold; box-shadow: 0 0 10px rgba(0,242,254,0.2);">
-          --
+  <header style="display:none; flex-direction: column; gap: 15px;">
+    <!-- Top Row: Logo & Actions -->
+    <div style="display:flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 10px;">
+      
+      <!-- Logo & Profile -->
+      <div style="display:flex; align-items:center; gap:8px; cursor:pointer;" onclick="openEditProfile()" title="Edit Profile">
+        <div style="position: relative; display: flex; align-items: center; gap: 5px;">
+          <img id="userProfilePicHeader" src="https://ui-avatars.com/api/?name=U&background=cyan&color=000" alt="Profile"
+            style="width: 38px; height: 38px; border-radius: 50%; border: 2px solid cyan; object-fit: cover; display: none;">
+          <div id="headerGamificationBadge"
+            style="display: none; background: rgba(0,242,254,0.1); border: 1px solid rgba(0,242,254,0.3); padding: 3px 8px; border-radius: 12px; font-size: 10px; font-weight: bold; color: gold; box-shadow: 0 0 10px rgba(0,242,254,0.2);">
+            --
+          </div>
         </div>
+        <div style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid rgba(0, 242, 254, 0.4); box-shadow: 0 4px 15px rgba(0, 242, 254, 0.2), inset 0 0 10px rgba(0, 242, 254, 0.1); backdrop-filter: blur(10px); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);" onmouseover="this.style.transform='scale(1.1) rotate(5deg)'; this.style.boxShadow='0 6px 20px rgba(0, 242, 254, 0.4), inset 0 0 15px rgba(0, 242, 254, 0.2)';" onmouseout="this.style.transform='scale(1) rotate(0)'; this.style.boxShadow='0 4px 15px rgba(0, 242, 254, 0.2), inset 0 0 10px rgba(0, 242, 254, 0.1)';">
+          <img src="img1.png" alt="Logo" style="width: 28px; height: 28px; object-fit: contain; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.6));">
+        </div>
+        <h2 class="premium-brand" style="margin: 0; font-size: 26px; font-weight: 900; line-height: 1; background: linear-gradient(90deg, #ffffff, #00f2fe); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: 1.5px; text-transform: uppercase;">
+          NextGen
+        </h2>
       </div>
-      <img src="img1.png" alt="Logo" style="width: 40px; height: 40px; filter: drop-shadow(0 0 5px cyan);">
-      <h2 class="premium-brand">
-        <span class="brand-emoji">🛡️</span>
-        NextGen Library
-      </h2>
-    </div>
-    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: flex-end;">
-      <!-- Global Search Bar -->
-      <div class="search-wrapper">
-        <input type="text" id="globalSearchInput" placeholder="Search courses, library..." oninput="searchLibrary()">
-        <div id="searchResultsModal" class="search-dropdown"></div>
-      </div>
-      <div id="headerWalletDisplay" style="margin-left: 15px; display: flex; align-items: center; gap: 10px;">
-        <!-- NEW NEURAL WALLET BALANCE SQUARE -->
-        <div
-          style="background: rgba(11, 19, 43, 0.8); border: 2px solid cyan; border-radius: 10px; font-weight: 900; box-shadow: 0 0 15px rgba(0,242,254,0.4); display: flex; align-items: stretch; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;"
+
+      <!-- Wallet & Buttons -->
+      <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; flex-grow: 1;">
+        
+        <div id="headerWalletDisplay" style="display: flex; align-items: center;">
+          <!-- COMPACT NEURAL WALLET SQUARE -->
+          <div
+            style="background: rgba(11, 19, 43, 0.9); border: 2px solid cyan; border-radius: 8px; font-weight: 900; box-shadow: 0 0 10px rgba(0,242,254,0.3); display: flex; align-items: stretch; overflow: hidden; transition: transform 0.2s;"
+            onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'" onmouseleave="this.style.transform='scale(1)'">
+            <div
+              id="walletCoinArea"
+              onclick="claimDailyBonus()"
+              title="Click to claim your Daily Bonus!"
+              style="padding: 4px 8px; text-align: center; min-width: 60px; display: flex; flex-direction: column; justify-content: center; cursor: pointer; position: relative;">
+              <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle, rgba(255,215,0,0.15) 0%, transparent 70%); pointer-events: none; animation: pulseGlow 2s infinite;"></div>
+              <span style="color: #00f2fe; font-size: 9px; display: block; text-transform: uppercase;">Wallet</span>
+              <span style="color: gold; font-size: 14px; text-shadow: 0 0 8px gold;">🪙 <span id="headerWalletBalance">0.00</span></span>
+            </div>
+            <div style="display: flex; flex-direction: column; border-left: 1px solid rgba(0,242,254,0.3); background: rgba(0,0,0,0.5);">
+              <button onclick="topUpWallet()"
+                style="background: linear-gradient(90deg, #00cec9, #00b894); border: none; color: black; padding: 4px 6px; font-size: 10px; font-weight: 900; cursor: pointer; border-bottom: 1px solid rgba(0,0,0,0.5); text-align: left; height: 100%; white-space: nowrap;">➕ IN</button>
+              <button onclick="openWithdrawalModal()"
+                style="background: rgba(255, 71, 87, 0.15); border: none; color: #ff4757; padding: 4px 6px; font-size: 10px; font-weight: 900; cursor: pointer; text-align: left; height: 100%; white-space: nowrap;">💸 OUT</button>
+            </div>
+          </div>
+        </div>
+
+        <button id="pwaInstallBtn" class="pwa-hide-on-install"
+          style="display: none; align-items: center; gap: 6px; padding: 6px 14px; background: linear-gradient(135deg, #00f2fe, #4facfe); color: black; border-radius: 20px; border: 1px solid rgba(255,255,255,0.4); cursor: pointer; font-weight: 900; font-size: 13px; box-shadow: 0 0 15px rgba(0, 242, 254, 0.6); text-transform: uppercase; transition: 0.2s;"
           onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'" onmouseleave="this.style.transform='scale(1)'">
-          <div
-            id="walletCoinArea"
-            onclick="claimDailyBonus()"
-            title="Click to claim your Daily Bonus!"
-            style="padding: 6px 15px; text-align: center; min-width: 120px; display: flex; flex-direction: column; justify-content: center; cursor: pointer; position: relative;">
-            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle, rgba(255,215,0,0.15) 0%, transparent 70%); pointer-events: none; animation: pulseGlow 2s infinite;"></div>
-            <span
-              style="color: #00f2fe; font-size: 10px; display: block; text-transform: uppercase; letter-spacing: 1px;">Neural
-              Wallet</span>
-            <span style="color: gold; font-size: 18px; text-shadow: 0 0 10px gold; margin-top:2px;">🪙 <span
-                id="headerWalletBalance">0.00</span></span>
-          </div>
-          <div
-            style="display: flex; flex-direction: column; border-left: 1px solid rgba(0,242,254,0.3); background: rgba(0,0,0,0.5);">
-            <button onclick="topUpWallet()"
-              style="background: linear-gradient(90deg, #00cec9, #00b894); border: none; color: black; padding: 6px 15px; font-size: 11px; font-weight: 900; cursor: pointer; transition: 0.3s; border-bottom: 1px solid rgba(0,0,0,0.5); text-align: left; height: 100%;">➕
-              RECHARGE</button>
-            <button onclick="openWithdrawalModal()"
-              style="background: rgba(255, 71, 87, 0.15); border: none; color: #ff4757; padding: 6px 15px; font-size: 11px; font-weight: 900; cursor: pointer; transition: 0.3s; text-align: left; height: 100%;">💸
-              WITHDRAW</button>
-          </div>
+          <span style="font-size:16px;">📲</span> Install App
+        </button>
+
+        <!-- PREMIUM LEADERSHIP BADGE BUTTON -->
+        <div onclick="openLeaderboard()" 
+             style="display: flex; align-items: center; gap: 6px; background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,69,0,0.15)); border: 1px solid rgba(255,215,0,0.8); padding: 5px 12px; border-radius: 20px; cursor: pointer; box-shadow: 0 0 15px rgba(255,215,0,0.4); backdrop-filter: blur(5px); transition: 0.3s;"
+             onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'" onmouseleave="this.style.transform='scale(1)'">
+          <span style="font-size: 15px;">🏆</span>
+          <span style="color: gold; font-weight: 900; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; text-shadow: 0 0 5px rgba(255,215,0,0.8);">Leaderboard</span>
         </div>
+
+        <button id="themeToggleBtn" onclick="toggleMode()"
+          style="font-size: 18px; padding: 3px; background: transparent; border: none; box-shadow: none; cursor: pointer;"></button>
       </div>
-      <button id="pwaInstallBtn" class="pwa-hide-on-install"
-        style="display: none; align-items: center; gap: 5px; font-size: 14px; padding: 6px 12px; background: #00f2fe; color: black; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; box-shadow: 0 0 10px #00f2fe;">
-        📲 Install App
-      </button>
-      <button onclick="openLeaderboard()"
-        style="font-size: 14px; padding: 6px 12px; background: gold; color: black; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; box-shadow: 0 0 10px gold;">🏆
-        Leadership</button>
-      <button id="themeToggleBtn" onclick="toggleMode()"
-        style="font-size: 20px; padding: 8px 15px; background: transparent; border: none; box-shadow: none; cursor: pointer;"></button>
+    </div>
+
+    <!-- Bottom Row: Compact Centered Search -->
+    <div style="display: flex; justify-content: center; width: 100%;">
+      <div class="search-wrapper" style="width: 100%; max-width: 400px; position: relative;">
+        <input type="text" id="globalSearchInput" placeholder="🔍 Search courses, library..." oninput="searchLibrary()" 
+               style="width: 100%; box-sizing: border-box; padding: 8px 15px; border-radius: 20px; border: 1px solid rgba(0,255,255,0.3); background: rgba(0,0,0,0.6); color: white; font-size: 13px; text-align: center; box-shadow: inset 0 0 10px rgba(0,255,255,0.1);">
+        <div id="searchResultsModal" class="search-dropdown" style="width: 100%; border-radius: 15px; overflow: hidden; margin-top: 5px;"></div>
+      </div>
     </div>
   </header>
 
@@ -3069,15 +3082,16 @@
 
       <!-- SIGN UP FORM -->
       <div id="signUpForm">
-        <img src="img1.png" alt="Logo"
-          style="width: 80px; height: 80px; margin-bottom: 10px; filter: drop-shadow(0 0 10px cyan);">
+        <div style="width: 90px; height: 90px; margin: 0 auto 15px auto; background: linear-gradient(135deg, rgba(0, 242, 254, 0.15), rgba(0, 255, 170, 0.05)); border-radius: 25px; border: 1px solid rgba(0, 242, 254, 0.5); display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(0, 242, 254, 0.2), inset 0 0 15px rgba(0, 242, 254, 0.2); backdrop-filter: blur(10px); transform: rotate(-3deg); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);" onmouseover="this.style.transform='rotate(3deg) scale(1.05)'" onmouseout="this.style.transform='rotate(-3deg) scale(1)'">
+          <img src="img1.png" alt="Logo" style="width: 60px; height: 60px; object-fit: contain; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.6)); transform: rotate(3deg);">
+        </div>
         <h2 class="premium-brand" style="margin-bottom: 25px; font-size: 24px;">
           <span class="brand-emoji">📝</span> NextGen Library Registration
         </h2>
         <input type="text" id="regName" class="login-input" placeholder="Name (Letters & Spaces only)">
         <input type="number" id="regRoll" class="login-input"
           placeholder="University Roll Number / Registation Number (13 Digits)"
-          style="appearance: none; -moz-appearance: textfield;">
+          style="-webkit-appearance: none; -moz-appearance: textfield; appearance: none;">
 
         <div style="display: flex; gap: 10px;">
           <select id="regBranch" class="login-input" style="flex: 1;">
@@ -3097,7 +3111,14 @@
           </select>
         </div>
 
-        <input type="tel" id="regMobile" class="login-input" placeholder="Mobile Number">
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+          <input type="tel" id="regMobile" class="login-input" placeholder="Mobile Number" style="flex: 1; margin-bottom: 0;">
+          <select id="regGender" class="login-input" style="flex: 1; margin-bottom: 0;">
+            <option value="" disabled selected>Gender</option>
+            <option value="boy">Boy 👦</option>
+            <option value="girl">Girl 👧</option>
+          </select>
+        </div>
 
         <button class="login-btn" onclick="handleSignUp()">Sign Up & Enter</button>
         <button class="login-btn" onclick="loginAsGuest()"
@@ -3112,8 +3133,9 @@
 
       <!-- LOGIN FORM -->
       <div id="loginForm" style="display: none;">
-        <img src="img1.png" alt="Logo"
-          style="width: 80px; height: 80px; margin-bottom: 10px; filter: drop-shadow(0 0 10px cyan);">
+        <div style="width: 90px; height: 90px; margin: 0 auto 15px auto; background: linear-gradient(135deg, rgba(0, 242, 254, 0.15), rgba(0, 255, 170, 0.05)); border-radius: 25px; border: 1px solid rgba(0, 242, 254, 0.5); display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(0, 242, 254, 0.2), inset 0 0 15px rgba(0, 242, 254, 0.2); backdrop-filter: blur(10px); transform: rotate(-3deg); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);" onmouseover="this.style.transform='rotate(3deg) scale(1.05)'" onmouseout="this.style.transform='rotate(-3deg) scale(1)'">
+          <img src="img1.png" alt="Logo" style="width: 60px; height: 60px; object-fit: contain; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.6)); transform: rotate(3deg);">
+        </div>
         <h2 class="premium-brand" style="margin-bottom: 25px; font-size: 24px;">
           <span class="brand-emoji">🔑</span> NextGen Library Login
         </h2>
@@ -3169,7 +3191,7 @@
 
     <div class="login-box" style="position: relative; max-height: 85vh; overflow-y: auto;">
       <h2
-        style="background: linear-gradient(90deg, #00f2fe, #4facfe); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 5px; font-family: 'Outfit'; font-weight: 900; font-size: 32px;">
+        style="background: linear-gradient(90deg, #00f2fe, #4facfe); -webkit-background-clip: text; background-clip: text; background-clip: text; color: transparent; margin-bottom: 5px; font-family: 'Outfit'; font-weight: 900; font-size: 32px;">
         ⚙️ NEURAL PROFILE</h2>
       <p
         style="color: #aaa; letter-spacing: 2px; font-size: 11px; margin-bottom: 25px; text-transform: uppercase; font-weight: 700;">
@@ -3194,7 +3216,7 @@
       </div>
 
       <input type="number" id="editRoll" class="login-input" placeholder="University Roll Number (13 Digits)"
-        style="appearance: none; -moz-appearance: textfield;">
+        style="-webkit-appearance: none; -moz-appearance: textfield; appearance: none;">
 
       <div style="display: flex; gap: 10px;">
         <select id="editBranch" class="login-input" style="flex: 1;">
@@ -3437,7 +3459,7 @@
     <div
       style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 20px;">
       <h2
-        style="background: linear-gradient(90deg, #00f2fe, #4facfe); -webkit-background-clip: text; background-clip: text; color: transparent; margin: 0;">
+        style="background: linear-gradient(90deg, #00f2fe, #4facfe); -webkit-background-clip: text; background-clip: text; background-clip: text; color: transparent; margin: 0;">
         🛡️ Secure Admin Dashboard</h2>
       <div style="display: flex; gap: 15px; margin-top: 10px; flex-wrap: wrap;">
         <!-- ADMIN HACK: ONE-CLICK DATA BACKUP -->
@@ -3472,7 +3494,10 @@
 
     <!-- STUDENT DATABASE SECTION -->
     <div id="adminSection_students" class="admin-section">
-      <p>View all registered student data below. This info is protected.</p>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <p style="margin: 0;">View all registered student data below. This info is protected.</p>
+        <button id="autoAssingAvatarsBtn" onclick="autoAssignMissingAvatars()" style="background: linear-gradient(135deg, #FF9F43, #FF6B6B); border: none; padding: 6px 15px; color: white; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 11px; box-shadow: 0 0 10px rgba(255,159,67,0.5);">🎭 Auto-Assign Avatars (Old Users)</button>
+      </div>
       <div style="overflow-x: auto;">
         <table class="admin-table">
           <thead>
@@ -4678,7 +4703,7 @@
         transition: 0.3s;
       }
 
-      /* MODE SWITCHER CHIPS */
+      /* --- */
       .mode-chip {
         padding: 6px 14px;
         border-radius: 20px;
@@ -4730,8 +4755,10 @@
       }
     </style>
 
-    <img src="img1.png" alt="NextGen Library"
-      style="width:220px; height:220px; margin-bottom:20px; filter:drop-shadow(0 0 25px rgba(0, 242, 254, 0.6)); animation: float 4s ease-in-out infinite;">
+    <div style="position: relative; width: 200px; height: 200px; margin: 0 auto 30px auto; display: flex; align-items: center; justify-content: center; animation: float 4s ease-in-out infinite;">
+      <div style="position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle, rgba(0, 242, 254, 0.15) 0%, transparent 70%); box-shadow: 0 0 40px rgba(0, 242, 254, 0.3), inset 0 0 20px rgba(0, 242, 254, 0.2); animation: pulseGlow 3s infinite;"></div>
+      <img src="img1.png" alt="NextGen Library" style="width: 140px; height: 140px; object-fit: contain; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8)); z-index: 2;">
+    </div>
     <h1 id="typingText"></h1>
     <p id="welcomeSubtitle" class="neural-subtitle">Your Digital Learning Hub</p>
     <button onclick="enterSite()" style="padding: 15px 40px; font-size: 18px; border-radius: 30px;">Enter
@@ -5606,7 +5633,7 @@
 
 
   <script>
-    /* MIND GAMES HUB LOGIC */
+    /* --- */
     let gameTimerInterval;
     let gameScore = 0;
     let currentGameType = "";
@@ -5674,7 +5701,7 @@
       gameSessionStartTime = now; // Reset for next minute
     }
 
-    /* ANTI-CHEAT SYSTEM for Games */
+    /* --- */
     let antiCheatActive = false;
     let antiCheatGame = "";
 
@@ -6072,7 +6099,7 @@
     }
 
 
-    /* AUTO TYPING */
+    /* --- */
     let text = "WELCOME TO NEXTGEN LIBRARY";
     let i = 0;
     function typing() {
@@ -6085,7 +6112,7 @@
     }
     typing();
 
-    /* SECURITY & UTILITY HELPERS */
+    /* --- */
     function sanitizeHTML(str) {
       if (!str) return "";
       const temp = document.createElement('div');
@@ -6128,7 +6155,7 @@
       return localStorage.getItem("adminSession") === "true";
     }
 
-    /* PAGE NAVIGATION MANAGER */
+    /* --- */
     function showPage(pageId, pushToHistory = true, navContext = null) {
       if (!pageId) return;
 
@@ -6213,7 +6240,7 @@
       }
     }
 
-    /* AUTO-CLEANUP BATTLES (24 HOURS) */
+    /* --- */
     function autoCleanupBattles() {
       const dayInMs = 24 * 60 * 60 * 1000;
       const now = Date.now();
@@ -6245,23 +6272,66 @@
       });
     }
 
+    /* --- */
+    function closeAllModals() {
+      const modals = [
+        "leaderboardModal",
+        "editProfileModal",
+        "walletRechargeModal",
+        "withdrawalModal",
+        "battleArenaOverlay",
+        "victoryModal",
+        "aiExamGeneratorModal",
+        "gameArena",
+        "premiumViewer",
+        "assignmentOverlay"
+      ];
+      let closedAny = false;
+      modals.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.style.display && el.style.display !== 'none') {
+          el.style.display = 'none';
+          closedAny = true;
+          // Trigger specific cleanup if needed (like stopping anti-cheat)
+          if (id === 'gameArena' && typeof stopAntiCheat === 'function') {
+             try { stopAntiCheat(); } catch(e){}
+          }
+        }
+      });
+      return closedAny;
+    }
+
     // Handle Browser Back/Forward Buttons
     window.onpopstate = function (event) {
+      // 1. Did the user just hit back to close a modal?
+      const closedModal = closeAllModals();
+
+      // If they went FORWARD to a modal state, we don't handle it yet, just let them be, or open it if we had complex state mapping
+      if (event.state && event.state.isModal) {
+         // we just ignore for now, this ensures they don't break the app
+         return;
+      }
+
+      // 2. Normal Page Navigation
       if (event.state && event.state.pageId) {
-        const ctx = event.state.navContext;
-        if (ctx) {
-          // Restore Sub-Navigation State
-          studentNavState = JSON.parse(JSON.stringify(ctx.state || {}));
-          if (ctx.type === 'level') {
-            openStudentLevel(ctx.level, ctx.selection, false);
-          } else if (ctx.type === 'chapter') {
-            openStudentChapter(ctx.selection, false);
+        // Only redraw the page if we didn't JUST close a modal (to preserve scroll/state underneath)
+        // Wait, if we closed a modal, we are STILL logically on this page. No need to clear it out.
+        if (!closedModal) {
+          const ctx = event.state.navContext;
+          if (ctx) {
+            // Restore Sub-Navigation State
+            studentNavState = JSON.parse(JSON.stringify(ctx.state || {}));
+            if (ctx.type === 'level') {
+              openStudentLevel(ctx.level, ctx.selection, false);
+            } else if (ctx.type === 'chapter') {
+              openStudentChapter(ctx.selection, false);
+            }
+          } else {
+            showPage(event.state.pageId, false);
           }
-        } else {
-          showPage(event.state.pageId, false);
         }
       } else {
-        showPage("loginScreen", false);
+        if (!closedModal) showPage("loginScreen", false);
       }
     };
 
@@ -6321,7 +6391,7 @@
       if (tabId === 'examcms') initExamCmsAdmin();
     }
 
-    /* GLOBAL DATA FETCH */
+    /* --- */
     let data = {};
     let premiumPrices = JSON.parse(localStorage.getItem("premiumPrices")) || {};
 
@@ -6359,10 +6429,10 @@
       }
     }
 
-    /* GLOBAL CONFIGS */
+    /* --- */
     let lowPowerEnabled = localStorage.getItem('lowPowerMode') === 'true';
 
-    /* DATA */
+    /* --- */
     let oldData = {
       Math: {
         "UNIT 1: Set theory. Relations and Functions": {
@@ -6861,7 +6931,7 @@
       }, 60000); // 1 minute intervals
     }
 
-    /* AUTHENTICATION FUNCTIONS */
+    /* --- */
 
     function toggleAuthMode(mode) {
       document.getElementById('signUpForm').style.display = 'none';
@@ -6956,7 +7026,7 @@
 
     function renderIDCardPreview() {
       if (!currentUserMobile) return Promise.reject();
-      let ud = JSON.parse(localStorage.getItem(currentUserMobile));
+      let ud = JSON.parse(localStorage.getItem("user_" + btoa(currentUserMobile)));
       if (!ud) return Promise.reject();
 
       let picURL = ud.profilePic || `https://ui-avatars.com/api/?name=${encodeURIComponent(ud.name || 'U')}&background=00f2fe&color=000`;
@@ -7044,7 +7114,7 @@
     }
     function openEditProfile() {
       if (!currentUserMobile) return;
-      let ud = JSON.parse(localStorage.getItem(currentUserMobile));
+      let ud = JSON.parse(localStorage.getItem("user_" + btoa(currentUserMobile)));
       if (!ud) return;
 
       document.getElementById("editName").value = ud.name;
@@ -7130,7 +7200,7 @@
       return true;
     }
 
-    /* LOGIN AS GUEST */
+    /* --- */
     function loginAsGuest() {
       currentUserMobile = "GUEST_USER";
       setAuthSession("GUEST_USER", 24); // 24 hour session for guests
@@ -7155,9 +7225,10 @@
         let branch = document.getElementById("regBranch").value;
         let section = document.getElementById("regSection").value;
         let mobile = document.getElementById("regMobile").value.trim();
+        let gender = document.getElementById("regGender") ? document.getElementById("regGender").value : "";
 
-        if (!name || !roll || !branch || !section || !mobile) {
-          alert("Please fill in all details to register!");
+        if (!name || !roll || !branch || !section || !mobile || !gender) {
+          alert("Please fill in all details (including Gender) to register!");
           return;
         }
 
@@ -7176,8 +7247,21 @@
             return;
           }
 
+          // DYNAMIC AVATAR GENERATION
+          let generatedAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(name || 'U')}&background=cyan&color=000`;
+          if (gender === "boy") {
+            const boySeeds = ["Jack", "Felix", "Leo", "Sam", "Oliver", "Max", "Toby", "Finn", "Ryan", "Alex", "Duke", "Jasper", "Oscar", "Caleb"];
+            let seed = boySeeds[Math.floor(Math.random() * boySeeds.length)];
+            generatedAvatar = `https://api.dicebear.com/7.x/micah/svg?seed=${seed}&backgroundColor=00f2fe,4facfe,d1d4f9,ffdfbf`;
+          } else if (gender === "girl") {
+            const girlSeeds = ["Mia", "Aneka", "Zoe", "Lily", "Bella", "Chloe", "Ruby", "Luna", "Jade", "Sadie", "Avery", "Molly", "Daisy"];
+            let seed = girlSeeds[Math.floor(Math.random() * girlSeeds.length)];
+            generatedAvatar = `https://api.dicebear.com/7.x/micah/svg?seed=${seed}&backgroundColor=ff9ff3,ffdfbf,c0aede,feca57`;
+          }
+
           let userData = {
-            name, roll, branch, section, mobile,
+            name, roll, branch, section, mobile, gender,
+            profilePic: generatedAvatar,
             registeredAt: Date.now(),
             timeSpent: 0
           };
@@ -7202,7 +7286,7 @@
               if (wsP) wsP.innerText = `\nWelcome, ${name}!`;
 
               // Initialize in gameLeaderboard (if not exists)
-              let picUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(name || 'U')}&background=cyan&color=000`;
+              let picUrl = generatedAvatar;
               database.ref('gameLeaderboard/' + mobile).set({
                 name: name,
                 score: 0,
@@ -7663,6 +7747,7 @@
 
     // AI GENERATOR LOGIC
     function openAIGenerator() {
+      history.pushState({ isModal: true, id: 'aiExamGeneratorModal' }, "", "#aiGenerator");
       document.getElementById('aiExamGeneratorModal').style.display = 'block';
       const track = examCmsActiveTrack || "Competitive Exam";
       const topic = examCmsActiveTopic || "General Knowledge";
@@ -7672,7 +7757,7 @@ Return ONLY a raw JSON array matching this format:
 Ensure options are clear and only one is correct.`;
       document.getElementById('aiGeneratorPrompt').textContent = prompt;
     }
-    function closeAIGenerator() { document.getElementById('aiExamGeneratorModal').style.display = 'none'; }
+    function closeAIGenerator(fromHistory = false) { document.getElementById('aiExamGeneratorModal').style.display = 'none'; if (!fromHistory && window.location.hash.includes("aiGenerator")) history.back(); }
     function copyAIPrompt() {
       const txt = document.getElementById('aiGeneratorPrompt').textContent;
       navigator.clipboard.writeText(txt);
@@ -7940,7 +8025,7 @@ Ensure options are clear and only one is correct.`;
       }).catch(err => alert("Update Error: " + err));
     }
 
-    /* PENDING WALLET RECHARGES ADMIN LOGIC */
+    /* --- */
     function renderAdminRechargeRequests() {
       let tbody = document.getElementById("pendingRechargesTableBody");
       if (!tbody) return;
@@ -8080,7 +8165,7 @@ Ensure options are clear and only one is correct.`;
       });
     }
 
-    /* ADMIN HACK: ONE-CLICK DATA BACKUP */
+    /* --- */
     function backupFullData() {
       database.ref('/').once('value').then(snap => {
         const data = snap.val();
@@ -8097,7 +8182,7 @@ Ensure options are clear and only one is correct.`;
       });
     }
 
-    /* ADMIN HACK: USER SHADOW MODE */
+    /* --- */
     function viewUserShadow(mobile) {
       database.ref(`users/${mobile}`).once('value').then(snap => {
         const u = snap.val();
@@ -8146,12 +8231,10 @@ Ensure options are clear and only one is correct.`;
         if (shadowModal) shadowModal.style.display = 'flex';
       });
     }
-
     function rejectRecharge(reqId) {
       let reason = prompt("Enter rejection reason (e.g., Fake UTR, Unclear Image, Invalid Amount):");
       if (reason === null || reason.trim() === "") return; // cancelled
 
-      // Either move to a rejected collection or delete. It's safer to just delete and alert
       database.ref('rechargeRequests/pending/' + reqId).once('value').then(snap => {
         let req = snap.val();
         if (req) {
@@ -8163,6 +8246,69 @@ Ensure options are clear and only one is correct.`;
             alert("❌ Recharge request rejected.");
           });
         }
+      });
+    }
+
+    function autoAssignMissingAvatars() {
+      if(!confirm("Are you sure you want to SYNC ALL USERS to the Leaderboard and assign Avatars to old users?")) return;
+      
+      const adminBtn = document.getElementById('autoAssingAvatarsBtn');
+      if(adminBtn) adminBtn.innerText = "⏳ Processing DB Sync...";
+      
+      const boySeeds = ["Jack", "Felix", "Leo", "Sam", "Oliver", "Max", "Toby", "Finn", "Ryan", "Alex", "Duke", "Jasper", "Oscar"];
+      const girlSeeds = ["Mia", "Aneka", "Zoe", "Lily", "Bella", "Chloe", "Ruby", "Luna", "Jade", "Sadie", "Avery", "Molly"];
+      let countAvatars = 0;
+      let countLeaderboard = 0;
+
+      database.ref('users').once('value').then(snap => {
+        let updates = [];
+        snap.forEach(child => {
+          let user = child.val();
+          let mobile = child.key;
+
+          // SECURITY & CLEANUP: Filter out tests, empty nodes, or admins so they don't pollute the leaderboard
+          if (!user || typeof user !== 'object' || !user.name || !user.mobile || user.role === "admin" || mobile === "undefined") {
+            updates.push(database.ref('gameLeaderboard/' + mobile).remove()); // Erase junk from leaderboard
+            return;
+          }
+
+          let isUI = user.profilePic && user.profilePic.includes('ui-avatars.com');
+          let missingPic = !user.profilePic || isUI;
+          let finalPic = user.profilePic;
+
+          if (missingPic) {
+            let isBoy = true;
+            if(user.gender === 'girl') isBoy = false;
+            else if(user.gender === 'boy') isBoy = true;
+            else isBoy = Math.random() > 0.5; // Random fallback for older users
+            
+            let seed = isBoy ? boySeeds[Math.floor(Math.random() * boySeeds.length)] : girlSeeds[Math.floor(Math.random() * girlSeeds.length)];
+            let bg = isBoy ? '00f2fe,4facfe,d1d4f9,ffdfbf' : 'ff9ff3,ffdfbf,c0aede,feca57';
+            finalPic = `https://api.dicebear.com/7.x/micah/svg?seed=${seed}&backgroundColor=${bg}`;
+            
+            updates.push(database.ref('users/' + mobile + '/profilePic').set(finalPic));
+            countAvatars++;
+          }
+          
+          // ALWAYS SYNC REAL USERS TO THE LEADERBOARD
+          updates.push(database.ref('gameLeaderboard/' + mobile).set({
+             name: user.name,
+             score: user.timeSpent || 0,
+             pic: finalPic,
+             lastPlayed: Date.now()
+          }));
+          countLeaderboard++;
+        });
+
+        Promise.all(updates).then(() => {
+          alert(`✅ Done! Synced ${countLeaderboard} users to Leaderboard & assigned new 3D avatars to ${countAvatars} users.`);
+          if(adminBtn) adminBtn.innerText = "🎭 SYNC ALL & Auto-Assign Avatars";
+        }).catch(err => {
+          console.error(err);
+          alert("❌ Error syncing database.");
+          if(adminBtn) adminBtn.innerText = "🎭 SYNC ALL & Auto-Assign Avatars";
+
+        });
       });
     }
 
@@ -8288,7 +8434,7 @@ Ensure options are clear and only one is correct.`;
       });
     }
 
-    /* ADVANCED SITE SETTINGS */
+    /* --- */
     function loadSiteSettings() {
       database.ref('siteConfig').once('value').then(snapshot => {
         let fbConfig = snapshot.val();
@@ -9274,7 +9420,7 @@ Ensure options are clear and only one is correct.`;
       }, 3000);
     }
 
-    /* PREMIUM CONTENT CMS SETTINGS */
+    /* --- */
     let premiumData = JSON.parse(localStorage.getItem("premiumData")) || {
       "BCA": {
         "Nimcet & MCA": [],
@@ -10353,7 +10499,7 @@ Ensure options are clear and only one is correct.`;
       return true;
     }
 
-    /* Duplicated Auth Functions Removed - Consolidated at top of script */
+    /* --- */
 
 
     // EDIT PROFILE FUNCTIONS
@@ -10380,6 +10526,7 @@ Ensure options are clear and only one is correct.`;
     }
 
     function openEditProfile() {
+      history.pushState({ isModal: true, id: 'editProfileModal' }, "", "#editProfile");
       try {
         if (!currentUserMobile) {
           alert("Session expired. Please log in again.");
@@ -10424,9 +10571,10 @@ Ensure options are clear and only one is correct.`;
       }
     }
 
-    function closeEditProfile() {
+    function closeEditProfile(fromHistory = false) {
       document.getElementById("editProfileScreen").style.display = "none";
       isRecoveringMode = false;
+      if (!fromHistory && window.location.hash.includes("editProfile")) { history.back(); }
     }
 
     function quickSwitchTrack(newTrack) {
@@ -10771,20 +10919,25 @@ Ensure options are clear and only one is correct.`;
     }
 
     function openLeaderboard() {
+      history.pushState({ isModal: true, id: 'leaderboardModal' }, "", "#leaderboard");
       // Use the 'gameLeaderboard' node which is more likely to be public-readable than the full 'users' node
       document.getElementById('leaderboardModal').style.display = 'flex';
       let list = document.getElementById('leaderboardList');
       list.innerHTML = "<p style='color:cyan;'>Loading leaders...</p>";
 
-      // Increased limit to 100 students for leadership visibility
-      database.ref('gameLeaderboard').orderByChild('score').limitToLast(100).once('value').then(snap => {
+      // Removed limit entirely to show all users on the leadership board
+      database.ref('gameLeaderboard').orderByChild('score').once('value').then(snap => {
         let data = snap.val() || {};
         let usersArr = [];
         for (let key in data) {
+          let uName = data[key].name;
+          // Security: Ignore fake data or admins hanging out in leaderboard
+          if(!uName || uName === "Explorer" || uName === "NextGen Student" || uName.includes("Admin") || uName.toLowerCase().includes("guest")) continue;
+
           usersArr.push({
-            name: data[key].name || "Explorer",
+            name: uName,
             score: data[key].score || 0,
-            pic: data[key].pic || `https://ui-avatars.com/api/?name=${encodeURIComponent(data[key].name || 'U')}&background=cyan&color=000`
+            pic: data[key].pic || `https://ui-avatars.com/api/?name=${encodeURIComponent(uName || 'U')}&background=cyan&color=000`
           });
         }
         // Highest score first
@@ -10818,8 +10971,9 @@ Ensure options are clear and only one is correct.`;
       });
     }
 
-    function closeLeaderboard() {
+    function closeLeaderboard(fromHistory = false) {
       document.getElementById('leaderboardModal').style.display = "none";
+      if (!fromHistory && window.location.hash.includes("leaderboard")) { history.back(); }
     }
 
     function enterSite() {
@@ -10886,7 +11040,7 @@ Ensure options are clear and only one is correct.`;
       }
     }
 
-    /* BATTLE ARENA LOGIC */
+    /* --- */
     let currentBattleQuestions = [];
 
     function openBattleArena() {
@@ -10927,12 +11081,14 @@ Ensure options are clear and only one is correct.`;
     document.getElementById("rechargeAmountInput").addEventListener("input", updateRechargeQR);
 
     function topUpWallet() {
+      history.pushState({ isModal: true, id: 'walletRechargeModal' }, "", "#walletRecharge");
       updateRechargeQR(); // initial render
       document.getElementById("walletRechargeModal").style.display = "flex";
     }
 
-    function closeWalletRechargeModal() {
+    function closeWalletRechargeModal(fromHistory = false) {
       document.getElementById("walletRechargeModal").style.display = "none";
+      if (!fromHistory && window.location.hash.includes("walletRecharge")) { history.back(); }
     }
 
     function previewWalletRechargeScreenshot(event) {
@@ -11029,8 +11185,8 @@ Ensure options are clear and only one is correct.`;
       });
     }
 
-    function openWithdrawalModal() { document.getElementById("withdrawalModal").style.display = "flex"; }
-    function closeWithdrawalModal() { document.getElementById("withdrawalModal").style.display = "none"; }
+    function openWithdrawalModal() { history.pushState({ isModal: true, id: 'withdrawalModal' }, "", "#withdrawal"); document.getElementById("withdrawalModal").style.display = "flex"; }
+    function closeWithdrawalModal(fromHistory = false) { document.getElementById("withdrawalModal").style.display = "none"; if (!fromHistory && window.location.hash.includes("withdrawal")) history.back(); }
 
     function submitWithdrawalRequest() {
       if (!currentUserMobile) return alert("Please login first!");
@@ -11226,7 +11382,7 @@ Ensure options are clear and only one is correct.`;
       });
     }
 
-    /* BATTLE EXAM ENGINE LOGIC */
+    /* --- */
     let activeBattleId = null;
     let battleQuestions = [];
     let userAnswers = {}; // { index: choice }
@@ -11393,7 +11549,7 @@ Ensure options are clear and only one is correct.`;
       });
     }
 
-    /* LEADERBOARD LOGIC */
+    /* --- */
     function openBattleLeaderboard() {
       showPage('battleLeaderboardSection');
       const select = document.getElementById('leaderboardBattleSelect');
@@ -11480,7 +11636,7 @@ Ensure options are clear and only one is correct.`;
       });
     }
 
-    /* VICTORY CARD LOGIC */
+    /* --- */
     function openVictoryModal(battleId, rank) {
       if (!currentUserMobile) return;
 
@@ -13271,7 +13427,7 @@ Ensure options are clear and only one is correct.`;
       });
     }
 
-    /* PREMIUM NOTES & BOOK LOGIC */
+    /* --- */
     let selectedPremiumItem = "";
 
     function openPremiumHub() {
@@ -13556,8 +13712,8 @@ Ensure options are clear and only one is correct.`;
 
 
 
-    /* MOTIVATION ROTATION */
-    /* MOTIVATION ROTATION */
+    /* --- */
+    /* --- */
     const motivations = [
       // Bhagavad Gita / Mahabharata
       "\"Karmanye Vadhikaraste, Ma Phaleshu Kadachana. (You have a right to perform your prescribed duty, but you are not entitled to the fruits of action.)\" - Bhagavad Gita",
@@ -13643,7 +13799,7 @@ Ensure options are clear and only one is correct.`;
     }, 60000); // 60,000 ms = 1 minute
 
 
-    /* ADVANCED VFX: INTERACTIVE PARTICLE ENGINE */
+    /* --- */
     const canvas = document.getElementById('vfx-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -13764,7 +13920,7 @@ Ensure options are clear and only one is correct.`;
     animateParticles();
 
 
-    /* 3D TILT EFFECT LOGIC (Mouse & Touch) */
+    /* --- */
     function handleTilt(e, isTouch = false) {
       const target = isTouch ? e.touches[0].target : e.target;
       const box = target.closest('.box');
@@ -13820,7 +13976,7 @@ Ensure options are clear and only one is correct.`;
     });
 
 
-    /* GLOBAL SEARCH ALGORITHM */
+    /* --- */
     function searchLibrary() {
       const q = document.getElementById('globalSearchInput').value.toLowerCase().trim();
       const resBox = document.getElementById('searchResultsModal');
@@ -14147,7 +14303,7 @@ Ensure options are clear and only one is correct.`;
       if (projName === "No file open") projName = "NextGen_Project";
 
       const wHTML = `\n<!-- \n====================================\n🚀 Generated by NextGen Elite Pro\n👤 Developed by Aditya Kumar\n==================================== \n-->\n`;
-      const wJS = `\n/* \n====================================\n🚀 Generated by NextGen Elite Pro\n👤 Developed by Aditya Kumar\n==================================== \n*/\n`;
+      const wJS = `\n/* --- */\n`;
       const wPY = `\n# ====================================\n# 🚀 Generated by NextGen Elite Pro\n# 👤 Developed by Aditya Kumar\n# ====================================\n`;
 
       let finalCode = rawCode;
