@@ -6312,7 +6312,7 @@
       }, 5000);
     }
 
-    // ROBUST APP INITIALIZATION WITH FIREBASE + LOCAL FALLBACK
+    // ROBUST APP INITIALIZATION WITH FIREBASE + LOCAL FALLBACK (REVISED)
     async function initializeAppData() {
       console.group("🚀 NEURAL SYNC: Initialization Started");
       const loadingText = document.getElementById("loadingStatusText");
@@ -6326,52 +6326,58 @@
       try {
         updateStatus("Requesting Notification Permissions...");
         if ("Notification" in window && Notification.permission === "default") {
-          await Notification.requestPermission();
+          try { await Notification.requestPermission(); } catch(e) {}
         }
 
-        updateStatus("Fetching Remote Data (Firebase)...");
+        updateStatus("Starting Data Sync (20s limit)...");
         
-        // Timeout logic for Firebase (5 seconds)
-        const fetchTimeout = new Promise((_, reject) => 
-          setTimeout(() => reject(new Error("Firebase Timeout")), 5000)
+        // Timeout logic for Firebase (20 seconds for reliability)
+        const timeoutDuration = 20000;
+        const fetchTimeout = (label) => new Promise((_, reject) => 
+          setTimeout(() => reject(new Error(`${label} Timeout`)), timeoutDuration)
         );
 
-        const firebaseFetch = Promise.all([
-          database.ref('courseData').once('value'),
-          database.ref('premiumConfig').once('value'),
-          database.ref('premiumCourseConfigs').once('value'),
-          database.ref('premiumData').once('value')
-        ]);
+        // INDIVIDUAL FETCHES FOR ROBUSTNESS
+        const safeFetch = async (refPath, label) => {
+          try {
+            updateStatus(`Syncing ${label}...`);
+            const snap = await Promise.race([database.ref(refPath).once('value'), fetchTimeout(label)]);
+            console.log(`✅ ${label} synced.`);
+            return snap;
+          } catch (e) {
+            console.error(`⚠️ ${label} Fetch Failed:`, e);
+            return null;
+          }
+        };
 
-        let snapshots;
+        // Attempt to load from data.json immediately as a baseline if Firebase is slow
+        updateStatus("Loading local baseline...");
         try {
-          snapshots = await Promise.race([firebaseFetch, fetchTimeout]);
-          updateStatus("Remote Sync Successful.");
-        } catch (fbError) {
-          console.error("⚠️ Firebase Fetch Failed or Timed Out:", fbError);
-          updateStatus("Remote Sync Failed. Attempting Local Fallback...");
-          
-          // LOCAL FALLBACK: Load from data.json
           const localResp = await fetch('data.json');
           if (localResp.ok) {
-            const localData = await localResp.json();
-            data = localData;
-            updateStatus("Local Data Loaded (Offline Mode).");
-          } else {
-            throw new Error("Local fallback data not found.");
+            data = await localResp.json();
           }
+        } catch (e) { console.warn("Local baseline failed:", e); }
+
+        // Start Firebase fetches
+        const [courseSnap, pConfSnap, pCourseConfSnap, pDataSnap] = await Promise.all([
+          safeFetch('courseData', 'Library Content'),
+          safeFetch('premiumConfig', 'Core Config'),
+          safeFetch('premiumCourseConfigs', 'Course Rules'),
+          safeFetch('premiumData', 'Premium Registry')
+        ]);
+
+        if (courseSnap && courseSnap.exists() && courseSnap.val()) {
+          data = courseSnap.val();
+          enforceBCA(data);
+          updateStatus("Library Sync Successful.");
+        } else if (!data || Object.keys(data).length === 0) {
+          updateStatus("Remote Library Empty. Using default skeleton.");
         }
 
-        if (snapshots) {
-          let [courseSnap, pConfSnap, pCourseConfSnap, pDataSnap] = snapshots;
-          if (courseSnap.exists() && courseSnap.val()) {
-            data = courseSnap.val();
-            enforceBCA(data);
-          }
-          if (pConfSnap.exists() && pConfSnap.val()) globalPremiumConfig = pConfSnap.val();
-          if (pCourseConfSnap.exists() && pCourseConfSnap.val()) globalPremiumCourseConfigs = pCourseConfSnap.val();
-          if (pDataSnap.exists() && pDataSnap.val()) premiumData = pDataSnap.val();
-        }
+        if (pConfSnap && pConfSnap.exists()) globalPremiumConfig = pConfSnap.val();
+        if (pCourseConfSnap && pCourseConfSnap.exists()) globalPremiumCourseConfigs = pCourseConfSnap.val();
+        if (pDataSnap && pDataSnap.exists()) premiumData = pDataSnap.val();
 
         // ENABLE REAL-TIME SYNC (Non-blocking)
         database.ref('courseData').on('value', snap => {
@@ -6405,14 +6411,19 @@
           loadAdminBattles();
         } else if (session && Date.now() < session.exp) {
           currentUserMobile = session.mobile;
-          const userSnap = await database.ref('users/' + currentUserMobile).once('value');
-          let userData = userSnap.val();
-          if (userData) {
-            localStorage.setItem("user_" + btoa(currentUserMobile), JSON.stringify(userData));
-            updateNeuralHUD(userData);
-            enterSite();
-          } else {
-            showPage("loginScreen", false);
+          try {
+            const userSnap = await database.ref('users/' + currentUserMobile).once('value');
+            let userData = userSnap.val();
+            if (userData) {
+              localStorage.setItem("user_" + btoa(currentUserMobile), JSON.stringify(userData));
+              updateNeuralHUD(userData);
+              enterSite();
+            } else {
+              showPage("loginScreen", false);
+            }
+          } catch (e) {
+            console.error("User session sync failed:", e);
+            enterSite(); // Try to enter anyway using local state
           }
         } else {
           showPage("loginScreen", false);
@@ -6420,7 +6431,7 @@
 
       } catch (globalError) {
         console.error("❌ CRITICAL INIT ERROR:", globalError);
-        updateStatus("Critical Failure. Using default empty state.");
+        updateStatus("Critical Failure. Reverting to login.");
         showPage("loginScreen", false);
       } finally {
         console.groupEnd();
@@ -6433,6 +6444,9 @@
         }
       }
     }
+
+    window.onload = initializeAppData;
+
 
     window.onload = initializeAppData;
 
