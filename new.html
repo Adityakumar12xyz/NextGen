@@ -4690,7 +4690,7 @@
         Management</h2>
 
       <!-- GAME ECONOMY & LIMITS SETTINGS -->
-      <div
+      <div id="adminGameEconomy"
         style="background:rgba(255,215,0,0.05); padding:20px; border-radius:15px; border:1px solid gold; margin-bottom:30px;">
         <h3 style="color:gold; margin-top:0;">💰 Game Economy & Limits</h3>
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:15px;">
@@ -6703,13 +6703,36 @@
     }
 
     function isAdminAuthenticated() {
-      // Check legacy flag OR new secure token — both are valid
-      return localStorage.getItem("adminSession") === "true";
+      // SECURE: Require BOTH the session flag AND the secure token to be present.
+      // This prevents simple localStorage manipulation from granting admin access.
+      const hasFlag = localStorage.getItem("adminSession") === "true";
+      const hasToken = !!localStorage.getItem("nx_admin_token");
+      return hasFlag && hasToken;
     }
 
     
     function showPage(pageId, pushToHistory = true, navContext = null) {
       if (!pageId) return;
+
+      // ═══════════════════════════════════════════════════
+      // SECURITY GUARD: Block unauthorized access to adminDashboard.
+      // Only allow admin/teacher sessions. Guests and students are BLOCKED.
+      // ═══════════════════════════════════════════════════
+      if (pageId === 'adminDashboard') {
+        if (!isAdminAuthenticated() && !isTeacherAuthenticated()) {
+          console.warn('🔐 SECURITY: Unauthorized adminDashboard access blocked.');
+          // Clear any stale/tampered flags
+          localStorage.removeItem('adminSession');
+          localStorage.removeItem('nx_admin_token');
+          localStorage.removeItem('teacherSession');
+          // Redirect based on login state
+          if (currentUserMobile) {
+            pageId = 'programsWrapper'; // Students go to their dashboard
+          } else {
+            pageId = 'loginScreen';     // Guests/unauthenticated go to login
+          }
+        }
+      }
 
       // Update Browser History if requested
       if (pushToHistory) {
@@ -6816,11 +6839,18 @@
             openStudentLevel('subject', studentNavState.subject, false); 
         }
         else {
-            showPage(pageId, false, navContext);
+            // SECURITY: Never restore adminDashboard from history for non-admins
+            if (pageId === 'adminDashboard' && !isAdminAuthenticated() && !isTeacherAuthenticated()) {
+              showPage(currentUserMobile ? 'programsWrapper' : 'loginScreen', false);
+            } else {
+              showPage(pageId, false, navContext);
+            }
         }
       } else {
-         if (currentUserMobile) {
-            showPage("welcomeScreen", false);
+         if (currentUserMobile && !currentUserMobile.startsWith('GUEST_')) {
+            showPage("programsWrapper", false);
+         } else if (currentUserMobile && currentUserMobile.startsWith('GUEST_')) {
+            showPage("programsWrapper", false);
          } else {
             showPage("loginScreen", false);
          }
@@ -6919,7 +6949,14 @@
           }
         }
       } else {
-        if (!closedModal) showPage("loginScreen", false);
+        if (!closedModal) {
+          // SECURITY: When no history state exists, never allow admin panel fallback
+          if (currentUserMobile && !isAdminAuthenticated() && !isTeacherAuthenticated()) {
+            showPage("programsWrapper", false);
+          } else if (!currentUserMobile) {
+            showPage("loginScreen", false);
+          }
+        }
       }
     };
 
@@ -7421,7 +7458,12 @@
         renderStudentCourses();
         renderPremiumHubCourses();
 
-        // SESSION MANAGEMENT
+        // SESSION MANAGEMENT (HIGH SECURITY: Clear Admin/Teacher session on every refresh)
+        localStorage.removeItem("adminSession");
+        localStorage.removeItem("nx_admin_token");
+        localStorage.removeItem("teacherSession");
+        localStorage.removeItem("teacherCourse");
+
         const session = getAuthSession();
         if (isAdminAuthenticated()) {
           showPage("adminDashboard");
@@ -7834,6 +7876,12 @@
 
     
     function loginAsGuest() {
+      // SECURITY: Wipe ALL admin/teacher tokens before entering guest mode
+      localStorage.removeItem('adminSession');
+      localStorage.removeItem('nx_admin_token');
+      localStorage.removeItem('teacherSession');
+      localStorage.removeItem('teacherCourse');
+
       // Generate a unique random ID for every guest session (Incognito Style)
       const randomId = "GUEST_" + Math.floor(1000 + Math.random() * 9000);
       currentUserMobile = randomId;
@@ -7982,6 +8030,12 @@
             setTimeout(() => {
               if (overlay) overlay.style.display = 'none';
 
+              // SECURITY: Clear any admin/teacher session tokens when a student logs in
+              localStorage.removeItem('adminSession');
+              localStorage.removeItem('nx_admin_token');
+              localStorage.removeItem('teacherSession');
+              localStorage.removeItem('teacherCourse');
+
               // Secure Session Storage
               setAuthSession(mobile);
               localStorage.setItem("user_" + btoa(mobile), JSON.stringify(savedData));
@@ -8043,26 +8097,28 @@
       // Unhide wallet settings section
       const walletSett = document.getElementById("adminWalletSettings");
       if (walletSett) walletSett.style.display = 'block';
-
-      // Unlock CMS dropdown
-      let courseSel = document.getElementById("cmsCourseSelect");
-      if (courseSel) {
-        courseSel.disabled = false;
-      }
+      // Unhide subject manager
+      const subMgr = document.getElementById("adminSubjectManager");
+      if (subMgr) subMgr.style.display = 'block';
+      // Re-enable CMS dropdown
+      const courseSel = document.getElementById("cmsCourse");
+      if (courseSel) courseSel.disabled = false;
+      // Hide teacher banner if exists
+      const banner = document.getElementById('teacherModeBanner');
+      if (banner) banner.remove();
+      // Show game economy settings
+      const gameEco = document.getElementById("adminGameEconomy");
+      if (gameEco) gameEco.style.display = 'block';
     }
 
     function applyTeacherRestrictions() {
       if (!isTeacherAuthenticated()) return;
 
-      resetAdminUI(); // Start from clean state
-
-      // Hide all tabs except CMS and Game Management
+      // Hide all tabs except CMS Editor and Game Management
       document.querySelectorAll('.admin-tab-btn').forEach(btn => {
         const btnText = btn.innerText.toLowerCase();
-        // Keep CMS Editor and Game Management (as requested)
-        if (!btnText.includes('cms editor') && !btnText.includes('game management')) {
-          btn.style.display = 'none';
-        }
+        const isAllowed = btnText.includes('cms editor') || btnText.includes('game management');
+        btn.style.display = isAllowed ? 'block' : 'none';
       });
       // Force switch to CMS tab
       switchAdminTab('cms');
@@ -8075,27 +8131,45 @@
         }
       });
 
-      // Hide specific section: Wallet Recharge Settings
+      // Hide sensitive sections
       const walletSett = document.getElementById("adminWalletSettings");
       if (walletSett) walletSett.style.display = 'none';
+      const subMgr = document.getElementById("adminSubjectManager");
+      if (subMgr) subMgr.style.display = 'none';
+      const gameEco = document.getElementById("adminGameEconomy");
+      if (gameEco) gameEco.style.display = 'none';
 
-      // Lock Course Dropdown to Teacher's Assigned Course
-      let courseSel = document.getElementById("cmsCourseSelect");
+      // Lock cmsCourse dropdown to teacher's assigned course ONLY
+      let courseSel = document.getElementById("cmsCourse");
       if (courseSel) {
-        let tCourse = getTeacherCourse();
+        let tCourse = (getTeacherCourse() || '').toUpperCase();
         if (tCourse) {
-          tCourse = tCourse.toUpperCase();
-          // Check if option exists, else create it
-          let exists = Array.from(courseSel.options).some(opt => opt.value === tCourse);
-          if (!exists) {
-            let o = document.createElement("option");
-            o.value = tCourse;
-            o.innerText = tCourse;
-            courseSel.appendChild(o);
-          }
+          // Rebuild dropdown with only teacher's course
+          courseSel.innerHTML = '';
+          let o = document.createElement("option");
+          o.value = tCourse;
+          o.innerText = '\uD83D\uDCDA ' + tCourse + ' (Your Course)';
+          courseSel.appendChild(o);
           courseSel.value = tCourse;
-          courseSel.disabled = true; // Lock dropdown
-          if (typeof populateCmsBranches === 'function') populateCmsBranches();
+          courseSel.disabled = true;
+          // Auto-trigger to load branches for this course
+          cmsSelection.course = tCourse;
+          if (typeof onAdminCMSCourseChange === 'function') onAdminCMSCourseChange();
+        }
+      }
+      // Hide delete-course controls
+      const delSel = document.getElementById('deleteCourseSelect');
+      if (delSel && delSel.closest('div')) delSel.closest('div').style.display = 'none';
+      // Show teacher mode banner
+      if (!document.getElementById('teacherModeBanner')) {
+        const tCourse2 = (getTeacherCourse() || '').toUpperCase();
+        const adminHeader = document.querySelector('#adminDashboard h2');
+        if (adminHeader) {
+          const b = document.createElement('div');
+          b.id = 'teacherModeBanner';
+          b.style.cssText = 'background:linear-gradient(90deg,#00cec9,#81ecec);color:#000;padding:8px 16px;border-radius:8px;font-weight:800;font-size:14px;margin-bottom:15px;text-align:center;';
+          b.innerHTML = '\uD83C\uDFEB Teacher Mode: You can only edit <strong>' + tCourse2 + '</strong> course content.';
+          adminHeader.parentNode.insertBefore(b, adminHeader.nextSibling);
         }
       }
     }
@@ -10579,19 +10653,29 @@ Ensure options are clear and only one is correct.`;
         document.getElementById("subCourse")
       ];
 
+      // If teacher is logged in, only show their assigned course in dropdowns
+      const isTeacher = isTeacherAuthenticated();
+      const teacherCourse = isTeacher ? (getTeacherCourse() || '').toUpperCase() : null;
+
       selectors.forEach(sel => {
         if (!sel) return;
         sel.innerHTML = '<option value="" disabled selected>Select Course</option>';
         for (let c in data) {
+          // Teachers only see their own course
+          if (isTeacher && c.toUpperCase() !== teacherCourse) continue;
           let opt = document.createElement("option");
           opt.value = c;
           opt.innerText = c;
           sel.appendChild(opt);
         }
       });
-      populateBattleCourses();
-      renderPremCourseList();
+
+      if (!isTeacher) {
+        populateBattleCourses();
+        renderPremCourseList();
+      }
     }
+
 
     function onAdminCMSCourseChange() {
       cmsSelection.course = document.getElementById("cmsCourse").value;
@@ -11631,6 +11715,14 @@ Ensure options are clear and only one is correct.`;
 
     function enterSite() {
       try {
+        // SECURITY: Ensure admin tokens are NEVER active during a student/guest session
+        if (!isAdminAuthenticated() && !isTeacherAuthenticated()) {
+          localStorage.removeItem('adminSession');
+          localStorage.removeItem('nx_admin_token');
+          localStorage.removeItem('teacherSession');
+          localStorage.removeItem('teacherCourse');
+        }
+
         requestNotificationPermission();
         showPage("programsWrapper");
         startTimeTracking();
