@@ -2616,13 +2616,11 @@
   <script>
     window.OneSignalDeferred = window.OneSignalDeferred || [];
     OneSignalDeferred.push(async function(OneSignal) {
-      let swPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1) + "sw.js";
       await OneSignal.init({
         appId: "0fadbcae-7569-4efb-8321-567a20b04127",
-        serviceWorkerParam: { scope: window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1) },
-        serviceWorkerPath: swPath
+        allowLocalhostAsHTTP: true,
       });
-      console.log("OneSignal Bound to " + swPath);
+      console.log("OneSignal Booted.");
     });
   </script>
 </head>
@@ -14114,20 +14112,23 @@ Ensure options are clear and only one is correct.`;
 
     async function forceSubscribeAdmin() {
       try {
-        if (window.OneSignal) {
-           await window.OneSignal.Notifications.requestPermission();
-           let hasPermission = window.OneSignal.Notifications.hasPermission;
-           if (hasPermission) {
-               alert("✅ Native Permission Granted! You are SUBSCRIBED.");
-           } else {
-               alert("❌ Notification Permission was denied by browser. Click Lock 🔒 Icon to Allow!");
-           }
+        if (!window.OneSignal) {
+           return alert("OneSignal SDK is still loading. Please wait 3 seconds and try again.");
+        }
+        
+        // v16 Prompt logic
+        await OneSignal.Notifications.requestPermission();
+        
+        // Immediate Feedback
+        let status = await OneSignal.Notifications.permission;
+        if (status === "granted") {
+           alert("✅ SUCCESS: You are subscribed! Notifications will now REACH you.");
         } else {
-           alert("OneSignal is not fully loaded. Wait 2 seconds or Reload.");
+           alert("❌ FAILED: Permission is '" + status + "'. Please check the Lock 🔒 icon in your browser URL bar and set Notifications to ALLOW.");
         }
       } catch (err) {
-        console.error(err);
-        alert("Error prompting subscription: " + err.message);
+        console.error("Subscription Error:", err);
+        alert("Error: " + err.message);
       }
     }
 
