@@ -5047,6 +5047,8 @@
           <textarea id="notifBody" class="login-input" placeholder="Notification Body/Message..."
             style="height: 60px; margin-bottom: 10px;"></textarea>
 
+          <input type="url" id="notifUrl" class="login-input" placeholder="Optional: Link to open on click (e.g., https://...)" style="margin-bottom: 10px;">
+
           <div style="margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
             <label
               style="color: cyan; font-size: 12px; cursor: pointer; background: rgba(0,242,254,0.1); padding: 8px; border-radius: 5px; border: 1px dashed cyan;">
@@ -11640,7 +11642,8 @@ Ensure options are clear and only one is correct.`;
           headerPic.style.display = 'block';
         }
 
-        setTimeout(restoreNavState, 100);
+        // PWA ROUTING BUG FIX: Prevent restoring deep links on fresh start so user always sees the Dashboard 1st page
+        // setTimeout(restoreNavState, 100);
       } catch (err) {
         console.error("enterSite failed:", err);
       }
@@ -14018,6 +14021,7 @@ Ensure options are clear and only one is correct.`;
     function sendBroadcastNotification() {
       const title = document.getElementById('notifTitle').value.trim();
       const body = document.getElementById('notifBody').value.trim();
+      const clickUrl = document.getElementById('notifUrl') ? document.getElementById('notifUrl').value.trim() : "";
 
       if (!title || !body) return alert("Please enter both Title and Message!");
 
@@ -14030,17 +14034,26 @@ Ensure options are clear and only one is correct.`;
         if (!apiKey) return;
         localStorage.setItem("os_apikey", apiKey);
       }
-
+      
+      // Fix: OneSignal allows triggering the browser to prompt to subscribe natively 
+      // even if there are 0 subscribers, to help admin debug.
+      
       document.getElementById('notifTitle').value = "Sending...";
 
-      const raw = JSON.stringify({
+      let payloadData = {
         "app_id": appId,
         "included_segments": ["Subscribed Users"],
         "headings": { "en": title },
         "contents": { "en": body },
         "big_picture": notifImageBase64 || "", // Base64 Compressed Image
         "chrome_web_icon": "https://aditya-code1.github.io/NextGen/favicon1.png",
-      });
+      };
+      
+      if (clickUrl) {
+          payloadData["url"] = clickUrl;
+      }
+
+      const raw = JSON.stringify(payloadData);
 
       const requestOptions = {
         method: "POST",
